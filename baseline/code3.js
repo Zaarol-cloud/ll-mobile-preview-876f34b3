@@ -71,7 +71,7 @@ gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDC
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarBackButtonObjects1Objects = Hashtable.newFrom({"CalendarBackButton": gdjs.TreasureCalendarSceneCode.GDCalendarBackButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarParrotObjects1Objects = Hashtable.newFrom({"CalendarParrot": gdjs.TreasureCalendarSceneCode.GDCalendarParrotObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarShopButtonObjects1Objects = Hashtable.newFrom({"CalendarShopButton": gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1});
-gdjs.TreasureCalendarSceneCode.userFunc0xae0ce8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xbc0430 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-043: Kalenderbootstrap, clientsichere Konfigurationsanzeige und serverautoritiver Claim.
 // Ausschließlich lokale Firebase-Emulatoren; keine Zahlung, kein Shop und keine lokale Gutschrift.
@@ -365,7 +365,7 @@ if (calendarState && calendarAction) {
   }
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xe0c490 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xa75318 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-043-MAP-BOOK-V3 · sechs Schatzkartenseiten mit je fünf großen Login-Wegpunkten.
 // Ausschließlich Darstellung; Wallet, Premiumstatus und Claims bleiben serverautoritativ.
@@ -646,7 +646,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xae0ce8(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xbc0430(runtimeScene);
 
 }
 
@@ -654,7 +654,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xae0ce8(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xe0c490(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xa75318(runtimeScene);
 
 }
 
