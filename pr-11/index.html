@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+            overflow: hidden;
+		}
+        #canvasArea {
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+        }
+
+        
+	</style>
+    <!-- Libs and GDJS core files : -->
+		<script src="libs/jshashtable.js" crossorigin="anonymous"></script>
+	<script src="logger.js" crossorigin="anonymous"></script>
+	<script src="gd.js" crossorigin="anonymous"></script>
+	<script src="libs/rbush.js" crossorigin="anonymous"></script>
+	<script src="AsyncTasksManager.js" crossorigin="anonymous"></script>
+	<script src="inputmanager.js" crossorigin="anonymous"></script>
+	<script src="jsonmanager.js" crossorigin="anonymous"></script>
+	<script src="Model3DManager.js" crossorigin="anonymous"></script>
+	<script src="ResourceLoader.js" crossorigin="anonymous"></script>
+	<script src="ResourceCache.js" crossorigin="anonymous"></script>
+	<script src="timemanager.js" crossorigin="anonymous"></script>
+	<script src="polygon.js" crossorigin="anonymous"></script>
+	<script src="runtimeobject.js" crossorigin="anonymous"></script>
+	<script src="profiler.js" crossorigin="anonymous"></script>
+	<script src="RuntimeInstanceContainer.js" crossorigin="anonymous"></script>
+	<script src="runtimescene.js" crossorigin="anonymous"></script>
+	<script src="scenestack.js" crossorigin="anonymous"></script>
+	<script src="force.js" crossorigin="anonymous"></script>
+	<script src="RuntimeLayer.js" crossorigin="anonymous"></script>
+	<script src="layer.js" crossorigin="anonymous"></script>
+	<script src="RuntimeCustomObjectLayer.js" crossorigin="anonymous"></script>
+	<script src="timer.js" crossorigin="anonymous"></script>
+	<script src="runtimewatermark.js" crossorigin="anonymous"></script>
+	<script src="runtimegame.js" crossorigin="anonymous"></script>
+	<script src="variable.js" crossorigin="anonymous"></script>
+	<script src="variablescontainer.js" crossorigin="anonymous"></script>
+	<script src="oncetriggers.js" crossorigin="anonymous"></script>
+	<script src="runtimebehavior.js" crossorigin="anonymous"></script>
+	<script src="SpriteAnimator.js" crossorigin="anonymous"></script>
+	<script src="spriteruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="affinetransformation.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObjectInstanceContainer.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObject.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObject2D.js" crossorigin="anonymous"></script>
+	<script src="indexeddb.js" crossorigin="anonymous"></script>
+	<script src="events-tools/commontools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/variabletools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/runtimescenetools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/inputtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/objecttools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/cameratools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/soundtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/storagetools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/stringtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/windowtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/networktools.js" crossorigin="anonymous"></script>
+	<script src="splash/gd-logo-light.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-filters-tools.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/runtimegame-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/runtimescene-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/layer-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-image-manager.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-bitmapfont-manager.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/spriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/CustomRuntimeObject2DPixiRenderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/DebuggerPixiRenderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/loadingscreen-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-effects-manager.js" crossorigin="anonymous"></script>
+	<script src="howler-sound-manager/howler.min.js" crossorigin="anonymous"></script>
+	<script src="howler-sound-manager/howler-sound-manager.js" crossorigin="anonymous"></script>
+	<script src="fontfaceobserver-font-manager/fontfaceobserver.js" crossorigin="anonymous"></script>
+	<script src="fontfaceobserver-font-manager/fontfaceobserver-font-manager.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TextObject/textruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TextObject/textruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/AnimatableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/EffectBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/FlippableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/OpacityBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/ResizableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/ScalableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/TextContainerBehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/3D/HemisphereLight.js" crossorigin="anonymous"></script>
+	<script src="code0.js" crossorigin="anonymous"></script>
+	<script src="code1.js" crossorigin="anonymous"></script>
+	<script src="code2.js" crossorigin="anonymous"></script>
+	<script src="code3.js" crossorigin="anonymous"></script>
+	<script src="code4.js" crossorigin="anonymous"></script>
+	<script src="code5.js" crossorigin="anonymous"></script>
+	<script src="code6.js" crossorigin="anonymous"></script>
+	<script src="data.js" crossorigin="anonymous"></script>
+
+
+
+    <style id="lockloot-mobile-fit">
+      :root {
+        color-scheme: dark;
+        background: #000;
+      }
+      html, body {
+        width: 100%;
+        height: 100%;
+        height: 100dvh;
+        margin: 0;
+        overflow: hidden;
+        overscroll-behavior: none;
+        background: #000;
+      }
+      body {
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        padding-left: env(safe-area-inset-left, 0px);
+      }
+      #canvasArea {
+        position: fixed !important;
+        inset: 0 !important;
+        box-sizing: border-box !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        padding-top: env(safe-area-inset-top, 0px) !important;
+        padding-right: env(safe-area-inset-right, 0px) !important;
+        padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+        padding-left: env(safe-area-inset-left, 0px) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+      }
+      #canvasArea canvas, body > canvas {
+        display: block !important;
+        flex: 0 0 auto !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+      }
+      #lockloot-orientation {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        box-sizing: border-box;
+        padding: calc(24px + env(safe-area-inset-top, 0px))
+          calc(24px + env(safe-area-inset-right, 0px))
+          calc(24px + env(safe-area-inset-bottom, 0px))
+          calc(24px + env(safe-area-inset-left, 0px));
+        display: none;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font: 600 1.1rem/1.4 system-ui, sans-serif;
+        color: #fff4ce;
+        background: #000;
+      }
+      #lockloot-orientation[data-lockloot-show="true"] {
+        display: flex;
+      }
+    </style>
+    <script id="lockloot-mobile-fit-script">
+      (() => {
+        const gameWidth = 720;
+        const gameHeight = 1280;
+        const landscapeGame = gameWidth > gameHeight;
+        let observedArea = null;
+        let resizeObserver = null;
+
+        const fit = () => {
+          const canvasArea = document.getElementById('canvasArea');
+          const area = canvasArea || document.body;
+          const canvas = (canvasArea && canvasArea.querySelector('canvas')) || document.querySelector('body > canvas');
+          const overlay = document.getElementById('lockloot-orientation');
+          if (!area || !canvas || !overlay) {
+            if (document.body) document.body.dataset.locklootMobileLayout = 'pending';
+            return;
+          }
+
+          if (area !== observedArea && typeof ResizeObserver === 'function') {
+            if (resizeObserver) resizeObserver.disconnect();
+            observedArea = area;
+            resizeObserver = new ResizeObserver(() => requestAnimationFrame(fit));
+            resizeObserver.observe(area);
+          }
+
+          const viewport = window.visualViewport;
+          const viewportWidth = Math.max(1, viewport ? viewport.width : window.innerWidth);
+          const viewportHeight = Math.max(1, viewport ? viewport.height : window.innerHeight);
+          const computed = getComputedStyle(area);
+          const horizontalPadding = parseFloat(computed.paddingLeft || '0') + parseFloat(computed.paddingRight || '0');
+          const verticalPadding = parseFloat(computed.paddingTop || '0') + parseFloat(computed.paddingBottom || '0');
+          const availableWidth = Math.max(1, viewportWidth - horizontalPadding);
+          const availableHeight = Math.max(1, viewportHeight - verticalPadding);
+          const scale = Math.min(availableWidth / gameWidth, availableHeight / gameHeight);
+          const fittedWidth = Math.max(1, Math.floor(gameWidth * scale * 1000) / 1000);
+          const fittedHeight = Math.max(1, Math.floor(gameHeight * scale * 1000) / 1000);
+
+          canvas.style.setProperty('width', fittedWidth + 'px', 'important');
+          canvas.style.setProperty('height', fittedHeight + 'px', 'important');
+          if (!canvasArea) {
+            const fittedLeft = horizontalPadding / 2 + (availableWidth - fittedWidth) / 2;
+            const fittedTop = verticalPadding / 2 + (availableHeight - fittedHeight) / 2;
+            canvas.style.setProperty('position', 'fixed', 'important');
+            canvas.style.setProperty('left', fittedLeft + 'px', 'important');
+            canvas.style.setProperty('top', fittedTop + 'px', 'important');
+          }
+
+          const rotate = landscapeGame && viewportHeight > viewportWidth;
+          overlay.dataset.locklootShow = String(rotate);
+          overlay.setAttribute('aria-hidden', String(!rotate));
+          canvas.style.setProperty('visibility', rotate ? 'hidden' : 'visible', 'important');
+          canvas.style.setProperty('pointer-events', rotate ? 'none' : 'auto', 'important');
+
+          const tolerance = 1.5;
+          const fits = fittedWidth <= availableWidth + tolerance && fittedHeight <= availableHeight + tolerance;
+          document.body.dataset.locklootMobileLayout = rotate ? 'rotate' : 'ready';
+          document.body.dataset.locklootCanvasFits = String(fits);
+          document.body.dataset.locklootRotateVisible = String(rotate);
+          document.body.dataset.locklootGameSize = gameWidth + 'x' + gameHeight;
+          document.body.dataset.locklootFittedSize = fittedWidth + 'x' + fittedHeight;
+          document.body.dataset.locklootViewport = Math.round(viewportWidth) + 'x' + Math.round(viewportHeight);
+        };
+
+        const scheduleFit = () => requestAnimationFrame(() => requestAnimationFrame(fit));
+        window.addEventListener('resize', scheduleFit, { passive: true });
+        window.addEventListener('orientationchange', scheduleFit, { passive: true });
+        if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit, { passive: true });
+        document.addEventListener('DOMContentLoaded', scheduleFit, { once: true });
+        const mutationObserver = new MutationObserver(scheduleFit);
+        mutationObserver.observe(document.documentElement, { childList: true, subtree: true });
+        let attempts = 0;
+        const startupTimer = setInterval(() => {
+          fit();
+          attempts += 1;
+          if (attempts >= 40 && document.body?.dataset.locklootMobileLayout !== 'pending') {
+            clearInterval(startupTimer);
+          }
+        }, 250);
+      })();
+    </script>
+</head>
+<body>
+  <div id="lockloot-orientation" role="status" aria-live="polite" aria-hidden="true">Bitte Gerät drehen</div>
+
+    
+	<script>
+
+    (function() {
+        //Initialization
+        var game = new gdjs.RuntimeGame(gdjs.projectData, {});
+
+        //Create a renderer
+        game.getRenderer().createStandardCanvas(document.body);
+
+        //Bind keyboards/mouse/touch events
+        game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
+
+        //Load all assets and start the game
+        game.loadAllAssets(function() {
+            game.startGameLoop();
+        });
+    })();
+
+	</script>
+</body>
+</html>
