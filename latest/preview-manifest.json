@@ -1,8 +1,8 @@
 {
   "source_repository": "Zaarol-cloud/lock-and-loot",
   "pr_number": 0,
-  "source_commit": "243068306c5db02a599819a17714c9ff472cd917",
-  "built_at": "2026-08-11T00:23:33Z",
+  "source_commit": "21ea29af965cfb0ce2d5a25b3c925dc8cafc79ff",
+  "built_at": "2026-08-11T00:33:07Z",
   "gdevelop_version": "5.6.277",
   "mobile_layout": {
     "strategy": "contain",
