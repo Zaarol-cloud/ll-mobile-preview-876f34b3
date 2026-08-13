@@ -159,7 +159,7 @@ gdjs.SolutionSceneCode.GDSolutionDialogResultObjects1= [];
 gdjs.SolutionSceneCode.GDSolutionDialogResultObjects2= [];
 
 
-gdjs.SolutionSceneCode.userFunc0x9c71d0 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xbd3aa0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const musicChannel = 20;
@@ -185,7 +185,7 @@ if (solutionPlaying) {
   gdjs.evtTools.sound.playMusicOnChannel(runtimeScene, 'music_solution_once', musicChannel, false, 75, 1);
 }
 };
-gdjs.SolutionSceneCode.userFunc0xbc7c68 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xbc3138 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
 // Datenquelle sind ausschließlich die global gesicherten Werte der vorherigen Kiste.
@@ -497,7 +497,7 @@ gdjs.SolutionSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0x9c71d0(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xbd3aa0(runtimeScene);
 
 }
 
@@ -505,7 +505,7 @@ gdjs.SolutionSceneCode.userFunc0x9c71d0(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xbc7c68(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xbc3138(runtimeScene);
 
 }
 
