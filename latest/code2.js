@@ -159,7 +159,46 @@ gdjs.SolutionSceneCode.GDSolutionDialogResultObjects1= [];
 gdjs.SolutionSceneCode.GDSolutionDialogResultObjects2= [];
 
 
-gdjs.SolutionSceneCode.userFunc0xbd3aa0 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa73de8 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
+const localizationGame = runtimeScene.getGame();
+if (!localizationGame.__lockLootI18n) {
+  const storageKey = "lockloot.language.v1";
+  const catalog = JSON.parse(localizationGame.getVariables().get("localizationCatalogJson").getAsString());
+  const languages = new Set(catalog.supportedLanguages.map(entry => entry.code));
+  let storedLanguage = "";
+  try { storedLanguage = globalThis.localStorage ? String(globalThis.localStorage.getItem(storageKey) || "") : ""; } catch (error) {}
+  const state = {
+    catalog,
+    storageKey,
+    language: languages.has(storedLanguage) ? storedLanguage : catalog.defaultLanguage,
+    revision: 1,
+    t(key, parameters = {}) {
+      const entry = catalog.strings[key];
+      if (!entry) return "[MISSING:" + key + "]";
+      const template = typeof entry[state.language] === "string" ? entry[state.language] : entry[catalog.defaultLanguage];
+      if (typeof template !== "string") return "[MISSING:" + key + "]";
+      const required = [...new Set([...template.matchAll(/\{([A-Za-z][A-Za-z0-9_]*)\}/g)].map(match => match[1]))].sort();
+      const supplied = Object.keys(parameters).sort();
+      if (JSON.stringify(required) !== JSON.stringify(supplied)) throw new Error("Invalid localization parameters for " + key + ": expected " + required.join(",") + "; received " + supplied.join(","));
+      return template.replace(/\{([A-Za-z][A-Za-z0-9_]*)\}/g, (match, name) => String(parameters[name]));
+    },
+    setLanguage(language) {
+      if (!languages.has(language)) return false;
+      if (state.language !== language) { state.language = language; state.revision += 1; }
+      localizationGame.getVariables().get("localizationLanguage").setString(state.language);
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(storageKey, state.language); } catch (error) {}
+      return true;
+    }
+  };
+  localizationGame.__lockLootI18n = state;
+  state.setLanguage(state.language);
+}
+const sceneLocalization = localizationGame.__lockLootI18n;
+localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
+};
+gdjs.SolutionSceneCode.userFunc0xb6f6f0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const musicChannel = 20;
@@ -185,11 +224,13 @@ if (solutionPlaying) {
   gdjs.evtTools.sound.playMusicOnChannel(runtimeScene, 'music_solution_once', musicChannel, false, 75, 1);
 }
 };
-gdjs.SolutionSceneCode.userFunc0xbc3138 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xe862a8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
 // Datenquelle sind ausschließlich die global gesicherten Werte der vorherigen Kiste.
 const sceneVariables = runtimeScene.getVariables();
+const solutionI18n = runtimeScene.getGame().__lockLootI18n;
+const solutionT = (key, parameters = {}) => solutionI18n.t(key, parameters);
 const globalVariables = runtimeScene.getGame().getVariables();
 const cleanPlayerText = value => String(value || "").replace(/\bT[1-5](?:-CODE)?-\d{2}\b/gi, "").replace(/\s{2,}/g, " " ).replace(/^[-–—:;,.\s]+|[-–—:;,.\s]+$/g, "").trim();
 if (!runtimeScene.__lockLootSolutionState) {
@@ -198,12 +239,12 @@ if (!runtimeScene.__lockLootSolutionState) {
   const metadataValue = globalVariables.get("previousSolutionMetadata").toJSObject();
   const dataAvailable = globalVariables.get("previousSolutionAvailable").getAsBoolean();
   const code = dataAvailable && Array.isArray(codeValue) && codeValue.length === 11 ? codeValue : Array(11).fill("–");
-  const hints = dataAvailable && Array.isArray(hintValue) ? hintValue.slice(0, 10).map(cleanPlayerText) : [];
   const metadata = dataAvailable && Array.isArray(metadataValue) ? metadataValue.slice(0, 10) : [];
+  const hints = dataAvailable && Array.isArray(hintValue) ? hintValue.slice(0, 10).map((value, index) => cleanPlayerText(metadata[index] && metadata[index].textByLanguage && metadata[index].textByLanguage[solutionI18n.language] || value)) : [];
   runtimeScene.__lockLootSolutionState = { time: 0, code, hints, metadata, dataAvailable };
   sceneVariables.get("availableHintCount").setNumber(hints.length);
   const title = runtimeScene.getObjects("SolutionTitle")[0];
-  if (title) title.setString(dataAvailable ? "DIE GELÖSTE KISTE" : "KEINE LÖSUNG GESPEICHERT");
+  if (title) title.setString(dataAvailable ? solutionT("solution.title") : solutionT("solution.no_solution"));
   for (let index = 0; index < 11; index += 1) {
     const digit = runtimeScene.getObjects("SolutionDigit" + index)[0];
     if (digit) digit.setString(String(code[index]));
@@ -237,70 +278,53 @@ const getOne = name => runtimeScene.getObjects(name)[0];
 const show = (name, visible) => { const object = getOne(name); if (object) object.hide(!visible); };
 const positionsFor = index => {
   const item = state.metadata[index] || {};
-  const positions = Array.isArray(item.sichtbarePositionen) ? item.sichtbarePositionen : [];
+  const positions = Array.isArray(item.sichtbarePositionen) ? item.sichtbarePositionen : Array.isArray(item.visiblePositions) ? item.visiblePositions : [];
   return positions.map(Number).filter(position => Number.isInteger(position) && position >= 1 && position <= 11);
 };
 const valueAt = visiblePosition => Number(state.code[visiblePosition - 1]);
 const valuesFor = index => positionsFor(index).map(valueAt);
 const isPrime = value => Number.isInteger(value) && value >= 2 && Array.from({ length: Math.max(0, value - 2) }, (_, offset) => offset + 2).every(divisor => value % divisor !== 0);
-const relation = (left, right) => left === right ? "gleich groß wie" : left > right ? "größer als" : "kleiner als";
+const relation = (left, right) => solutionT(left === right ? "solution.relation.equal" : left > right ? "solution.relation.greater" : "solution.relation.less");
 const glossaryFor = hintText => {
   const source = String(hintText || "").toLowerCase();
   const definitions = [];
-  const add = definition => { if (!definitions.includes(definition)) definitions.push(definition); };
-  if (source.includes("median") || source.includes("meridian")) add("Median bedeutet: Sortiere alle elf Ziffern. Die sechste Ziffer in der sortierten Reihe liegt genau in der Mitte.");
-  if (source.includes("primzahl")) add("Eine Primzahl ist mindestens 2 und lässt sich nur durch 1 und sich selbst ohne Rest teilen.");
-  if (source.includes("parität")) add("Parität bedeutet hier nur: gerade oder ungerade.");
-  if (source.includes("quadratzahl")) add("Eine Quadratzahl entsteht aus Zahl × dieselbe Zahl, zum Beispiel 9 = 3 × 3.");
-  if (source.includes("zusammengesetzt")) add("Zusammengesetzt bedeutet: Die Zahl hat außer 1 und sich selbst noch weitere Teiler.");
-  if (source.includes("zweierpotenz")) add("Eine Zweierpotenz entsteht durch Verdoppeln: Bei einzelnen Ziffern sind das 1, 2, 4 und 8.");
-  if (source.includes("kubikzahl") || source.includes("würfelzahl")) add("Eine Kubikzahl entsteht aus Zahl × Zahl × Zahl; bei einzelnen Ziffern sind das 0, 1 und 8.");
-  if (source.includes("fibonacci")) add("In der Fibonacci-Folge ist jede Zahl die Summe der beiden vorherigen; als einzelne Ziffern kommen 0, 1, 2, 3, 5 und 8 vor.");
-  if (source.includes("fakultät")) add("Bei einer Fakultät werden alle positiven Zahlen bis zu dieser Zahl miteinander multipliziert.");
-  if (source.includes("dreieckszahl")) add("Eine Dreieckszahl lässt sich als Punktedreieck anordnen; bei einzelnen Ziffern sind das 0, 1, 3 und 6.");
-  if (source.includes("palindrom")) add("Ein Palindrom liest sich vorwärts und rückwärts genau gleich.");
-  if (source.includes("modulo")) add("Modulo meint den Rest, der nach einer Teilung übrig bleibt.");
-  if (source.includes("maximum")) add("Maximum bedeutet: die größte Zahl im gesamten Code.");
-  if (source.includes("minimum")) add("Minimum bedeutet: die kleinste Zahl im gesamten Code.");
-  return definitions.slice(0, 2).join(" " );
+  const add = key => { const value = solutionT(key); if (!definitions.includes(value)) definitions.push(value); };
+  if (source.includes("median") || source.includes("meridian")) add("solution.glossary.median");
+  if (source.includes("primzahl") || source.includes("prime")) add("solution.glossary.prime");
+  if (source.includes("parität") || source.includes("parity")) add("solution.glossary.parity");
+  if (source.includes("quadratzahl") || source.includes("square number")) add("solution.glossary.square");
+  if (source.includes("zusammengesetzt") || source.includes("composite")) add("solution.glossary.composite");
+  if (source.includes("zweierpotenz") || source.includes("power of two")) add("solution.glossary.power_two");
+  if (source.includes("kubikzahl") || source.includes("würfelzahl") || source.includes("cube number")) add("solution.glossary.cube");
+  if (source.includes("fibonacci")) add("solution.glossary.fibonacci");
+  if (source.includes("fakultät") || source.includes("factorial")) add("solution.glossary.factorial");
+  if (source.includes("dreieckszahl") || source.includes("triangular")) add("solution.glossary.triangular");
+  if (source.includes("palindrom")) add("solution.glossary.palindrome");
+  if (source.includes("modulo") || source.includes("remainder")) add("solution.glossary.modulo");
+  if (source.includes("maximum")) add("solution.glossary.maximum");
+  if (source.includes("minimum")) add("solution.glossary.minimum");
+  return definitions.slice(0, 2).join(" ");
 };
 const plainRuleFor = (item, hintText) => {
-  const id = String(item.hinweisartId || "");
-  if (id === "T4-21") return "Addiere die genannten Zahlen. An der Zielposition steht die letzte Ziffer dieser Summe.";
-  if (id === "T3-16") return "Multipliziere die beiden Ausgangszahlen. An der Zielposition steht die letzte Ziffer des Ergebnisses.";
-  if (id === "T5-02") return "Teile die ersten beiden Zahlen jeweils durch die dritte Zahl. Bei beiden bleibt derselbe Rest übrig.";
-  if (id === "T5-01") return "Zähle die Positionen von rechts: Ganz rechts ist Position 1, die nächste Ziffer ist Position 2. Vergleiche anschließend die beiden gefundenen Zahlen.";
-  if (id === "T5-04") return "Prüfe die anderen Hinweise am richtigen Code. Genau einer davon widerspricht dem Code, alle übrigen stimmen.";
-  if (id === "T3-07") return "Die grüne Zielzahl muss größer als die kleinere blaue Zahl und kleiner als die größere blaue Zahl sein.";
-  if (id === "T3-11") return "Bilde den Unterschied zwischen den beiden blauen Zahlen. Dieser Wert muss an der grünen Zielposition stehen.";
-  if (id === "T4-19") return "Addiere zuerst die beiden Zahlen jeder blauen Gruppe. Der Unterschied zwischen den beiden Summen steht an der grünen Zielposition.";
-  if (id === "T2-15") return "Beide blauen Zahlen sind gleich weit von der Zahl 5 entfernt.";
-  if (id === "T1-CODE-03") return "Vergleiche die genannte Ziffer mit allen elf Codeziffern. So siehst du, ob sie die größte, die kleinste oder keine von beiden ist.";
-  if (id === "T2-CODE-02") return "Globale Extremwerte sind die kleinste und die größte Zahl im Code. Die Zahl an der genannten Position liegt zwischen diesen beiden Werten.";
-  if (id === "T2-CODE-04") return "Vergleiche, wie weit die beiden genannten Ziffern von der größten oder kleinsten Zahl des Codes entfernt sind.";
-  if (id === "T4-CODE-05") return "Ziehe die kleinste Zahl des Codes von der größten ab. Das Ergebnis muss rechts neben der ersten Primzahl stehen.";
-  if (id === "T4-CODE-06") return "Die erste und die letzte Codeziffer müssen beide zwischen der kleinsten und der größten Zahl des Codes liegen.";
-  if (id === "T4-15") return "Die Ziffer an der genannten Position erscheint im gesamten Code so oft wie im Hinweis angegeben.";
-  if (id === "T1-CODE-04") return "Sortiere alle elf Ziffern und vergleiche die mittlere Zahl mit der genannten Position.";
-  if (id === "T4-CODE-04") return "Bestimme die erste gerade Zahl, die letzte ungerade Zahl und die mittlere Zahl des sortierten Codes. Vergleiche diese drei Werte in der genannten Reihenfolge.";
-  let rule = String(item.mathematischeRegel || "").trim();
-  rule = rule.replace(/modulo 10/gi, "mit der letzten Ziffer").replace(/modulo/gi, "mit dem Rest der Teilung");
-  rule = rule.replace(/Parität/gi, "Eigenschaft gerade oder ungerade").replace(/Extremwerte?/gi, "größte oder kleinste Zahl");
-  rule = rule.replace(/Quellwerte?/gi, "genannten Zahlen").replace(/Prüfziffer/gi, "Zahl an der Zielposition");
-  rule = rule.replace(/absolute[nr]? /gi, "").replace(/disjunkter?/gi, "getrennter");
-  rule = rule.replace(/global(?:e|er|es|en)?/gi, "im gesamten Code gefundene").replace(/strikt/gi, "ohne Gleichstand");
-  rule = rule.replace(/code\.length - internem Index/gi, "Zählung von rechts").replace(/internem Index/gi, "Position");
-  return rule || String(hintText || "").trim() || "Die farbigen Ziffern zeigen, wie der Hinweis geprüft wird.";
+  const id = String(item.hinweisartId || item.id || "");
+  const keys = {
+    "T4-21": "solution.rule.t4_21", "T3-16": "solution.rule.t3_16", "T5-02": "solution.rule.t5_02", "T5-01": "solution.rule.t5_01", "T5-04": "solution.rule.t5_04",
+    "T3-07": "solution.rule.t3_07", "T3-11": "solution.rule.t3_11", "T4-19": "solution.rule.t4_19", "T2-15": "solution.rule.t2_15", "T1-CODE-03": "solution.rule.t1_code_03",
+    "T2-CODE-02": "solution.rule.t2_code_02", "T2-CODE-04": "solution.rule.t2_code_04", "T4-CODE-05": "solution.rule.t4_code_05", "T4-CODE-06": "solution.rule.t4_code_06",
+    "T4-15": "solution.rule.t4_15", "T1-CODE-04": "solution.rule.t1_code_04", "T4-CODE-04": "solution.rule.t4_code_04"
+  };
+  return keys[id] ? solutionT(keys[id]) : solutionT("solution.explanation_from_hint", { hint: String(hintText || "").trim() });
 };
 const colorRolesFor = index => {
   const item = state.metadata[index] || {};
-  const id = String(item.hinweisartId || "");
+  const id = String(item.hinweisartId || item.id || "");
   const details = item.details || {};
   const positions = positionsFor(index);
   const given = new Set(positions);
   const result = new Set();
   const makeResult = position => { if (Number.isInteger(position) && position >= 1 && position <= 11) { result.add(position); given.delete(position); } };
-  const roles = Array.isArray(item.positionsrollen) ? item.positionsrollen.map(role => String(role).toLowerCase()) : [];
+  const sourceRoles = Array.isArray(item.positionsrollen) ? item.positionsrollen : Array.isArray(item.positionRoles) ? item.positionRoles : [];
+  const roles = sourceRoles.map(role => String(role).toLowerCase());
   roles.forEach((role, roleIndex) => {
     if (/zielposition|durchschnittsposition|prüfziffer|medianvorkommen/.test(role)) makeResult(positions[roleIndex]);
   });
@@ -325,52 +349,48 @@ const colorRolesFor = index => {
 };
 const calculationPartsFor = index => {
   const item = state.metadata[index] || {};
-  const id = String(item.hinweisartId || "");
+  const id = String(item.hinweisartId || item.id || "");
   const details = item.details || {};
   const positions = positionsFor(index);
   const values = valuesFor(index);
   const a = values[0], b = values[1], c = values[2], d = values[3];
   const parts = (given = "", result = "") => ({ given, result });
-  if (id === "T2-CODE-02" && values.length >= 1) { const allValues = state.code.map(Number); const minimum = Math.min(...allValues); const maximum = Math.max(...allValues); return parts("KLEINSTER WERT: " + minimum + "   GRÖSSTER WERT: " + maximum, "POSITION " + positions[0] + ": " + a + " LIEGT DAZWISCHEN"); }
-  if (["T2-02", "T2-10", "T2-16"].includes(id) && values.length >= 2) return parts(a + " + " + b, "ERGEBNIS: " + (a + b));
-  if (["T2-03", "T2-06", "T2-13"].includes(id) && values.length >= 2) return parts("Abstand zwischen " + a + " und " + b, "ERGEBNIS: " + Math.abs(a - b));
-  if (id === "T2-07" && values.length >= 2) return parts(a + " × " + b, "ERGEBNIS: " + (a * b));
-  if (id === "T2-09" && values.length >= 2) return parts("Kleinere Zahl: " + Math.min(a, b), "GRÖSSERE ZAHL: " + Math.max(a, b));
-  if (id === "T2-11" && values.length >= 2 && b !== 0) return parts(a + " ÷ " + b, "ERGEBNIS: " + (a / b));
-  if (id === "T2-12" && values.length >= 2) return parts("Ziffern: " + a + " und " + b, "ZWEISTELLIGE ZAHL: " + a + b);
+  const result = value => solutionT("solution.calc.result", { value });
+  if (id === "T2-CODE-02" && values.length >= 1) { const allValues = state.code.map(Number); const minimum = Math.min(...allValues); const maximum = Math.max(...allValues); return parts(solutionT("solution.calc.extremes", { minimum, maximum }), solutionT("solution.calc.between", { position: positions[0], value: a })); }
+  if (["T2-02", "T2-10", "T2-16"].includes(id) && values.length >= 2) return parts(a + " + " + b, result(a + b));
+  if (["T2-03", "T2-06", "T2-13"].includes(id) && values.length >= 2) return parts(solutionT("solution.calc.distance", { first: a, second: b }), result(Math.abs(a - b)));
+  if (id === "T2-07" && values.length >= 2) return parts(a + " × " + b, result(a * b));
+  if (id === "T2-09" && values.length >= 2) return parts(solutionT("solution.calc.smaller_larger", { smaller: Math.min(a, b) }), solutionT("solution.calc.larger", { larger: Math.max(a, b) }));
+  if (id === "T2-11" && values.length >= 2 && b !== 0) return parts(a + " ÷ " + b, result(a / b));
+  if (id === "T2-12" && values.length >= 2) return parts(solutionT("solution.calc.digits", { first: a, second: b }), solutionT("solution.calc.two_digit", { value: String(a) + String(b) }));
   if (["T3-01", "T3-03", "T3-08", "T3-10", "T3-11", "T3-12"].includes(id) && values.length >= 3) {
     let computed = a + b; let formula = a + " + " + b + " = " + computed;
-    if (["T3-08", "T3-11"].includes(id)) { computed = Math.abs(a - b); formula = "Abstand " + a + " zu " + b + " = " + computed; }
+    if (["T3-08", "T3-11"].includes(id)) { computed = Math.abs(a - b); formula = solutionT("solution.calc.distance", { first: a, second: b }) + " = " + computed; }
     if (id === "T3-03") { computed = a * b; formula = a + " × " + b + " = " + computed; }
     if (id === "T3-12") { computed = (a + b) / 2; formula = "(" + a + " + " + b + ") ÷ 2 = " + computed; }
-    return parts(formula, "POSITION " + positions[2] + ": " + c);
+    return parts(formula, solutionT("solution.calc.position_value", { position: positions[2], value: c }));
   }
-  if (id === "T3-15" && values.length >= 3) return parts(a + " + " + b + " + " + c, "ERGEBNIS: " + (a + b + c));
-  if (id === "T3-16" && values.length >= 3) { const product = a * b; return parts(a + " × " + b + " = " + product, "LETZTE ZIFFER / POSITION " + positions[2] + ": " + c); }
-  if (["T4-02", "T4-03"].includes(id) && values.length >= 4) return parts(a + " + " + b + " = " + (a + b) + "   |   " + c + " + " + d + " = " + (c + d), "BEIDE SUMMEN PASSEN ZUM HINWEIS");
-  if (id === "T4-05" && values.length >= 4) return parts("Abstände: " + Math.abs(a - b) + " und " + Math.abs(c - d), "BEIDE ABSTÄNDE SIND GLEICH");
-  if (id === "T4-06" && values.length >= 4) return parts(a + " × " + b + " = " + (a * b) + "   |   " + c + " × " + d + " = " + (c * d), "BEIDE PRODUKTE SIND GLEICH");
-  if (["T4-08", "T4-14"].includes(id) && values.length >= 4) { const half = Math.floor(values.length / 2); const left = values.slice(0, half); const right = values.slice(half); return parts(left.join(" + ") + "   |   " + right.join(" + "), "SUMMEN: " + left.reduce((sum, value) => sum + value, 0) + " UND " + right.reduce((sum, value) => sum + value, 0)); }
-  if (id === "T4-15" && values.length >= 1) { const matching = state.code.map(Number).map((value, codeIndex) => value === a && codeIndex + 1 !== positions[0] ? codeIndex + 1 : 0).filter(Boolean); return parts("POSITION " + positions[0] + " ZEIGT DIE " + a, "WEITERE GLEICHE ZIFFERN: POSITIONEN " + matching.join(", ")); }
-  if (id === "T4-20") { const odd = state.code.map(Number).filter((_, position) => position % 2 === 0); const even = state.code.map(Number).filter((_, position) => position % 2 === 1); return parts(odd.join(" + ") + "   |   " + even.join(" + "), "SUMMEN: " + odd.reduce((sum, value) => sum + value, 0) + " UND " + even.reduce((sum, value) => sum + value, 0)); }
+  if (id === "T3-15" && values.length >= 3) return parts(a + " + " + b + " + " + c, result(a + b + c));
+  if (id === "T3-16" && values.length >= 3) { const product = a * b; return parts(a + " × " + b + " = " + product, solutionT("solution.calc.last_digit", { position: positions[2], value: c })); }
+  if (["T4-02", "T4-03"].includes(id) && values.length >= 4) return parts(a + " + " + b + " = " + (a + b) + "   |   " + c + " + " + d + " = " + (c + d), solutionT("solution.calc.both_sums"));
+  if (id === "T4-05" && values.length >= 4) return parts(Math.abs(a - b) + "   |   " + Math.abs(c - d), solutionT("solution.calc.both_distances"));
+  if (id === "T4-06" && values.length >= 4) return parts(a + " × " + b + " = " + (a * b) + "   |   " + c + " × " + d + " = " + (c * d), solutionT("solution.calc.both_products"));
+  if (["T4-08", "T4-14"].includes(id) && values.length >= 4) { const half = Math.floor(values.length / 2); const left = values.slice(0, half); const right = values.slice(half); return parts(left.join(" + ") + "   |   " + right.join(" + "), solutionT("solution.calc.sums", { first: left.reduce((sum, value) => sum + value, 0), second: right.reduce((sum, value) => sum + value, 0) })); }
+  if (id === "T4-15" && values.length >= 1) { const matching = state.code.map(Number).map((value, codeIndex) => value === a && codeIndex + 1 !== positions[0] ? codeIndex + 1 : 0).filter(Boolean); return parts(solutionT("solution.calc.position_value", { position: positions[0], value: a }), solutionT("solution.calc.matching_positions", { positions: matching.join(", ") })); }
+  if (id === "T4-20") { const odd = state.code.map(Number).filter((_, position) => position % 2 === 0); const even = state.code.map(Number).filter((_, position) => position % 2 === 1); return parts(odd.join(" + ") + "   |   " + even.join(" + "), solutionT("solution.calc.sums", { first: odd.reduce((sum, value) => sum + value, 0), second: even.reduce((sum, value) => sum + value, 0) })); }
   if (id === "T4-21") {
     const sourcePositions = Array.isArray(details.sourcePositions) ? details.sourcePositions.map(Number) : positions.slice(0, -1).map(position => position - 1);
     const targetPosition = Number.isInteger(Number(details.targetPosition)) ? Number(details.targetPosition) : positions[positions.length - 1] - 1;
-    const sourceValues = sourcePositions.map(position => Number(state.code[position]));
-    const sum = sourceValues.reduce((total, value) => total + value, 0);
-    return parts(sourceValues.join(" + ") + " = " + sum, "LETZTE ZIFFER / POSITION " + (targetPosition + 1) + ": " + Number(state.code[targetPosition]));
+    const sourceValues = sourcePositions.map(position => Number(state.code[position])); const sum = sourceValues.reduce((total, value) => total + value, 0);
+    return parts(sourceValues.join(" + ") + " = " + sum, solutionT("solution.calc.last_digit", { position: targetPosition + 1, value: Number(state.code[targetPosition]) }));
   }
-  if (id === "T5-02" && values.length >= 3) { const divisor = c; return parts(a + " ÷ " + divisor + " UND " + b + " ÷ " + divisor, "BEI BEIDEN BLEIBT REST " + (a % divisor)); }
-  if (id === "T1-CODE-04") { const sorted = state.code.map(Number).slice().sort((left, right) => left - right); return parts("SORTIERT: " + sorted.join(", "), "MITTLERE ZAHL: " + sorted[5]); }
-  if (id === "T4-CODE-04" && values.length >= 3) return parts("GEGEBENE WERTE: " + a + ", " + b, "MITTLERE ZAHL: " + c);
-  if (id === "T1-CODE-01" && values.length >= 1) { const primes = state.code.map(Number).filter(isPrime); return parts("PRIMZAHLEN: " + primes.join(", "), "GRÖSSTE DAVON: " + Math.max(...primes)); }
-  if (id === "T1-CODE-02" && values.length >= 1) { const evens = state.code.map(Number).filter(value => value % 2 === 0); return parts("GERADE ZAHLEN: " + evens.join(", "), "KLEINSTE DAVON: " + Math.min(...evens)); }
-  if (id === "T1-CODE-03" && values.length >= 1) return parts("ALLE ZIFFERN WERDEN VERGLICHEN", "KLEINSTE: " + Math.min(...state.code.map(Number)) + "   GRÖSSTE: " + Math.max(...state.code.map(Number)));
-  if (positions.length > 0) {
-    const colors = colorRolesFor(index);
-    const valueText = list => list.map(position => "P" + position + " = " + valueAt(position)).join("   |   ");
-    return parts(valueText(colors.given), colors.result.length ? "ERGEBNIS: " + valueText(colors.result) : "");
-  }
+  if (id === "T5-02" && values.length >= 3) { const divisor = c; return parts(a + " ÷ " + divisor + "   |   " + b + " ÷ " + divisor, solutionT("solution.calc.same_remainder", { remainder: a % divisor })); }
+  if (id === "T1-CODE-04") { const sorted = state.code.map(Number).slice().sort((left, right) => left - right); return parts(solutionT("solution.calc.sorted", { values: sorted.join(", ") }), solutionT("solution.calc.median", { value: sorted[5] })); }
+  if (id === "T4-CODE-04" && values.length >= 3) return parts(solutionT("solution.given_values", { values: a + ", " + b }), solutionT("solution.calc.median", { value: c }));
+  if (id === "T1-CODE-01" && values.length >= 1) { const primes = state.code.map(Number).filter(isPrime); return parts(solutionT("solution.calc.primes", { values: primes.join(", ") }), solutionT("solution.calc.largest_prime", { value: Math.max(...primes) })); }
+  if (id === "T1-CODE-02" && values.length >= 1) { const evens = state.code.map(Number).filter(value => value % 2 === 0); return parts(solutionT("solution.calc.evens", { values: evens.join(", ") }), solutionT("solution.calc.smallest_even", { value: Math.min(...evens) })); }
+  if (id === "T1-CODE-03" && values.length >= 1) return parts(solutionT("solution.calc.all_compared"), solutionT("solution.calc.minimum_maximum", { minimum: Math.min(...state.code.map(Number)), maximum: Math.max(...state.code.map(Number)) }));
+  if (positions.length > 0) return parts(solutionT("solution.given_values", { values: positions.map(position => "P" + position + " = " + valueAt(position)).join("   |   ") }), "");
   return parts();
 };
 const explanationFor = index => {
@@ -439,22 +459,22 @@ let explanation = { body: "", given: "", result: "" };
 if (dialogState === "learning" && selectedHint >= 0 && selectedHint < state.hints.length) explanation = explanationFor(selectedHint);
 if (dialogText) {
   dialogText.setWrapping(true);
-  dialogText.setWrappingWidth(310);
+  dialogText.setWrappingWidth(318);
   dialogText.setTextAlignment("center");
   dialogText.setVerticalTextAlignment("center");
-  dialogText.setPadding(10);
+  dialogText.setPadding(6);
   if (dialogState === "intro") {
-    dialogText.setCharacterSize(14); dialogText.setLineHeight(18);
-    dialogText.setString(state.dataAvailable ? "Ein anderer Spieler hat das Rätsel gelöst. Ich helfe dir jetzt, die gekauften Hinweise Schritt für Schritt zu verstehen!" : "Für diesen Aufruf wurde keine vorherige Kiste gespeichert. Kehre zurück und öffne den Lösungsbildschirm über den Testbutton.");
+    dialogText.setCharacterSize(23); dialogText.setLineHeight(27);
+    dialogText.setString(state.dataAvailable ? solutionT("solution.intro") : solutionT("solution.intro_empty"));
   } else if (dialogState === "exit") {
-    dialogText.setCharacterSize(14); dialogText.setLineHeight(18);
-    dialogText.setString("Ich hoffe, ich konnte dir helfen. Im Hauptmenü erscheint dieser Bildschirm erst wieder bei der nächsten bereits gelösten Kiste.");
+    dialogText.setCharacterSize(23); dialogText.setLineHeight(27);
+    dialogText.setString(solutionT("solution.exit"));
   } else if (explanation.body) {
     const textSize = explanation.body.length > 300 ? 10 : explanation.body.length > 220 ? 11 : explanation.body.length > 145 ? 12 : 13;
     dialogText.setCharacterSize(textSize); dialogText.setLineHeight(textSize + 3); dialogText.setString(explanation.body);
   } else {
-    dialogText.setCharacterSize(14); dialogText.setLineHeight(18);
-    dialogText.setString(state.hints.length ? "Tippe links auf einen gekauften Hinweis. Ich markiere die betroffenen Zahlen und erkläre Begriff und Rechnung." : "Für diese Kiste wurden keine Hinweise gekauft. Den richtigen Code kannst du trotzdem in der Truhe sehen.");
+    dialogText.setCharacterSize(23); dialogText.setLineHeight(27);
+    dialogText.setString(state.hints.length ? solutionT("solution.choose_hint") : solutionT("solution.no_hints"));
   }
   const hasCalculation = dialogState === "learning" && Boolean(explanation.given || explanation.result);
   const dialogCenterY = hasCalculation ? 160 : 176;
@@ -476,7 +496,7 @@ const modal = dialogState === "intro" || dialogState === "exit";
 show("SolutionDialogPrimary", modal); show("SolutionDialogPrimaryLabel", modal);
 show("SolutionDialogSecondary", dialogState === "exit"); show("SolutionDialogSecondaryLabel", dialogState === "exit");
 const primaryLabel = getOne("SolutionDialogPrimaryLabel");
-if (primaryLabel) primaryLabel.setString("VERSTANDEN");
+if (primaryLabel) primaryLabel.setString(solutionT("solution.understood"));
 };
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionHintButton0Objects1Objects = Hashtable.newFrom({"SolutionHintButton0": gdjs.SolutionSceneCode.GDSolutionHintButton0Objects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionHintButton1Objects1Objects = Hashtable.newFrom({"SolutionHintButton1": gdjs.SolutionSceneCode.GDSolutionHintButton1Objects1});
@@ -492,12 +512,22 @@ gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPri
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionBackObjects1Objects = Hashtable.newFrom({"SolutionBack": gdjs.SolutionSceneCode.GDSolutionBackObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
+gdjs.SolutionSceneCode.userFunc0xceee00 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Statische SolutionScene-Spielertexte aus dem zentralen Katalog.
+const i18n = runtimeScene.getGame().__lockLootI18n;
+if (!runtimeScene.__lockLootL047Solution || runtimeScene.__lockLootL047Solution !== i18n.revision) {
+  runtimeScene.__lockLootL047Solution = i18n.revision;
+  const set = (name, key) => { const object = runtimeScene.getObjects(name)[0]; if (object) object.setString(i18n.t(key)); };
+  set("SolutionHintHeader", "solution.hints"); set("SolutionDialogPrimaryLabel", "solution.understood"); set("SolutionDialogSecondaryLabel", "solution.more_questions");
+}
+};
 gdjs.SolutionSceneCode.eventsList0 = function(runtimeScene) {
 
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xbd3aa0(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa73de8(runtimeScene);
 
 }
 
@@ -505,7 +535,15 @@ gdjs.SolutionSceneCode.userFunc0xbd3aa0(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xbc3138(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xb6f6f0(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.SolutionSceneCode.userFunc0xe862a8(runtimeScene);
 
 }
 
@@ -888,6 +926,14 @@ if (isConditionTrue_0) {
 {gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "MainMenu", true);
 }
 }
+
+}
+
+
+{
+
+
+gdjs.SolutionSceneCode.userFunc0xceee00(runtimeScene);
 
 }
 

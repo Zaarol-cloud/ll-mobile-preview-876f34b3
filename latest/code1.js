@@ -168,7 +168,46 @@ gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2= [];
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xbd3aa0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcae690 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
+const localizationGame = runtimeScene.getGame();
+if (!localizationGame.__lockLootI18n) {
+  const storageKey = "lockloot.language.v1";
+  const catalog = JSON.parse(localizationGame.getVariables().get("localizationCatalogJson").getAsString());
+  const languages = new Set(catalog.supportedLanguages.map(entry => entry.code));
+  let storedLanguage = "";
+  try { storedLanguage = globalThis.localStorage ? String(globalThis.localStorage.getItem(storageKey) || "") : ""; } catch (error) {}
+  const state = {
+    catalog,
+    storageKey,
+    language: languages.has(storedLanguage) ? storedLanguage : catalog.defaultLanguage,
+    revision: 1,
+    t(key, parameters = {}) {
+      const entry = catalog.strings[key];
+      if (!entry) return "[MISSING:" + key + "]";
+      const template = typeof entry[state.language] === "string" ? entry[state.language] : entry[catalog.defaultLanguage];
+      if (typeof template !== "string") return "[MISSING:" + key + "]";
+      const required = [...new Set([...template.matchAll(/\{([A-Za-z][A-Za-z0-9_]*)\}/g)].map(match => match[1]))].sort();
+      const supplied = Object.keys(parameters).sort();
+      if (JSON.stringify(required) !== JSON.stringify(supplied)) throw new Error("Invalid localization parameters for " + key + ": expected " + required.join(",") + "; received " + supplied.join(","));
+      return template.replace(/\{([A-Za-z][A-Za-z0-9_]*)\}/g, (match, name) => String(parameters[name]));
+    },
+    setLanguage(language) {
+      if (!languages.has(language)) return false;
+      if (state.language !== language) { state.language = language; state.revision += 1; }
+      localizationGame.getVariables().get("localizationLanguage").setString(state.language);
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(storageKey, state.language); } catch (error) {}
+      return true;
+    }
+  };
+  localizationGame.__lockLootI18n = state;
+  state.setLanguage(state.language);
+}
+const sceneLocalization = localizationGame.__lockLootI18n;
+localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
+};
+gdjs.TrainingSceneCode.userFunc0xbf73b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -251,7 +290,7 @@ const controller = game[controllerKey];
 if (!controller.state.currentTrack) controller.forceMain(runtimeScene);
 controller.update(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xbc3138 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0x9fb520 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -294,6 +333,7 @@ const wrapParagraph = (paragraph, maxCharacters) => {
   return lines;
 };
 
+const trainingVisualI18n = runtimeScene.getGame().__lockLootI18n;
 let hintIsSpeaking = false;
 const hintObjects = runtimeScene.getObjects("txtHint");
 const bubbleObjects = runtimeScene.getObjects("SpeechBubble");
@@ -359,14 +399,14 @@ if (hintObjects.length > 0 && bubbleObjects.length > 0) {
   hint.setPadding(4);
   hintIsSpeaking =
     normalizedText.length > 0 &&
-    !normalizedText.startsWith("Tippe mich an, um Hinweise zu erhalten");
+    normalizedText !== trainingVisualI18n.t("training.hint_prompt").replace(/\s+/g, " " ).trim();
   const controlsY = 104 + bubbleHeight - 50;
   for (const counter of hintCounterObjects) {
     counter.setPosition(110, controlsY + 10);
     counter.setWrapping(true);
     counter.setWrappingWidth(bubbleWidth - 220);
     counter.setTextAlignment("center");
-    counter.setString(normalHintNavigationVisible ? "Hinweis " + (displayedHintIndex + 1) + " von " + paidNormalHints : "");
+    counter.setString(normalHintNavigationVisible ? trainingVisualI18n.t("training.hint_counter", { index: displayedHintIndex + 1, total: paidNormalHints }) : "");
     counter.hide(!normalHintNavigationVisible);
   }
   for (const previousButton of hintPrevObjects) {
@@ -866,42 +906,23 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xc27aa0 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xbeb3e8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-040: Die Trefferzahlen stammen ausschließlich aus der bestätigten attemptChest-Antwort.
-// Der Client kennt weder richtige Ziffernwerte noch Positionen oder den solutionCode.
+// L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
 const sceneVariables = runtimeScene.getVariables();
-const bonusActiveVariable = sceneVariables.get('bonusHintActive');
-const bonusTextVariable = sceneVariables.get('bonusHintText');
-const totalHitsVariable = sceneVariables.get('richtigeZiffernGesamt');
-const positionHitsVariable = sceneVariables.get('richtigePositionen');
+const i18n = runtimeScene.getGame().__lockLootI18n;
+const bonusActiveVariable = sceneVariables.get("bonusHintActive");
+const bonusTextVariable = sceneVariables.get("bonusHintText");
+const totalHitsVariable = sceneVariables.get("richtigeZiffernGesamt");
+const positionHitsVariable = sceneVariables.get("richtigePositionen");
 const totalHits = totalHitsVariable.getAsNumber();
 const positionHits = positionHitsVariable.getAsNumber();
-
 if (!Number.isSafeInteger(totalHits) || !Number.isSafeInteger(positionHits) || totalHits < 0 || totalHits > 11 || positionHits < 0 || positionHits > totalHits) {
-  bonusActiveVariable.setBoolean(false);
-  bonusTextVariable.setString('');
-  totalHitsVariable.setNumber(0);
-  positionHitsVariable.setNumber(0);
+  bonusActiveVariable.setBoolean(false); bonusTextVariable.setString(""); totalHitsVariable.setNumber(0); positionHitsVariable.setNumber(0);
 } else {
-  let bonusText;
-  if (totalHits === 0) {
-    bonusText = 'Keine deiner eingegebenen Ziffern kommt im richtigen Code vor. Noch keine steht an der richtigen Position.';
-  } else if (totalHits === 1) {
-    bonusText = positionHits === 1
-      ? 'Eine deiner eingegebenen Ziffern kommt im richtigen Code vor. Sie steht bereits an der richtigen Position.'
-      : 'Eine deiner eingegebenen Ziffern kommt im richtigen Code vor. Sie steht noch nicht an der richtigen Position.';
-  } else {
-    const positionSentence = positionHits === 0
-      ? 'Noch keine davon steht an der richtigen Position.'
-      : positionHits === 1
-        ? 'Eine davon steht bereits an der richtigen Position.'
-        : positionHits + ' davon stehen bereits an der richtigen Position.';
-    bonusText = 'Von deinen elf eingegebenen Ziffern kommen ' + totalHits + ' im richtigen Code vor. ' + positionSentence;
-  }
-  totalHitsVariable.setNumber(totalHits);
-  positionHitsVariable.setNumber(positionHits);
-  bonusTextVariable.setString(bonusText);
+  const key = totalHits === 0 ? "training.bonus.none" : totalHits === 1 ? (positionHits === 1 ? "training.bonus.one_exact" : "training.bonus.one_wrong_position") : positionHits === 0 ? "training.bonus.many_none_exact" : positionHits === 1 ? "training.bonus.many_one_exact" : "training.bonus.many_exact";
+  const parameters = key === "training.bonus.many_exact" ? { matching: totalHits, exact: positionHits } : key.startsWith("training.bonus.many_") ? { matching: totalHits } : {};
+  bonusTextVariable.setString(i18n.t(key, parameters));
 }
 };
 gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
@@ -909,7 +930,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc27aa0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbeb3e8(runtimeScene);
 
 }
 
@@ -920,7 +941,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xa56880 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc49a88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -942,7 +963,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa56880(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc49a88(runtimeScene);
 
 }
 
@@ -1481,7 +1502,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xc24a18 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xaefb60 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -3624,17 +3645,20 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc24a18(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaefb60(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xaa22b0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaeb7c8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
+const trainingI18n = runtimeScene.getGame().__lockLootI18n;
+const trainingT = (key, parameters = {}) => trainingI18n.t(key, parameters);
+const trainingHintText = hint => hint && hint.textByLanguage && typeof hint.textByLanguage[trainingI18n.language] === "string" ? hint.textByLanguage[trainingI18n.language] : hint.text;
 if (!runtimeScene.__lockLootTrainingBackend) {
   const sceneVariables = runtimeScene.getVariables();
   const endpoints = Object.freeze({
@@ -3723,7 +3747,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     const forbidden = ['solutionCode', 'assignmentSalt', 'assignmentSeedHash', 'assignedHints', 'truthValue', 'internalPositions', 'mathematicalRule', 'signature'];
     if (forbidden.some((field) => JSON.stringify(hintState).includes(field))) throw Object.assign(new Error('Interne Hintdaten in Clientantwort.'), { status: 'INVALID_RESPONSE' });
     for (const hint of hintState.revealedHints) {
-      if (!hint || !Number.isSafeInteger(hint.index) || !Number.isSafeInteger(hint.packageNumber) || !Number.isSafeInteger(hint.tier) || typeof hint.id !== 'string' || typeof hint.text !== 'string') throw Object.assign(new Error('Ungültiger clientsicherer Hinweis.'), { status: 'INVALID_RESPONSE' });
+      if (!hint || !Number.isSafeInteger(hint.index) || !Number.isSafeInteger(hint.packageNumber) || !Number.isSafeInteger(hint.tier) || typeof hint.id !== 'string' || typeof hint.text !== 'string' || !hint.textByLanguage || typeof hint.textByLanguage.de !== 'string' || typeof hint.textByLanguage.en !== 'string' || hint.textByLanguage.de !== hint.text) throw Object.assign(new Error('Ungültiger clientsicherer Hinweis.'), { status: 'INVALID_RESPONSE' });
     }
     return hintState;
   };
@@ -3749,8 +3773,8 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     for (const field of ['booster5', 'booster10', 'booster25']) if (!Number.isSafeInteger(economy.activeChestBoosters[field]) || economy.activeChestBoosters[field] < 0) throw Object.assign(new Error('Ungültiger Kistenbooster.'), { status: 'INVALID_RESPONSE' });
     return economy;
   };
-  const rationalText = (value) => value.numerator + '/' + value.denominator + ' Cent';
-  const economySummary = () => state.economy ? 'Economy V' + state.economy.economyVersion + ' · A ' + rationalText(state.economy.activeBaseValue) + ' · B ' + rationalText(state.economy.futureChests[0].value) + ' · C ' + rationalText(state.economy.futureChests[1].value) + ' · D ' + rationalText(state.economy.futureChests[2].value) + ' · A-Booster ' + state.economy.activeChestBoosters.booster5 + '/' + state.economy.activeChestBoosters.booster10 + '/' + state.economy.activeChestBoosters.booster25 : '';
+  const rationalText = (value) => trainingT("training.rational_value", { numerator: value.numerator, denominator: value.denominator });
+  const economySummary = () => state.economy ? trainingT("training.economy_summary", { version: state.economy.economyVersion, a: rationalText(state.economy.activeBaseValue), b: rationalText(state.economy.futureChests[0].value), c: rationalText(state.economy.futureChests[1].value), d: rationalText(state.economy.futureChests[2].value), booster5: state.economy.activeChestBoosters.booster5, booster10: state.economy.activeChestBoosters.booster10, booster25: state.economy.activeChestBoosters.booster25 }) : '';
   const applyEconomy = (economy, chest = state.currentChest) => {
     validateEconomy(economy, chest);
     state.economy = economy;
@@ -3780,8 +3804,8 @@ if (!runtimeScene.__lockLootTrainingBackend) {
   const applyHintState = (hintState, preserveIndex = true) => {
     validateHintState(hintState, state.currentChest.chestId);
     state.hintState = hintState;
-    const texts = hintState.revealedHints.map((hint) => hint.text);
-    const metadata = hintState.revealedHints.map((hint) => ({ index: hint.index, packageNumber: hint.packageNumber, tier: hint.tier, id: hint.id, text: hint.text }));
+    const texts = hintState.revealedHints.map(trainingHintText);
+    const metadata = hintState.revealedHints.map((hint) => ({ index: hint.index, packageNumber: hint.packageNumber, tier: hint.tier, id: hint.id, text: hint.text, textByLanguage: hint.textByLanguage, visiblePositions: hint.visiblePositions, positionRoles: hint.positionRoles, explanationType: hint.explanationType, explanationData: hint.explanationData }));
     sceneVariables.get('Hinweise').fromJSObject(texts);
     sceneVariables.get('HinweisMetadaten').fromJSObject(metadata);
     sceneVariables.get('paidHintCount').setNumber(hintState.purchasedPackageCount);
@@ -3791,7 +3815,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     sceneVariables.get('displayedHintIndex').setNumber(displayIndex);
     sceneVariables.get('hintPresentationStep').setNumber(0);
     sceneVariables.get('hintPresentationActive').setBoolean(false);
-    const normalText = texts.length ? texts[displayIndex] : 'Tippe mich an, um Hinweise zu erhalten.';
+    const normalText = texts.length ? texts[displayIndex] : trainingT("training.hint_prompt");
     sceneVariables.get('normalHintText').setString(normalText);
     if (!sceneVariables.get('bonusHintActive').getAsBoolean()) setHintText(normalText);
   };
@@ -3833,7 +3857,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     if (!sceneIsCurrent() || sceneVariables.get('backendRequestPending').getAsBoolean()) return;
     sceneVariables.get('backendRequestPending').setBoolean(true);
     sceneVariables.get('backendInitState').setString('loading');
-    setStatus('Lokales Backend wird verbunden …\nWertvolle Aktionen sind während des Ladens gesperrt.');
+    setStatus(trainingT("training.backend_connecting_locked"));
     try {
       let session = readSession();
       let loaded = false;
@@ -3872,14 +3896,17 @@ if (!runtimeScene.__lockLootTrainingBackend) {
       if (!sceneIsCurrent()) return;
       sceneVariables.get('backendInitState').setString('ready');
       sceneVariables.get('backendLastError').setString('');
-      setStatus('Lokales Backend verbunden · Serverwallet aktiv.\nKiste und persönliche Hinweise wurden bestätigt geladen.\n' + economySummary());
+      setStatus(trainingT("training.backend_connected", { economy: economySummary() }));
     } catch (error) {
       if (!sceneIsCurrent()) return;
       const networkError = error && (error.name === 'AbortError' || error instanceof TypeError);
       sceneVariables.get('backendInitState').setString(networkError ? 'offline' : 'error');
       sceneVariables.get('backendLastError').setString(networkError ? 'BACKEND_UNREACHABLE' : 'BOOTSTRAP_FAILED');
       state.reconnectAt = Date.now() + 3000;
-      setStatus(networkError ? 'Lokales Backend nicht erreichbar.\nHintkauf und Schlossversuch sind gesperrt; Anzeige und Ziffern bleiben nutzbar.' : 'Lokaler Serverbootstrap fehlgeschlagen.\nEs wurde kein Ressourcenstand lokal verändert.');
+      setStatus(networkError ? trainingT("training.backend_offline") : trainingT("training.bootstrap_failed"));
+      const fallbackHintText = trainingT("training.hint_prompt");
+      sceneVariables.get('normalHintText').setString(fallbackHintText);
+      if (!sceneVariables.get('bonusHintActive').getAsBoolean()) setHintText(fallbackHintText);
     } finally {
       if (sceneIsCurrent()) sceneVariables.get('backendRequestPending').setBoolean(false);
     }
@@ -3893,7 +3920,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
       expectedWalletRevision: state.wallet.revision
     };
     state.retryHintRequest = request;
-    setStatus('Serverautoritiver Hinweiskauf läuft …\nEin zweiter Kauf ist bis zur Antwort gesperrt.');
+    setStatus(trainingT("training.hint_purchase_running"));
     const result = await callCallable(endpoints.buyHintPackage, { ...request }, state.idToken);
     if (!result || result.chestId !== state.currentChest.chestId || !Number.isSafeInteger(result.packageNumber) || !Array.isArray(result.newlyRevealedHints) || result.newlyRevealedHints.length !== 2 || !result.wallet || !result.hintState || !result.economy) throw Object.assign(new Error('Ungültige Hintkauf-Antwort.'), { status: 'INVALID_RESPONSE' });
     applyWallet(result.wallet);
@@ -3901,12 +3928,12 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     applyHintState(result.hintState, false);
     const firstIndex = (result.packageNumber - 1) * 2;
     sceneVariables.get('displayedHintIndex').setNumber(firstIndex);
-    sceneVariables.get('normalHintText').setString(result.newlyRevealedHints[0].text);
+    sceneVariables.get('normalHintText').setString(trainingHintText(result.newlyRevealedHints[0]));
     sceneVariables.get('hintPresentationStep').setNumber(1);
     sceneVariables.get('hintPresentationActive').setBoolean(true);
     sceneVariables.get('backendHintPresentationPending').setBoolean(true);
     state.retryHintRequest = null;
-    setStatus('Hinweispaket ' + result.packageNumber + ' serverseitig gekauft.\nBestätigter Keksbestand: ' + result.wallet.cookies + '.\n' + economySummary());
+    setStatus(trainingT("training.hint_purchase_done", { package: result.packageNumber, cookies: result.wallet.cookies, economy: economySummary() }));
   };
   state.runAttempt = async () => {
     const enteredCode = Array.from({ length: 11 }, (_, index) => sceneVariables.get('digit' + index + 'Value').getAsNumber()).join('');
@@ -3914,7 +3941,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     sceneVariables.get('enteredCode').setString(enteredCode);
     const request = state.retryAttemptRequest || { integration: 'L&L-041', requestId: makeRequestId(), chestId: state.currentChest.chestId, enteredCode, expectedRevision: state.wallet.revision };
     state.retryAttemptRequest = request;
-    setStatus('Serverseitiger Schlossversuch läuft …\nDie eingegebenen Ziffern bleiben sichtbar.');
+    setStatus(trainingT("training.attempt_running"));
     const result = await callCallable(endpoints.attemptChest, { ...request }, state.idToken);
     if (!result || typeof result.success !== 'boolean' || result.chestId !== state.currentChest.chestId || !Number.isSafeInteger(result.lockpicksRemaining) || !Number.isSafeInteger(result.walletRevision) || !Number.isSafeInteger(result.chestRevision) || !result.wallet || !result.economy) throw Object.assign(new Error('Ungültige Schlossantwort.'), { status: 'INVALID_RESPONSE' });
     applyWallet(result.wallet);
@@ -3934,7 +3961,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
       setHintText(sceneVariables.get('normalHintText').getAsString());
       for (const object of runtimeScene.getObjects('TxtCode_richtig')) object.hide(false);
       for (const object of runtimeScene.getObjects('TxtCode_falsch')) object.hide();
-      setStatus('Erster Löser: Kiste global gewonnen und rotiert.\nGenau 1 Dietrich eingesetzt; Belohnung: +' + result.reward.cookies + ' Kekse, +' + result.reward.lockpicks + ' Dietriche · alter Boost ' + result.consumedPersonalBoost + ' % vollständig verbraucht.\nNeue Wallet-Booster 5/10/25: ' + state.wallet.booster5 + '/' + state.wallet.booster10 + '/' + state.wallet.booster25 + '.\nNeue Kiste: ' + state.currentChest.chestId + '\n' + economySummary());
+      setStatus(trainingT("training.attempt_won", { rewardCookies: result.reward.cookies, rewardLockpicks: result.reward.lockpicks, consumedBoost: result.consumedPersonalBoost, booster5: state.wallet.booster5, booster10: state.wallet.booster10, booster25: state.wallet.booster25, chestId: state.currentChest.chestId, economy: economySummary() }));
     } else {
       if (!Number.isSafeInteger(result.matchingDigitCount) || !Number.isSafeInteger(result.exactPositionCount) || result.matchingDigitCount < 0 || result.matchingDigitCount > 11 || result.exactPositionCount < 0 || result.exactPositionCount > result.matchingDigitCount) throw Object.assign(new Error('Ungültige Fehlversuchsbonus-Antwort.'), { status: 'INVALID_RESPONSE' });
       sceneVariables.get('wrongCode').setBoolean(true);
@@ -3943,7 +3970,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
       sceneVariables.get('richtigePositionen').setNumber(result.exactPositionCount);
       sceneVariables.get('bonusHintPending').setBoolean(true);
       for (const object of runtimeScene.getObjects('TxtCode_falsch')) object.hide(false);
-      setStatus('Fehlversuch serverseitig bestätigt.\nGenau ein Dietrich wurde verbraucht; die elf Eingabeziffern bleiben stehen.\n' + economySummary());
+      setStatus(trainingT("training.attempt_wrong", { economy: economySummary() }));
     }
   };
   state.handleActionError = async (error, action) => {
@@ -3952,23 +3979,23 @@ if (!runtimeScene.__lockLootTrainingBackend) {
       sceneVariables.get('backendInitState').setString('offline');
       sceneVariables.get('backendLastError').setString('BACKEND_UNREACHABLE');
       state.reconnectAt = Date.now() + 3000;
-      setStatus('Lokales Backend nicht erreichbar.\nKein lokaler Ressourcenverbrauch; dieselbe requestId bleibt für eine sichere Wiederholung erhalten.');
+      setStatus(trainingT("training.backend_unreachable_retry"));
       return;
     }
     if (error && error.reason === 'STALE_CHEST') {
       state.retryHintRequest = null;
       state.retryAttemptRequest = null;
       await state.loadBootstrap();
-      setStatus('Die gemeinsame Kiste hat gewechselt.\nAktueller Zustand wurde geladen; kein Keks oder Dietrich wurde verbraucht.');
+      setStatus(trainingT("training.chest_changed"));
       return;
     }
     if (action === 'hint') state.retryHintRequest = null;
     if (action === 'attempt') state.retryAttemptRequest = null;
-    if (error && error.reason === 'NOT_ENOUGH_COOKIES') setStatus('Nicht genügend Kekse.\nEs wurde kein Hinweispaket freigegeben.');
-    else if (error && error.reason === 'ALL_HINT_PACKAGES_PURCHASED') setStatus('Alle fünf Hinweispakete sind bereits gekauft.\nEs wurde kein weiterer Keks verbraucht.');
-    else if (error && error.status === 'RESOURCE_EXHAUSTED') setStatus('Kein Dietrich verfügbar.\nEs wurde kein Schlossversuch ausgeführt.');
-    else if (error && error.status === 'UNAUTHENTICATED') { sceneVariables.get('backendInitState').setString('offline'); state.reconnectAt = Date.now() + 1000; setStatus('Lokale Anmeldung abgelaufen.\nVerbindung wird erneut hergestellt; kein Ressourcenverbrauch.'); }
-    else setStatus('Backendaktion wurde kontrolliert abgelehnt.\nKein lokaler Ressourcenstand wurde verändert.');
+    if (error && error.reason === 'NOT_ENOUGH_COOKIES') setStatus(trainingT("training.not_enough_cookies"));
+    else if (error && error.reason === 'ALL_HINT_PACKAGES_PURCHASED') setStatus(trainingT("training.all_hints_bought"));
+    else if (error && error.status === 'RESOURCE_EXHAUSTED') setStatus(trainingT("training.no_lockpick"));
+    else if (error && error.status === 'UNAUTHENTICATED') { sceneVariables.get('backendInitState').setString('offline'); state.reconnectAt = Date.now() + 1000; setStatus(trainingT("training.login_expired")); }
+    else setStatus(trainingT("training.action_rejected"));
   };
   sceneVariables.get('backendModeActive').setBoolean(true);
   sceneVariables.get('backendInitState').setString('loading');
@@ -3979,8 +4006,8 @@ if (!runtimeScene.__lockLootTrainingBackend) {
   sceneVariables.get('autoHideText').setBoolean(false);
   sceneVariables.get('hintWritten').setBoolean(true);
   sceneVariables.get('hintPackageWritten').setBoolean(true);
-  sceneVariables.get('normalHintText').setString('Lokales Backend wird verbunden …');
-  setHintText('Lokales Backend wird verbunden …');
+  sceneVariables.get('normalHintText').setString(trainingT("training.backend_connecting"));
+  setHintText(trainingT("training.backend_connecting"));
   for (const object of runtimeScene.getObjects('Debug_CorrectCode')) { object.setString(''); object.hide(); }
   for (const object of runtimeScene.getObjects('TxtCode_richtig')) object.hide();
   for (const object of runtimeScene.getObjects('TxtCode_falsch')) object.hide();
@@ -3996,13 +4023,13 @@ if (requestedAction) actionVariable.setString('');
 if (requestedAction) {
   const initState = trainingVariables.get('backendInitState').getAsString();
   if (initState !== 'ready') {
-    trainingBackend.setStatus('Lokales Backend ist nicht bereit.\nHintkauf und Schlossversuch bleiben ohne lokalen Ressourcenverbrauch gesperrt.');
+    trainingBackend.setStatus(trainingT("training.backend_not_ready"));
   } else if (trainingVariables.get('backendRequestPending').getAsBoolean()) {
-    trainingBackend.setStatus('Eine Serveranfrage läuft bereits.\nDer zweite Klick wurde nicht als neue Aktion übernommen.');
+    trainingBackend.setStatus(trainingT("training.request_pending"));
   } else {
     trainingVariables.get('backendRequestPending').setBoolean(true);
     const operation = requestedAction === 'hint' ? trainingBackend.runHintPurchase() : trainingBackend.runAttempt();
-    void operation.catch((error) => trainingBackend.handleActionError(error, requestedAction)).catch(() => { trainingBackend.setStatus('Backendzustand konnte nicht neu geladen werden.\nKeine lokale Ressourcenänderung.'); }).finally(() => {
+    void operation.catch((error) => trainingBackend.handleActionError(error, requestedAction)).catch(() => { trainingBackend.setStatus(trainingT("training.reload_failed")); }).finally(() => {
       if (runtimeScene.__lockLootTrainingBackend === trainingBackend) trainingVariables.get('backendRequestPending').setBoolean(false);
     });
   }
@@ -4034,7 +4061,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xa7ea90 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb10098 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
 // Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
@@ -4058,12 +4085,35 @@ if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
+gdjs.TrainingSceneCode.userFunc0x9a0190 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
+const trainingI18n = runtimeScene.getGame().__lockLootI18n;
+const trainingObjects = name => runtimeScene.getObjects(name);
+const trainingSet = (name, value) => { const objects = trainingObjects(name); if (objects[0]) objects[0].setString(value); };
+trainingSet("TxtBestand", trainingI18n.t("training.inventory", { cookies: runtimeScene.getVariables().get("Kekse").getAsNumber(), lockpicks: runtimeScene.getVariables().get("Dietrich").getAsNumber() }));
+if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.revision !== trainingI18n.revision) {
+  runtimeScene.__lockLootL047Training = { revision: trainingI18n.revision };
+  trainingSet("TxtCode_richtig", trainingI18n.t("training.code_correct"));
+  trainingSet("TxtCode_falsch", trainingI18n.t("training.code_wrong"));
+  trainingSet("SolutionTestLabel", trainingI18n.t("training.solution_test"));
+  const backend = runtimeScene.__lockLootTrainingBackend;
+  if (backend && backend.hintState && Array.isArray(backend.hintState.revealedHints)) {
+    const hints = backend.hintState.revealedHints.map(hint => hint.textByLanguage && hint.textByLanguage[trainingI18n.language] || hint.text);
+    runtimeScene.getVariables().get("Hinweise").fromJSObject(hints);
+    const index = Math.max(0, Math.min(hints.length - 1, Math.floor(runtimeScene.getVariables().get("displayedHintIndex").getAsNumber())));
+    const value = hints.length ? hints[index] : trainingI18n.t("training.hint_prompt");
+    runtimeScene.getVariables().get("normalHintText").setString(value);
+    if (!runtimeScene.getVariables().get("bonusHintActive").getAsBoolean()) trainingSet("txtHint", value);
+  }
+}
+};
 gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbd3aa0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcae690(runtimeScene);
 
 }
 
@@ -4071,7 +4121,15 @@ gdjs.TrainingSceneCode.userFunc0xbd3aa0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbc3138(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf73b0(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TrainingSceneCode.userFunc0x9fb520(runtimeScene);
 
 }
 
@@ -5537,7 +5595,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaa22b0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaeb7c8(runtimeScene);
 
 }
 
@@ -5646,7 +5704,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa7ea90(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb10098(runtimeScene);
 
 }
 
@@ -5664,6 +5722,14 @@ if (isConditionTrue_0) {
 {gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "SolutionScene", true);
 }
 }
+
+}
+
+
+{
+
+
+gdjs.TrainingSceneCode.userFunc0x9a0190(runtimeScene);
 
 }
 

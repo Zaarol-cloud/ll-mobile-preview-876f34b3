@@ -99,17 +99,58 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2= [];
 
 
+gdjs.TreasureCalendarSceneCode.userFunc0xa73de8 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
+const localizationGame = runtimeScene.getGame();
+if (!localizationGame.__lockLootI18n) {
+  const storageKey = "lockloot.language.v1";
+  const catalog = JSON.parse(localizationGame.getVariables().get("localizationCatalogJson").getAsString());
+  const languages = new Set(catalog.supportedLanguages.map(entry => entry.code));
+  let storedLanguage = "";
+  try { storedLanguage = globalThis.localStorage ? String(globalThis.localStorage.getItem(storageKey) || "") : ""; } catch (error) {}
+  const state = {
+    catalog,
+    storageKey,
+    language: languages.has(storedLanguage) ? storedLanguage : catalog.defaultLanguage,
+    revision: 1,
+    t(key, parameters = {}) {
+      const entry = catalog.strings[key];
+      if (!entry) return "[MISSING:" + key + "]";
+      const template = typeof entry[state.language] === "string" ? entry[state.language] : entry[catalog.defaultLanguage];
+      if (typeof template !== "string") return "[MISSING:" + key + "]";
+      const required = [...new Set([...template.matchAll(/\{([A-Za-z][A-Za-z0-9_]*)\}/g)].map(match => match[1]))].sort();
+      const supplied = Object.keys(parameters).sort();
+      if (JSON.stringify(required) !== JSON.stringify(supplied)) throw new Error("Invalid localization parameters for " + key + ": expected " + required.join(",") + "; received " + supplied.join(","));
+      return template.replace(/\{([A-Za-z][A-Za-z0-9_]*)\}/g, (match, name) => String(parameters[name]));
+    },
+    setLanguage(language) {
+      if (!languages.has(language)) return false;
+      if (state.language !== language) { state.language = language; state.revision += 1; }
+      localizationGame.getVariables().get("localizationLanguage").setString(state.language);
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(storageKey, state.language); } catch (error) {}
+      return true;
+    }
+  };
+  localizationGame.__lockLootI18n = state;
+  state.setLanguage(state.language);
+}
+const sceneLocalization = localizationGame.__lockLootI18n;
+localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
+};
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarPrevButtonObjects1Objects = Hashtable.newFrom({"CalendarPrevButton": gdjs.TreasureCalendarSceneCode.GDCalendarPrevButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarNextButtonObjects1Objects = Hashtable.newFrom({"CalendarNextButton": gdjs.TreasureCalendarSceneCode.GDCalendarNextButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarClaimButtonObjects1Objects = Hashtable.newFrom({"CalendarClaimButton": gdjs.TreasureCalendarSceneCode.GDCalendarClaimButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarBackButtonObjects1Objects = Hashtable.newFrom({"CalendarBackButton": gdjs.TreasureCalendarSceneCode.GDCalendarBackButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarParrotObjects1Objects = Hashtable.newFrom({"CalendarParrot": gdjs.TreasureCalendarSceneCode.GDCalendarParrotObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarShopButtonObjects1Objects = Hashtable.newFrom({"CalendarShopButton": gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1});
-gdjs.TreasureCalendarSceneCode.userFunc0xcaeae0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xa03f88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-043: Kalenderbootstrap, clientsichere Konfigurationsanzeige und serverautoritiver Claim.
 // Ausschließlich lokale Firebase-Emulatoren; keine Zahlung, kein Shop und keine lokale Gutschrift.
 const calendarVariables = runtimeScene.getVariables();
+const calendarI18n = runtimeScene.getGame().__lockLootI18n;
+const calendarT = (key, parameters = {}) => calendarI18n.t(key, parameters);
 const calendarGame = runtimeScene.getGame();
 const calendarSessionKey = "__lockLootCalendarSession";
 const calendarStorageKey = "__lockLootL040LocalAuth";
@@ -152,8 +193,8 @@ const calendarRewardText = (reward) => {
   if (reward.booster5) boosters.push("5 % × " + reward.booster5);
   if (reward.booster10) boosters.push("10 % × " + reward.booster10);
   if (reward.booster25) boosters.push("25 % × " + reward.booster25);
-  return "K +" + reward.cookies + "  ·  D +" + reward.lockpicks +
-    (boosters.length ? "\nBOOST " + boosters.join(" · ") : "");
+  return calendarT("calendar.reward_resources", { cookies: reward.cookies, lockpicks: reward.lockpicks }) +
+    (boosters.length ? calendarT("calendar.reward_boost", { boosters: boosters.join(" · ") }) : "");
 };
 const calendarValidateWallet = (wallet) => {
   const fields = [...calendarRewardFields, "totalBoost", "revision", "schemaVersion"];
@@ -213,15 +254,13 @@ const calendarRender = (state) => {
   calendarVariables.get("CalendarWalletLockpicks").setNumber(wallet.lockpicks);
   calendarFillConfigVariable(calendar);
 
-  calendarSetText("CalendarProgressText", calendar.cycleCompleted ? "30 / 30 ABGESCHLOSSEN" : "LOGIN " + calendar.progress + " VON 30");
-  calendarSetText("CalendarWalletText", "SERVERWALLET  ·  KEKSE " + wallet.cookies + "  ·  DIETRICHE " + wallet.lockpicks);
-  calendarSetText("CalendarPremiumStatusText", calendar.premiumEntitled ?
-    "PREMIUM-PASS FÜR 30 LOGINS · AKTIV" :
-    "PREMIUM-PASS FÜR 30 LOGINS · NICHT FREIGESCHALTET");
+  calendarSetText("CalendarProgressText", calendar.cycleCompleted ? calendarT("calendar.completed", { total: 30 }) : calendarT("calendar.progress", { current: calendar.progress, total: 30 }));
+  calendarSetText("CalendarWalletText", calendarT("calendar.wallet", { cookies: wallet.cookies, lockpicks: wallet.lockpicks }));
+  calendarSetText("CalendarPremiumStatusText", calendar.premiumEntitled ? calendarT("calendar.premium_active") : calendarT("calendar.premium_inactive"));
   const startLevel = state.page * 5 + 1;
   const endLevel = Math.min(30, startLevel + 4);
   const chapterNames = ["I", "II", "III", "IV", "V", "VI"];
-  calendarSetText("CalendarPageText", "KAPITEL " + chapterNames[state.page] + "  ·  LOGIN " + startLevel + "–" + endLevel);
+  calendarSetText("CalendarPageText", calendarT("calendar.chapter", { chapter: chapterNames[state.page], start: startLevel, end: endLevel }));
 
   const stageTexts = calendarObjects("CalendarStageText");
   const freeRewards = calendarObjects("CalendarFreeRewardText");
@@ -236,7 +275,7 @@ const calendarRender = (state) => {
     const claimed = level <= calendar.progress;
     const current = level === calendar.nextLevel;
     const currentAvailable = current && available;
-    if (stageTexts[index]) stageTexts[index].setString("LOGIN\n" + level + (level % 10 === 0 ? " ★" : ""));
+    if (stageTexts[index]) stageTexts[index].setString(calendarT("calendar.stage", { level }) + (level % 10 === 0 ? " ★" : ""));
     if (freeRewards[index]) {
       const text = calendarRewardText(entry.free);
       freeRewards[index].setString(text);
@@ -251,15 +290,14 @@ const calendarRender = (state) => {
       premiumRewards[index].setWrappingWidth(Math.max(72, premiumRewards[index].getWidth()));
       premiumRewards[index].setCharacterSize(text.length > 28 ? 10 : 12);
     }
-    if (freeStates[index]) freeStates[index].setString(claimed ? "✓" : currentAvailable ? "★ HEUTE" : current ? "NÄCHSTER" : "SPÄTER");
-    if (premiumStates[index]) premiumStates[index].setString(!calendar.premiumEntitled ? "PASS AUS" : claimed ? "✓ EXTRA" : currentAvailable ? "★ EXTRA" : current ? "NÄCHSTER" : "SPÄTER");
+    if (freeStates[index]) freeStates[index].setString(claimed ? "✓" : currentAvailable ? calendarT("calendar.today") : current ? calendarT("calendar.next_stage") : calendarT("calendar.later"));
+    if (premiumStates[index]) premiumStates[index].setString(!calendar.premiumEntitled ? calendarT("calendar.pass_off") : claimed ? calendarT("calendar.extra") : currentAvailable ? calendarT("calendar.extra_today") : current ? calendarT("calendar.next_stage") : calendarT("calendar.later"));
     calendarSetColor(stageTexts[index], currentAvailable ? "255;239;139" : claimed ? "176;241;184" : "255;226;160");
     calendarSetColor(freeStates[index], currentAvailable ? "255;239;139" : claimed ? "139;238;164" : "226;214;185");
     calendarSetColor(premiumStates[index], !calendar.premiumEntitled ? "180;164;195" : currentAvailable ? "255;222;112" : claimed ? "205;170;255" : "226;205;245");
     calendarSetOpacity(premiumBadges[index], calendar.premiumEntitled ? 255 : 115);
   }
-  const claimLabel = state.pending ? "WIRD EINGESAMMELT …" : !state.backendAvailable ? "BACKEND NICHT ERREICHBAR" :
-    calendar.cycleCompleted ? "ZYKLUS ABGESCHLOSSEN" : calendar.todayClaimed ? "HEUTE BEREITS EINGESAMMELT" : "BELOHNUNG HOLEN";
+  const claimLabel = state.pending ? calendarT("calendar.claim_pending") : !state.backendAvailable ? calendarT("calendar.backend_unavailable") : calendar.cycleCompleted ? calendarT("calendar.cycle_complete") : calendar.todayClaimed ? calendarT("calendar.claimed_today") : calendarT("calendar.claim");
   calendarSetText("CalendarClaimButtonText", claimLabel);
   const claimButtons = calendarObjects("CalendarClaimButton");
   if (claimButtons.length) {
@@ -291,7 +329,7 @@ if (runtimeScene.getTimeManager().isFirstFrame() && calendarRenderStateMatch) {
     renderStateId: calendarRenderStateMatch, renderDisplayProgress: spec.displayProgress, renderMarkerLevel: spec.markerLevel, renderMarkerAfterClaim: spec.markerAfterClaim
   };
   runtimeScene.__lockLootCalendarScene = state;
-  calendarSetStatus(state, "Lokale Renderdaten werden geladen …");
+  calendarSetStatus(state, calendarT("calendar.render_loading_local"));
   const renderEndpoints = Object.freeze({
     auth: "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=local-emulator-only",
     prepare: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/prepareGDevelopTest",
@@ -340,7 +378,7 @@ if (runtimeScene.getTimeManager().isFirstFrame() && calendarRenderStateMatch) {
     if (runtimeScene.__lockLootCalendarScene !== state) return;
     state.pending = false;
     state.backendAvailable = false;
-    calendarSetStatus(state, "LOKALE RENDERDATEN NICHT VERFÜGBAR");
+    calendarSetStatus(state, calendarT("calendar.render_unavailable"));
   });
 }
 
@@ -388,7 +426,7 @@ if (runtimeScene.getTimeManager().isFirstFrame() && !calendarRenderStateMatch) {
     page: 0, pending: false, backendAvailable: false, statusMessage: ""
   };
   runtimeScene.__lockLootCalendarScene = state;
-  calendarSetStatus(state, "Lokaler Serverstand wird geladen …");
+  calendarSetStatus(state, calendarT("calendar.loading_server"));
   const authenticate = async () => {
     const auth = await requestJson(endpoints.auth, { returnSecureToken: true });
     if (!auth || typeof auth.idToken !== "string" || !auth.idToken || typeof auth.localId !== "string" || !auth.localId) throw Object.assign(new Error("Anonyme Auth-Antwort ungültig."), { status: "AUTH_FAILED" });
@@ -438,13 +476,13 @@ if (runtimeScene.getTimeManager().isFirstFrame() && !calendarRenderStateMatch) {
     if (runtimeScene.__lockLootCalendarScene !== state) return;
     state.backendAvailable = true;
     state.page = Math.min(5, Math.floor((((state.calendar.nextLevel || 30) - 1) / 5)));
-    calendarSetStatus(state, "SERVERSTAND GELADEN · 00:00 UTC · TEST-/KONFIGURATIONSWERTE");
+    calendarSetStatus(state, calendarT("calendar.server_loaded"));
     calendarRender(state);
   }).catch((error) => {
     if (runtimeScene.__lockLootCalendarScene !== state) return;
     state.backendAvailable = false;
     const networkError = error && (error.name === "AbortError" || error instanceof TypeError);
-    calendarSetStatus(state, networkError ? "BACKEND NICHT ERREICHBAR · KEINE LOKALE GUTSCHRIFT" : "KALENDER NICHT SICHER GELADEN · KEINE LOKALE GUTSCHRIFT");
+    calendarSetStatus(state, networkError ? calendarT("calendar.offline_no_credit") : calendarT("calendar.unsafe_no_credit"));
     if (state.calendar && state.wallet) calendarRender(state);
   });
 }
@@ -467,20 +505,20 @@ if (calendarState && calendarAction) {
     calendarRender(calendarState);
   } else if (calendarAction === "claim") {
     if (!calendarState.backendAvailable) {
-      calendarSetStatus(calendarState, "BACKEND NICHT ERREICHBAR · CLAIM DEAKTIVIERT");
+      calendarSetStatus(calendarState, calendarT("calendar.claim_disabled"));
     } else if (calendarState.pending) {
-      calendarSetStatus(calendarState, "DIE SERVERSEITIGE ANFRAGE LÄUFT BEREITS");
+      calendarSetStatus(calendarState, calendarT("calendar.request_running"));
     } else if (calendarState.calendar.cycleCompleted) {
-      calendarSetStatus(calendarState, "30 / 30 ABGESCHLOSSEN · KEIN 31. CLAIM");
+      calendarSetStatus(calendarState, calendarT("calendar.no_31_claim"));
     } else if (calendarState.calendar.todayClaimed) {
-      calendarSetStatus(calendarState, "HEUTE BEREITS EINGESAMMELT · NÄCHSTER QUALIFIZIERTER LOGIN");
+      calendarSetStatus(calendarState, calendarT("calendar.already_claimed_next"));
     } else {
       calendarState.pending = true;
       if (!calendarSession.pendingRequestId) {
         if (!globalThis.crypto || typeof globalThis.crypto.randomUUID !== "function") throw new Error("Keine sichere requestId verfügbar.");
         calendarSession.pendingRequestId = "gd-calendar-" + globalThis.crypto.randomUUID();
       }
-      calendarSetStatus(calendarState, "SERVERPRÜFUNG LÄUFT · Keine lokale Vorabgutschrift");
+      calendarSetStatus(calendarState, calendarT("calendar.server_check"));
       calendarRender(calendarState);
       const before = { cookies: calendarState.wallet.cookies, lockpicks: calendarState.wallet.lockpicks };
       void calendarState.callCallable(calendarState.endpoints.claim, {
@@ -494,7 +532,7 @@ if (calendarState && calendarAction) {
         calendarState.markerAfterClaimStartedAt = runtimeScene.__lockLootMapBookL045 ? runtimeScene.__lockLootMapBookL045.time : 0;
         calendarSession.pendingRequestId = "";
         calendarState.page = Math.min(5, Math.floor((((calendarState.calendar.progress || 1) - 1) / 5)));
-        calendarSetStatus(calendarState, "LOGIN " + result.progressLevel + " EINGESAMMELT · KEKSE " + before.cookies + "→" + result.wallet.cookies + " · DIETRICHE " + before.lockpicks + "→" + result.wallet.lockpicks + (calendarState.calendar.premiumEntitled ? " · KOSTENLOS + PREMIUM EXTRA" : " · KOSTENLOS"));
+        calendarSetStatus(calendarState, calendarT("calendar.claim_success", { level: result.progressLevel, cookiesBefore: before.cookies, cookiesAfter: result.wallet.cookies, lockpicksBefore: before.lockpicks, lockpicksAfter: result.wallet.lockpicks, premium: calendarT(calendarState.calendar.premiumEntitled ? "calendar.claim_success_premium" : "calendar.claim_success_free") }));
       }).catch(async (error) => {
         if (runtimeScene.__lockLootCalendarScene !== calendarState) return;
         if (error && ["CALENDAR_ALREADY_CLAIMED_TODAY", "CALENDAR_CYCLE_COMPLETED"].includes(error.reason)) {
@@ -506,13 +544,13 @@ if (calendarState && calendarAction) {
           } catch (refreshError) {
             calendarState.backendAvailable = false;
           }
-          calendarSetStatus(calendarState, error.reason === "CALENDAR_CYCLE_COMPLETED" ? "30 / 30 ABGESCHLOSSEN · KEIN 31. CLAIM" : "HEUTE BEREITS EINGESAMMELT · KEINE ZWEITE GUTSCHRIFT");
+          calendarSetStatus(calendarState, error.reason === "CALENDAR_CYCLE_COMPLETED" ? calendarT("calendar.no_31_claim") : calendarT("calendar.already_claimed_no_second"));
         } else if (error && (error.name === "AbortError" || error instanceof TypeError)) {
           calendarState.backendAvailable = false;
-          calendarSetStatus(calendarState, "BACKENDANTWORT UNKLAR · KEINE LOKALE GUTSCHRIFT");
+          calendarSetStatus(calendarState, calendarT("calendar.unknown_response"));
         } else {
           calendarSession.pendingRequestId = "";
-          calendarSetStatus(calendarState, "SERVERCLAIM ABGELEHNT · KEINE LOKALE ÄNDERUNG");
+          calendarSetStatus(calendarState, calendarT("calendar.claim_rejected"));
         }
       }).finally(() => {
         if (runtimeScene.__lockLootCalendarScene === calendarState) {
@@ -524,7 +562,7 @@ if (calendarState && calendarAction) {
   }
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xacf198 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xaf11c8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-045 · professioneller Schatzkarten-Renderer: sechs Seiten mit je fünf Loginstufen.
 // Rein visuelle Projektion clientsicherer Serverdaten; Claim und Wallet bleiben in L&L-045 Phase A serverautoritativ.
@@ -551,6 +589,7 @@ if (!runtimeScene.__lockLootMapBookL045) {
   };
 }
 const mapBook = runtimeScene.__lockLootMapBookL045;
+const mapBookT = (key, parameters = {}) => runtimeScene.getGame().__lockLootI18n.t(key, parameters);
 mapBook.time += Math.min(runtimeScene.getElapsedTime() / 1000, 0.05);
 const first = name => runtimeScene.getObjects(name)[0];
 const hideAll = name => runtimeScene.getObjects(name).forEach(object => object.hide(true));
@@ -611,7 +650,7 @@ placeSprite(mapBook.headerPlate[0], 154, 2, 412, 82, 255, "170;110;68");
 placeSprite(mapBook.headerPlate[1], 46, 156, 300, 86, 255, "102;190;126");
 placeSprite(mapBook.headerPlate[2], 374, 156, 300, 86, 255, "205;135;255");
 placeSprite(first("CalendarHeaderPanel"), 168, 76, 384, 68);
-placeText(first("CalendarTitleText"), "SCHATZKALENDER", 176, 40, 368, 28, 27, "255;222;104");
+placeText(first("CalendarTitleText"), mapBookT("calendar.title"), 176, 40, 368, 28, 27, "255;222;104");
 
 const calendarData = mapBookRuntime && mapBookRuntime.calendar;
 const page = Math.max(0, Math.min(5, mapBookRuntime ? mapBookRuntime.page : 0));
@@ -623,7 +662,7 @@ const premiumEnabled = Boolean(calendarData && calendarData.premiumEntitled);
 const backendEnabled = Boolean(mapBookRuntime && mapBookRuntime.backendAvailable);
 const claimEnabled = Boolean(calendarData && backendEnabled && !mapBookRuntime.pending && !calendarData.todayClaimed && !calendarData.cycleCompleted);
 const complete = Boolean(calendarData && calendarData.cycleCompleted);
-placeCenteredText(first("CalendarProgressText"), complete ? "30 / 30 ABGESCHLOSSEN" : "LOGIN " + displayProgress + " VON 30", 360, 119, 304, 36, 17, "255;244;206");
+placeCenteredText(first("CalendarProgressText"), complete ? mapBookT("calendar.completed", { total: 30 }) : mapBookT("calendar.progress", { current: displayProgress, total: 30 }), 360, 119, 304, 36, 17, "255;244;206");
 
 placeSprite(mapBook.walletFrame[0], 2, 4, 174, 76);
 placeSprite(mapBook.walletFrame[1], 2, 70, 174, 78);
@@ -646,10 +685,10 @@ else if (parrotTime >= 6.50 && parrotTime < 6.88) parrotFrame = 4;
 else if (parrotTime >= 7.35 && parrotTime < 7.86) parrotFrame = 5;
 if (parrot) parrot.setAnimationFrame(parrotFrame);
 
-placeCenteredText(first("CalendarFreeHeaderText"), "TÄGLICHE BELOHNUNGEN\nFÜR ALLE SPIELER", 196, 220, 248, 44, 13, "230;255;218");
-placeCenteredText(first("CalendarPremiumHeaderText"), "PREMIUM-BELOHNUNGEN\nNUR MIT PREMIUM-PASS", 524, 220, 248, 44, 13, "255;230;255");
+placeCenteredText(first("CalendarFreeHeaderText"), mapBookT("calendar.free_header"), 196, 220, 248, 44, 13, "230;255;218");
+placeCenteredText(first("CalendarPremiumHeaderText"), mapBookT("calendar.premium_header"), 524, 220, 248, 44, 13, "255;230;255");
 const pageTextObject = first("CalendarPageText");
-placeText(pageTextObject, "SEITE " + (page + 1) + " VON 6  ·  LOGIN " + startLevel + "–" + endLevel, 176, 238, 336, 18, 13, "70;37;14");
+placeText(pageTextObject, mapBookT("calendar.page", { page: page + 1, total: 6, start: startLevel, end: endLevel }), 176, 238, 336, 18, 13, "70;37;14");
 if (pageTextObject && typeof pageTextObject.setOutlineEnabled === "function") pageTextObject.setOutlineEnabled(false);
 
 const centers = [
@@ -684,8 +723,8 @@ for (let index = 0; index < 5; index += 1) {
   placeCenteredText(mapBook.stage[index], String(level), center.x, center.y + 8, 44, 38, level >= 10 ? 19 : 22,
     currentAvailable ? "255;244;178" : freeClaimed ? "205;255;198" : "255;236;178");
   if (mapBook.stage[index]) mapBook.stage[index].setZOrder(76);
-  placeText(mapBook.freeState[index], "TAG " + level, 110, center.y - 34, 190, 22, 15, "35;25;14");
-  placeText(mapBook.premiumState[index], "TAG " + level, 420, center.y - 34, 190, 22, 15, "35;25;14");
+  placeText(mapBook.freeState[index], mapBookT("calendar.day", { level }), 110, center.y - 34, 190, 22, 15, "35;25;14");
+  placeText(mapBook.premiumState[index], mapBookT("calendar.day", { level }), 420, center.y - 34, 190, 22, 15, "35;25;14");
   mapBook.freeState[index].setTextAlignment("left");
   mapBook.premiumState[index].setTextAlignment("right");
   mapBook.freeState[index].setBold(false);
@@ -758,8 +797,8 @@ if (marker && markerLevel >= startLevel && markerLevel <= endLevel + 0.5) {
 
 const prevButton = first("CalendarPrevButton");
 const nextButton = first("CalendarNextButton");
-placeSprite(prevButton, 174, 818, 62, 62, page > 0 ? 255 : 145);
-placeSprite(nextButton, 484, 818, 62, 62, page < 5 ? 255 : 145);
+placeSprite(prevButton, 162, 806, 86, 86, page > 0 ? 255 : 145);
+placeSprite(nextButton, 472, 806, 86, 86, page < 5 ? 255 : 145);
 if (prevButton && typeof prevButton.flipX === "function") prevButton.flipX(false);
 if (nextButton && typeof nextButton.flipX === "function") nextButton.flipX(true);
 
@@ -767,17 +806,17 @@ const claimButton = first("CalendarClaimButton");
 const claimFinished = Boolean(calendarData && (calendarData.todayClaimed || calendarData.cycleCompleted));
 placeSprite(claimButton, 236, 798, 248, 90, claimEnabled || claimFinished || (mapBookRuntime && mapBookRuntime.renderOnly) ? 255 : 165);
 if (claimButton) claimButton.setAnimation(claimFinished ? 1 : 0);
-let claimCaption = "BELOHNUNG\nABHOLEN";
-if (mapBookRuntime && mapBookRuntime.pending) claimCaption = "ANFRAGE\nLÄUFT …";
-else if (calendarData && calendarData.cycleCompleted) claimCaption = "30 / 30\nABGESCHLOSSEN";
-else if (calendarData && calendarData.todayClaimed) claimCaption = "HEUTE BEREITS\nABGEHOLT";
-else if (!backendEnabled) claimCaption = "NICHT\nVERFÜGBAR";
+let claimCaption = mapBookT("calendar.claim");
+if (mapBookRuntime && mapBookRuntime.pending) claimCaption = mapBookT("calendar.claim_pending");
+else if (calendarData && calendarData.cycleCompleted) claimCaption = mapBookT("calendar.completed", { total: 30 });
+else if (calendarData && calendarData.todayClaimed) claimCaption = mapBookT("calendar.claimed_today");
+else if (!backendEnabled) claimCaption = mapBookT("calendar.backend_unavailable");
 placeCenteredText(first("CalendarClaimButtonText"), claimCaption, 360, 863, 202, 50, 14, claimEnabled ? "255;244;206" : "224;215;194");
 
 placeSprite(first("CalendarL045PremiumPanel"), 75, 894, 570, 150);
-placeCenteredText(first("CalendarL045PremiumTitleText"), "PREMIUM-PASS FÜR 30 LOGINS" + (premiumEnabled ? " · AKTIV" : ""), 360, 954, 452, 24, premiumEnabled ? 14 : 16, "255;222;255");
-placeText(first("CalendarL045PremiumBodyText"), "Zusätzliche Premium-Belohnungen\nfür den aktuellen 30-Login-Zyklus", 118, 966, 308, 42, 13, "255;229;235");
-placeText(first("CalendarL045PremiumPriceText"), "EINMALIG\n4,99 €", 444, 968, 132, 40, 16, "255;222;112");
+placeCenteredText(first("CalendarL045PremiumTitleText"), mapBookT(premiumEnabled ? "calendar.premium_active" : "calendar.premium_title"), 360, 944, 452, 28, premiumEnabled ? 15 : 17, "255;222;255");
+placeText(first("CalendarL045PremiumBodyText"), mapBookT("calendar.premium_body"), 118, 972, 308, 34, 16, "255;229;235");
+placeText(first("CalendarL045PremiumPriceText"), mapBookT("calendar.premium_price"), 438, 972, 144, 34, 17, "255;222;112");
 
 const statusMessage = mapBookRuntime && mapBookRuntime.statusMessage ? mapBookRuntime.statusMessage : "";
 const statusObject = first("CalendarStatusText");
@@ -787,10 +826,32 @@ if (!backendEnabled && statusMessage && !(mapBookRuntime && mapBookRuntime.rende
   statusObject.hide(true);
 }
 placeSprite(first("CalendarShopButton"), 262, 1060, 88, 88, 255, "255;230;175");
-placeCenteredText(first("CalendarShopButtonText"), "SHOP", 306, 1113, 76, 32, 18, "255;252;214");
+placeCenteredText(first("CalendarShopButtonText"), mapBookT("calendar.shop"), 306, 1113, 76, 32, 18, "255;252;214");
 placeSprite(first("CalendarBackButton"), 370, 1060, 88, 88);
 };
+gdjs.TreasureCalendarSceneCode.userFunc0xcdeeb0 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Statische Kalender-Spielertexte aus dem zentralen Katalog.
+const i18n = runtimeScene.getGame().__lockLootI18n;
+if (!runtimeScene.__lockLootL047Calendar || runtimeScene.__lockLootL047Calendar !== i18n.revision) {
+  runtimeScene.__lockLootL047Calendar = i18n.revision;
+  const set = (name, key) => { const object = runtimeScene.getObjects(name)[0]; if (object) object.setString(i18n.t(key)); };
+  set("CalendarTitleText", "calendar.title"); set("CalendarPauseHintText", "calendar.pause_hint");
+  set("CalendarFreeHeaderText", "calendar.free_header"); set("CalendarPremiumHeaderText", "calendar.premium_header");
+  set("CalendarPrevButtonText", "calendar.previous"); set("CalendarNextButtonText", "calendar.next"); set("CalendarShopButtonText", "calendar.shop");
+  set("CalendarL045PremiumTitleText", "calendar.premium_title"); set("CalendarL045PremiumBodyText", "calendar.premium_body"); set("CalendarL045PremiumPriceText", "calendar.premium_price");
+  const state = runtimeScene.__lockLootCalendarScene; if (state && state.calendar && state.wallet && typeof calendarRender === "function") calendarRender(state);
+}
+};
 gdjs.TreasureCalendarSceneCode.eventsList0 = function(runtimeScene) {
+
+{
+
+
+gdjs.TreasureCalendarSceneCode.userFunc0xa73de8(runtimeScene);
+
+}
+
 
 {
 
@@ -909,7 +970,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xcaeae0(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xa03f88(runtimeScene);
 
 }
 
@@ -917,7 +978,15 @@ gdjs.TreasureCalendarSceneCode.userFunc0xcaeae0(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xacf198(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xaf11c8(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TreasureCalendarSceneCode.userFunc0xcdeeb0(runtimeScene);
 
 }
 

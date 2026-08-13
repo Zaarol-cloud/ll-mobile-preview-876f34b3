@@ -44,9 +44,54 @@ gdjs.MainMenuCode.GDMainMenuShopTextObjects1= [];
 gdjs.MainMenuCode.GDMainMenuMusicStateTextObjects1= [];
 gdjs.MainMenuCode.GDMainMenuLanguageStateTextObjects1= [];
 gdjs.MainMenuCode.GDMainMenuUtilityHintTextObjects1= [];
+gdjs.MainMenuCode.GDMainMenuLanguagePanelObjects1= [];
+gdjs.MainMenuCode.GDMainMenuLanguagePanelTitleObjects1= [];
+gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1= [];
+gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1= [];
+gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1= [];
+gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1= [];
 
 
-gdjs.MainMenuCode.userFunc0xbd4f60 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xcae690 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
+const localizationGame = runtimeScene.getGame();
+if (!localizationGame.__lockLootI18n) {
+  const storageKey = "lockloot.language.v1";
+  const catalog = JSON.parse(localizationGame.getVariables().get("localizationCatalogJson").getAsString());
+  const languages = new Set(catalog.supportedLanguages.map(entry => entry.code));
+  let storedLanguage = "";
+  try { storedLanguage = globalThis.localStorage ? String(globalThis.localStorage.getItem(storageKey) || "") : ""; } catch (error) {}
+  const state = {
+    catalog,
+    storageKey,
+    language: languages.has(storedLanguage) ? storedLanguage : catalog.defaultLanguage,
+    revision: 1,
+    t(key, parameters = {}) {
+      const entry = catalog.strings[key];
+      if (!entry) return "[MISSING:" + key + "]";
+      const template = typeof entry[state.language] === "string" ? entry[state.language] : entry[catalog.defaultLanguage];
+      if (typeof template !== "string") return "[MISSING:" + key + "]";
+      const required = [...new Set([...template.matchAll(/\{([A-Za-z][A-Za-z0-9_]*)\}/g)].map(match => match[1]))].sort();
+      const supplied = Object.keys(parameters).sort();
+      if (JSON.stringify(required) !== JSON.stringify(supplied)) throw new Error("Invalid localization parameters for " + key + ": expected " + required.join(",") + "; received " + supplied.join(","));
+      return template.replace(/\{([A-Za-z][A-Za-z0-9_]*)\}/g, (match, name) => String(parameters[name]));
+    },
+    setLanguage(language) {
+      if (!languages.has(language)) return false;
+      if (state.language !== language) { state.language = language; state.revision += 1; }
+      localizationGame.getVariables().get("localizationLanguage").setString(state.language);
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(storageKey, state.language); } catch (error) {}
+      return true;
+    }
+  };
+  localizationGame.__lockLootI18n = state;
+  state.setLanguage(state.language);
+}
+const sceneLocalization = localizationGame.__lockLootI18n;
+localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
+};
+gdjs.MainMenuCode.userFunc0xce8058 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -134,7 +179,7 @@ if (controller.state.mainMenuScene !== runtimeScene) {
 }
 controller.update(runtimeScene);
 };
-gdjs.MainMenuCode.userFunc0xbd4820 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0x9fcaf0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-024: Rein visuelle Steuerung des modularen Hauptmenüs.
 // Die bestehende modulare Welt und alle anderen Szenen bleiben unverändert.
@@ -203,13 +248,14 @@ for (let index = 0; index < sparkles.length; index += 1) {
 
 
 };
-gdjs.MainMenuCode.userFunc0xbc3228 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xcdc210 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-046: Aufgeräumte Hauptnavigation und kompakte Utility-Steuerung.
+// L&L-046/L&L-047: Aufgeräumte Hauptnavigation, unveränderte Musiksteuerung und lokale Sprachwahl.
 const menuGame = runtimeScene.getGame();
+const menuI18n = menuGame.__lockLootI18n;
 const menuController = menuGame.__lockLootMusicController;
 if (!runtimeScene.__lockLootL046Menu) {
-  runtimeScene.__lockLootL046Menu = { musicEnabled: menuGame.__lockLootMusicEnabled !== false, languageMessageUntil: 0, hoverName: "" };
+  runtimeScene.__lockLootL046Menu = { musicEnabled: menuGame.__lockLootMusicEnabled !== false, languagePanelOpen: false, hoverName: "" };
   menuGame.__lockLootMusicEnabled = runtimeScene.__lockLootL046Menu.musicEnabled;
 }
 const menuState = runtimeScene.__lockLootL046Menu;
@@ -218,33 +264,44 @@ const menuCursorY = gdjs.evtTools.input.getCursorY(runtimeScene, "UI", 0);
 const firstMenuObject = name => runtimeScene.getObjects(name)[0] || null;
 const cursorOnMenuObject = object => object && menuCursorX >= object.getX() && menuCursorX <= object.getX() + object.getWidth() && menuCursorY >= object.getY() && menuCursorY <= object.getY() + object.getHeight();
 const setMenuText = (name, value) => { const object = firstMenuObject(name); if (object) object.setString(value); };
+const showMenuObject = (name, visible) => { for (const object of runtimeScene.getObjects(name)) object.hide(!visible); };
 const playButton = firstMenuObject("MainMenuPlayButton");
 const shopButton = firstMenuObject("MainMenuShopButton");
 const musicButton = firstMenuObject("MainMenuMusicButton");
 const languageButton = firstMenuObject("MainMenuLanguageButton");
-const buttonEntries = [["play", playButton], ["shop", shopButton], ["music", musicButton], ["language", languageButton]];
+const deButton = firstMenuObject("MainMenuLanguageDeButton");
+const enButton = firstMenuObject("MainMenuLanguageEnButton");
+const panelObjects = ["MainMenuLanguagePanel", "MainMenuLanguagePanelTitle", "MainMenuLanguageDeButton", "MainMenuLanguageEnButton", "MainMenuLanguageDeText", "MainMenuLanguageEnText"];
+for (const name of panelObjects) showMenuObject(name, menuState.languagePanelOpen);
+setMenuText("MainMenuPlayText", menuI18n.t("menu.play"));
+setMenuText("MainMenuShopText", menuI18n.t("menu.shop"));
+setMenuText("MainMenuMusicStateText", menuI18n.t(menuState.musicEnabled ? "menu.music_on" : "menu.music_off"));
+setMenuText("MainMenuLanguageStateText", menuI18n.t("menu.language"));
+setMenuText("MainMenuLanguagePanelTitle", menuI18n.t("menu.language_panel_title"));
+setMenuText("MainMenuLanguageDeText", menuI18n.t("menu.language_de"));
+setMenuText("MainMenuLanguageEnText", menuI18n.t("menu.language_en"));
+setMenuText("MainMenuUtilityHintText", "");
+const buttonEntries = [["play", playButton], ["shop", shopButton], ["music", musicButton], ["language", languageButton], ["de", deButton], ["en", enButton]];
 menuState.hoverName = "";
 for (const [name, button] of buttonEntries) {
-  const hovered = cursorOnMenuObject(button);
+  const available = !["de", "en"].includes(name) || menuState.languagePanelOpen;
+  const hovered = available && cursorOnMenuObject(button);
   if (hovered) menuState.hoverName = name;
-  if (button) {
-    button.setOpacity(hovered ? 255 : 238);
-    button.setColor(hovered ? "255;239;184" : "255;255;255");
-  }
+  if (button) { button.setOpacity(hovered ? 255 : 238); button.setColor(hovered ? "255;239;184" : "255;255;255"); }
 }
-setMenuText("MainMenuMusicStateText", menuState.musicEnabled ? "MUSIK AN" : "MUSIK AUS");
-const now = Date.now();
-setMenuText("MainMenuUtilityHintText", now < menuState.languageMessageUntil ? "SPRACHAUSWAHL FOLGT SPÄTER" : "");
 gdjs.evtTools.sound.setMusicOnChannelVolume(runtimeScene, 20, menuState.musicEnabled ? 70 : 0);
 if (gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left")) {
-  if (cursorOnMenuObject(playButton)) gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TrainingScene", false);
-  else if (cursorOnMenuObject(shopButton)) gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TreasureCalendarScene", false);
-  else if (cursorOnMenuObject(musicButton)) {
+  if (menuState.languagePanelOpen && cursorOnMenuObject(deButton)) { menuI18n.setLanguage("de"); menuState.languagePanelOpen = false; }
+  else if (menuState.languagePanelOpen && cursorOnMenuObject(enButton)) { menuI18n.setLanguage("en"); menuState.languagePanelOpen = false; }
+  else if (cursorOnMenuObject(languageButton)) menuState.languagePanelOpen = !menuState.languagePanelOpen;
+  else if (!menuState.languagePanelOpen && cursorOnMenuObject(playButton)) gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TrainingScene", false);
+  else if (!menuState.languagePanelOpen && cursorOnMenuObject(shopButton)) gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TreasureCalendarScene", false);
+  else if (!menuState.languagePanelOpen && cursorOnMenuObject(musicButton)) {
     menuState.musicEnabled = !menuState.musicEnabled;
     menuGame.__lockLootMusicEnabled = menuState.musicEnabled;
     gdjs.evtTools.sound.setMusicOnChannelVolume(runtimeScene, 20, menuState.musicEnabled ? 70 : 0);
     if (menuState.musicEnabled && menuController && menuController.state && !menuController.state.currentTrack) menuController.forceMain(runtimeScene);
-  } else if (cursorOnMenuObject(languageButton)) menuState.languageMessageUntil = now + 2600;
+  } else if (menuState.languagePanelOpen) menuState.languagePanelOpen = false;
 }
 };
 gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
@@ -252,7 +309,7 @@ gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.MainMenuCode.userFunc0xbd4f60(runtimeScene);
+gdjs.MainMenuCode.userFunc0xcae690(runtimeScene);
 
 }
 
@@ -260,7 +317,7 @@ gdjs.MainMenuCode.userFunc0xbd4f60(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xbd4820(runtimeScene);
+gdjs.MainMenuCode.userFunc0xce8058(runtimeScene);
 
 }
 
@@ -268,7 +325,15 @@ gdjs.MainMenuCode.userFunc0xbd4820(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xbc3228(runtimeScene);
+gdjs.MainMenuCode.userFunc0x9fcaf0(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.MainMenuCode.userFunc0xcdc210(runtimeScene);
 
 }
 
@@ -321,6 +386,12 @@ gdjs.MainMenuCode.GDMainMenuShopTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuMusicStateTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageStateTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuUtilityHintTextObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguagePanelObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguagePanelTitleObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1.length = 0;
 
 gdjs.MainMenuCode.eventsList0(runtimeScene);
 gdjs.MainMenuCode.GDMainMenuTitleObjects1.length = 0;
@@ -366,6 +437,12 @@ gdjs.MainMenuCode.GDMainMenuShopTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuMusicStateTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageStateTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuUtilityHintTextObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguagePanelObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguagePanelTitleObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1.length = 0;
 
 
 return;

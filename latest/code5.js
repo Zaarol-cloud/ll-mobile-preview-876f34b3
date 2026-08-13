@@ -57,18 +57,58 @@ gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1= [];
 gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2= [];
 
 
+gdjs.ShopSzeneCode.userFunc0xa73de8 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
+const localizationGame = runtimeScene.getGame();
+if (!localizationGame.__lockLootI18n) {
+  const storageKey = "lockloot.language.v1";
+  const catalog = JSON.parse(localizationGame.getVariables().get("localizationCatalogJson").getAsString());
+  const languages = new Set(catalog.supportedLanguages.map(entry => entry.code));
+  let storedLanguage = "";
+  try { storedLanguage = globalThis.localStorage ? String(globalThis.localStorage.getItem(storageKey) || "") : ""; } catch (error) {}
+  const state = {
+    catalog,
+    storageKey,
+    language: languages.has(storedLanguage) ? storedLanguage : catalog.defaultLanguage,
+    revision: 1,
+    t(key, parameters = {}) {
+      const entry = catalog.strings[key];
+      if (!entry) return "[MISSING:" + key + "]";
+      const template = typeof entry[state.language] === "string" ? entry[state.language] : entry[catalog.defaultLanguage];
+      if (typeof template !== "string") return "[MISSING:" + key + "]";
+      const required = [...new Set([...template.matchAll(/\{([A-Za-z][A-Za-z0-9_]*)\}/g)].map(match => match[1]))].sort();
+      const supplied = Object.keys(parameters).sort();
+      if (JSON.stringify(required) !== JSON.stringify(supplied)) throw new Error("Invalid localization parameters for " + key + ": expected " + required.join(",") + "; received " + supplied.join(","));
+      return template.replace(/\{([A-Za-z][A-Za-z0-9_]*)\}/g, (match, name) => String(parameters[name]));
+    },
+    setLanguage(language) {
+      if (!languages.has(language)) return false;
+      if (state.language !== language) { state.language = language; state.revision += 1; }
+      localizationGame.getVariables().get("localizationLanguage").setString(state.language);
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(storageKey, state.language); } catch (error) {}
+      return true;
+    }
+  };
+  localizationGame.__lockLootI18n = state;
+  state.setLanguage(state.language);
+}
+const sceneLocalization = localizationGame.__lockLootI18n;
+localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
+};
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Objects = Hashtable.newFrom({"ShopTabCookies": gdjs.ShopSzeneCode.GDShopTabCookiesObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
-gdjs.ShopSzeneCode.userFunc0xada650 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xa15078 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
 const shopVariables = runtimeScene.getVariables();
+const shopI18n = runtimeScene.getGame().__lockLootI18n;
+const shopT = (key, parameters = {}) => shopI18n.t(key, parameters);
 const shopGame = runtimeScene.getGame();
 const shopFallbackCatalog = Object.freeze({"shopCatalogVersion":1,"currency":"EUR","priceMode":"PLANNED_DISPLAY_ONLY","products":[{"internalProductKey":"cookies_49","category":"cookies","resourceType":"cookies","quantity":49,"plannedPriceMinorUnits":99,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_119","category":"cookies","resourceType":"cookies","quantity":119,"plannedPriceMinorUnits":199,"bonusLabel":"+20 %","sortOrder":20,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_349","category":"cookies","resourceType":"cookies","quantity":349,"plannedPriceMinorUnits":499,"bonusLabel":"+40 %","sortOrder":30,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_999","category":"cookies","resourceType":"cookies","quantity":999,"plannedPriceMinorUnits":999,"bonusLabel":"+100 %","sortOrder":40,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_79","category":"lockpicks","resourceType":"lockpicks","quantity":79,"plannedPriceMinorUnits":99,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_191","category":"lockpicks","resourceType":"lockpicks","quantity":191,"plannedPriceMinorUnits":199,"bonusLabel":"+20 %","sortOrder":20,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_559","category":"lockpicks","resourceType":"lockpicks","quantity":559,"plannedPriceMinorUnits":499,"bonusLabel":"+40 %","sortOrder":30,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_1599","category":"lockpicks","resourceType":"lockpicks","quantity":1599,"plannedPriceMinorUnits":999,"bonusLabel":"+100 %","sortOrder":40,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"premium_pass_30_logins","category":"premium","resourceType":"premium_pass","quantity":1,"plannedPriceMinorUnits":499,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null}]});
 const shopSessionKey = "__lockLootShopSession";
-const shopProductNames = Object.freeze({cookies_49: "Vorratsbeutel", cookies_119: "Piratenkiste", cookies_349: "Kapit\u00e4nstruhe", cookies_999: "Legendentruhe", lockpicks_79: "Starterset", lockpicks_191: "Abenteurerset", lockpicks_559: "Meisterset", lockpicks_1599: "Legendenset"});
 if (!shopGame[shopSessionKey]) shopGame[shopSessionKey] = {idToken: "", uid: ""};
 const shopSession = shopGame[shopSessionKey];
 const shopObjects = (name) => runtimeScene.getObjects(name).slice().sort((left, right) => (left.getY() + left.getHeight() / 2) - (right.getY() + right.getHeight() / 2) || (left.getX() + left.getWidth() / 2) - (right.getX() + right.getWidth() / 2));
@@ -82,7 +122,7 @@ const shopFitText = (object, value, sizes, wrappingWidth = 0) => {
   if (typeof object.setCharacterSize === "function") object.setCharacterSize(selected);
   if (wrappingWidth && typeof object.setWrapping === "function") { object.setWrapping(true); object.setWrappingWidth(wrappingWidth); }
 };
-const shopFormatPrice = (minorUnits) => (minorUnits / 100).toFixed(2).replace(".", ",") + " €";
+const shopFormatPrice = (minorUnits) => shopT("shop.price", { amount: (minorUnits / 100).toFixed(2).replace(".", shopI18n.language === "de" ? "," : ".") });
 const shopValidateCatalog = (catalog) => {
   const validProduct = (product) => product && typeof product.internalProductKey === "string" &&
     ["cookies", "lockpicks", "premium"].includes(product.category) &&
@@ -123,38 +163,38 @@ const shopRender = (state) => {
     for (const object of [cards[index], icons[index], titles[index], quantities[index], prices[index], bonuses[index]]) shopSetOpacity(object, visible ? 255 : 0);
     if (!product) continue;
     if (icons[index] && typeof icons[index].setAnimation === "function") icons[index].setAnimation((category === "cookies" ? 0 : 4) + index);
-    shopFitText(titles[index], shopProductNames[product.internalProductKey] || "ANGEBOT", [[12, 15], [16, 13], [22, 12]], 180);
+    shopFitText(titles[index], shopT("shop.product." + product.internalProductKey), [[12, 15], [16, 13], [22, 12]], 180);
     const quantitySizes = category === "cookies" ? [[13, 22], [18, 18], [24, 15]] : [[13, 18], [18, 17], [24, 15]];
-    shopFitText(quantities[index], String(product.quantity) + (category === "cookies" ? " KEKSE" : " DIETRICHE"), quantitySizes);
+    shopFitText(quantities[index], shopT(category === "cookies" ? "shop.quantity_cookies" : "shop.quantity_lockpicks", { quantity: product.quantity }), quantitySizes);
     shopFitText(prices[index], shopFormatPrice(product.plannedPriceMinorUnits), [[11, 19], [16, 15], [24, 13]]);
-    shopFitText(bonuses[index], product.bonusLabel ? product.bonusLabel + " MENGENBONUS" : "BASISANGEBOT", [[23, 12], [32, 11], [44, 9]], 180);
+    shopFitText(bonuses[index], product.bonusLabel ? shopT("shop.volume_bonus", { bonus: product.bonusLabel }) : shopT("shop.base_offer"), [[23, 15], [32, 14], [44, 12]], 180);
     shopSetColor(bonuses[index], product.bonusLabel ? "146;57;18" : "91;74;51");
   }
   const cookieTabs = shopObjects("ShopTabCookies");
   const lockpickTabs = shopObjects("ShopTabLockpicks");
   const cookieTabTexts = shopObjects("ShopTabCookiesText");
   const lockpickTabTexts = shopObjects("ShopTabLockpicksText");
-  shopSetColor(cookieTabs[0], category === "cookies" ? "255;228;144" : "125;110;96");
-  shopSetColor(lockpickTabs[0], category === "lockpicks" ? "225;242;248" : "125;110;96");
-  shopSetOpacity(cookieTabs[0], category === "cookies" ? 255 : 188);
-  shopSetOpacity(lockpickTabs[0], category === "lockpicks" ? 255 : 188);
-  shopSetColor(cookieTabTexts[0], category === "cookies" ? "70;35;15" : "102;86;72");
-  shopSetColor(lockpickTabTexts[0], category === "lockpicks" ? "55;64;70" : "102;86;72");
+  shopSetColor(cookieTabs[0], category === "cookies" ? "255;228;144" : "165;148;128");
+  shopSetColor(lockpickTabs[0], category === "lockpicks" ? "225;242;248" : "165;148;128");
+  shopSetOpacity(cookieTabs[0], category === "cookies" ? 255 : 208);
+  shopSetOpacity(lockpickTabs[0], category === "lockpicks" ? 255 : 208);
+  shopSetColor(cookieTabTexts[0], category === "cookies" ? "70;35;15" : "128;109;90");
+  shopSetColor(lockpickTabTexts[0], category === "lockpicks" ? "55;64;70" : "128;109;90");
   shopSetOpacity(cookieTabTexts[0], category === "cookies" ? 255 : 228);
   shopSetOpacity(lockpickTabTexts[0], category === "lockpicks" ? 255 : 228);
   shopVariables.get("ShopCategory").setString(category);
   shopVariables.get("ShopCatalogVersion").setNumber(state.catalog.shopCatalogVersion);
   shopVariables.get("ShopBackendAvailable").setBoolean(state.backendAvailable);
   shopVariables.get("ShopPremiumEntitled").setBoolean(state.premiumEntitled);
-  const walletCookieText = state.wallet ? "KEKSE " + state.wallet.cookies : "KEKSE NICHT VERFÜGBAR";
-  const walletLockpickText = state.wallet ? "DIETRICHE " + state.wallet.lockpicks : "DIETRICHE NICHT VERFÜGBAR";
+  const walletCookieText = state.wallet ? shopT("shop.quantity_cookies", { quantity: state.wallet.cookies }) : shopT("common.cookies") + " " + shopT("common.not_available");
+  const walletLockpickText = state.wallet ? shopT("shop.quantity_lockpicks", { quantity: state.wallet.lockpicks }) : shopT("common.lockpicks") + " " + shopT("common.not_available");
   shopFitText(shopObjects("ShopWalletCookiesText")[0], walletCookieText, [[18, 18], [20, 14], [32, 12]]);
   shopFitText(shopObjects("ShopWalletLockpicksText")[0], walletLockpickText, [[18, 18], [20, 14], [32, 12]]);
   const premiumPanels = shopObjects("ShopPremiumPanel"); const premiumBadges = shopObjects("ShopPremiumBadge"); const premiumStatuses = shopObjects("ShopPremiumStatusText");
   for (const premiumBadge of premiumBadges) shopSetOpacity(premiumBadge, state.premiumEntitled ? 255 : 105);
   shopSetColor(premiumPanels[0], state.premiumEntitled ? "255;255;255" : "170;160;170");
   shopSetColor(premiumStatuses[0], state.premiumEntitled ? "255;225;116" : "200;184;210");
-  shopFitText(premiumStatuses[0], state.premiumEntitled ? "AKTIV · FÜR DIESEN KALENDERZYKLUS" : "NOCH NICHT FREIGESCHALTET", [[32, 14], [42, 12], [54, 10]], 500);
+  shopFitText(premiumStatuses[0], state.premiumEntitled ? shopT("shop.premium_active") : shopT("shop.premium_inactive"), [[32, 14], [42, 12], [54, 10]], 500);
   shopFitText(shopObjects("ShopStatusText")[0], state.statusMessage, [[54, 15], [74, 12], [96, 10]], 600);
 };
 const shopSetStatus = (state, message) => { state.statusMessage = message; shopVariables.get("ShopStatusMessage").setString(message); shopSetText("ShopStatusText", message); };
@@ -178,7 +218,7 @@ if (runtimeScene.getTimeManager().isFirstFrame()) {
     } finally { clearTimeout(timeout); }
   };
   const callCallable = async (endpoint, data, idToken) => { const payload = await requestJson(endpoint, {data}, idToken); return payload.result !== undefined ? payload.result : payload.data; };
-  const state = {catalog: shopValidateCatalog(shopFallbackCatalog), category: "cookies", wallet: null, premiumEntitled: false, backendAvailable: false, statusMessage: "KATALOG V1 · PREISE NUR GEPLANT"};
+  const state = {catalog: shopValidateCatalog(shopFallbackCatalog), category: "cookies", wallet: null, premiumEntitled: false, backendAvailable: false, statusMessage: shopT("shop.catalog_planned")};
   runtimeScene.__lockLootShopScene = state;
   shopRender(state);
   const authenticate = async () => {
@@ -198,7 +238,7 @@ if (runtimeScene.getTimeManager().isFirstFrame()) {
       state.backendAvailable = true;
       shopVariables.get("ShopWalletCookies").setNumber(state.wallet.cookies);
       shopVariables.get("ShopWalletLockpicks").setNumber(state.wallet.lockpicks);
-      shopSetStatus(state, "SERVERSTAND GELADEN · KÄUFE WERDEN SPÄTER AKTIVIERT.");
+      shopSetStatus(state, shopT("shop.server_loaded"));
       shopRender(state);
     } catch (error) {
       if (retry && error?.status === "UNAUTHENTICATED") { shopSession.idToken = ""; shopSession.uid = ""; return load(false); }
@@ -208,7 +248,7 @@ if (runtimeScene.getTimeManager().isFirstFrame()) {
   void load(true).catch(() => {
     if (runtimeScene.__lockLootShopScene !== state) return;
     state.backendAvailable = false; state.wallet = null; state.premiumEntitled = false;
-    shopSetStatus(state, "BACKEND NICHT ERREICHBAR · KATALOG WEITER VERFÜGBAR");
+    shopSetStatus(state, shopT("shop.backend_offline"));
     shopRender(state);
   });
 }
@@ -220,18 +260,39 @@ if (shopState && shopAction) {
   shopActionVariable.setString("");
   if (shopAction === "category-cookies" || shopAction === "category-lockpicks") {
     shopState.category = shopAction === "category-cookies" ? "cookies" : "lockpicks";
-    shopSetStatus(shopState, shopState.category === "cookies" ? "KEKSANGEBOTE · KÄUFE NOCH DEAKTIVIERT" : "DIETRICHANGEBOTE · KÄUFE NOCH DEAKTIVIERT");
+    shopSetStatus(shopState, shopState.category === "cookies" ? shopT("shop.cookies_disabled") : shopT("shop.lockpicks_disabled"));
     shopRender(shopState);
   } else if (shopAction === "product" || shopAction === "premium") {
     // L&L-044: Kein Kauf, keine Walletgutschrift und keine Premiumaktivierung.
-    shopSetStatus(shopState, "KÄUFE WERDEN SPÄTER AKTIVIERT.");
+    shopSetStatus(shopState, shopT("shop.purchases_later"));
     shopRender(shopState);
   }
 }
 };
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
+gdjs.ShopSzeneCode.userFunc0xa8c990 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Statische Shop-Spielertexte aus dem zentralen Katalog.
+const i18n = runtimeScene.getGame().__lockLootI18n;
+if (!runtimeScene.__lockLootL047Shop || runtimeScene.__lockLootL047Shop !== i18n.revision) {
+  runtimeScene.__lockLootL047Shop = i18n.revision;
+  const set = (name, key) => { const object = runtimeScene.getObjects(name)[0]; if (object) object.setString(i18n.t(key)); };
+  set("ShopTitleText", "shop.title"); set("ShopWalletLabelText", "shop.inventory"); set("ShopTabCookiesText", "shop.cookies"); set("ShopTabLockpicksText", "shop.lockpicks");
+  set("ShopPremiumTitleText", "shop.premium_title"); set("ShopPremiumBodyText", "shop.premium_body"); set("ShopPremiumPriceText", "shop.premium_price");
+  set("ShopCalendarButtonText", "shop.calendar"); set("ShopBackButtonText", "shop.back");
+  const state = runtimeScene.__lockLootShopScene; if (state && typeof shopRender === "function") shopRender(state);
+}
+};
 gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
+
+{
+
+
+gdjs.ShopSzeneCode.userFunc0xa73de8(runtimeScene);
+
+}
+
 
 {
 
@@ -312,7 +373,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xada650(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xa15078(runtimeScene);
 
 }
 
@@ -351,6 +412,14 @@ if (isConditionTrue_0) {
 {gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "MainMenu", false);
 }
 }
+
+}
+
+
+{
+
+
+gdjs.ShopSzeneCode.userFunc0xa8c990(runtimeScene);
 
 }
 
