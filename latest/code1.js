@@ -43,9 +43,6 @@ gdjs.TrainingSceneCode.GDbt_9595BackObjects3= [];
 gdjs.TrainingSceneCode.GDTxtStatusObjects1= [];
 gdjs.TrainingSceneCode.GDTxtStatusObjects2= [];
 gdjs.TrainingSceneCode.GDTxtStatusObjects3= [];
-gdjs.TrainingSceneCode.GDTxtBestandObjects1= [];
-gdjs.TrainingSceneCode.GDTxtBestandObjects2= [];
-gdjs.TrainingSceneCode.GDTxtBestandObjects3= [];
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects1= [];
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects2= [];
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects3= [];
@@ -166,9 +163,27 @@ gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3= [];
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1= [];
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2= [];
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3= [];
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1= [];
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2= [];
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects1= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects2= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects3= [];
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects1= [];
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects2= [];
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects3= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects1= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects2= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects3= [];
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects1= [];
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects2= [];
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects3= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects1= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xcae690 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xced120 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -207,7 +222,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xbf73b0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcdfe58 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -290,7 +305,7 @@ const controller = game[controllerKey];
 if (!controller.state.currentTrack) controller.forceMain(runtimeScene);
 controller.update(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0x9fb520 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xbe90b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -359,7 +374,7 @@ if (hintObjects.length > 0 && bubbleObjects.length > 0) {
   let bubbleHeight = 190;
   let maxCharacters = 30;
   let hintX = 58;
-  let hintY = 128;
+  let hintY = 168;
   let hintCharacterSize = 19;
   let hintLineHeight = 24;
   let hintWrappingWidth = bubbleWidth - 116;
@@ -371,7 +386,7 @@ if (hintObjects.length > 0 && bubbleObjects.length > 0) {
   } else {
     maxCharacters = 28;
     hintX = 66;
-    hintY = 136;
+    hintY = 176;
     hintCharacterSize = 17;
     hintLineHeight = 21;
     hintWrappingWidth = bubbleWidth - 140;
@@ -386,7 +401,7 @@ if (hintObjects.length > 0 && bubbleObjects.length > 0) {
     .flatMap((paragraph) => wrapParagraph(paragraph, maxCharacters))
     .join("\n");
   if (formattedText !== currentText) hint.setString(formattedText);
-  bubble.setPosition(24, 104);
+  bubble.setPosition(24, 144);
   bubble.setWidth(bubbleWidth);
   bubble.setHeight(bubbleHeight);
   hint.setPosition(hintX, hintY);
@@ -400,7 +415,7 @@ if (hintObjects.length > 0 && bubbleObjects.length > 0) {
   hintIsSpeaking =
     normalizedText.length > 0 &&
     normalizedText !== trainingVisualI18n.t("training.hint_prompt").replace(/\s+/g, " " ).trim();
-  const controlsY = 104 + bubbleHeight - 50;
+  const controlsY = 144 + bubbleHeight - 50;
   for (const counter of hintCounterObjects) {
     counter.setPosition(110, controlsY + 10);
     counter.setWrapping(true);
@@ -906,7 +921,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xbeb3e8 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xa05d40 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -930,7 +945,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbeb3e8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa05d40(runtimeScene);
 
 }
 
@@ -941,7 +956,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xc49a88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa9ccb8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -963,7 +978,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc49a88(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa9ccb8(runtimeScene);
 
 }
 
@@ -1502,7 +1517,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xaefb60 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0x8b1a80 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -3645,14 +3660,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaefb60(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x8b1a80(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xaeb7c8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xbdf168 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -3761,6 +3776,8 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     sceneVariables.get('backendBooster10').setNumber(wallet.booster10);
     sceneVariables.get('backendBooster25').setNumber(wallet.booster25);
     sceneVariables.get('backendTotalBoost').setNumber(wallet.totalBoost);
+    const hud = runtimeScene.getGame().__lockLootResourceHud;
+    if (hud) hud.acceptConfirmed(wallet, state.uid, runtimeScene);
   };
   const validateRational = (value) => {
     if (!value || typeof value.numerator !== 'string' || !/^-?\d+$/.test(value.numerator) || typeof value.denominator !== 'string' || !/^\d+$/.test(value.denominator) || value.denominator === '0') throw Object.assign(new Error('Ungültiger exakter Ökonomiewert.'), { status: 'INVALID_RESPONSE' });
@@ -4061,7 +4078,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xb10098 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xacacf0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
 // Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
@@ -4085,13 +4102,12 @@ if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.userFunc0x9a0190 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xac8830 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
 const trainingObjects = name => runtimeScene.getObjects(name);
 const trainingSet = (name, value) => { const objects = trainingObjects(name); if (objects[0]) objects[0].setString(value); };
-trainingSet("TxtBestand", trainingI18n.t("training.inventory", { cookies: runtimeScene.getVariables().get("Kekse").getAsNumber(), lockpicks: runtimeScene.getVariables().get("Dietrich").getAsNumber() }));
 if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.revision !== trainingI18n.revision) {
   runtimeScene.__lockLootL047Training = { revision: trainingI18n.revision };
   trainingSet("TxtCode_richtig", trainingI18n.t("training.code_correct"));
@@ -4108,12 +4124,96 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
+gdjs.TrainingSceneCode.userFunc0xac8908 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
+};
+gdjs.TrainingSceneCode.userFunc0xabecc0 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
+const resourceHudGame = runtimeScene.getGame();
+if (!resourceHudGame.__lockLootResourceHud) {
+  const resourceHudConfig = JSON.parse(resourceHudGame.getVariables().get("resourceHudConfigJson").getAsString());
+  const resourceHudStorageKey = "lockloot.wallet-confirmed.v1";
+  const resourceHudAuthStorageKey = "__lockLootL040LocalAuth";
+  const normalizeWallet = (wallet) => {
+    if (!wallet || !Number.isSafeInteger(wallet.cookies) || wallet.cookies < 0 || !Number.isSafeInteger(wallet.lockpicks) || wallet.lockpicks < 0 || !Number.isSafeInteger(wallet.revision) || wallet.revision < 0) return null;
+    return {cookies: wallet.cookies, lockpicks: wallet.lockpicks, revision: wallet.revision};
+  };
+  const readAuthUid = () => {
+    try {
+      const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudAuthStorageKey) : "";
+      const session = raw ? JSON.parse(raw) : null;
+      return session && typeof session.uid === "string" ? session.uid : "";
+    } catch (error) { return ""; }
+  };
+  const readConfirmed = () => {
+    try {
+      const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudStorageKey) : "";
+      const cached = raw ? JSON.parse(raw) : null;
+      const wallet = normalizeWallet(cached);
+      const activeUid = readAuthUid();
+      return wallet && activeUid && cached.uid === activeUid ? {...wallet, uid: activeUid} : null;
+    } catch (error) { return null; }
+  };
+  const objects = (scene, name) => scene.getObjects(name);
+  const place = (object, x, y, width, height, zOrder) => {
+    if (!object) return;
+    object.setPosition(x, y);
+    if (typeof object.setWidth === "function") object.setWidth(width);
+    if (typeof object.setHeight === "function") object.setHeight(height);
+    if (typeof object.setZOrder === "function") object.setZOrder(zOrder);
+  };
+  const state = {
+    config: Object.freeze(resourceHudConfig),
+    confirmed: readConfirmed(),
+    acceptConfirmed(wallet, uid, scene) {
+      const safeWallet = normalizeWallet(wallet);
+      if (!safeWallet || typeof uid !== "string" || !uid) return false;
+      state.confirmed = {...safeWallet, uid};
+      try {
+        if (globalThis.localStorage) globalThis.localStorage.setItem(resourceHudStorageKey, JSON.stringify(state.confirmed));
+      } catch (error) {}
+      if (scene) state.render(scene);
+      return true;
+    },
+    render(scene) {
+      const c = state.config;
+      const firstY = c.anchorY;
+      const secondY = c.anchorY + c.rowHeight + c.rowGap;
+      place(objects(scene, "ResourceHudCookieFrame")[0], c.anchorX, firstY, c.width, c.rowHeight, c.frameZ);
+      place(objects(scene, "ResourceHudLockpickFrame")[0], c.anchorX, secondY, c.width, c.rowHeight, c.frameZ);
+      place(objects(scene, "ResourceHudCookieIcon")[0], c.anchorX + c.iconInsetX, firstY + c.iconInsetY, c.iconSize, c.iconSize, c.iconZ);
+      place(objects(scene, "ResourceHudLockpickIcon")[0], c.anchorX + c.iconInsetX, secondY + c.iconInsetY, c.iconSize, c.iconSize, c.iconZ);
+      const cookieText = objects(scene, "ResourceHudCookiesText")[0];
+      const lockpickText = objects(scene, "ResourceHudLockpicksText")[0];
+      place(cookieText, c.anchorX + c.textOffsetX, firstY + c.textInsetY, c.textWidth, c.textHeight, c.textZ);
+      place(lockpickText, c.anchorX + c.textOffsetX, secondY + c.textInsetY, c.textWidth, c.textHeight, c.textZ);
+      const value = state.confirmed;
+      if (cookieText) {
+        cookieText.setString(value ? String(value.cookies) : c.unavailableText);
+        if (typeof cookieText.setCharacterSize === "function") cookieText.setCharacterSize(c.fontSize);
+      }
+      if (lockpickText) {
+        lockpickText.setString(value ? String(value.lockpicks) : c.unavailableText);
+        if (typeof lockpickText.setCharacterSize === "function") lockpickText.setCharacterSize(c.fontSize);
+      }
+    }
+  };
+  resourceHudGame.__lockLootResourceHud = state;
+}
+const resourceHud = resourceHudGame.__lockLootResourceHud;
+if (!runtimeScene.getObjects("ResourceHudCookieFrame").length) {
+  gdjs.evtTools.runtimeScene.createObjectsFromExternalLayout(runtimeScene, "SharedResourceHUD_720x1280", 0, 0, 0);
+}
+resourceHud.render(runtimeScene);
+};
 gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcae690(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xced120(runtimeScene);
 
 }
 
@@ -4121,7 +4221,7 @@ gdjs.TrainingSceneCode.userFunc0xcae690(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf73b0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcdfe58(runtimeScene);
 
 }
 
@@ -4129,7 +4229,7 @@ gdjs.TrainingSceneCode.userFunc0xbf73b0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0x9fb520(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbe90b8(runtimeScene);
 
 }
 
@@ -5595,7 +5695,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaeb7c8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbdf168(runtimeScene);
 
 }
 
@@ -5669,21 +5769,6 @@ if (isConditionTrue_0) {
 
 {
 
-
-let isConditionTrue_0 = false;
-{
-gdjs.copyArray(runtimeScene.getObjects("TxtBestand"), gdjs.TrainingSceneCode.GDTxtBestandObjects1);
-{for(var i = 0, len = gdjs.TrainingSceneCode.GDTxtBestandObjects1.length ;i < len;++i) {
-    gdjs.TrainingSceneCode.GDTxtBestandObjects1[i].getBehavior("Text").setText("Kekse: " + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(12))) + gdjs.evtTools.string.newLine() + "Dietriche: " + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(11))));
-}
-}
-}
-
-}
-
-
-{
-
 gdjs.copyArray(runtimeScene.getObjects("SolutionTestButton"), gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1);
 
 let isConditionTrue_0 = false;
@@ -5704,7 +5789,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb10098(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xacacf0(runtimeScene);
 
 }
 
@@ -5729,7 +5814,23 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0x9a0190(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xac8830(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TrainingSceneCode.userFunc0xac8908(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TrainingSceneCode.userFunc0xabecc0(runtimeScene);
 
 }
 
@@ -5781,9 +5882,6 @@ gdjs.TrainingSceneCode.GDbt_9595BackObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTxtStatusObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTxtStatusObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTxtStatusObjects3.length = 0;
-gdjs.TrainingSceneCode.GDTxtBestandObjects1.length = 0;
-gdjs.TrainingSceneCode.GDTxtBestandObjects2.length = 0;
-gdjs.TrainingSceneCode.GDTxtBestandObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects3.length = 0;
@@ -5904,6 +6002,24 @@ gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3.length = 0;
 
 gdjs.TrainingSceneCode.eventsList22(runtimeScene);
 gdjs.TrainingSceneCode.GDTrainingSkyObjects1.length = 0;
@@ -5948,9 +6064,6 @@ gdjs.TrainingSceneCode.GDbt_9595BackObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTxtStatusObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTxtStatusObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTxtStatusObjects3.length = 0;
-gdjs.TrainingSceneCode.GDTxtBestandObjects1.length = 0;
-gdjs.TrainingSceneCode.GDTxtBestandObjects2.length = 0;
-gdjs.TrainingSceneCode.GDTxtBestandObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects3.length = 0;
@@ -6071,6 +6184,24 @@ gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickFrameObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookieIconObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpickIconObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudCookiesTextObjects3.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2.length = 0;
+gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3.length = 0;
 
 
 return;

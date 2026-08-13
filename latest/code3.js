@@ -29,8 +29,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarProgressTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarProgressTextObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarPauseHintTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarPauseHintTextObjects2= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletTextObjects1= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletTextObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarStatusTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarStatusTextObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarPremiumStatusTextObjects1= [];
@@ -65,12 +63,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects2= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects1= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects2= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects1= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects2= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects1= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects1= [];
@@ -83,10 +75,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects2= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects1= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects2= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects1= [];
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects1= [];
@@ -97,9 +85,21 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieIconObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieIconObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickIconObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickIconObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookiesTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookiesTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xa73de8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xced120 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -144,7 +144,7 @@ gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDC
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarBackButtonObjects1Objects = Hashtable.newFrom({"CalendarBackButton": gdjs.TreasureCalendarSceneCode.GDCalendarBackButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarParrotObjects1Objects = Hashtable.newFrom({"CalendarParrot": gdjs.TreasureCalendarSceneCode.GDCalendarParrotObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarShopButtonObjects1Objects = Hashtable.newFrom({"CalendarShopButton": gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1});
-gdjs.TreasureCalendarSceneCode.userFunc0xa03f88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xc10fe0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-043: Kalenderbootstrap, clientsichere Konfigurationsanzeige und serverautoritiver Claim.
 // Ausschließlich lokale Firebase-Emulatoren; keine Zahlung, kein Shop und keine lokale Gutschrift.
@@ -208,8 +208,8 @@ const calendarApplyWallet = (state, wallet) => {
   state.wallet = safeWallet;
   calendarVariables.get("CalendarWalletCookies").setNumber(safeWallet.cookies);
   calendarVariables.get("CalendarWalletLockpicks").setNumber(safeWallet.lockpicks);
-  calendarSetText("CalendarWalletCookiesText", String(safeWallet.cookies));
-  calendarSetText("CalendarWalletLockpicksText", String(safeWallet.lockpicks));
+  const hud = calendarGame.__lockLootResourceHud;
+  if (hud) hud.acceptConfirmed(safeWallet, calendarSession.uid, runtimeScene);
   return safeWallet;
 };
 const calendarValidateState = (calendar) => {
@@ -255,7 +255,7 @@ const calendarRender = (state) => {
   calendarFillConfigVariable(calendar);
 
   calendarSetText("CalendarProgressText", calendar.cycleCompleted ? calendarT("calendar.completed", { total: 30 }) : calendarT("calendar.progress", { current: calendar.progress, total: 30 }));
-  calendarSetText("CalendarWalletText", calendarT("calendar.wallet", { cookies: wallet.cookies, lockpicks: wallet.lockpicks }));
+  // L&L-047-Kompatibilität: "calendar.wallet" bleibt im Katalog; L&L-048 rendert sprachneutrale Zahlen.
   calendarSetText("CalendarPremiumStatusText", calendar.premiumEntitled ? calendarT("calendar.premium_active") : calendarT("calendar.premium_inactive"));
   const startLevel = state.page * 5 + 1;
   const endLevel = Math.min(30, startLevel + 4);
@@ -562,7 +562,7 @@ if (calendarState && calendarAction) {
   }
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xaf11c8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xabeca8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-045 · professioneller Schatzkarten-Renderer: sechs Seiten mit je fünf Loginstufen.
 // Rein visuelle Projektion clientsicherer Serverdaten; Claim und Wallet bleiben in L&L-045 Phase A serverautoritativ.
@@ -584,8 +584,7 @@ if (!runtimeScene.__lockLootMapBookL045) {
     booster: ordered("CalendarL045Booster"),
     waypoint: ordered("CalendarL045Waypoint"),
     rewardCard: ordered("CalendarPremiumBadge"),
-    headerPlate: ordered("CalendarL045HeaderPlate"),
-    walletFrame: ordered("CalendarL045WalletFrame")
+    headerPlate: ordered("CalendarL045HeaderPlate")
   };
 }
 const mapBook = runtimeScene.__lockLootMapBookL045;
@@ -636,7 +635,6 @@ hideAll("CalendarPremiumPanel");
 hideAll("CalendarRewardRow");
 hideAll("CalendarFreeStateText");
 hideAll("CalendarPremiumStateText");
-hideAll("CalendarWalletText");
 hideAll("CalendarPremiumStatusText");
 hideAll("CalendarPauseHintText");
 hideAll("CalendarSpeechBubble");
@@ -646,7 +644,7 @@ hideAll("CalendarNextButtonText");
 placeSprite(first("CalendarBackground"), 0, 0, 720, 1280);
 placeSprite(first("CalendarMap"), 36, 142, 648, 782);
 
-placeSprite(mapBook.headerPlate[0], 154, 2, 412, 82, 255, "170;110;68");
+placeSprite(mapBook.headerPlate[0], 172, 2, 394, 82, 255, "170;110;68");
 placeSprite(mapBook.headerPlate[1], 46, 156, 300, 86, 255, "102;190;126");
 placeSprite(mapBook.headerPlate[2], 374, 156, 300, 86, 255, "205;135;255");
 placeSprite(first("CalendarHeaderPanel"), 168, 76, 384, 68);
@@ -664,14 +662,6 @@ const claimEnabled = Boolean(calendarData && backendEnabled && !mapBookRuntime.p
 const complete = Boolean(calendarData && calendarData.cycleCompleted);
 placeCenteredText(first("CalendarProgressText"), complete ? mapBookT("calendar.completed", { total: 30 }) : mapBookT("calendar.progress", { current: displayProgress, total: 30 }), 360, 119, 304, 36, 17, "255;244;206");
 
-placeSprite(mapBook.walletFrame[0], 2, 4, 174, 76);
-placeSprite(mapBook.walletFrame[1], 2, 70, 174, 78);
-placeSprite(first("CalendarL045WalletCookie"), 22, 24, 40, 40);
-placeSprite(first("CalendarL045WalletLockpick"), 18, 90, 48, 48, 255, "255;244;190");
-const walletCookies = mapBookRuntime && mapBookRuntime.wallet ? String(mapBookRuntime.wallet.cookies) : "—";
-const walletLockpicks = mapBookRuntime && mapBookRuntime.wallet ? String(mapBookRuntime.wallet.lockpicks) : "—";
-placeCenteredText(first("CalendarWalletCookiesText"), walletCookies, 116, 58, 88, 38, 28);
-placeCenteredText(first("CalendarWalletLockpicksText"), walletLockpicks, 116, 127, 88, 38, 28);
 
 const parrot = first("CalendarParrot");
 placeSprite(parrot, 624, 106, 74, 117);
@@ -829,7 +819,7 @@ placeSprite(first("CalendarShopButton"), 262, 1060, 88, 88, 255, "255;230;175");
 placeCenteredText(first("CalendarShopButtonText"), mapBookT("calendar.shop"), 306, 1113, 76, 32, 18, "255;252;214");
 placeSprite(first("CalendarBackButton"), 370, 1060, 88, 88);
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xcdeeb0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xae2c70 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Kalender-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -843,12 +833,92 @@ if (!runtimeScene.__lockLootL047Calendar || runtimeScene.__lockLootL047Calendar 
   const state = runtimeScene.__lockLootCalendarScene; if (state && state.calendar && state.wallet && typeof calendarRender === "function") calendarRender(state);
 }
 };
+gdjs.TreasureCalendarSceneCode.userFunc0xa047b0 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
+const resourceHudGame = runtimeScene.getGame();
+if (!resourceHudGame.__lockLootResourceHud) {
+  const resourceHudConfig = JSON.parse(resourceHudGame.getVariables().get("resourceHudConfigJson").getAsString());
+  const resourceHudStorageKey = "lockloot.wallet-confirmed.v1";
+  const resourceHudAuthStorageKey = "__lockLootL040LocalAuth";
+  const normalizeWallet = (wallet) => {
+    if (!wallet || !Number.isSafeInteger(wallet.cookies) || wallet.cookies < 0 || !Number.isSafeInteger(wallet.lockpicks) || wallet.lockpicks < 0 || !Number.isSafeInteger(wallet.revision) || wallet.revision < 0) return null;
+    return {cookies: wallet.cookies, lockpicks: wallet.lockpicks, revision: wallet.revision};
+  };
+  const readAuthUid = () => {
+    try {
+      const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudAuthStorageKey) : "";
+      const session = raw ? JSON.parse(raw) : null;
+      return session && typeof session.uid === "string" ? session.uid : "";
+    } catch (error) { return ""; }
+  };
+  const readConfirmed = () => {
+    try {
+      const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudStorageKey) : "";
+      const cached = raw ? JSON.parse(raw) : null;
+      const wallet = normalizeWallet(cached);
+      const activeUid = readAuthUid();
+      return wallet && activeUid && cached.uid === activeUid ? {...wallet, uid: activeUid} : null;
+    } catch (error) { return null; }
+  };
+  const objects = (scene, name) => scene.getObjects(name);
+  const place = (object, x, y, width, height, zOrder) => {
+    if (!object) return;
+    object.setPosition(x, y);
+    if (typeof object.setWidth === "function") object.setWidth(width);
+    if (typeof object.setHeight === "function") object.setHeight(height);
+    if (typeof object.setZOrder === "function") object.setZOrder(zOrder);
+  };
+  const state = {
+    config: Object.freeze(resourceHudConfig),
+    confirmed: readConfirmed(),
+    acceptConfirmed(wallet, uid, scene) {
+      const safeWallet = normalizeWallet(wallet);
+      if (!safeWallet || typeof uid !== "string" || !uid) return false;
+      state.confirmed = {...safeWallet, uid};
+      try {
+        if (globalThis.localStorage) globalThis.localStorage.setItem(resourceHudStorageKey, JSON.stringify(state.confirmed));
+      } catch (error) {}
+      if (scene) state.render(scene);
+      return true;
+    },
+    render(scene) {
+      const c = state.config;
+      const firstY = c.anchorY;
+      const secondY = c.anchorY + c.rowHeight + c.rowGap;
+      place(objects(scene, "ResourceHudCookieFrame")[0], c.anchorX, firstY, c.width, c.rowHeight, c.frameZ);
+      place(objects(scene, "ResourceHudLockpickFrame")[0], c.anchorX, secondY, c.width, c.rowHeight, c.frameZ);
+      place(objects(scene, "ResourceHudCookieIcon")[0], c.anchorX + c.iconInsetX, firstY + c.iconInsetY, c.iconSize, c.iconSize, c.iconZ);
+      place(objects(scene, "ResourceHudLockpickIcon")[0], c.anchorX + c.iconInsetX, secondY + c.iconInsetY, c.iconSize, c.iconSize, c.iconZ);
+      const cookieText = objects(scene, "ResourceHudCookiesText")[0];
+      const lockpickText = objects(scene, "ResourceHudLockpicksText")[0];
+      place(cookieText, c.anchorX + c.textOffsetX, firstY + c.textInsetY, c.textWidth, c.textHeight, c.textZ);
+      place(lockpickText, c.anchorX + c.textOffsetX, secondY + c.textInsetY, c.textWidth, c.textHeight, c.textZ);
+      const value = state.confirmed;
+      if (cookieText) {
+        cookieText.setString(value ? String(value.cookies) : c.unavailableText);
+        if (typeof cookieText.setCharacterSize === "function") cookieText.setCharacterSize(c.fontSize);
+      }
+      if (lockpickText) {
+        lockpickText.setString(value ? String(value.lockpicks) : c.unavailableText);
+        if (typeof lockpickText.setCharacterSize === "function") lockpickText.setCharacterSize(c.fontSize);
+      }
+    }
+  };
+  resourceHudGame.__lockLootResourceHud = state;
+}
+const resourceHud = resourceHudGame.__lockLootResourceHud;
+if (!runtimeScene.getObjects("ResourceHudCookieFrame").length) {
+  gdjs.evtTools.runtimeScene.createObjectsFromExternalLayout(runtimeScene, "SharedResourceHUD_720x1280", 0, 0, 0);
+}
+resourceHud.render(runtimeScene);
+};
 gdjs.TreasureCalendarSceneCode.eventsList0 = function(runtimeScene) {
 
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xa73de8(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xced120(runtimeScene);
 
 }
 
@@ -970,7 +1040,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xa03f88(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xc10fe0(runtimeScene);
 
 }
 
@@ -978,7 +1048,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xa03f88(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xaf11c8(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xabeca8(runtimeScene);
 
 }
 
@@ -986,7 +1056,15 @@ gdjs.TreasureCalendarSceneCode.userFunc0xaf11c8(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xcdeeb0(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xae2c70(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TreasureCalendarSceneCode.userFunc0xa047b0(runtimeScene);
 
 }
 
@@ -1024,8 +1102,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarProgressTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarProgressTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarPauseHintTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarPauseHintTextObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletTextObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarStatusTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarStatusTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarPremiumStatusTextObjects1.length = 0;
@@ -1060,12 +1136,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects1.length = 0;
@@ -1078,10 +1148,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects1.length = 0;
@@ -1092,6 +1158,18 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects2.length = 0;
 
 gdjs.TreasureCalendarSceneCode.eventsList0(runtimeScene);
 gdjs.TreasureCalendarSceneCode.GDCalendarMapObjects1.length = 0;
@@ -1122,8 +1200,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarProgressTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarProgressTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarPauseHintTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarPauseHintTextObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletTextObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarStatusTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarStatusTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarPremiumStatusTextObjects1.length = 0;
@@ -1158,12 +1234,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects1.length = 0;
@@ -1176,10 +1246,6 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects2.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects1.length = 0;
-gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects1.length = 0;
@@ -1190,6 +1256,18 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects2.length = 0;
 
 
 return;

@@ -157,9 +157,21 @@ gdjs.SolutionSceneCode.GDSolutionDialogCalculationObjects1= [];
 gdjs.SolutionSceneCode.GDSolutionDialogCalculationObjects2= [];
 gdjs.SolutionSceneCode.GDSolutionDialogResultObjects1= [];
 gdjs.SolutionSceneCode.GDSolutionDialogResultObjects2= [];
+gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects1= [];
+gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects2= [];
+gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects1= [];
+gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects2= [];
+gdjs.SolutionSceneCode.GDResourceHudCookieIconObjects1= [];
+gdjs.SolutionSceneCode.GDResourceHudCookieIconObjects2= [];
+gdjs.SolutionSceneCode.GDResourceHudLockpickIconObjects1= [];
+gdjs.SolutionSceneCode.GDResourceHudLockpickIconObjects2= [];
+gdjs.SolutionSceneCode.GDResourceHudCookiesTextObjects1= [];
+gdjs.SolutionSceneCode.GDResourceHudCookiesTextObjects2= [];
+gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects1= [];
+gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.SolutionSceneCode.userFunc0xa73de8 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xced120 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -198,7 +210,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.SolutionSceneCode.userFunc0xb6f6f0 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0x8d8298 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const musicChannel = 20;
@@ -224,7 +236,7 @@ if (solutionPlaying) {
   gdjs.evtTools.sound.playMusicOnChannel(runtimeScene, 'music_solution_once', musicChannel, false, 75, 1);
 }
 };
-gdjs.SolutionSceneCode.userFunc0xe862a8 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0x8d84e0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
 // Datenquelle sind ausschließlich die global gesicherten Werte der vorherigen Kiste.
@@ -512,7 +524,7 @@ gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPri
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionBackObjects1Objects = Hashtable.newFrom({"SolutionBack": gdjs.SolutionSceneCode.GDSolutionBackObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
-gdjs.SolutionSceneCode.userFunc0xceee00 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xce8110 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische SolutionScene-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -527,7 +539,7 @@ gdjs.SolutionSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xa73de8(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xced120(runtimeScene);
 
 }
 
@@ -535,7 +547,7 @@ gdjs.SolutionSceneCode.userFunc0xa73de8(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xb6f6f0(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0x8d8298(runtimeScene);
 
 }
 
@@ -543,7 +555,7 @@ gdjs.SolutionSceneCode.userFunc0xb6f6f0(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xe862a8(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0x8d84e0(runtimeScene);
 
 }
 
@@ -933,7 +945,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xceee00(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xce8110(runtimeScene);
 
 }
 
@@ -1099,6 +1111,18 @@ gdjs.SolutionSceneCode.GDSolutionDialogCalculationObjects1.length = 0;
 gdjs.SolutionSceneCode.GDSolutionDialogCalculationObjects2.length = 0;
 gdjs.SolutionSceneCode.GDSolutionDialogResultObjects1.length = 0;
 gdjs.SolutionSceneCode.GDSolutionDialogResultObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects2.length = 0;
 
 gdjs.SolutionSceneCode.eventsList0(runtimeScene);
 gdjs.SolutionSceneCode.GDTrainingSkyObjects1.length = 0;
@@ -1257,6 +1281,18 @@ gdjs.SolutionSceneCode.GDSolutionDialogCalculationObjects1.length = 0;
 gdjs.SolutionSceneCode.GDSolutionDialogCalculationObjects2.length = 0;
 gdjs.SolutionSceneCode.GDSolutionDialogResultObjects1.length = 0;
 gdjs.SolutionSceneCode.GDSolutionDialogResultObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects2.length = 0;
 
 
 return;

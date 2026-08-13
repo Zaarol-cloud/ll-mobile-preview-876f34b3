@@ -41,13 +41,25 @@ gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1= [];
 gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects2= [];
 gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1= [];
 gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects2= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects1= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects2= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects1= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects2= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects1= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects2= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects1= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects2= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects1= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects2= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects1= [];
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects2= [];
 
 
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintBuyButtonObjects1Objects = Hashtable.newFrom({"BackendHintBuyButton": gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCalendarClaimButtonObjects1Objects = Hashtable.newFrom({"BackendCalendarClaimButton": gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintRepeatButtonObjects1Objects = Hashtable.newFrom({"BackendHintRepeatButton": gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintReloadButtonObjects1Objects = Hashtable.newFrom({"BackendHintReloadButton": gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1});
-gdjs.BackendTestScene_95L035Code.userFunc0xbe3ff8 = function GDJSInlineCode(runtimeScene) {
+gdjs.BackendTestScene_95L035Code.userFunc0xce7628 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-035 bis L&L-042: Lokale Firebase-Emulator-Verbindung über offizielle REST-/Callable-Protokolle.
 // Keine Firebase-Projektkonfiguration, kein externes SDK und niemals eine Produktionsverbindung.
@@ -205,7 +217,7 @@ gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCookieButtonObjects1Objects = Hashtable.newFrom({"BackendCookieButton": gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendWalletRepeatButtonObjects1Objects = Hashtable.newFrom({"BackendWalletRepeatButton": gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendBoosterButtonObjects1Objects = Hashtable.newFrom({"BackendBoosterButton": gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects1});
-gdjs.BackendTestScene_95L035Code.userFunc0xb72b30 = function GDJSInlineCode(runtimeScene) {
+gdjs.BackendTestScene_95L035Code.userFunc0xaf3498 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-035 bis L&L-042: Aktiver lokaler REST-/Callable-Adapter; keine bestehende TrainingScene-Variable wird benutzt.
 const sceneVariables = runtimeScene.getVariables();
@@ -490,7 +502,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.BackendTestScene_95L035Code.userFunc0xbe3ff8(runtimeScene);
+gdjs.BackendTestScene_95L035Code.userFunc0xce7628(runtimeScene);
 
 }
 
@@ -688,7 +700,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.BackendTestScene_95L035Code.userFunc0xb72b30(runtimeScene);
+gdjs.BackendTestScene_95L035Code.userFunc0xaf3498(runtimeScene);
 
 }
 
@@ -738,6 +750,18 @@ gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1.length = 0;
 gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects2.length = 0;
 gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1.length = 0;
 gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects2.length = 0;
 
 gdjs.BackendTestScene_95L035Code.eventsList0(runtimeScene);
 gdjs.BackendTestScene_95L035Code.GDBackendTestTitleObjects1.length = 0;
@@ -780,6 +804,18 @@ gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1.length = 0;
 gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects2.length = 0;
 gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1.length = 0;
 gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects2.length = 0;
 
 
 return;

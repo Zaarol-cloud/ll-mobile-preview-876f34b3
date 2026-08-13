@@ -50,9 +50,15 @@ gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1= [];
 gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1= [];
 gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1= [];
 gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1= [];
+gdjs.MainMenuCode.GDResourceHudCookieFrameObjects1= [];
+gdjs.MainMenuCode.GDResourceHudLockpickFrameObjects1= [];
+gdjs.MainMenuCode.GDResourceHudCookieIconObjects1= [];
+gdjs.MainMenuCode.GDResourceHudLockpickIconObjects1= [];
+gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1= [];
+gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1= [];
 
 
-gdjs.MainMenuCode.userFunc0xcae690 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xce2940 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -91,7 +97,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.MainMenuCode.userFunc0xce8058 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xbe90f0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -179,7 +185,7 @@ if (controller.state.mainMenuScene !== runtimeScene) {
 }
 controller.update(runtimeScene);
 };
-gdjs.MainMenuCode.userFunc0x9fcaf0 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xbedb40 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-024: Rein visuelle Steuerung des modularen Hauptmenüs.
 // Die bestehende modulare Welt und alle anderen Szenen bleiben unverändert.
@@ -248,7 +254,7 @@ for (let index = 0; index < sparkles.length; index += 1) {
 
 
 };
-gdjs.MainMenuCode.userFunc0xcdc210 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xbeddb8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-046/L&L-047: Aufgeräumte Hauptnavigation, unveränderte Musiksteuerung und lokale Sprachwahl.
 const menuGame = runtimeScene.getGame();
@@ -309,7 +315,7 @@ gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.MainMenuCode.userFunc0xcae690(runtimeScene);
+gdjs.MainMenuCode.userFunc0xce2940(runtimeScene);
 
 }
 
@@ -317,7 +323,7 @@ gdjs.MainMenuCode.userFunc0xcae690(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xce8058(runtimeScene);
+gdjs.MainMenuCode.userFunc0xbe90f0(runtimeScene);
 
 }
 
@@ -325,7 +331,7 @@ gdjs.MainMenuCode.userFunc0xce8058(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0x9fcaf0(runtimeScene);
+gdjs.MainMenuCode.userFunc0xbedb40(runtimeScene);
 
 }
 
@@ -333,7 +339,7 @@ gdjs.MainMenuCode.userFunc0x9fcaf0(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xcdc210(runtimeScene);
+gdjs.MainMenuCode.userFunc0xbeddb8(runtimeScene);
 
 }
 
@@ -392,6 +398,12 @@ gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1.length = 0;
 
 gdjs.MainMenuCode.eventsList0(runtimeScene);
 gdjs.MainMenuCode.GDMainMenuTitleObjects1.length = 0;
@@ -443,6 +455,12 @@ gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1.length = 0;
 
 
 return;
