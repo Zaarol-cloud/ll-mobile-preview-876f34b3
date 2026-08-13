@@ -63,6 +63,40 @@ gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045BoosterObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045BoosterObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045ShipMarkerObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045ShipMarkerObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumTitleTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumTitleTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2= [];
 
 
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarPrevButtonObjects1Objects = Hashtable.newFrom({"CalendarPrevButton": gdjs.TreasureCalendarSceneCode.GDCalendarPrevButtonObjects1});
@@ -71,17 +105,34 @@ gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDC
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarBackButtonObjects1Objects = Hashtable.newFrom({"CalendarBackButton": gdjs.TreasureCalendarSceneCode.GDCalendarBackButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarParrotObjects1Objects = Hashtable.newFrom({"CalendarParrot": gdjs.TreasureCalendarSceneCode.GDCalendarParrotObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarShopButtonObjects1Objects = Hashtable.newFrom({"CalendarShopButton": gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1});
-gdjs.TreasureCalendarSceneCode.userFunc0xaf42b0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0x9e7d58 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-043: Kalenderbootstrap, clientsichere Konfigurationsanzeige und serverautoritiver Claim.
 // Ausschließlich lokale Firebase-Emulatoren; keine Zahlung, kein Shop und keine lokale Gutschrift.
 const calendarVariables = runtimeScene.getVariables();
 const calendarGame = runtimeScene.getGame();
 const calendarSessionKey = "__lockLootCalendarSession";
+const calendarStorageKey = "__lockLootL040LocalAuth";
+const calendarReadStoredSession = () => {
+  try {
+    const value = globalThis.localStorage ? globalThis.localStorage.getItem(calendarStorageKey) : "";
+    const parsed = value ? JSON.parse(value) : null;
+    return parsed && typeof parsed.idToken === "string" && typeof parsed.uid === "string" ? parsed : null;
+  } catch (error) { return null; }
+};
+const calendarSaveSession = (session) => {
+  try { if (globalThis.localStorage) globalThis.localStorage.setItem(calendarStorageKey, JSON.stringify(session)); } catch (error) {}
+};
 if (!calendarGame[calendarSessionKey]) {
-  calendarGame[calendarSessionKey] = { idToken: "", uid: "", pendingRequestId: "" };
+  calendarGame[calendarSessionKey] = calendarReadStoredSession() || { idToken: "", uid: "", refreshToken: "", pendingRequestId: "" };
 }
 const calendarSession = calendarGame[calendarSessionKey];
+const calendarRenderStateMatch = (() => {
+  try {
+    const value = new URLSearchParams(globalThis.location && globalThis.location.search ? globalThis.location.search : "").get("l045state");
+    return value && /^[A-H]$/.test(value) ? value : "";
+  } catch (error) { return ""; }
+})();
 
 const calendarObjects = (name) => runtimeScene.getObjects(name).slice().sort((left, right) => left.getY() - right.getY());
 const calendarSetText = (name, text) => {
@@ -111,6 +162,15 @@ const calendarValidateWallet = (wallet) => {
   }
   return wallet;
 };
+const calendarApplyWallet = (state, wallet) => {
+  const safeWallet = calendarValidateWallet(wallet);
+  state.wallet = safeWallet;
+  calendarVariables.get("CalendarWalletCookies").setNumber(safeWallet.cookies);
+  calendarVariables.get("CalendarWalletLockpicks").setNumber(safeWallet.lockpicks);
+  calendarSetText("CalendarWalletCookiesText", String(safeWallet.cookies));
+  calendarSetText("CalendarWalletLockpicksText", String(safeWallet.lockpicks));
+  return safeWallet;
+};
 const calendarValidateState = (calendar) => {
   const valid = calendar && calendar.levelCount === 30 && Number.isSafeInteger(calendar.calendarVersion) &&
     Number.isSafeInteger(calendar.progress) && calendar.progress >= 0 && calendar.progress <= 30 &&
@@ -119,7 +179,10 @@ const calendarValidateState = (calendar) => {
     Array.isArray(calendar.rewardOverview) && calendar.rewardOverview.length === 30 &&
     calendar.rewardOverview.every((entry, index) => entry && entry.level === index + 1 &&
       calendarRewardIsSafe(entry.free) && calendarRewardIsSafe(entry.premium));
-  if (!valid || calendar.cycleCompleted !== (calendar.progress === 30) ||
+  const claimedLevelsAreSafe = (levels) => Array.isArray(levels) && levels.every((level, index) => Number.isSafeInteger(level) && level >= 1 && level <= calendar.progress && (index === 0 || levels[index - 1] < level));
+  if (!valid || !claimedLevelsAreSafe(calendar.freeClaimedLevels) || !claimedLevelsAreSafe(calendar.premiumClaimedLevels) ||
+      calendar.freeClaimedLevels.length !== calendar.progress || (!calendar.premiumEntitled && calendar.premiumClaimedLevels.length !== 0) ||
+      calendar.cycleCompleted !== (calendar.progress === 30) ||
       calendar.nextLevel !== (calendar.progress === 30 ? null : calendar.progress + 1)) {
     throw Object.assign(new Error("Ungültiger clientsicherer Kalenderzustand."), { status: "INVALID_RESPONSE" });
   }
@@ -206,12 +269,85 @@ const calendarRender = (state) => {
   const previousButtons = calendarObjects("CalendarPrevButton");
   const nextButtons = calendarObjects("CalendarNextButton");
   if (previousButtons.length) calendarSetOpacity(previousButtons[0], state.page > 0 ? 230 : 105);
-  if (nextButtons.length) calendarSetOpacity(nextButtons[0], state.page < 2 ? 230 : 105);
+  if (nextButtons.length) calendarSetOpacity(nextButtons[0], state.page < 5 ? 230 : 105);
 };
 
-if (runtimeScene.getTimeManager().isFirstFrame()) {
+if (runtimeScene.getTimeManager().isFirstFrame() && calendarRenderStateMatch) {
+  // L&L-045: reproduzierbarer A-H-Renderzustand mit echten clientsicheren Daten aus dem lokalen Emulator. Kein Claim.
+  const makeLevels = count => Array.from({ length: count }, (_, index) => index + 1);
+  const renderSpecs = {
+    A: { page: 0, progress: 0, displayProgress: 0, markerLevel: 1, markerAfterClaim: false, premium: false, todayClaimed: false, completed: false },
+    B: { page: 0, progress: 1, displayProgress: 1, markerLevel: 1.5, markerAfterClaim: true, premium: false, todayClaimed: true, completed: false },
+    C: { page: 0, progress: 1, displayProgress: 1, markerLevel: 2, markerAfterClaim: false, premium: true, todayClaimed: true, completed: false },
+    D: { page: 1, progress: 9, displayProgress: 10, markerLevel: 10, markerAfterClaim: false, premium: false, todayClaimed: false, completed: false },
+    E: { page: 1, progress: 10, displayProgress: 10, markerLevel: 10.5, markerAfterClaim: true, premium: true, todayClaimed: true, completed: false },
+    F: { page: 3, progress: 19, displayProgress: 20, markerLevel: 20, markerAfterClaim: false, premium: true, todayClaimed: false, completed: false },
+    G: { page: 5, progress: 29, displayProgress: 30, markerLevel: 30, markerAfterClaim: false, premium: true, todayClaimed: false, completed: false },
+    H: { page: 5, progress: 30, displayProgress: 30, markerLevel: 30, markerAfterClaim: false, premium: true, todayClaimed: true, completed: true }
+  };
+  const spec = renderSpecs[calendarRenderStateMatch];
+  const state = {
+    calendar: null, wallet: null, page: spec.page, pending: true, backendAvailable: false, statusMessage: "", renderOnly: true,
+    renderStateId: calendarRenderStateMatch, renderDisplayProgress: spec.displayProgress, renderMarkerLevel: spec.markerLevel, renderMarkerAfterClaim: spec.markerAfterClaim
+  };
+  runtimeScene.__lockLootCalendarScene = state;
+  calendarSetStatus(state, "Lokale Renderdaten werden geladen …");
+  const renderEndpoints = Object.freeze({
+    auth: "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=local-emulator-only",
+    prepare: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/prepareGDevelopTest",
+    bootstrap: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/bootstrapPlayerState"
+  });
+  const renderRequestJson = async (endpoint, body, idToken = "") => {
+    const parsed = new URL(endpoint);
+    if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["9099", "5001"].includes(parsed.port)) throw new Error("Lokale Rendergrenze verletzt.");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    try {
+      const headers = { "Content-Type": "application/json" };
+      if (idToken) headers.Authorization = "Bearer " + idToken;
+      const response = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify(body), signal: controller.signal });
+      const payload = await response.json();
+      if (!response.ok || (payload && payload.error)) throw new Error("Lokale Renderanfrage abgelehnt.");
+      return payload;
+    } finally { clearTimeout(timeout); }
+  };
+  const renderCallable = async (endpoint, data, idToken) => {
+    const payload = await renderRequestJson(endpoint, { data }, idToken);
+    const result = payload && payload.result !== undefined ? payload.result : payload && payload.data;
+    if (result === undefined) throw new Error("Lokales Render-Callable-Ergebnis fehlt.");
+    return result;
+  };
+  void (async () => {
+    const auth = await renderRequestJson(renderEndpoints.auth, { returnSecureToken: true });
+    if (!auth || typeof auth.idToken !== "string" || typeof auth.localId !== "string") throw new Error("Lokale Renderauthentifizierung ungültig.");
+    const prepared = await renderCallable(renderEndpoints.prepare, { integration: "L&L-042" }, auth.idToken);
+    if (!prepared || !Number.isSafeInteger(prepared.calendarVersion)) throw new Error("Lokale Kalenderkonfiguration fehlt.");
+    const snapshot = await renderCallable(renderEndpoints.bootstrap, { integration: "L&L-042" }, auth.idToken);
+    if (!snapshot || snapshot.uid !== auth.localId) throw new Error("Lokaler Render-Bootstrap ist ungültig.");
+    const sourceCalendar = calendarValidateState(snapshot.calendar);
+    calendarApplyWallet(state, snapshot);
+    state.calendar = calendarValidateState({
+      ...sourceCalendar,
+      progress: spec.progress, todayClaimed: spec.todayClaimed, cycleCompleted: spec.completed, premiumEntitled: spec.premium,
+      freeClaimedLevels: makeLevels(spec.progress), premiumClaimedLevels: spec.premium ? makeLevels(spec.progress) : [],
+      nextLevel: spec.completed ? null : spec.progress + 1
+    });
+    state.pending = false;
+    state.backendAvailable = true;
+    calendarSetStatus(state, "");
+    calendarRender(state);
+  })().catch(() => {
+    if (runtimeScene.__lockLootCalendarScene !== state) return;
+    state.pending = false;
+    state.backendAvailable = false;
+    calendarSetStatus(state, "LOKALE RENDERDATEN NICHT VERFÜGBAR");
+  });
+}
+
+if (runtimeScene.getTimeManager().isFirstFrame() && !calendarRenderStateMatch) {
   const endpoints = Object.freeze({
     auth: "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=local-emulator-only",
+    refresh: "http://127.0.0.1:9099/securetoken.googleapis.com/v1/token?key=local-emulator-only",
     prepare: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/prepareGDevelopTest",
     bootstrap: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/bootstrapPlayerState",
     claim: "http://127.0.0.1:5001/demo-lock-loot-local/europe-west1/claimDailyCalendarReward"
@@ -220,14 +356,14 @@ if (runtimeScene.getTimeManager().isFirstFrame()) {
     const parsed = new URL(endpoint);
     if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["9099", "5001"].includes(parsed.port)) throw new Error("Lokale Demo-Grenze verletzt.");
   };
-  const requestJson = async (endpoint, body, idToken = "") => {
+  const requestJson = async (endpoint, body, idToken = "", formEncoded = false) => {
     assertLocalEndpoint(endpoint);
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
     try {
-      const headers = { "Content-Type": "application/json" };
+      const headers = { "Content-Type": formEncoded ? "application/x-www-form-urlencoded" : "application/json" };
       if (idToken) headers.Authorization = "Bearer " + idToken;
-      const response = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify(body), signal: controller.signal });
+      const response = await fetch(endpoint, { method: "POST", headers, body: formEncoded ? body : JSON.stringify(body), signal: controller.signal });
       const responseText = await response.text();
       let payload = null;
       try { payload = responseText ? JSON.parse(responseText) : null; } catch (error) { throw Object.assign(new Error("Ungültige lokale JSON-Antwort."), { status: "INVALID_RESPONSE" }); }
@@ -258,7 +394,20 @@ if (runtimeScene.getTimeManager().isFirstFrame()) {
     if (!auth || typeof auth.idToken !== "string" || !auth.idToken || typeof auth.localId !== "string" || !auth.localId) throw Object.assign(new Error("Anonyme Auth-Antwort ungültig."), { status: "AUTH_FAILED" });
     calendarSession.idToken = auth.idToken;
     calendarSession.uid = auth.localId;
+    calendarSession.refreshToken = typeof auth.refreshToken === "string" ? auth.refreshToken : "";
     calendarSession.pendingRequestId = "";
+    calendarSaveSession(calendarSession);
+  };
+  const refreshSession = async () => {
+    if (!calendarSession.refreshToken) throw Object.assign(new Error("Kein lokales Refresh-Token."), { status: "AUTH_FAILED" });
+    const body = "grant_type=refresh_token&refresh_token=" + encodeURIComponent(calendarSession.refreshToken);
+    const refreshed = await requestJson(endpoints.refresh, body, "", true);
+    if (!refreshed || typeof refreshed.id_token !== "string" || typeof refreshed.user_id !== "string" || typeof refreshed.refresh_token !== "string") throw Object.assign(new Error("Lokale Token-Erneuerung ungültig."), { status: "AUTH_FAILED" });
+    calendarSession.idToken = refreshed.id_token;
+    calendarSession.uid = refreshed.user_id;
+    calendarSession.refreshToken = refreshed.refresh_token;
+    calendarSession.pendingRequestId = "";
+    calendarSaveSession(calendarSession);
   };
   const loadServerState = async (allowReauthentication) => {
     if (!calendarSession.idToken) await authenticate();
@@ -267,13 +416,19 @@ if (runtimeScene.getTimeManager().isFirstFrame()) {
       if (!prepared || !Number.isSafeInteger(prepared.calendarVersion)) throw Object.assign(new Error("Kalender-Testdaten fehlen."), { status: "INVALID_RESPONSE" });
       const snapshot = await callCallable(endpoints.bootstrap, { integration: "L&L-042" }, calendarSession.idToken);
       if (!snapshot || snapshot.uid !== calendarSession.uid) throw Object.assign(new Error("Bootstrap-UID stimmt nicht."), { status: "INVALID_RESPONSE" });
-      state.wallet = calendarValidateWallet(snapshot);
+      calendarApplyWallet(state, snapshot);
       state.calendar = calendarValidateState(snapshot.calendar);
     } catch (error) {
       if (allowReauthentication && error && error.status === "UNAUTHENTICATED") {
-        calendarSession.idToken = "";
-        calendarSession.uid = "";
-        await authenticate();
+        try {
+          await refreshSession();
+        } catch (refreshError) {
+          if (refreshError && (refreshError.name === "AbortError" || refreshError instanceof TypeError)) throw refreshError;
+          calendarSession.idToken = "";
+          calendarSession.uid = "";
+          calendarSession.refreshToken = "";
+          await authenticate();
+        }
         return loadServerState(false);
       }
       throw error;
@@ -308,6 +463,8 @@ if (calendarState && calendarAction) {
   } else if (calendarAction === "parrot-info") {
     const infoVariable = calendarVariables.get("CalendarParrotInfoStep");
     infoVariable.setNumber((infoVariable.getAsNumber() + 1) % 3);
+  } else if (calendarAction === "claim" && calendarState.renderOnly) {
+    calendarRender(calendarState);
   } else if (calendarAction === "claim") {
     if (!calendarState.backendAvailable) {
       calendarSetStatus(calendarState, "BACKEND NICHT ERREICHBAR · CLAIM DEAKTIVIERT");
@@ -331,8 +488,10 @@ if (calendarState && calendarAction) {
       }, calendarSession.idToken).then((result) => {
         if (runtimeScene.__lockLootCalendarScene !== calendarState) return;
         if (!result || result.dayBoundary !== "UTC" || !result.rewards || !calendarRewardIsSafe(result.rewards.free) || !calendarRewardIsSafe(result.rewards.premium)) throw Object.assign(new Error("Ungültige Kalenderclaim-Antwort."), { status: "INVALID_RESPONSE" });
-        calendarState.wallet = calendarValidateWallet(result.wallet);
+        calendarApplyWallet(calendarState, result.wallet);
         calendarState.calendar = calendarValidateState(result.calendar);
+        calendarState.markerAfterClaimLevel = calendarState.calendar.progress;
+        calendarState.markerAfterClaimStartedAt = runtimeScene.__lockLootMapBookL045 ? runtimeScene.__lockLootMapBookL045.time : 0;
         calendarSession.pendingRequestId = "";
         calendarState.page = Math.min(5, Math.floor((((calendarState.calendar.progress || 1) - 1) / 5)));
         calendarSetStatus(calendarState, "LOGIN " + result.progressLevel + " EINGESAMMELT · KEKSE " + before.cookies + "→" + result.wallet.cookies + " · DIETRICHE " + before.lockpicks + "→" + result.wallet.lockpicks + (calendarState.calendar.premiumEntitled ? " · KOSTENLOS + PREMIUM EXTRA" : " · KOSTENLOS"));
@@ -341,7 +500,7 @@ if (calendarState && calendarAction) {
         if (error && ["CALENDAR_ALREADY_CLAIMED_TODAY", "CALENDAR_CYCLE_COMPLETED"].includes(error.reason)) {
           try {
             const snapshot = await calendarState.callCallable(calendarState.endpoints.bootstrap, { integration: "L&L-042" }, calendarSession.idToken);
-            calendarState.wallet = calendarValidateWallet(snapshot);
+            calendarApplyWallet(calendarState, snapshot);
             calendarState.calendar = calendarValidateState(snapshot.calendar);
             calendarSession.pendingRequestId = "";
           } catch (refreshError) {
@@ -365,39 +524,48 @@ if (calendarState && calendarAction) {
   }
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xbd2d18 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0x9e9ee0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-043-MAP-BOOK-V3 · sechs Schatzkartenseiten mit je fünf großen Login-Wegpunkten.
-// Ausschließlich Darstellung; Wallet, Premiumstatus und Claims bleiben serverautoritativ.
+// L&L-045 · professioneller Schatzkarten-Renderer: sechs Seiten mit je fünf Loginstufen.
+// Rein visuelle Projektion clientsicherer Serverdaten; Claim und Wallet bleiben in L&L-045 Phase A serverautoritativ.
 const mapBookRuntime = runtimeScene.__lockLootCalendarScene;
 const mapBookVariables = runtimeScene.getVariables();
-if (!runtimeScene.__lockLootMapBookV3) {
+if (!runtimeScene.__lockLootMapBookL045) {
   const ordered = name => runtimeScene.getObjects(name).slice().sort((left, right) => left.getY() - right.getY() || left.getX() - right.getX());
-  runtimeScene.__lockLootMapBookV3 = {
-    time: 0,
+  runtimeScene.__lockLootMapBookL045 = {
+    time: 0, markerLevel: null, markerFromLevel: null, markerMoveStart: 0,
     stage: ordered("CalendarStageText"),
     freeReward: ordered("CalendarFreeRewardText"),
     freeState: ordered("CalendarFreeStateText"),
     premiumReward: ordered("CalendarPremiumRewardText"),
     premiumState: ordered("CalendarPremiumStateText"),
-    premiumBadge: ordered("CalendarPremiumBadge"),
     cookie: ordered("CalendarCookieIcon"),
-    lockpick: ordered("CalendarLockpickIcon")
+    lockpick: ordered("CalendarLockpickIcon"),
+    freeStatus: ordered("CalendarL045FreeStatus"),
+    premiumStatus: ordered("CalendarL045PremiumStatus"),
+    booster: ordered("CalendarL045Booster"),
+    waypoint: ordered("CalendarL045Waypoint"),
+    rewardCard: ordered("CalendarPremiumBadge"),
+    headerPlate: ordered("CalendarL045HeaderPlate"),
+    walletFrame: ordered("CalendarL045WalletFrame")
   };
 }
-const mapBook = runtimeScene.__lockLootMapBookV3;
+const mapBook = runtimeScene.__lockLootMapBookL045;
 mapBook.time += Math.min(runtimeScene.getElapsedTime() / 1000, 0.05);
-const firstMapObject = name => runtimeScene.getObjects(name)[0];
-const hideMapObjects = name => runtimeScene.getObjects(name).forEach(object => object.hide(true));
-const placeMapSprite = (object, x, y, width, height, opacity = 255) => {
+const first = name => runtimeScene.getObjects(name)[0];
+const hideAll = name => runtimeScene.getObjects(name).forEach(object => object.hide(true));
+const placeSprite = (object, x, y, width, height, opacity = 255, color = "255;255;255") => {
   if (!object) return;
   object.hide(false);
   object.setPosition(x, y);
-  object.setWidth(width);
-  object.setHeight(height);
+  const currentWidth = object.getWidth();
+  const currentHeight = object.getHeight();
+  if (currentWidth > 0 && typeof object.setScaleX === "function" && typeof object.getScaleX === "function") object.setScaleX(object.getScaleX() * width / currentWidth);
+  if (currentHeight > 0 && typeof object.setScaleY === "function" && typeof object.getScaleY === "function") object.setScaleY(object.getScaleY() * height / currentHeight);
   object.setOpacity(opacity);
+  if (typeof object.setColor === "function") object.setColor(color);
 };
-const placeMapText = (object, value, x, y, width, size, color = "255;244;206") => {
+const placeText = (object, value, x, y, width, height, size, color = "255;244;206") => {
   if (!object) return;
   object.hide(false);
   object.setString(value);
@@ -409,24 +577,65 @@ const placeMapText = (object, value, x, y, width, size, color = "255;244;206") =
   object.setTextAlignment("center");
   object.setVerticalTextAlignment("center");
   object.setPadding(1);
-  if (typeof object.setOutlineEnabled === "function") object.setOutlineEnabled(false);
+  if (typeof object.setOutlineEnabled === "function") object.setOutlineEnabled(true);
   if (typeof object.showShadow === "function") object.showShadow(false);
+  if (typeof object.getHeight === "function" && typeof object.setY === "function") object.setY(y + Math.max(0, (height - object.getHeight()) / 2));
 };
-const placeMapCenteredText = (object, value, centerX, centerY, width, size, color = "255;244;206") => {
-  placeMapText(object, value, centerX - width / 2, centerY, width, size, color);
-  if (!object) return;
-  object.setPosition(centerX - object.getWidth() / 2, centerY - object.getHeight() / 2);
+const placeCenteredText = (object, value, centerX, centerY, width, height, size, color = "255;244;206") => {
+  placeText(object, value, centerX - width / 2, centerY - height / 2, width, height, size, color);
 };
+const claimedAt = (levels, level) => Array.isArray(levels) && levels.includes(level);
+const boosterText = reward => [["booster5", 5], ["booster10", 10], ["booster25", 25]]
+  .filter(([field]) => reward && Number.isSafeInteger(reward[field]) && reward[field] > 0)
+  .map(([field, percent]) => "+" + percent + " %" + (reward[field] > 1 ? " ×" + reward[field] : ""))
+  .join(" · ");
 
-hideMapObjects("CalendarHeaderPanel");
-hideMapObjects("CalendarPremiumBadge");
-hideMapObjects("CalendarFreePanel");
-hideMapObjects("CalendarPremiumPanel");
-hideMapObjects("CalendarRewardRow");
-placeMapSprite(firstMapObject("CalendarBackground"), 0, 0, 720, 1280);
-placeMapSprite(firstMapObject("CalendarMap"), 45, 235, 630, 900);
-const mapParrot = firstMapObject("CalendarParrot");
-placeMapSprite(mapParrot, 605, 120, 100, 158);
+hideAll("CalendarHeaderPanel");
+hideAll("CalendarPremiumBadge");
+hideAll("CalendarFreePanel");
+hideAll("CalendarPremiumPanel");
+hideAll("CalendarRewardRow");
+hideAll("CalendarFreeStateText");
+hideAll("CalendarPremiumStateText");
+hideAll("CalendarWalletText");
+hideAll("CalendarPremiumStatusText");
+hideAll("CalendarPauseHintText");
+hideAll("CalendarSpeechBubble");
+hideAll("CalendarPrevButtonText");
+hideAll("CalendarNextButtonText");
+
+placeSprite(first("CalendarBackground"), 0, 0, 720, 1280);
+placeSprite(first("CalendarMap"), 36, 142, 648, 782);
+
+placeSprite(mapBook.headerPlate[0], 154, 2, 412, 82, 255, "170;110;68");
+placeSprite(mapBook.headerPlate[1], 46, 156, 300, 86, 255, "102;190;126");
+placeSprite(mapBook.headerPlate[2], 374, 156, 300, 86, 255, "205;135;255");
+placeSprite(first("CalendarHeaderPanel"), 168, 76, 384, 68);
+placeText(first("CalendarTitleText"), "SCHATZKALENDER", 176, 40, 368, 28, 27, "255;222;104");
+
+const calendarData = mapBookRuntime && mapBookRuntime.calendar;
+const page = Math.max(0, Math.min(5, mapBookRuntime ? mapBookRuntime.page : 0));
+const startLevel = page * 5 + 1;
+const endLevel = startLevel + 4;
+const progress = calendarData ? calendarData.progress : 0;
+const displayProgress = mapBookRuntime && Number.isSafeInteger(mapBookRuntime.renderDisplayProgress) ? mapBookRuntime.renderDisplayProgress : progress;
+const premiumEnabled = Boolean(calendarData && calendarData.premiumEntitled);
+const backendEnabled = Boolean(mapBookRuntime && mapBookRuntime.backendAvailable);
+const claimEnabled = Boolean(calendarData && backendEnabled && !mapBookRuntime.pending && !calendarData.todayClaimed && !calendarData.cycleCompleted);
+const complete = Boolean(calendarData && calendarData.cycleCompleted);
+placeCenteredText(first("CalendarProgressText"), complete ? "30 / 30 ABGESCHLOSSEN" : "LOGIN " + displayProgress + " VON 30", 360, 119, 304, 36, 17, "255;244;206");
+
+placeSprite(mapBook.walletFrame[0], 2, 4, 174, 76);
+placeSprite(mapBook.walletFrame[1], 2, 70, 174, 78);
+placeSprite(first("CalendarL045WalletCookie"), 22, 24, 40, 40);
+placeSprite(first("CalendarL045WalletLockpick"), 18, 90, 48, 48, 255, "255;244;190");
+const walletCookies = mapBookRuntime && mapBookRuntime.wallet ? String(mapBookRuntime.wallet.cookies) : "—";
+const walletLockpicks = mapBookRuntime && mapBookRuntime.wallet ? String(mapBookRuntime.wallet.lockpicks) : "—";
+placeCenteredText(first("CalendarWalletCookiesText"), walletCookies, 116, 58, 88, 38, 28);
+placeCenteredText(first("CalendarWalletLockpicksText"), walletLockpicks, 116, 127, 88, 38, 28);
+
+const parrot = first("CalendarParrot");
+placeSprite(parrot, 624, 106, 74, 117);
 const parrotTime = mapBook.time % 8.4;
 let parrotFrame = 0;
 if (parrotTime >= 3.80 && parrotTime < 4.00) parrotFrame = 1;
@@ -435,97 +644,151 @@ else if (parrotTime >= 4.16 && parrotTime < 4.34) parrotFrame = 1;
 else if (parrotTime >= 5.45 && parrotTime < 5.82) parrotFrame = 3;
 else if (parrotTime >= 6.50 && parrotTime < 6.88) parrotFrame = 4;
 else if (parrotTime >= 7.35 && parrotTime < 7.86) parrotFrame = 5;
-if (mapParrot) mapParrot.setAnimationFrame(parrotFrame);
+if (parrot) parrot.setAnimationFrame(parrotFrame);
 
-const calendarData = mapBookRuntime && mapBookRuntime.calendar;
-const previewPageOverride = -1;
-const page = previewPageOverride >= 0 ? previewPageOverride : Math.max(0, Math.min(5, mapBookRuntime ? mapBookRuntime.page : 0));
-const startLevel = page * 5 + 1;
-const endLevel = startLevel + 4;
-const roman = ["I", "II", "III", "IV", "V", "VI"][page];
-const progress = calendarData ? calendarData.progress : 0;
-const premiumEnabled = Boolean(calendarData && calendarData.premiumEntitled);
-const backendEnabled = Boolean(mapBookRuntime && mapBookRuntime.backendAvailable);
-const claimEnabled = Boolean(calendarData && backendEnabled && !mapBookRuntime.pending && !calendarData.todayClaimed && !calendarData.cycleCompleted);
-
-placeMapText(firstMapObject("CalendarTitleText"), "SCHATZKALENDER", 175, 16, 370, 28, "255;218;92");
-placeMapText(firstMapObject("CalendarProgressText"), calendarData && calendarData.cycleCompleted ? "30 / 30 ABGESCHLOSSEN" : "LOGIN " + progress + " VON 30", 205, 48, 310, 18);
-hideMapObjects("CalendarWalletText");
-hideMapObjects("CalendarPremiumStatusText");
-placeMapText(firstMapObject("CalendarPageText"), "KAPITEL " + roman + "  ·  LOGIN " + startLevel + "–" + endLevel, 190, 328, 340, 14, "63;31;11");
-placeMapCenteredText(firstMapObject("CalendarFreeHeaderText"), "KOSTENLOS", 202, 374, 144, 13, "28;88;72");
-placeMapCenteredText(firstMapObject("CalendarPremiumHeaderText"), "PREMIUM", 518, 374, 144, 13, "67;18;80");
-
-const speechStep = mapBookVariables.get("CalendarParrotInfoStep").getAsNumber();
-const speechBubble = firstMapObject("CalendarSpeechBubble");
-const speechText = firstMapObject("CalendarPauseHintText");
-if (speechStep > 0) {
-  placeMapSprite(speechBubble, 320, 86, 300, 94);
-  const message = speechStep === 1 ? "1× LOGIN = 1× FORTSCHRITT" : "PREMIUM-PASS FÜR 30 LOGINS";
-  placeMapText(speechText, message, 350, 111, 225, 12, "80;43;18");
-} else {
-  if (speechBubble) speechBubble.hide(true);
-  if (speechText) speechText.hide(true);
-}
+placeCenteredText(first("CalendarFreeHeaderText"), "TÄGLICHE BELOHNUNGEN\nFÜR ALLE SPIELER", 196, 220, 248, 44, 13, "230;255;218");
+placeCenteredText(first("CalendarPremiumHeaderText"), "PREMIUM-BELOHNUNGEN\nNUR MIT PREMIUM-PASS", 524, 220, 248, 44, 13, "255;230;255");
+const pageTextObject = first("CalendarPageText");
+placeText(pageTextObject, "SEITE " + (page + 1) + " VON 6  ·  LOGIN " + startLevel + "–" + endLevel, 176, 238, 336, 18, 13, "70;37;14");
+if (pageTextObject && typeof pageTextObject.setOutlineEnabled === "function") pageTextObject.setOutlineEnabled(false);
 
 const centers = [
-  {x: 312, y: 432}, {x: 457, y: 536}, {x: 306, y: 652},
-  {x: 453, y: 778}, {x: 293, y: 915}
+  { x: 360, y: 310 },
+  { x: 360, y: 418 },
+  { x: 360, y: 526 },
+  { x: 360, y: 634 },
+  { x: 360, y: 742 }
 ];
-for (const collection of [mapBook.stage, mapBook.freeReward, mapBook.freeState, mapBook.premiumReward, mapBook.premiumState]) {
+for (const collection of [mapBook.stage, mapBook.freeReward, mapBook.premiumReward, mapBook.cookie, mapBook.lockpick, mapBook.freeStatus, mapBook.premiumStatus, mapBook.waypoint, mapBook.rewardCard]) {
   for (const object of collection) object.hide(true);
 }
-for (const icon of [...mapBook.cookie, ...mapBook.lockpick]) icon.hide(true);
+for (const object of mapBook.booster) object.hide(true);
+hideAll("CalendarL045FreeBoosterText");
+hideAll("CalendarL045PremiumBoosterText");
+const pathLine = first("CalendarPauseHintText");
+placeText(pathLine, "|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|", 349, 276, 22, 500, 17, "105;58;20");
+if (pathLine) { pathLine.setZOrder(32); pathLine.setOutlineEnabled(false); }
 for (let index = 0; index < 5; index += 1) {
   const level = startLevel + index;
   const center = centers[index];
   const entry = calendarData && Array.isArray(calendarData.rewardOverview) ? calendarData.rewardOverview[level - 1] : null;
-  const free = entry ? entry.free : {cookies: "—", lockpicks: "—", booster5: 0, booster10: 0, booster25: 0};
-  const premium = entry ? entry.premium : {cookies: "—", lockpicks: "—", booster5: 0, booster10: 0, booster25: 0};
-  const claimed = Boolean(calendarData && level <= calendarData.progress);
-  const current = Boolean(calendarData && level === calendarData.nextLevel);
-  const lowerWaypointOpticalOffsetY = index === 4 ? 3 : index === 3 ? 2 : 0;
-  placeMapCenteredText(mapBook.stage[index], String(level), center.x,
-      center.y + (level % 5 === 0 ? 14 : 12) + lowerWaypointOpticalOffsetY, 56, level % 5 === 0 ? 24 : 21,
-      current && claimEnabled ? "255;255;255" : claimed ? "37;133;58" : "87;45;17");
-  const freeRewardCenterX = center.x - 126;
-  const premiumRewardCenterX = center.x + 126;
-  const rewardOpticalOffsetY = 12;
-  placeMapSprite(mapBook.cookie[index * 2], freeRewardCenterX - 52, center.y - 31, 28, 28);
-  placeMapSprite(mapBook.lockpick[index * 2], freeRewardCenterX - 52, center.y + 3, 28, 28);
-  placeMapCenteredText(mapBook.freeReward[index], String(free.cookies), freeRewardCenterX, center.y - 17 + rewardOpticalOffsetY, 48, 20, "28;88;72");
-  placeMapCenteredText(mapBook.freeReward[index + 5], String(free.lockpicks), freeRewardCenterX, center.y + 17 + rewardOpticalOffsetY, 48, 20, "28;88;72");
-  placeMapCenteredText(mapBook.premiumReward[index], String(premium.cookies), premiumRewardCenterX, center.y - 17 + rewardOpticalOffsetY, 48, 20,
-      premiumEnabled ? "67;18;80" : "72;35;84");
-  placeMapCenteredText(mapBook.premiumReward[index + 5], String(premium.lockpicks), premiumRewardCenterX, center.y + 17 + rewardOpticalOffsetY, 48, 20,
-      premiumEnabled ? "67;18;80" : "72;35;84");
+  const free = entry && entry.free ? entry.free : null;
+  const premium = entry && entry.premium ? entry.premium : null;
+  const freeClaimed = Boolean(calendarData && claimedAt(calendarData.freeClaimedLevels, level));
+  const premiumClaimed = Boolean(calendarData && claimedAt(calendarData.premiumClaimedLevels, level));
+  const currentAvailable = Boolean(calendarData && level === calendarData.nextLevel && claimEnabled);
+
+  placeSprite(mapBook.rewardCard[index], 84, center.y - 50, 258, 100);
+  placeSprite(mapBook.rewardCard[index + 5], 378, center.y - 50, 258, 100);
+  placeSprite(mapBook.waypoint[index], center.x - 30, center.y - 30, 60, 60, 255, currentAvailable ? "255;236;165" : "255;255;255");
+  placeCenteredText(mapBook.stage[index], String(level), center.x, center.y + 8, 44, 38, level >= 10 ? 19 : 22,
+    currentAvailable ? "255;244;178" : freeClaimed ? "205;255;198" : "255;236;178");
+  if (mapBook.stage[index]) mapBook.stage[index].setZOrder(76);
+  placeText(mapBook.freeState[index], "TAG " + level, 110, center.y - 34, 190, 22, 15, "35;25;14");
+  placeText(mapBook.premiumState[index], "TAG " + level, 420, center.y - 34, 190, 22, 15, "35;25;14");
+  mapBook.freeState[index].setTextAlignment("left");
+  mapBook.premiumState[index].setTextAlignment("right");
+  mapBook.freeState[index].setBold(false);
+  mapBook.premiumState[index].setBold(false);
+  mapBook.freeState[index].setOutlineEnabled(false);
+  mapBook.premiumState[index].setOutlineEnabled(false);
+
+  const freeBoost = level === 10 || level === 20 || level === 30 ? boosterText(free) : "";
+  const premiumBoost = level === 10 || level === 20 || level === 30 ? boosterText(premium) : "";
+  const freeCookieCenterY = center.y + (freeBoost ? -24 : -17);
+  const freeLockpickCenterY = center.y + (freeBoost ? 0 : 17);
+  const freeRewardIconSize = freeBoost ? 28 : 32;
+  placeSprite(mapBook.cookie[index], 188, freeCookieCenterY - freeRewardIconSize / 2, freeRewardIconSize, freeRewardIconSize);
+  placeSprite(mapBook.lockpick[index], 188, freeLockpickCenterY - freeRewardIconSize / 2, freeRewardIconSize, freeRewardIconSize);
+  placeText(mapBook.freeReward[index], !free ? "—" : "+" + String(free.cookies), 230, freeCookieCenterY - 2, 76, 22, 18, "25;20;14");
+  placeText(mapBook.freeReward[index + 5], !free ? "—" : "+" + String(free.lockpicks), 230, freeLockpickCenterY - 2, 76, 22, 18, "25;20;14");
+
+  const premiumCookieCenterY = center.y + (premiumBoost ? -24 : -17);
+  const premiumLockpickCenterY = center.y + (premiumBoost ? 0 : 17);
+  const premiumRewardIconSize = premiumBoost ? 28 : 32;
+  placeSprite(mapBook.cookie[index + 5], 414, premiumCookieCenterY - premiumRewardIconSize / 2, premiumRewardIconSize, premiumRewardIconSize);
+  placeSprite(mapBook.lockpick[index + 5], 414, premiumLockpickCenterY - premiumRewardIconSize / 2, premiumRewardIconSize, premiumRewardIconSize);
+  placeText(mapBook.premiumReward[index], !premium ? "—" : "+" + String(premium.cookies), 456, premiumCookieCenterY - 2, 76, 22, 18, "25;20;14");
+  placeText(mapBook.premiumReward[index + 5], !premium ? "—" : "+" + String(premium.lockpicks), 456, premiumLockpickCenterY - 2, 76, 22, 18, "25;20;14");
+
+  const freeStatusAnimation = freeClaimed ? 0 : currentAvailable ? 2 : 1;
+  const premiumStatusAnimation = premiumClaimed ? 0 : premiumEnabled && currentAvailable ? 2 : 1;
+  placeSprite(mapBook.freeStatus[index], 96, center.y - 18, 54, 54);
+  placeSprite(mapBook.premiumStatus[index], 570, center.y - 18, 54, 54, premiumEnabled || premiumClaimed ? 255 : 175);
+  mapBook.freeStatus[index].setAnimation(freeStatusAnimation);
+  mapBook.premiumStatus[index].setAnimation(premiumStatusAnimation);
+
+  if (level === 10 || level === 20 || level === 30) {
+    if (freeBoost) {
+      placeSprite(mapBook.booster[0], 190, center.y + 12, 28, 24);
+      placeText(first("CalendarL045FreeBoosterText"), freeBoost, 230, center.y + 25, 76, 20, 12, "25;20;14");
+    }
+    if (premiumBoost) {
+      placeSprite(mapBook.booster[1], 416, center.y + 12, 28, 24);
+      placeText(first("CalendarL045PremiumBoosterText"), premiumBoost, 456, center.y + 25, 76, 20, 12, "25;20;14");
+    }
+  }
 }
 
-const prevButton = firstMapObject("CalendarPrevButton");
-const nextButton = firstMapObject("CalendarNextButton");
-placeMapSprite(prevButton, 230, 1022, 58, 58, page > 0 ? 245 : 80);
-placeMapSprite(nextButton, 432, 1022, 58, 58, page < 5 ? 245 : 80);
+const completedLevel = calendarData ? calendarData.progress : 0;
+const openLevel = calendarData ? (calendarData.cycleCompleted ? 30 : calendarData.nextLevel) : null;
+const renderMarkerLevel = mapBookRuntime && Number.isFinite(mapBookRuntime.renderMarkerLevel) ? mapBookRuntime.renderMarkerLevel : null;
+const afterClaimLevel = mapBookRuntime && Number.isSafeInteger(mapBookRuntime.markerAfterClaimLevel) ? mapBookRuntime.markerAfterClaimLevel : null;
+const markerLevel = renderMarkerLevel !== null ? renderMarkerLevel : afterClaimLevel && afterClaimLevel < 30 ? afterClaimLevel + 0.5 : openLevel;
+const marker = first("CalendarL045ShipMarker");
+if (marker && markerLevel >= startLevel && markerLevel <= endLevel + 0.5) {
+  const lowerLevel = Math.floor(markerLevel);
+  const upperLevel = Math.ceil(markerLevel);
+  const lowerCenter = centers[Math.min(4, lowerLevel - startLevel)];
+  const upperCenter = upperLevel > endLevel ? { x: lowerCenter.x, y: lowerCenter.y + 108 } : centers[upperLevel - startLevel];
+  let fraction = markerLevel - lowerLevel;
+  if (afterClaimLevel && renderMarkerLevel === null && afterClaimLevel < 30) {
+    const elapsed = Math.max(0, mapBook.time - (mapBookRuntime.markerAfterClaimStartedAt || mapBook.time));
+    const move = Math.min(1, elapsed / 0.85);
+    fraction = 0.5 * move * move * (3 - 2 * move);
+  }
+  const pageEndMidpoint = lowerLevel === endLevel && fraction > 0;
+  const markerX = pageEndMidpoint ? lowerCenter.x - 29 : lowerCenter.x - 35 + (upperCenter.x - lowerCenter.x) * fraction;
+  const markerY = pageEndMidpoint ? lowerCenter.y + 8 : lowerCenter.y - 36 + (upperCenter.y - lowerCenter.y) * fraction;
+  placeSprite(marker, markerX, markerY, pageEndMidpoint ? 58 : 70, pageEndMidpoint ? 50 : 60);
+  if (typeof marker.setZOrder === "function") marker.setZOrder(96);
+} else if (marker) {
+  marker.hide(true);
+}
+
+const prevButton = first("CalendarPrevButton");
+const nextButton = first("CalendarNextButton");
+placeSprite(prevButton, 174, 818, 62, 62, page > 0 ? 255 : 145);
+placeSprite(nextButton, 484, 818, 62, 62, page < 5 ? 255 : 145);
 if (prevButton && typeof prevButton.flipX === "function") prevButton.flipX(false);
 if (nextButton && typeof nextButton.flipX === "function") nextButton.flipX(true);
-hideMapObjects("CalendarPrevButtonText");
-hideMapObjects("CalendarNextButtonText");
-const claimButton = firstMapObject("CalendarClaimButton");
-const claimFinished = Boolean(calendarData && (calendarData.todayClaimed || calendarData.cycleCompleted));
-placeMapSprite(claimButton, 328, 1017, 64, 64, claimEnabled || claimFinished ? 255 : 135);
-if (claimButton) claimButton.setAnimation(claimFinished ? 1 : 0);
-let claimCaption = "HOLEN";
-if (!backendEnabled) claimCaption = "OFFLINE";
-else if (mapBookRuntime.pending) claimCaption = "LÄUFT …";
-else if (calendarData && calendarData.cycleCompleted) claimCaption = "FERTIG";
-else if (calendarData && calendarData.todayClaimed) claimCaption = "GEHOLT";
-hideMapObjects("CalendarClaimButtonText");
-const statusText = mapBookRuntime && mapBookRuntime.statusMessage ? mapBookRuntime.statusMessage : "LOKALER SERVERSTAND WIRD GELADEN …";
-placeMapText(firstMapObject("CalendarStatusText"), statusText, 48, 1148, 560, statusText.length > 70 ? 8 : 10,
-    backendEnabled ? "196;242;211" : "255;218;150");
-placeMapSprite(firstMapObject("CalendarBackButton"), 638, 1195, 68, 68);
-placeMapSprite(firstMapObject("CalendarShopButton"), 550, 1195, 68, 68);
-placeMapCenteredText(firstMapObject("CalendarShopButtonText"), "SHOP", 584, 1233, 62, 14, "255;231;164");
 
+const claimButton = first("CalendarClaimButton");
+const claimFinished = Boolean(calendarData && (calendarData.todayClaimed || calendarData.cycleCompleted));
+placeSprite(claimButton, 236, 798, 248, 90, claimEnabled || claimFinished || (mapBookRuntime && mapBookRuntime.renderOnly) ? 255 : 165);
+if (claimButton) claimButton.setAnimation(claimFinished ? 1 : 0);
+let claimCaption = "BELOHNUNG\nABHOLEN";
+if (mapBookRuntime && mapBookRuntime.pending) claimCaption = "ANFRAGE\nLÄUFT …";
+else if (calendarData && calendarData.cycleCompleted) claimCaption = "30 / 30\nABGESCHLOSSEN";
+else if (calendarData && calendarData.todayClaimed) claimCaption = "HEUTE BEREITS\nABGEHOLT";
+else if (!backendEnabled) claimCaption = "NICHT\nVERFÜGBAR";
+placeCenteredText(first("CalendarClaimButtonText"), claimCaption, 360, 863, 202, 50, 14, claimEnabled ? "255;244;206" : "224;215;194");
+
+placeSprite(first("CalendarL045PremiumPanel"), 75, 894, 570, 150);
+placeCenteredText(first("CalendarL045PremiumTitleText"), "PREMIUM-PASS FÜR 30 LOGINS" + (premiumEnabled ? " · AKTIV" : ""), 360, 954, 452, 24, premiumEnabled ? 14 : 16, "255;222;255");
+placeText(first("CalendarL045PremiumBodyText"), "Zusätzliche Premium-Belohnungen\nfür den aktuellen 30-Login-Zyklus", 118, 966, 308, 42, 13, "255;229;235");
+placeText(first("CalendarL045PremiumPriceText"), "EINMALIG\n4,99 €", 444, 968, 132, 40, 16, "255;222;112");
+
+const statusMessage = mapBookRuntime && mapBookRuntime.statusMessage ? mapBookRuntime.statusMessage : "";
+const statusObject = first("CalendarStatusText");
+if (!backendEnabled && statusMessage && !(mapBookRuntime && mapBookRuntime.renderOnly)) {
+  placeText(statusObject, "Kalender derzeit nicht verfügbar.", 120, 1042, 480, 24, 10, "255;218;150");
+} else if (statusObject) {
+  statusObject.hide(true);
+}
+placeSprite(first("CalendarShopButton"), 262, 1060, 88, 88, 255, "255;230;175");
+placeCenteredText(first("CalendarShopButtonText"), "SHOP", 306, 1113, 76, 32, 18, "255;252;214");
+placeSprite(first("CalendarBackButton"), 370, 1060, 88, 88);
 };
 gdjs.TreasureCalendarSceneCode.eventsList0 = function(runtimeScene) {
 
@@ -646,7 +909,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xaf42b0(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0x9e7d58(runtimeScene);
 
 }
 
@@ -654,7 +917,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xaf42b0(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xbd2d18(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0x9e9ee0(runtimeScene);
 
 }
 
@@ -726,6 +989,40 @@ gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045BoosterObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045BoosterObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045ShipMarkerObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045ShipMarkerObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumTitleTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumTitleTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2.length = 0;
 
 gdjs.TreasureCalendarSceneCode.eventsList0(runtimeScene);
 gdjs.TreasureCalendarSceneCode.GDCalendarMapObjects1.length = 0;
@@ -790,6 +1087,40 @@ gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045HeaderPlateObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletFrameObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletCookieObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WalletLockpickObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeStatusObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumStatusObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045BoosterObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045BoosterObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045ShipMarkerObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045ShipMarkerObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045WaypointObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPanelObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletCookiesTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarWalletLockpicksTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045FreeBoosterTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBoosterTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumTitleTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumTitleTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2.length = 0;
 
 
 return;
