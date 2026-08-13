@@ -87,7 +87,7 @@ gdjs.MainMenuCode.GDMainMenuCodeTextObjects1= [];
 gdjs.MainMenuCode.GDMainMenuCodeTextObjects2= [];
 
 
-gdjs.MainMenuCode.userFunc0xbb5f00 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0x9e4f60 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -175,7 +175,7 @@ if (controller.state.mainMenuScene !== runtimeScene) {
 }
 controller.update(runtimeScene);
 };
-gdjs.MainMenuCode.userFunc0xbbe258 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0x9dbb30 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-024: Rein visuelle Steuerung des modularen Hauptmenüs.
 // Bestehende Navigation, Online-Status und alle anderen Szenen bleiben unverändert.
@@ -254,7 +254,7 @@ gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.MainMenuCode.userFunc0xbb5f00(runtimeScene);
+gdjs.MainMenuCode.userFunc0x9e4f60(runtimeScene);
 
 }
 
@@ -262,7 +262,7 @@ gdjs.MainMenuCode.userFunc0xbb5f00(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xbbe258(runtimeScene);
+gdjs.MainMenuCode.userFunc0x9dbb30(runtimeScene);
 
 }
 

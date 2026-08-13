@@ -17,8 +17,6 @@ gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1= [];
 gdjs.ShopSzeneCode.GDShopPremiumPanelObjects2= [];
 gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects1= [];
 gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects2= [];
-gdjs.ShopSzeneCode.GDShopParrotObjects1= [];
-gdjs.ShopSzeneCode.GDShopParrotObjects2= [];
 gdjs.ShopSzeneCode.GDShopBackButtonObjects1= [];
 gdjs.ShopSzeneCode.GDShopBackButtonObjects2= [];
 gdjs.ShopSzeneCode.GDShopTitleTextObjects1= [];
@@ -51,24 +49,29 @@ gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects1= [];
 gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects2= [];
 gdjs.ShopSzeneCode.GDShopStatusTextObjects1= [];
 gdjs.ShopSzeneCode.GDShopStatusTextObjects2= [];
-gdjs.ShopSzeneCode.GDShopDisclaimerTextObjects1= [];
-gdjs.ShopSzeneCode.GDShopDisclaimerTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1= [];
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects2= [];
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2= [];
 
 
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Objects = Hashtable.newFrom({"ShopTabCookies": gdjs.ShopSzeneCode.GDShopTabCookiesObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
-gdjs.ShopSzeneCode.userFunc0x9d72d8 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xa7a930 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
 const shopVariables = runtimeScene.getVariables();
 const shopGame = runtimeScene.getGame();
 const shopFallbackCatalog = Object.freeze({"shopCatalogVersion":1,"currency":"EUR","priceMode":"PLANNED_DISPLAY_ONLY","products":[{"internalProductKey":"cookies_49","category":"cookies","resourceType":"cookies","quantity":49,"plannedPriceMinorUnits":99,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_119","category":"cookies","resourceType":"cookies","quantity":119,"plannedPriceMinorUnits":199,"bonusLabel":"+20 %","sortOrder":20,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_349","category":"cookies","resourceType":"cookies","quantity":349,"plannedPriceMinorUnits":499,"bonusLabel":"+40 %","sortOrder":30,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_999","category":"cookies","resourceType":"cookies","quantity":999,"plannedPriceMinorUnits":999,"bonusLabel":"+100 %","sortOrder":40,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_79","category":"lockpicks","resourceType":"lockpicks","quantity":79,"plannedPriceMinorUnits":99,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_191","category":"lockpicks","resourceType":"lockpicks","quantity":191,"plannedPriceMinorUnits":199,"bonusLabel":"+20 %","sortOrder":20,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_559","category":"lockpicks","resourceType":"lockpicks","quantity":559,"plannedPriceMinorUnits":499,"bonusLabel":"+40 %","sortOrder":30,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_1599","category":"lockpicks","resourceType":"lockpicks","quantity":1599,"plannedPriceMinorUnits":999,"bonusLabel":"+100 %","sortOrder":40,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"premium_pass_30_logins","category":"premium","resourceType":"premium_pass","quantity":1,"plannedPriceMinorUnits":499,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null}]});
 const shopSessionKey = "__lockLootShopSession";
+const shopProductNames = Object.freeze({cookies_49: "Vorratsbeutel", cookies_119: "Piratenkiste", cookies_349: "Kapit\u00e4nstruhe", cookies_999: "Legendentruhe", lockpicks_79: "Starterset", lockpicks_191: "Abenteurerset", lockpicks_559: "Meisterset", lockpicks_1599: "Legendenset"});
 if (!shopGame[shopSessionKey]) shopGame[shopSessionKey] = {idToken: "", uid: ""};
 const shopSession = shopGame[shopSessionKey];
-const shopObjects = (name) => runtimeScene.getObjects(name).slice().sort((left, right) => left.getY() - right.getY() || left.getX() - right.getX());
+const shopObjects = (name) => runtimeScene.getObjects(name).slice().sort((left, right) => (left.getY() + left.getHeight() / 2) - (right.getY() + right.getHeight() / 2) || (left.getX() + left.getWidth() / 2) - (right.getX() + right.getWidth() / 2));
 const shopSetText = (name, value) => { const objects = shopObjects(name); if (objects[0] && typeof objects[0].setString === "function") objects[0].setString(value); };
 const shopSetColor = (object, value) => { if (object && typeof object.setColor === "function") object.setColor(value); };
 const shopSetOpacity = (object, value) => { if (object && typeof object.setOpacity === "function") object.setOpacity(value); };
@@ -110,36 +113,49 @@ const shopRender = (state) => {
   const quantities = shopObjects("ShopCardQuantityText");
   const prices = shopObjects("ShopCardPriceText");
   const bonuses = shopObjects("ShopCardBonusText");
+  for (const cardText of [...titles, ...quantities, ...prices, ...bonuses]) {
+    if (typeof cardText.showShadow === "function") cardText.showShadow(false);
+    if (typeof cardText.setOutlineThickness === "function") cardText.setOutlineThickness(1);
+  }
   for (let index = 0; index < 4; index += 1) {
     const product = products[index];
     const visible = Boolean(product);
     for (const object of [cards[index], icons[index], titles[index], quantities[index], prices[index], bonuses[index]]) shopSetOpacity(object, visible ? 255 : 0);
     if (!product) continue;
-    if (icons[index] && typeof icons[index].setAnimation === "function") icons[index].setAnimation(category === "cookies" ? 0 : 1);
-    titles[index].setString(category === "cookies" ? "KEKSPAKET" : "DIETRICHPACK");
-    shopFitText(quantities[index], String(product.quantity) + (category === "cookies" ? " KEKSE" : " DIETRICHE"), [[14, 25], [18, 19], [24, 15]]);
+    if (icons[index] && typeof icons[index].setAnimation === "function") icons[index].setAnimation((category === "cookies" ? 0 : 4) + index);
+    shopFitText(titles[index], shopProductNames[product.internalProductKey] || "ANGEBOT", [[12, 15], [16, 13], [22, 12]], 180);
+    const quantitySizes = category === "cookies" ? [[13, 22], [18, 18], [24, 15]] : [[13, 18], [18, 17], [24, 15]];
+    shopFitText(quantities[index], String(product.quantity) + (category === "cookies" ? " KEKSE" : " DIETRICHE"), quantitySizes);
     shopFitText(prices[index], shopFormatPrice(product.plannedPriceMinorUnits), [[11, 19], [16, 15], [24, 13]]);
-    shopFitText(bonuses[index], product.bonusLabel ? product.bonusLabel + " MENGENBONUS" : "BASISANGEBOT", [[23, 15], [32, 12], [44, 10]], 264);
+    shopFitText(bonuses[index], product.bonusLabel ? product.bonusLabel + " MENGENBONUS" : "BASISANGEBOT", [[23, 12], [32, 11], [44, 9]], 180);
     shopSetColor(bonuses[index], product.bonusLabel ? "146;57;18" : "91;74;51");
   }
   const cookieTabs = shopObjects("ShopTabCookies");
   const lockpickTabs = shopObjects("ShopTabLockpicks");
-  shopSetColor(cookieTabs[0], category === "cookies" ? "255;211;89" : "150;124;96");
-  shopSetColor(lockpickTabs[0], category === "lockpicks" ? "205;232;242" : "150;124;96");
+  const cookieTabTexts = shopObjects("ShopTabCookiesText");
+  const lockpickTabTexts = shopObjects("ShopTabLockpicksText");
+  shopSetColor(cookieTabs[0], category === "cookies" ? "255;228;144" : "125;110;96");
+  shopSetColor(lockpickTabs[0], category === "lockpicks" ? "225;242;248" : "125;110;96");
+  shopSetOpacity(cookieTabs[0], category === "cookies" ? 255 : 188);
+  shopSetOpacity(lockpickTabs[0], category === "lockpicks" ? 255 : 188);
+  shopSetColor(cookieTabTexts[0], category === "cookies" ? "70;35;15" : "102;86;72");
+  shopSetColor(lockpickTabTexts[0], category === "lockpicks" ? "55;64;70" : "102;86;72");
+  shopSetOpacity(cookieTabTexts[0], category === "cookies" ? 255 : 228);
+  shopSetOpacity(lockpickTabTexts[0], category === "lockpicks" ? 255 : 228);
   shopVariables.get("ShopCategory").setString(category);
   shopVariables.get("ShopCatalogVersion").setNumber(state.catalog.shopCatalogVersion);
   shopVariables.get("ShopBackendAvailable").setBoolean(state.backendAvailable);
   shopVariables.get("ShopPremiumEntitled").setBoolean(state.premiumEntitled);
   const walletCookieText = state.wallet ? "KEKSE " + state.wallet.cookies : "KEKSE NICHT VERFÜGBAR";
   const walletLockpickText = state.wallet ? "DIETRICHE " + state.wallet.lockpicks : "DIETRICHE NICHT VERFÜGBAR";
-  shopFitText(shopObjects("ShopWalletCookiesText")[0], walletCookieText, [[18, 18], [24, 15], [32, 12]]);
-  shopFitText(shopObjects("ShopWalletLockpicksText")[0], walletLockpickText, [[18, 18], [24, 15], [32, 12]]);
+  shopFitText(shopObjects("ShopWalletCookiesText")[0], walletCookieText, [[18, 18], [20, 14], [32, 12]]);
+  shopFitText(shopObjects("ShopWalletLockpicksText")[0], walletLockpickText, [[18, 18], [20, 14], [32, 12]]);
   const premiumPanels = shopObjects("ShopPremiumPanel"); const premiumBadges = shopObjects("ShopPremiumBadge"); const premiumStatuses = shopObjects("ShopPremiumStatusText");
-  shopSetOpacity(premiumBadges[0], state.premiumEntitled ? 255 : 105);
+  for (const premiumBadge of premiumBadges) shopSetOpacity(premiumBadge, state.premiumEntitled ? 255 : 105);
   shopSetColor(premiumPanels[0], state.premiumEntitled ? "255;255;255" : "170;160;170");
   shopSetColor(premiumStatuses[0], state.premiumEntitled ? "255;225;116" : "200;184;210");
   shopFitText(premiumStatuses[0], state.premiumEntitled ? "AKTIV · FÜR DIESEN KALENDERZYKLUS" : "NOCH NICHT FREIGESCHALTET", [[32, 14], [42, 12], [54, 10]], 500);
-  shopFitText(shopObjects("ShopStatusText")[0], state.statusMessage, [[54, 15], [74, 12], [96, 10]], 420);
+  shopFitText(shopObjects("ShopStatusText")[0], state.statusMessage, [[54, 15], [74, 12], [96, 10]], 600);
 };
 const shopSetStatus = (state, message) => { state.statusMessage = message; shopVariables.get("ShopStatusMessage").setString(message); shopSetText("ShopStatusText", message); };
 
@@ -213,6 +229,7 @@ if (shopState && shopAction) {
   }
 }
 };
+gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
 gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
 
@@ -295,7 +312,26 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0x9d72d8(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xa7a930(runtimeScene);
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("ShopCalendarButton"), gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
+if (isConditionTrue_0) {
+{gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TreasureCalendarScene", false);
+}
+}
 
 }
 
@@ -340,8 +376,6 @@ gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopPremiumPanelObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects2.length = 0;
-gdjs.ShopSzeneCode.GDShopParrotObjects1.length = 0;
-gdjs.ShopSzeneCode.GDShopParrotObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopBackButtonObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopBackButtonObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopTitleTextObjects1.length = 0;
@@ -374,8 +408,12 @@ gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopStatusTextObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopStatusTextObjects2.length = 0;
-gdjs.ShopSzeneCode.GDShopDisclaimerTextObjects1.length = 0;
-gdjs.ShopSzeneCode.GDShopDisclaimerTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2.length = 0;
 
 gdjs.ShopSzeneCode.eventsList0(runtimeScene);
 gdjs.ShopSzeneCode.GDShopBackgroundObjects1.length = 0;
@@ -394,8 +432,6 @@ gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopPremiumPanelObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects2.length = 0;
-gdjs.ShopSzeneCode.GDShopParrotObjects1.length = 0;
-gdjs.ShopSzeneCode.GDShopParrotObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopBackButtonObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopBackButtonObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopTitleTextObjects1.length = 0;
@@ -428,8 +464,12 @@ gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopStatusTextObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopStatusTextObjects2.length = 0;
-gdjs.ShopSzeneCode.GDShopDisclaimerTextObjects1.length = 0;
-gdjs.ShopSzeneCode.GDShopDisclaimerTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2.length = 0;
 
 
 return;

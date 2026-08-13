@@ -168,7 +168,7 @@ gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2= [];
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0x9df620 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xbd5668 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -251,7 +251,7 @@ const controller = game[controllerKey];
 if (!controller.state.currentTrack) controller.forceMain(runtimeScene);
 controller.update(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0x9d72d8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0x9e4df0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -866,7 +866,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xa04130 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0x9eed88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-040: Die Trefferzahlen stammen ausschließlich aus der bestätigten attemptChest-Antwort.
 // Der Client kennt weder richtige Ziffernwerte noch Positionen oder den solutionCode.
@@ -909,7 +909,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa04130(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x9eed88(runtimeScene);
 
 }
 
@@ -920,7 +920,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xb4a408 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xac6480 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -942,7 +942,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb4a408(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xac6480(runtimeScene);
 
 }
 
@@ -1481,7 +1481,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xa65ba0 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0x9ed3b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -3624,14 +3624,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa65ba0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x9ed3b8(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xa617f0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0x9a26a0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -4034,7 +4034,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xa59b50 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb8e0a8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
 // Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
@@ -4063,7 +4063,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0x9df620(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbd5668(runtimeScene);
 
 }
 
@@ -4071,7 +4071,7 @@ gdjs.TrainingSceneCode.userFunc0x9df620(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0x9d72d8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x9e4df0(runtimeScene);
 
 }
 
@@ -5537,7 +5537,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa617f0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x9a26a0(runtimeScene);
 
 }
 
@@ -5646,7 +5646,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa59b50(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb8e0a8(runtimeScene);
 
 }
 
