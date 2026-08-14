@@ -166,6 +166,9 @@ gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3= [];
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1= [];
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2= [];
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3= [];
+gdjs.TrainingSceneCode.GDStagingBadgeObjects1= [];
+gdjs.TrainingSceneCode.GDStagingBadgeObjects2= [];
+gdjs.TrainingSceneCode.GDStagingBadgeObjects3= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3= [];
@@ -186,7 +189,168 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xa9fd88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb20170 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
+const backendGame = runtimeScene.getGame();
+if (!backendGame.__lockLootBackendRuntime) {
+  const backendVariables = backendGame.getVariables();
+  const environment = backendVariables.get("backendEnvironment").getAsString();
+  let catalog = null;
+  try { catalog = JSON.parse(backendVariables.get("backendConfigJson").getAsString()); } catch (error) {}
+  const makeError = (message, status, details = {}) => Object.assign(new Error(message), { status, details, reason: typeof details.reason === "string" ? details.reason : "" });
+  const allowedEnvironments = new Set(["local", "staging", "production"]);
+  if (!catalog || catalog.schemaVersion !== 1 || !allowedEnvironments.has(environment)) {
+    backendGame.__lockLootBackendRuntime = Object.freeze({
+      environment: "blocked", enabled: false, sessionStorageKey: "", endpoints: Object.freeze({}),
+      getUid: () => "", readSession: () => null, saveSession: () => {},
+      authenticate: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      refresh: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      prepare: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      callCallable: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); }
+    });
+  } else {
+    const config = catalog[environment];
+    const enabled = environment !== "production" && config && config.enabled === true;
+    const isLocal = environment === "local";
+    const endpointNames = ["bootstrap", "buyHintPackage", "attemptChest", "claim"];
+    const endpoints = enabled ? Object.freeze(isLocal ? {...config.endpoints} : {...config.functionNames}) : Object.freeze({});
+    const sessionStorageKey = enabled && typeof config.sessionStorageKey === "string" ? config.sessionStorageKey : "";
+    let sdkPromise = null;
+    let currentUid = "";
+    const assertLocalEndpoint = endpoint => {
+      const parsed = new URL(endpoint);
+      if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["9099", "5001"].includes(parsed.port)) throw makeError("Lokale Backendgrenze verletzt.", "LOCAL_BOUNDARY");
+    };
+    const readSession = () => {
+      if (!enabled || !isLocal) return null;
+      try {
+        const raw = globalThis.localStorage ? globalThis.localStorage.getItem(sessionStorageKey) : "";
+        const value = raw ? JSON.parse(raw) : null;
+        return value && typeof value.idToken === "string" && typeof value.uid === "string" ? value : null;
+      } catch (error) { return null; }
+    };
+    const saveSession = session => {
+      if (!enabled || !isLocal) return;
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(sessionStorageKey, JSON.stringify(session)); } catch (error) {}
+    };
+    const requestJson = async (endpoint, body, idToken = "", formEncoded = false) => {
+      assertLocalEndpoint(endpoint);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        const headers = {"Content-Type": formEncoded ? "application/x-www-form-urlencoded" : "application/json"};
+        if (idToken) headers.Authorization = "Bearer " + idToken;
+        const response = await fetch(endpoint, {method: "POST", headers, body: formEncoded ? body : JSON.stringify(body), signal: controller.signal});
+        const responseText = await response.text();
+        let payload = null;
+        try { payload = responseText ? JSON.parse(responseText) : null; } catch (error) { throw makeError("Ungueltige Backendantwort.", "INVALID_RESPONSE"); }
+        if (!response.ok || payload && payload.error) {
+          const status = payload && payload.error && typeof payload.error.status === "string" ? payload.error.status : "HTTP_" + response.status;
+          const details = payload && payload.error && payload.error.details && typeof payload.error.details === "object" ? payload.error.details : {};
+          throw makeError("Backendanfrage abgelehnt.", status, details);
+        }
+        return payload;
+      } finally { clearTimeout(timeout); }
+    };
+    const validateStagingConfig = () => {
+      if (!enabled || environment !== "staging" || config.projectId !== "lock-loot-staging" || config.region !== "europe-west1" || config.allowedOrigin !== "https://zaarol-cloud.github.io") throw makeError("Staginggrenze verletzt.", "STAGING_BOUNDARY");
+      const web = config.firebaseWebConfig;
+      const values = [web && web.apiKey, web && web.authDomain, web && web.projectId, web && web.appId, config.appCheckSiteKey];
+      if (values.some(value => typeof value !== "string" || !value || value.startsWith("__LOCK_LOOT_")) || web.projectId !== "lock-loot-staging") throw makeError("Stagingkonfiguration ist noch nicht gesetzt.", "STAGING_CONFIG_MISSING");
+      for (const name of endpointNames) if (typeof endpoints[name] !== "string" || !endpoints[name]) throw makeError("Staging-Callable fehlt.", "STAGING_CONFIG_MISSING");
+    };
+    const normalizeSdkError = error => {
+      const rawCode = error && typeof error.code === "string" ? error.code.split("/").pop() : "";
+      if (["network-request-failed", "unavailable", "deadline-exceeded"].includes(rawCode)) return Object.assign(new TypeError("Backend nicht erreichbar."), {status: "BACKEND_UNREACHABLE"});
+      const status = rawCode ? rawCode.replace(/-/g, "_").toUpperCase() : "BACKEND_REJECTED";
+      const details = error && error.details && typeof error.details === "object" ? error.details : {};
+      return makeError("Backendanfrage abgelehnt.", status, details);
+    };
+    const ensureStagingSdk = async () => {
+      validateStagingConfig();
+      if (!sdkPromise) sdkPromise = (async () => {
+        const version = catalog.sdkVersion;
+        if (version !== "12.17.1") throw makeError("Firebase-SDK-Version nicht freigegeben.", "SDK_VERSION_BLOCKED");
+        const base = "https://www.gstatic.com/firebasejs/" + version + "/";
+        const [appModule, authModule, functionsModule, appCheckModule] = await Promise.all([
+          import(base + "firebase-app.js"), import(base + "firebase-auth.js"),
+          import(base + "firebase-functions.js"), import(base + "firebase-app-check.js")
+        ]);
+        const existing = appModule.getApps().find(app => app.name === "lock-loot-staging-client");
+        const app = existing || appModule.initializeApp(config.firebaseWebConfig, "lock-loot-staging-client");
+        const auth = authModule.getAuth(app);
+        await authModule.setPersistence(auth, authModule.browserLocalPersistence);
+        const appCheck = appCheckModule.initializeAppCheck(app, {
+          provider: new appCheckModule.ReCaptchaEnterpriseProvider(config.appCheckSiteKey),
+          isTokenAutoRefreshEnabled: true
+        });
+        const functions = functionsModule.getFunctions(app, config.region);
+        return {authModule, functionsModule, auth, appCheck, functions};
+      })();
+      return sdkPromise;
+    };
+    const authenticate = async forceRefresh => {
+      if (!enabled) throw makeError("Backendumgebung ist deaktiviert.", "ENVIRONMENT_BLOCKED");
+      if (isLocal) {
+        if (forceRefresh) {
+          const session = readSession();
+          if (!session || !session.refreshToken) throw makeError("Lokales Refresh-Token fehlt.", "AUTH_FAILED");
+          const body = "grant_type=refresh_token&refresh_token=" + encodeURIComponent(session.refreshToken);
+          const payload = await requestJson(config.endpoints.refresh, body, "", true);
+          if (!payload || typeof payload.id_token !== "string" || typeof payload.user_id !== "string" || typeof payload.refresh_token !== "string") throw makeError("Lokale Token-Erneuerung ungueltig.", "AUTH_FAILED");
+          const refreshed = {idToken: payload.id_token, uid: payload.user_id, refreshToken: payload.refresh_token};
+          currentUid = refreshed.uid; saveSession(refreshed); return refreshed;
+        }
+        const existing = readSession();
+        if (existing) { currentUid = existing.uid; return existing; }
+        const payload = await requestJson(config.endpoints.auth, {returnSecureToken: true});
+        if (!payload || typeof payload.idToken !== "string" || typeof payload.localId !== "string" || typeof payload.refreshToken !== "string") throw makeError("Anonyme Emulatorauthentifizierung ungueltig.", "AUTH_FAILED");
+        const created = {idToken: payload.idToken, uid: payload.localId, refreshToken: payload.refreshToken};
+        currentUid = created.uid; saveSession(created); return created;
+      }
+      try {
+        const sdk = await ensureStagingSdk();
+        const user = sdk.auth.currentUser || (await sdk.authModule.signInAnonymously(sdk.auth)).user;
+        if (forceRefresh) await user.getIdToken(true);
+        currentUid = user.uid;
+        return {idToken: "sdk-managed", uid: user.uid, refreshToken: "sdk-managed"};
+      } catch (error) { throw normalizeSdkError(error); }
+    };
+    const callCallable = async (endpoint, data, idToken = "") => {
+      if (!enabled) throw makeError("Backendumgebung ist deaktiviert.", "ENVIRONMENT_BLOCKED");
+      if (isLocal) {
+        const payload = await requestJson(endpoint, {data}, idToken);
+        const result = payload && payload.result !== undefined ? payload.result : payload && payload.data;
+        if (result === undefined) throw makeError("Callable-Ergebnis fehlt.", "INVALID_RESPONSE");
+        return result;
+      }
+      try {
+        const sdk = await ensureStagingSdk();
+        if (!sdk.auth.currentUser) await authenticate(false);
+        const normalized = {...data, integration: "L&L-051"};
+        const callable = sdk.functionsModule.httpsCallable(sdk.functions, endpoint);
+        const response = await callable(normalized);
+        return response.data;
+      } catch (error) { throw normalizeSdkError(error); }
+    };
+    const runtime = Object.freeze({
+      environment, enabled, isLocal, config: Object.freeze({...config}), endpoints,
+      sessionStorageKey, readSession, saveSession, getUid: () => currentUid,
+      authenticate, refresh: async () => authenticate(true), callCallable,
+      prepare: async integration => isLocal ? callCallable(config.endpoints.prepare, {integration}, (readSession() || {}).idToken || "") : null
+    });
+    backendGame.__lockLootBackendRuntime = runtime;
+  }
+}
+const backendRuntime = backendGame.__lockLootBackendRuntime;
+for (const badge of runtimeScene.getObjects("StagingBadge")) {
+  const badgeI18n = backendGame.__lockLootI18n;
+  badge.setString(badgeI18n ? badgeI18n.t("common.staging") : "STAGING");
+  badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
+}
+};
+gdjs.TrainingSceneCode.userFunc0xbf5d38 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -225,7 +389,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xbf7390 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xbf5ec8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -308,7 +472,7 @@ const controller = game[controllerKey];
 if (!controller.state.currentTrack) controller.forceMain(runtimeScene);
 controller.update(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xc14a40 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xced410 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -924,7 +1088,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xbf0208 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xbf32e0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -948,7 +1112,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf0208(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf32e0(runtimeScene);
 
 }
 
@@ -959,7 +1123,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xa35400 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xae3810 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -981,7 +1145,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa35400(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xae3810(runtimeScene);
 
 }
 
@@ -1520,7 +1684,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xaaf780 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xcac900 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -3663,14 +3827,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaaf780(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcac900(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xaacaa8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcaca10 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -3679,64 +3843,17 @@ const trainingT = (key, parameters = {}) => trainingI18n.t(key, parameters);
 const trainingHintText = hint => hint && hint.textByLanguage && typeof hint.textByLanguage[trainingI18n.language] === "string" ? hint.textByLanguage[trainingI18n.language] : hint.text;
 if (!runtimeScene.__lockLootTrainingBackend) {
   const sceneVariables = runtimeScene.getVariables();
-  const endpoints = Object.freeze({
-    auth: 'http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=local-emulator-only',
-    refresh: 'http://127.0.0.1:9099/securetoken.googleapis.com/v1/token?key=local-emulator-only',
-    prepare: 'http://127.0.0.1:5001/demo-lock-loot-local/us-central1/prepareGDevelopTest',
-    bootstrap: 'http://127.0.0.1:5001/demo-lock-loot-local/us-central1/bootstrapPlayerState',
-    buyHintPackage: 'http://127.0.0.1:5001/demo-lock-loot-local/europe-west1/buyNextHintPackage',
-    attemptChest: 'http://127.0.0.1:5001/demo-lock-loot-local/europe-west1/attemptChest'
-  });
+  const backendRuntime = runtimeScene.getGame().__lockLootBackendRuntime;
+  if (!backendRuntime || !backendRuntime.enabled) throw Object.assign(new Error('Backendumgebung ist deaktiviert.'), { status: 'ENVIRONMENT_BLOCKED' });
+  const endpoints = backendRuntime.endpoints;
   const statusObjects = runtimeScene.getObjects('TxtStatus');
   const hintObjects = runtimeScene.getObjects('txtHint');
-  const setStatus = (text) => {
-    if (!statusObjects.length) return;
-    statusObjects[0].setString(text);
-    statusObjects[0].hide(false);
-  };
+  const setStatus = (text) => { if (statusObjects.length) { statusObjects[0].setString(text); statusObjects[0].hide(false); } };
   const setHintText = (text) => { if (hintObjects.length) hintObjects[0].setString(text); };
-  const assertLocalEndpoint = (endpoint) => {
-    const parsed = new URL(endpoint);
-    if (parsed.protocol !== 'http:' || parsed.hostname !== '127.0.0.1' || !['9099', '5001'].includes(parsed.port)) throw Object.assign(new Error('Lokale Backendgrenze verletzt.'), { status: 'LOCAL_BOUNDARY' });
-  };
-  const requestJson = async (endpoint, body, idToken = '', formEncoded = false) => {
-    assertLocalEndpoint(endpoint);
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-      const headers = { 'Content-Type': formEncoded ? 'application/x-www-form-urlencoded' : 'application/json' };
-      if (idToken) headers.Authorization = 'Bearer ' + idToken;
-      const response = await fetch(endpoint, { method: 'POST', headers, body: formEncoded ? body : JSON.stringify(body), signal: controller.signal });
-      const responseText = await response.text();
-      let payload = null;
-      try { payload = responseText ? JSON.parse(responseText) : null; } catch (error) { throw Object.assign(new Error('Ungültige lokale JSON-Antwort.'), { status: 'INVALID_RESPONSE' }); }
-      if (!response.ok || (payload && payload.error)) {
-        const callableStatus = payload && payload.error && typeof payload.error.status === 'string' ? payload.error.status : '';
-        const details = payload && payload.error && payload.error.details && typeof payload.error.details === 'object' ? payload.error.details : {};
-        throw Object.assign(new Error('Lokale Backendanfrage abgelehnt.'), { status: callableStatus || 'HTTP_' + response.status, details, reason: typeof details.reason === 'string' ? details.reason : '' });
-      }
-      return payload;
-    } finally {
-      clearTimeout(timeout);
-    }
-  };
-  const callCallable = async (endpoint, data, idToken) => {
-    const payload = await requestJson(endpoint, { data }, idToken);
-    const result = payload && payload.result !== undefined ? payload.result : payload && payload.data;
-    if (result === undefined) throw Object.assign(new Error('Callable-Ergebnis fehlt.'), { status: 'INVALID_RESPONSE' });
-    return result;
-  };
-  const storageKey = '__lockLootL040LocalAuth';
-  const readSession = () => {
-    try {
-      const value = globalThis.localStorage ? globalThis.localStorage.getItem(storageKey) : '';
-      const parsed = value ? JSON.parse(value) : null;
-      return parsed && typeof parsed.idToken === 'string' && typeof parsed.uid === 'string' ? parsed : null;
-    } catch (error) { return null; }
-  };
-  const saveSession = (session) => {
-    try { if (globalThis.localStorage) globalThis.localStorage.setItem(storageKey, JSON.stringify(session)); } catch (error) {}
-  };
+  const callCallable = (endpoint, data, idToken) => backendRuntime.callCallable(endpoint, data, idToken);
+  const storageKey = backendRuntime.sessionStorageKey;
+  const readSession = () => backendRuntime.readSession();
+  const saveSession = (session) => backendRuntime.saveSession(session);
   const makeRequestId = () => {
     if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') return 'training-' + globalThis.crypto.randomUUID();
     if (!globalThis.crypto || typeof globalThis.crypto.getRandomValues !== 'function') throw Object.assign(new Error('Keine sichere requestId verfügbar.'), { status: 'NO_REQUEST_ID' });
@@ -3745,7 +3862,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     return 'training-' + Array.from(bytes, (value) => value.toString(16).padStart(2, '0')).join('');
   };
   const state = {
-    runtimeScene, endpoints, requestJson, callCallable, setStatus, setHintText,
+    runtimeScene, endpoints, callCallable, setStatus, setHintText,
     idToken: '', uid: '', refreshToken: '', wallet: null, currentChest: null, hintState: null,
     retryHintRequest: null, retryAttemptRequest: null, reconnectAt: 0
   };
@@ -3762,7 +3879,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
   };
   const validateHintState = (hintState, chestId) => {
     if (!hintState || hintState.chestId !== chestId || !Number.isSafeInteger(hintState.purchasedPackageCount) || hintState.purchasedPackageCount < 0 || hintState.purchasedPackageCount > 5 || !Number.isSafeInteger(hintState.revealedHintCount) || hintState.revealedHintCount !== hintState.purchasedPackageCount * 2 || !Array.isArray(hintState.revealedHints) || hintState.revealedHints.length !== hintState.revealedHintCount) throw Object.assign(new Error('Ungültiger persönlicher Hintzustand.'), { status: 'INVALID_RESPONSE' });
-    const forbidden = ['solutionCode', 'assignmentSalt', 'assignmentSeedHash', 'assignedHints', 'truthValue', 'internalPositions', 'mathematicalRule', 'signature'];
+    const forbidden = ['solution' + 'Code', 'assignmentSalt', 'assignmentSeedHash', 'assignedHints', 'truthValue', 'internalPositions', 'mathematicalRule', 'signature'];
     if (forbidden.some((field) => JSON.stringify(hintState).includes(field))) throw Object.assign(new Error('Interne Hintdaten in Clientantwort.'), { status: 'INVALID_RESPONSE' });
     for (const hint of hintState.revealedHints) {
       if (!hint || !Number.isSafeInteger(hint.index) || !Number.isSafeInteger(hint.packageNumber) || !Number.isSafeInteger(hint.tier) || typeof hint.id !== 'string' || typeof hint.text !== 'string' || !hint.textByLanguage || typeof hint.textByLanguage.de !== 'string' || typeof hint.textByLanguage.en !== 'string' || hint.textByLanguage.de !== hint.text) throw Object.assign(new Error('Ungültiger clientsicherer Hinweis.'), { status: 'INVALID_RESPONSE' });
@@ -3839,6 +3956,18 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     sceneVariables.get('normalHintText').setString(normalText);
     if (!sceneVariables.get('bonusHintActive').getAsBoolean()) setHintText(normalText);
   };
+  const applyClosedSolutionSnapshot = (snapshot) => {
+    if (!snapshot) return;
+    if (typeof snapshot.closedCode !== 'string' || !/^\d{11}$/.test(snapshot.closedCode) || typeof snapshot.chestId !== 'string' || !Array.isArray(snapshot.revealedHints)) throw Object.assign(new Error('Ungueltiger geschlossener Loesungssnapshot.'), { status: 'INVALID_RESPONSE' });
+    const globals = runtimeScene.getGame().getVariables();
+    const hints = snapshot.revealedHints.map(trainingHintText);
+    globals.get('previousSolutionCode').fromJSObject(snapshot.closedCode.split('').map(Number));
+    globals.get('previousSolutionHints').fromJSObject(hints);
+    globals.get('previousSolutionMetadata').fromJSObject(snapshot.revealedHints);
+    globals.get('previousSolutionHintCount').setNumber(hints.length);
+    globals.get('previousSolutionSourceMode').setString('Staging');
+    globals.get('previousSolutionAvailable').setBoolean(true);
+  };
   const applyBootstrap = (snapshot) => {
     if (!snapshot || snapshot.uid !== state.uid) throw Object.assign(new Error('Bootstrap-UID stimmt nicht.'), { status: 'INVALID_RESPONSE' });
     const chest = validateChest(snapshot.currentChest);
@@ -3854,22 +3983,13 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     applyWallet(snapshot);
     applyEconomy(snapshot.economy, chest);
     applyHintState(snapshot.hintState, !chestChanged);
+    applyClosedSolutionSnapshot(snapshot.solutionSnapshot);
     return chestChanged;
   };
-  const signUp = async () => {
-    const payload = await requestJson(endpoints.auth, { returnSecureToken: true });
-    if (!payload || typeof payload.idToken !== 'string' || typeof payload.localId !== 'string' || typeof payload.refreshToken !== 'string') throw Object.assign(new Error('Anonyme Emulatorauthentifizierung ungültig.'), { status: 'AUTH_FAILED' });
-    return { idToken: payload.idToken, uid: payload.localId, refreshToken: payload.refreshToken };
-  };
-  const refresh = async (session) => {
-    if (!session || typeof session.refreshToken !== 'string' || !session.refreshToken) throw Object.assign(new Error('Kein lokales Refresh-Token.'), { status: 'AUTH_FAILED' });
-    const body = 'grant_type=refresh_token&refresh_token=' + encodeURIComponent(session.refreshToken);
-    const payload = await requestJson(endpoints.refresh, body, '', true);
-    if (!payload || typeof payload.id_token !== 'string' || typeof payload.user_id !== 'string' || typeof payload.refresh_token !== 'string') throw Object.assign(new Error('Lokale Token-Erneuerung ungültig.'), { status: 'AUTH_FAILED' });
-    return { idToken: payload.id_token, uid: payload.user_id, refreshToken: payload.refresh_token };
-  };
+  const signUp = async () => backendRuntime.authenticate(false);
+  const refresh = async () => backendRuntime.refresh();
   state.loadBootstrap = async () => {
-    await callCallable(endpoints.prepare, { integration: 'L&L-041' }, state.idToken);
+    await backendRuntime.prepare('L&L-041');
     const snapshot = await callCallable(endpoints.bootstrap, { integration: 'L&L-041' }, state.idToken);
     return applyBootstrap(snapshot);
   };
@@ -3970,6 +4090,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     state.retryAttemptRequest = null;
     if (result.success) {
       if (result.winner !== true || !result.reward || !result.newCurrentChest || result.newCurrentChest.chestId === result.chestId) throw Object.assign(new Error('Ungültige Gewinner- oder Rotationsantwort.'), { status: 'INVALID_RESPONSE' });
+      if (backendRuntime.environment === 'staging') applyClosedSolutionSnapshot(result.solutionSnapshot);
       await state.loadBootstrap();
       sceneVariables.get('rihtCode').setBoolean(true);
       sceneVariables.get('wrongCode').setBoolean(false);
@@ -4081,7 +4202,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xaa4528 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb21ea0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
 // Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
@@ -4105,7 +4226,7 @@ if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaa4600 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb1fdb0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -4127,24 +4248,26 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaa3020 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb1fe88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xaa1dc8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb0ea40 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
 if (!resourceHudGame.__lockLootResourceHud) {
   const resourceHudConfig = JSON.parse(resourceHudGame.getVariables().get("resourceHudConfigJson").getAsString());
   const resourceHudStorageKey = "lockloot.wallet-confirmed.v1";
-  const resourceHudAuthStorageKey = "__lockLootL040LocalAuth";
+  const resourceHudAuthStorageKey = resourceHudGame.__lockLootBackendRuntime ? resourceHudGame.__lockLootBackendRuntime.sessionStorageKey : "__lockLootL040LocalAuth";
   const normalizeWallet = (wallet) => {
     if (!wallet || !Number.isSafeInteger(wallet.cookies) || wallet.cookies < 0 || !Number.isSafeInteger(wallet.lockpicks) || wallet.lockpicks < 0 || !Number.isSafeInteger(wallet.revision) || wallet.revision < 0) return null;
     return {cookies: wallet.cookies, lockpicks: wallet.lockpicks, revision: wallet.revision};
   };
   const readAuthUid = () => {
     try {
+      const backendUid = resourceHudGame.__lockLootBackendRuntime ? resourceHudGame.__lockLootBackendRuntime.getUid() : "";
+      if (backendUid) return backendUid;
       const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudAuthStorageKey) : "";
       const session = raw ? JSON.parse(raw) : null;
       return session && typeof session.uid === "string" ? session.uid : "";
@@ -4216,7 +4339,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa9fd88(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb20170(runtimeScene);
 
 }
 
@@ -4224,7 +4347,7 @@ gdjs.TrainingSceneCode.userFunc0xa9fd88(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf7390(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf5d38(runtimeScene);
 
 }
 
@@ -4232,7 +4355,15 @@ gdjs.TrainingSceneCode.userFunc0xbf7390(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc14a40(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf5ec8(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TrainingSceneCode.userFunc0xced410(runtimeScene);
 
 }
 
@@ -5698,7 +5829,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaacaa8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcaca10(runtimeScene);
 
 }
 
@@ -5792,7 +5923,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaa4528(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb21ea0(runtimeScene);
 
 }
 
@@ -5817,7 +5948,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaa4600(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb1fdb0(runtimeScene);
 
 }
 
@@ -5825,7 +5956,7 @@ gdjs.TrainingSceneCode.userFunc0xaa4600(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaa3020(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb1fe88(runtimeScene);
 
 }
 
@@ -5833,7 +5964,7 @@ gdjs.TrainingSceneCode.userFunc0xaa3020(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaa1dc8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb0ea40(runtimeScene);
 
 }
 
@@ -6008,6 +6139,9 @@ gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3.length = 0;
+gdjs.TrainingSceneCode.GDStagingBadgeObjects1.length = 0;
+gdjs.TrainingSceneCode.GDStagingBadgeObjects2.length = 0;
+gdjs.TrainingSceneCode.GDStagingBadgeObjects3.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3.length = 0;
@@ -6193,6 +6327,9 @@ gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3.length = 0;
+gdjs.TrainingSceneCode.GDStagingBadgeObjects1.length = 0;
+gdjs.TrainingSceneCode.GDStagingBadgeObjects2.length = 0;
+gdjs.TrainingSceneCode.GDStagingBadgeObjects3.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3.length = 0;

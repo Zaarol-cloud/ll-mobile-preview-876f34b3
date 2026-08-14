@@ -47,6 +47,8 @@ gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1= [];
 gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2= [];
 gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1= [];
 gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2= [];
+gdjs.ShopSzeneCode.GDStagingBadgeObjects1= [];
+gdjs.ShopSzeneCode.GDStagingBadgeObjects2= [];
 gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects1= [];
 gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects2= [];
 gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects1= [];
@@ -61,7 +63,168 @@ gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.ShopSzeneCode.userFunc0xaa1ca8 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xae3810 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
+const backendGame = runtimeScene.getGame();
+if (!backendGame.__lockLootBackendRuntime) {
+  const backendVariables = backendGame.getVariables();
+  const environment = backendVariables.get("backendEnvironment").getAsString();
+  let catalog = null;
+  try { catalog = JSON.parse(backendVariables.get("backendConfigJson").getAsString()); } catch (error) {}
+  const makeError = (message, status, details = {}) => Object.assign(new Error(message), { status, details, reason: typeof details.reason === "string" ? details.reason : "" });
+  const allowedEnvironments = new Set(["local", "staging", "production"]);
+  if (!catalog || catalog.schemaVersion !== 1 || !allowedEnvironments.has(environment)) {
+    backendGame.__lockLootBackendRuntime = Object.freeze({
+      environment: "blocked", enabled: false, sessionStorageKey: "", endpoints: Object.freeze({}),
+      getUid: () => "", readSession: () => null, saveSession: () => {},
+      authenticate: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      refresh: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      prepare: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      callCallable: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); }
+    });
+  } else {
+    const config = catalog[environment];
+    const enabled = environment !== "production" && config && config.enabled === true;
+    const isLocal = environment === "local";
+    const endpointNames = ["bootstrap", "buyHintPackage", "attemptChest", "claim"];
+    const endpoints = enabled ? Object.freeze(isLocal ? {...config.endpoints} : {...config.functionNames}) : Object.freeze({});
+    const sessionStorageKey = enabled && typeof config.sessionStorageKey === "string" ? config.sessionStorageKey : "";
+    let sdkPromise = null;
+    let currentUid = "";
+    const assertLocalEndpoint = endpoint => {
+      const parsed = new URL(endpoint);
+      if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["9099", "5001"].includes(parsed.port)) throw makeError("Lokale Backendgrenze verletzt.", "LOCAL_BOUNDARY");
+    };
+    const readSession = () => {
+      if (!enabled || !isLocal) return null;
+      try {
+        const raw = globalThis.localStorage ? globalThis.localStorage.getItem(sessionStorageKey) : "";
+        const value = raw ? JSON.parse(raw) : null;
+        return value && typeof value.idToken === "string" && typeof value.uid === "string" ? value : null;
+      } catch (error) { return null; }
+    };
+    const saveSession = session => {
+      if (!enabled || !isLocal) return;
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(sessionStorageKey, JSON.stringify(session)); } catch (error) {}
+    };
+    const requestJson = async (endpoint, body, idToken = "", formEncoded = false) => {
+      assertLocalEndpoint(endpoint);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        const headers = {"Content-Type": formEncoded ? "application/x-www-form-urlencoded" : "application/json"};
+        if (idToken) headers.Authorization = "Bearer " + idToken;
+        const response = await fetch(endpoint, {method: "POST", headers, body: formEncoded ? body : JSON.stringify(body), signal: controller.signal});
+        const responseText = await response.text();
+        let payload = null;
+        try { payload = responseText ? JSON.parse(responseText) : null; } catch (error) { throw makeError("Ungueltige Backendantwort.", "INVALID_RESPONSE"); }
+        if (!response.ok || payload && payload.error) {
+          const status = payload && payload.error && typeof payload.error.status === "string" ? payload.error.status : "HTTP_" + response.status;
+          const details = payload && payload.error && payload.error.details && typeof payload.error.details === "object" ? payload.error.details : {};
+          throw makeError("Backendanfrage abgelehnt.", status, details);
+        }
+        return payload;
+      } finally { clearTimeout(timeout); }
+    };
+    const validateStagingConfig = () => {
+      if (!enabled || environment !== "staging" || config.projectId !== "lock-loot-staging" || config.region !== "europe-west1" || config.allowedOrigin !== "https://zaarol-cloud.github.io") throw makeError("Staginggrenze verletzt.", "STAGING_BOUNDARY");
+      const web = config.firebaseWebConfig;
+      const values = [web && web.apiKey, web && web.authDomain, web && web.projectId, web && web.appId, config.appCheckSiteKey];
+      if (values.some(value => typeof value !== "string" || !value || value.startsWith("__LOCK_LOOT_")) || web.projectId !== "lock-loot-staging") throw makeError("Stagingkonfiguration ist noch nicht gesetzt.", "STAGING_CONFIG_MISSING");
+      for (const name of endpointNames) if (typeof endpoints[name] !== "string" || !endpoints[name]) throw makeError("Staging-Callable fehlt.", "STAGING_CONFIG_MISSING");
+    };
+    const normalizeSdkError = error => {
+      const rawCode = error && typeof error.code === "string" ? error.code.split("/").pop() : "";
+      if (["network-request-failed", "unavailable", "deadline-exceeded"].includes(rawCode)) return Object.assign(new TypeError("Backend nicht erreichbar."), {status: "BACKEND_UNREACHABLE"});
+      const status = rawCode ? rawCode.replace(/-/g, "_").toUpperCase() : "BACKEND_REJECTED";
+      const details = error && error.details && typeof error.details === "object" ? error.details : {};
+      return makeError("Backendanfrage abgelehnt.", status, details);
+    };
+    const ensureStagingSdk = async () => {
+      validateStagingConfig();
+      if (!sdkPromise) sdkPromise = (async () => {
+        const version = catalog.sdkVersion;
+        if (version !== "12.17.1") throw makeError("Firebase-SDK-Version nicht freigegeben.", "SDK_VERSION_BLOCKED");
+        const base = "https://www.gstatic.com/firebasejs/" + version + "/";
+        const [appModule, authModule, functionsModule, appCheckModule] = await Promise.all([
+          import(base + "firebase-app.js"), import(base + "firebase-auth.js"),
+          import(base + "firebase-functions.js"), import(base + "firebase-app-check.js")
+        ]);
+        const existing = appModule.getApps().find(app => app.name === "lock-loot-staging-client");
+        const app = existing || appModule.initializeApp(config.firebaseWebConfig, "lock-loot-staging-client");
+        const auth = authModule.getAuth(app);
+        await authModule.setPersistence(auth, authModule.browserLocalPersistence);
+        const appCheck = appCheckModule.initializeAppCheck(app, {
+          provider: new appCheckModule.ReCaptchaEnterpriseProvider(config.appCheckSiteKey),
+          isTokenAutoRefreshEnabled: true
+        });
+        const functions = functionsModule.getFunctions(app, config.region);
+        return {authModule, functionsModule, auth, appCheck, functions};
+      })();
+      return sdkPromise;
+    };
+    const authenticate = async forceRefresh => {
+      if (!enabled) throw makeError("Backendumgebung ist deaktiviert.", "ENVIRONMENT_BLOCKED");
+      if (isLocal) {
+        if (forceRefresh) {
+          const session = readSession();
+          if (!session || !session.refreshToken) throw makeError("Lokales Refresh-Token fehlt.", "AUTH_FAILED");
+          const body = "grant_type=refresh_token&refresh_token=" + encodeURIComponent(session.refreshToken);
+          const payload = await requestJson(config.endpoints.refresh, body, "", true);
+          if (!payload || typeof payload.id_token !== "string" || typeof payload.user_id !== "string" || typeof payload.refresh_token !== "string") throw makeError("Lokale Token-Erneuerung ungueltig.", "AUTH_FAILED");
+          const refreshed = {idToken: payload.id_token, uid: payload.user_id, refreshToken: payload.refresh_token};
+          currentUid = refreshed.uid; saveSession(refreshed); return refreshed;
+        }
+        const existing = readSession();
+        if (existing) { currentUid = existing.uid; return existing; }
+        const payload = await requestJson(config.endpoints.auth, {returnSecureToken: true});
+        if (!payload || typeof payload.idToken !== "string" || typeof payload.localId !== "string" || typeof payload.refreshToken !== "string") throw makeError("Anonyme Emulatorauthentifizierung ungueltig.", "AUTH_FAILED");
+        const created = {idToken: payload.idToken, uid: payload.localId, refreshToken: payload.refreshToken};
+        currentUid = created.uid; saveSession(created); return created;
+      }
+      try {
+        const sdk = await ensureStagingSdk();
+        const user = sdk.auth.currentUser || (await sdk.authModule.signInAnonymously(sdk.auth)).user;
+        if (forceRefresh) await user.getIdToken(true);
+        currentUid = user.uid;
+        return {idToken: "sdk-managed", uid: user.uid, refreshToken: "sdk-managed"};
+      } catch (error) { throw normalizeSdkError(error); }
+    };
+    const callCallable = async (endpoint, data, idToken = "") => {
+      if (!enabled) throw makeError("Backendumgebung ist deaktiviert.", "ENVIRONMENT_BLOCKED");
+      if (isLocal) {
+        const payload = await requestJson(endpoint, {data}, idToken);
+        const result = payload && payload.result !== undefined ? payload.result : payload && payload.data;
+        if (result === undefined) throw makeError("Callable-Ergebnis fehlt.", "INVALID_RESPONSE");
+        return result;
+      }
+      try {
+        const sdk = await ensureStagingSdk();
+        if (!sdk.auth.currentUser) await authenticate(false);
+        const normalized = {...data, integration: "L&L-051"};
+        const callable = sdk.functionsModule.httpsCallable(sdk.functions, endpoint);
+        const response = await callable(normalized);
+        return response.data;
+      } catch (error) { throw normalizeSdkError(error); }
+    };
+    const runtime = Object.freeze({
+      environment, enabled, isLocal, config: Object.freeze({...config}), endpoints,
+      sessionStorageKey, readSession, saveSession, getUid: () => currentUid,
+      authenticate, refresh: async () => authenticate(true), callCallable,
+      prepare: async integration => isLocal ? callCallable(config.endpoints.prepare, {integration}, (readSession() || {}).idToken || "") : null
+    });
+    backendGame.__lockLootBackendRuntime = runtime;
+  }
+}
+const backendRuntime = backendGame.__lockLootBackendRuntime;
+for (const badge of runtimeScene.getObjects("StagingBadge")) {
+  const badgeI18n = backendGame.__lockLootI18n;
+  badge.setString(badgeI18n ? badgeI18n.t("common.staging") : "STAGING");
+  badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
+}
+};
+gdjs.ShopSzeneCode.userFunc0xa981e0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -104,7 +267,7 @@ gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Obj
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
-gdjs.ShopSzeneCode.userFunc0xb05d38 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xa0b198 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
 const shopVariables = runtimeScene.getVariables();
@@ -113,16 +276,17 @@ const shopT = (key, parameters = {}) => shopI18n.t(key, parameters);
 const shopGame = runtimeScene.getGame();
 const shopFallbackCatalog = Object.freeze({"shopCatalogVersion":1,"currency":"EUR","priceMode":"PLANNED_DISPLAY_ONLY","products":[{"internalProductKey":"cookies_49","category":"cookies","resourceType":"cookies","quantity":49,"plannedPriceMinorUnits":99,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_119","category":"cookies","resourceType":"cookies","quantity":119,"plannedPriceMinorUnits":199,"bonusLabel":"+20 %","sortOrder":20,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_349","category":"cookies","resourceType":"cookies","quantity":349,"plannedPriceMinorUnits":499,"bonusLabel":"+40 %","sortOrder":30,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_999","category":"cookies","resourceType":"cookies","quantity":999,"plannedPriceMinorUnits":999,"bonusLabel":"+100 %","sortOrder":40,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_79","category":"lockpicks","resourceType":"lockpicks","quantity":79,"plannedPriceMinorUnits":99,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_191","category":"lockpicks","resourceType":"lockpicks","quantity":191,"plannedPriceMinorUnits":199,"bonusLabel":"+20 %","sortOrder":20,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_559","category":"lockpicks","resourceType":"lockpicks","quantity":559,"plannedPriceMinorUnits":499,"bonusLabel":"+40 %","sortOrder":30,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_1599","category":"lockpicks","resourceType":"lockpicks","quantity":1599,"plannedPriceMinorUnits":999,"bonusLabel":"+100 %","sortOrder":40,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"premium_pass_30_logins","category":"premium","resourceType":"premium_pass","quantity":1,"plannedPriceMinorUnits":499,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null}]});
 const shopSessionKey = "__lockLootShopSession";
-const shopAuthStorageKey = "__lockLootL040LocalAuth";
+const shopBackendRuntime = shopGame.__lockLootBackendRuntime;
+const shopAuthStorageKey = shopBackendRuntime ? shopBackendRuntime.sessionStorageKey : "";
 const shopReadSession = () => {
   try {
-    const raw = globalThis.localStorage ? globalThis.localStorage.getItem(shopAuthStorageKey) : "";
-    const parsed = raw ? JSON.parse(raw) : null;
+    const parsed = shopBackendRuntime ? shopBackendRuntime.readSession() : null;
+
     return parsed && typeof parsed.idToken === "string" && typeof parsed.uid === "string" ? parsed : null;
   } catch (error) { return null; }
 };
 const shopSaveSession = (session) => {
-  try { if (globalThis.localStorage) globalThis.localStorage.setItem(shopAuthStorageKey, JSON.stringify(session)); } catch (error) {}
+  try { if (shopBackendRuntime) shopBackendRuntime.saveSession(session); } catch (error) {}
 };
 if (!shopGame[shopSessionKey]) shopGame[shopSessionKey] = shopReadSession() || {idToken: "", uid: ""};
 const shopSession = shopGame[shopSessionKey];
@@ -212,37 +376,21 @@ const shopRender = (state) => {
 const shopSetStatus = (state, message) => { state.statusMessage = message; shopVariables.get("ShopStatusMessage").setString(message); shopSetText("ShopStatusText", message); };
 
 if (runtimeScene.getTimeManager().isFirstFrame()) {
-  const endpoints = Object.freeze({
-    auth: "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=local-emulator-only",
-    prepare: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/prepareGDevelopTest",
-    bootstrap: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/bootstrapPlayerState"
-  });
-  const assertLocal = (endpoint) => { const parsed = new URL(endpoint); if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["5001", "9099"].includes(parsed.port)) throw new Error("Lokale Demo-Grenze verletzt."); };
-  const requestJson = async (endpoint, body, idToken = "") => {
-    assertLocal(endpoint);
-    const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-      const headers = {"Content-Type": "application/json"}; if (idToken) headers.Authorization = "Bearer " + idToken;
-      const response = await fetch(endpoint, {method: "POST", headers, body: JSON.stringify(body), signal: controller.signal});
-      const payload = JSON.parse(await response.text());
-      if (!response.ok || payload.error) { const status = payload?.error?.status || "HTTP_" + response.status; throw Object.assign(new Error("Lokale Anfrage abgelehnt."), {status}); }
-      return payload;
-    } finally { clearTimeout(timeout); }
-  };
-  const callCallable = async (endpoint, data, idToken) => { const payload = await requestJson(endpoint, {data}, idToken); return payload.result !== undefined ? payload.result : payload.data; };
+  const backendRuntime = shopGame.__lockLootBackendRuntime;
+  if (!backendRuntime || !backendRuntime.enabled) throw Object.assign(new Error('Backendumgebung ist deaktiviert.'), { status: 'ENVIRONMENT_BLOCKED' });
+  const endpoints = backendRuntime.endpoints;
+  const callCallable = (endpoint, data, idToken) => backendRuntime.callCallable(endpoint, data, idToken);
   const state = {catalog: shopValidateCatalog(shopFallbackCatalog), category: "cookies", wallet: null, premiumEntitled: false, backendAvailable: false, statusMessage: shopT("shop.catalog_planned")};
   runtimeScene.__lockLootShopScene = state;
   shopRender(state);
   const authenticate = async () => {
-    const auth = await requestJson(endpoints.auth, {returnSecureToken: true});
-    if (!auth?.idToken || !auth?.localId) throw Object.assign(new Error("Anonyme Auth-Antwort ungültig."), {status: "AUTH_FAILED"});
-    shopSession.idToken = auth.idToken; shopSession.uid = auth.localId; shopSession.refreshToken = auth.refreshToken || "";
-    shopSaveSession(shopSession);
+    const auth = await backendRuntime.authenticate(false);
+    shopSession.idToken = auth.idToken; shopSession.uid = auth.uid; shopSession.refreshToken = auth.refreshToken || ''; shopSaveSession(shopSession);
   };
   const load = async (retry) => {
     if (!shopSession.idToken) await authenticate();
     try {
-      await callCallable(endpoints.prepare, {integration: "L&L-044"}, shopSession.idToken);
+      await backendRuntime.prepare("L&L-044");
       const snapshot = await callCallable(endpoints.bootstrap, {integration: "L&L-044"}, shopSession.idToken);
       if (!snapshot || snapshot.uid !== shopSession.uid) throw Object.assign(new Error("Bootstrap-UID stimmt nicht."), {status: "INVALID_RESPONSE"});
       state.wallet = shopValidateWallet(snapshot);
@@ -286,7 +434,7 @@ if (shopState && shopAction) {
 };
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
-gdjs.ShopSzeneCode.userFunc0xaa8870 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xb0ea28 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Shop-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -299,20 +447,22 @@ if (!runtimeScene.__lockLootL047Shop || runtimeScene.__lockLootL047Shop !== i18n
   const state = runtimeScene.__lockLootShopScene; if (state && typeof shopRender === "function") shopRender(state);
 }
 };
-gdjs.ShopSzeneCode.userFunc0xa0c968 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xbef090 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
 if (!resourceHudGame.__lockLootResourceHud) {
   const resourceHudConfig = JSON.parse(resourceHudGame.getVariables().get("resourceHudConfigJson").getAsString());
   const resourceHudStorageKey = "lockloot.wallet-confirmed.v1";
-  const resourceHudAuthStorageKey = "__lockLootL040LocalAuth";
+  const resourceHudAuthStorageKey = resourceHudGame.__lockLootBackendRuntime ? resourceHudGame.__lockLootBackendRuntime.sessionStorageKey : "__lockLootL040LocalAuth";
   const normalizeWallet = (wallet) => {
     if (!wallet || !Number.isSafeInteger(wallet.cookies) || wallet.cookies < 0 || !Number.isSafeInteger(wallet.lockpicks) || wallet.lockpicks < 0 || !Number.isSafeInteger(wallet.revision) || wallet.revision < 0) return null;
     return {cookies: wallet.cookies, lockpicks: wallet.lockpicks, revision: wallet.revision};
   };
   const readAuthUid = () => {
     try {
+      const backendUid = resourceHudGame.__lockLootBackendRuntime ? resourceHudGame.__lockLootBackendRuntime.getUid() : "";
+      if (backendUid) return backendUid;
       const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudAuthStorageKey) : "";
       const session = raw ? JSON.parse(raw) : null;
       return session && typeof session.uid === "string" ? session.uid : "";
@@ -384,7 +534,15 @@ gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xaa1ca8(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xae3810(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.ShopSzeneCode.userFunc0xa981e0(runtimeScene);
 
 }
 
@@ -468,7 +626,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xb05d38(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xa0b198(runtimeScene);
 
 }
 
@@ -514,7 +672,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xaa8870(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xb0ea28(runtimeScene);
 
 }
 
@@ -522,7 +680,7 @@ gdjs.ShopSzeneCode.userFunc0xaa8870(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xa0c968(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xbef090(runtimeScene);
 
 }
 
@@ -578,6 +736,8 @@ gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDStagingBadgeObjects1.length = 0;
+gdjs.ShopSzeneCode.GDStagingBadgeObjects2.length = 0;
 gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects1.length = 0;
@@ -638,6 +798,8 @@ gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2.length = 0;
 gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1.length = 0;
 gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDStagingBadgeObjects1.length = 0;
+gdjs.ShopSzeneCode.GDStagingBadgeObjects2.length = 0;
 gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects1.length = 0;

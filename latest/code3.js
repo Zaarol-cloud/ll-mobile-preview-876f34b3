@@ -85,6 +85,8 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2= [];
+gdjs.TreasureCalendarSceneCode.GDStagingBadgeObjects1= [];
+gdjs.TreasureCalendarSceneCode.GDStagingBadgeObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects2= [];
 gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects1= [];
@@ -99,7 +101,168 @@ gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xaa1ca8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xa0b198 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
+const backendGame = runtimeScene.getGame();
+if (!backendGame.__lockLootBackendRuntime) {
+  const backendVariables = backendGame.getVariables();
+  const environment = backendVariables.get("backendEnvironment").getAsString();
+  let catalog = null;
+  try { catalog = JSON.parse(backendVariables.get("backendConfigJson").getAsString()); } catch (error) {}
+  const makeError = (message, status, details = {}) => Object.assign(new Error(message), { status, details, reason: typeof details.reason === "string" ? details.reason : "" });
+  const allowedEnvironments = new Set(["local", "staging", "production"]);
+  if (!catalog || catalog.schemaVersion !== 1 || !allowedEnvironments.has(environment)) {
+    backendGame.__lockLootBackendRuntime = Object.freeze({
+      environment: "blocked", enabled: false, sessionStorageKey: "", endpoints: Object.freeze({}),
+      getUid: () => "", readSession: () => null, saveSession: () => {},
+      authenticate: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      refresh: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      prepare: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      callCallable: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); }
+    });
+  } else {
+    const config = catalog[environment];
+    const enabled = environment !== "production" && config && config.enabled === true;
+    const isLocal = environment === "local";
+    const endpointNames = ["bootstrap", "buyHintPackage", "attemptChest", "claim"];
+    const endpoints = enabled ? Object.freeze(isLocal ? {...config.endpoints} : {...config.functionNames}) : Object.freeze({});
+    const sessionStorageKey = enabled && typeof config.sessionStorageKey === "string" ? config.sessionStorageKey : "";
+    let sdkPromise = null;
+    let currentUid = "";
+    const assertLocalEndpoint = endpoint => {
+      const parsed = new URL(endpoint);
+      if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["9099", "5001"].includes(parsed.port)) throw makeError("Lokale Backendgrenze verletzt.", "LOCAL_BOUNDARY");
+    };
+    const readSession = () => {
+      if (!enabled || !isLocal) return null;
+      try {
+        const raw = globalThis.localStorage ? globalThis.localStorage.getItem(sessionStorageKey) : "";
+        const value = raw ? JSON.parse(raw) : null;
+        return value && typeof value.idToken === "string" && typeof value.uid === "string" ? value : null;
+      } catch (error) { return null; }
+    };
+    const saveSession = session => {
+      if (!enabled || !isLocal) return;
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(sessionStorageKey, JSON.stringify(session)); } catch (error) {}
+    };
+    const requestJson = async (endpoint, body, idToken = "", formEncoded = false) => {
+      assertLocalEndpoint(endpoint);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        const headers = {"Content-Type": formEncoded ? "application/x-www-form-urlencoded" : "application/json"};
+        if (idToken) headers.Authorization = "Bearer " + idToken;
+        const response = await fetch(endpoint, {method: "POST", headers, body: formEncoded ? body : JSON.stringify(body), signal: controller.signal});
+        const responseText = await response.text();
+        let payload = null;
+        try { payload = responseText ? JSON.parse(responseText) : null; } catch (error) { throw makeError("Ungueltige Backendantwort.", "INVALID_RESPONSE"); }
+        if (!response.ok || payload && payload.error) {
+          const status = payload && payload.error && typeof payload.error.status === "string" ? payload.error.status : "HTTP_" + response.status;
+          const details = payload && payload.error && payload.error.details && typeof payload.error.details === "object" ? payload.error.details : {};
+          throw makeError("Backendanfrage abgelehnt.", status, details);
+        }
+        return payload;
+      } finally { clearTimeout(timeout); }
+    };
+    const validateStagingConfig = () => {
+      if (!enabled || environment !== "staging" || config.projectId !== "lock-loot-staging" || config.region !== "europe-west1" || config.allowedOrigin !== "https://zaarol-cloud.github.io") throw makeError("Staginggrenze verletzt.", "STAGING_BOUNDARY");
+      const web = config.firebaseWebConfig;
+      const values = [web && web.apiKey, web && web.authDomain, web && web.projectId, web && web.appId, config.appCheckSiteKey];
+      if (values.some(value => typeof value !== "string" || !value || value.startsWith("__LOCK_LOOT_")) || web.projectId !== "lock-loot-staging") throw makeError("Stagingkonfiguration ist noch nicht gesetzt.", "STAGING_CONFIG_MISSING");
+      for (const name of endpointNames) if (typeof endpoints[name] !== "string" || !endpoints[name]) throw makeError("Staging-Callable fehlt.", "STAGING_CONFIG_MISSING");
+    };
+    const normalizeSdkError = error => {
+      const rawCode = error && typeof error.code === "string" ? error.code.split("/").pop() : "";
+      if (["network-request-failed", "unavailable", "deadline-exceeded"].includes(rawCode)) return Object.assign(new TypeError("Backend nicht erreichbar."), {status: "BACKEND_UNREACHABLE"});
+      const status = rawCode ? rawCode.replace(/-/g, "_").toUpperCase() : "BACKEND_REJECTED";
+      const details = error && error.details && typeof error.details === "object" ? error.details : {};
+      return makeError("Backendanfrage abgelehnt.", status, details);
+    };
+    const ensureStagingSdk = async () => {
+      validateStagingConfig();
+      if (!sdkPromise) sdkPromise = (async () => {
+        const version = catalog.sdkVersion;
+        if (version !== "12.17.1") throw makeError("Firebase-SDK-Version nicht freigegeben.", "SDK_VERSION_BLOCKED");
+        const base = "https://www.gstatic.com/firebasejs/" + version + "/";
+        const [appModule, authModule, functionsModule, appCheckModule] = await Promise.all([
+          import(base + "firebase-app.js"), import(base + "firebase-auth.js"),
+          import(base + "firebase-functions.js"), import(base + "firebase-app-check.js")
+        ]);
+        const existing = appModule.getApps().find(app => app.name === "lock-loot-staging-client");
+        const app = existing || appModule.initializeApp(config.firebaseWebConfig, "lock-loot-staging-client");
+        const auth = authModule.getAuth(app);
+        await authModule.setPersistence(auth, authModule.browserLocalPersistence);
+        const appCheck = appCheckModule.initializeAppCheck(app, {
+          provider: new appCheckModule.ReCaptchaEnterpriseProvider(config.appCheckSiteKey),
+          isTokenAutoRefreshEnabled: true
+        });
+        const functions = functionsModule.getFunctions(app, config.region);
+        return {authModule, functionsModule, auth, appCheck, functions};
+      })();
+      return sdkPromise;
+    };
+    const authenticate = async forceRefresh => {
+      if (!enabled) throw makeError("Backendumgebung ist deaktiviert.", "ENVIRONMENT_BLOCKED");
+      if (isLocal) {
+        if (forceRefresh) {
+          const session = readSession();
+          if (!session || !session.refreshToken) throw makeError("Lokales Refresh-Token fehlt.", "AUTH_FAILED");
+          const body = "grant_type=refresh_token&refresh_token=" + encodeURIComponent(session.refreshToken);
+          const payload = await requestJson(config.endpoints.refresh, body, "", true);
+          if (!payload || typeof payload.id_token !== "string" || typeof payload.user_id !== "string" || typeof payload.refresh_token !== "string") throw makeError("Lokale Token-Erneuerung ungueltig.", "AUTH_FAILED");
+          const refreshed = {idToken: payload.id_token, uid: payload.user_id, refreshToken: payload.refresh_token};
+          currentUid = refreshed.uid; saveSession(refreshed); return refreshed;
+        }
+        const existing = readSession();
+        if (existing) { currentUid = existing.uid; return existing; }
+        const payload = await requestJson(config.endpoints.auth, {returnSecureToken: true});
+        if (!payload || typeof payload.idToken !== "string" || typeof payload.localId !== "string" || typeof payload.refreshToken !== "string") throw makeError("Anonyme Emulatorauthentifizierung ungueltig.", "AUTH_FAILED");
+        const created = {idToken: payload.idToken, uid: payload.localId, refreshToken: payload.refreshToken};
+        currentUid = created.uid; saveSession(created); return created;
+      }
+      try {
+        const sdk = await ensureStagingSdk();
+        const user = sdk.auth.currentUser || (await sdk.authModule.signInAnonymously(sdk.auth)).user;
+        if (forceRefresh) await user.getIdToken(true);
+        currentUid = user.uid;
+        return {idToken: "sdk-managed", uid: user.uid, refreshToken: "sdk-managed"};
+      } catch (error) { throw normalizeSdkError(error); }
+    };
+    const callCallable = async (endpoint, data, idToken = "") => {
+      if (!enabled) throw makeError("Backendumgebung ist deaktiviert.", "ENVIRONMENT_BLOCKED");
+      if (isLocal) {
+        const payload = await requestJson(endpoint, {data}, idToken);
+        const result = payload && payload.result !== undefined ? payload.result : payload && payload.data;
+        if (result === undefined) throw makeError("Callable-Ergebnis fehlt.", "INVALID_RESPONSE");
+        return result;
+      }
+      try {
+        const sdk = await ensureStagingSdk();
+        if (!sdk.auth.currentUser) await authenticate(false);
+        const normalized = {...data, integration: "L&L-051"};
+        const callable = sdk.functionsModule.httpsCallable(sdk.functions, endpoint);
+        const response = await callable(normalized);
+        return response.data;
+      } catch (error) { throw normalizeSdkError(error); }
+    };
+    const runtime = Object.freeze({
+      environment, enabled, isLocal, config: Object.freeze({...config}), endpoints,
+      sessionStorageKey, readSession, saveSession, getUid: () => currentUid,
+      authenticate, refresh: async () => authenticate(true), callCallable,
+      prepare: async integration => isLocal ? callCallable(config.endpoints.prepare, {integration}, (readSession() || {}).idToken || "") : null
+    });
+    backendGame.__lockLootBackendRuntime = runtime;
+  }
+}
+const backendRuntime = backendGame.__lockLootBackendRuntime;
+for (const badge of runtimeScene.getObjects("StagingBadge")) {
+  const badgeI18n = backendGame.__lockLootI18n;
+  badge.setString(badgeI18n ? badgeI18n.t("common.staging") : "STAGING");
+  badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
+}
+};
+gdjs.TreasureCalendarSceneCode.userFunc0xa981e0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -144,7 +307,7 @@ gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDC
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarBackButtonObjects1Objects = Hashtable.newFrom({"CalendarBackButton": gdjs.TreasureCalendarSceneCode.GDCalendarBackButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarParrotObjects1Objects = Hashtable.newFrom({"CalendarParrot": gdjs.TreasureCalendarSceneCode.GDCalendarParrotObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarShopButtonObjects1Objects = Hashtable.newFrom({"CalendarShopButton": gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1});
-gdjs.TreasureCalendarSceneCode.userFunc0x8d7e88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xb801c8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-043: Kalenderbootstrap, clientsichere Konfigurationsanzeige und serverautoritiver Claim.
 // Ausschließlich lokale Firebase-Emulatoren; keine Zahlung, kein Shop und keine lokale Gutschrift.
@@ -153,16 +316,17 @@ const calendarI18n = runtimeScene.getGame().__lockLootI18n;
 const calendarT = (key, parameters = {}) => calendarI18n.t(key, parameters);
 const calendarGame = runtimeScene.getGame();
 const calendarSessionKey = "__lockLootCalendarSession";
-const calendarStorageKey = "__lockLootL040LocalAuth";
+const calendarBackendRuntime = calendarGame.__lockLootBackendRuntime;
+const calendarStorageKey = calendarBackendRuntime ? calendarBackendRuntime.sessionStorageKey : "";
 const calendarReadStoredSession = () => {
   try {
-    const value = globalThis.localStorage ? globalThis.localStorage.getItem(calendarStorageKey) : "";
-    const parsed = value ? JSON.parse(value) : null;
+    const parsed = calendarBackendRuntime ? calendarBackendRuntime.readSession() : null;
+
     return parsed && typeof parsed.idToken === "string" && typeof parsed.uid === "string" ? parsed : null;
   } catch (error) { return null; }
 };
 const calendarSaveSession = (session) => {
-  try { if (globalThis.localStorage) globalThis.localStorage.setItem(calendarStorageKey, JSON.stringify(session)); } catch (error) {}
+  try { if (calendarBackendRuntime) calendarBackendRuntime.saveSession(session); } catch (error) {}
 };
 if (!calendarGame[calendarSessionKey]) {
   calendarGame[calendarSessionKey] = calendarReadStoredSession() || { idToken: "", uid: "", refreshToken: "", pendingRequestId: "" };
@@ -359,7 +523,7 @@ if (runtimeScene.getTimeManager().isFirstFrame() && calendarRenderStateMatch) {
     const auth = await renderRequestJson(renderEndpoints.auth, { returnSecureToken: true });
     if (!auth || typeof auth.idToken !== "string" || typeof auth.localId !== "string") throw new Error("Lokale Renderauthentifizierung ungültig.");
     const prepared = await renderCallable(renderEndpoints.prepare, { integration: "L&L-042" }, auth.idToken);
-    if (!prepared || !Number.isSafeInteger(prepared.calendarVersion)) throw new Error("Lokale Kalenderkonfiguration fehlt.");
+      if (backendRuntime.isLocal && (!prepared || !Number.isSafeInteger(prepared.calendarVersion))) throw Object.assign(new Error("Kalender-Testdaten fehlen."), { status: "INVALID_RESPONSE" });
     const snapshot = await renderCallable(renderEndpoints.bootstrap, { integration: "L&L-042" }, auth.idToken);
     if (!snapshot || snapshot.uid !== auth.localId) throw new Error("Lokaler Render-Bootstrap ist ungültig.");
     const sourceCalendar = calendarValidateState(snapshot.calendar);
@@ -383,75 +547,29 @@ if (runtimeScene.getTimeManager().isFirstFrame() && calendarRenderStateMatch) {
 }
 
 if (runtimeScene.getTimeManager().isFirstFrame() && !calendarRenderStateMatch) {
-  const endpoints = Object.freeze({
-    auth: "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=local-emulator-only",
-    refresh: "http://127.0.0.1:9099/securetoken.googleapis.com/v1/token?key=local-emulator-only",
-    prepare: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/prepareGDevelopTest",
-    bootstrap: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/bootstrapPlayerState",
-    claim: "http://127.0.0.1:5001/demo-lock-loot-local/europe-west1/claimDailyCalendarReward"
-  });
-  const assertLocalEndpoint = (endpoint) => {
-    const parsed = new URL(endpoint);
-    if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["9099", "5001"].includes(parsed.port)) throw new Error("Lokale Demo-Grenze verletzt.");
-  };
-  const requestJson = async (endpoint, body, idToken = "", formEncoded = false) => {
-    assertLocalEndpoint(endpoint);
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-      const headers = { "Content-Type": formEncoded ? "application/x-www-form-urlencoded" : "application/json" };
-      if (idToken) headers.Authorization = "Bearer " + idToken;
-      const response = await fetch(endpoint, { method: "POST", headers, body: formEncoded ? body : JSON.stringify(body), signal: controller.signal });
-      const responseText = await response.text();
-      let payload = null;
-      try { payload = responseText ? JSON.parse(responseText) : null; } catch (error) { throw Object.assign(new Error("Ungültige lokale JSON-Antwort."), { status: "INVALID_RESPONSE" }); }
-      if (!response.ok || (payload && payload.error)) {
-        const status = payload && payload.error && typeof payload.error.status === "string" ? payload.error.status : "HTTP_" + response.status;
-        const details = payload && payload.error && payload.error.details && typeof payload.error.details === "object" ? payload.error.details : {};
-        throw Object.assign(new Error("Lokale Anfrage abgelehnt."), { status, reason: typeof details.reason === "string" ? details.reason : "" });
-      }
-      return payload;
-    } finally {
-      clearTimeout(timeout);
-    }
-  };
-  const callCallable = async (endpoint, data, idToken = "") => {
-    const payload = await requestJson(endpoint, { data }, idToken);
-    const result = payload && payload.result !== undefined ? payload.result : payload && payload.data;
-    if (result === undefined) throw Object.assign(new Error("Callable-Ergebnis fehlt."), { status: "INVALID_RESPONSE" });
-    return result;
-  };
+  const backendRuntime = calendarGame.__lockLootBackendRuntime;
+  if (!backendRuntime || !backendRuntime.enabled) throw Object.assign(new Error('Backendumgebung ist deaktiviert.'), { status: 'ENVIRONMENT_BLOCKED' });
+  const endpoints = backendRuntime.endpoints;
+  const callCallable = (endpoint, data, idToken) => backendRuntime.callCallable(endpoint, data, idToken);
   const state = {
-    endpoints, requestJson, callCallable, calendar: null, wallet: null,
+    endpoints, callCallable, calendar: null, wallet: null,
     page: 0, pending: false, backendAvailable: false, statusMessage: ""
   };
   runtimeScene.__lockLootCalendarScene = state;
   calendarSetStatus(state, calendarT("calendar.loading_server"));
   const authenticate = async () => {
-    const auth = await requestJson(endpoints.auth, { returnSecureToken: true });
-    if (!auth || typeof auth.idToken !== "string" || !auth.idToken || typeof auth.localId !== "string" || !auth.localId) throw Object.assign(new Error("Anonyme Auth-Antwort ungültig."), { status: "AUTH_FAILED" });
-    calendarSession.idToken = auth.idToken;
-    calendarSession.uid = auth.localId;
-    calendarSession.refreshToken = typeof auth.refreshToken === "string" ? auth.refreshToken : "";
-    calendarSession.pendingRequestId = "";
-    calendarSaveSession(calendarSession);
+    const auth = await backendRuntime.authenticate(false);
+    calendarSession.idToken = auth.idToken; calendarSession.uid = auth.uid; calendarSession.refreshToken = auth.refreshToken || ''; calendarSession.pendingRequestId = ''; calendarSaveSession(calendarSession);
   };
   const refreshSession = async () => {
-    if (!calendarSession.refreshToken) throw Object.assign(new Error("Kein lokales Refresh-Token."), { status: "AUTH_FAILED" });
-    const body = "grant_type=refresh_token&refresh_token=" + encodeURIComponent(calendarSession.refreshToken);
-    const refreshed = await requestJson(endpoints.refresh, body, "", true);
-    if (!refreshed || typeof refreshed.id_token !== "string" || typeof refreshed.user_id !== "string" || typeof refreshed.refresh_token !== "string") throw Object.assign(new Error("Lokale Token-Erneuerung ungültig."), { status: "AUTH_FAILED" });
-    calendarSession.idToken = refreshed.id_token;
-    calendarSession.uid = refreshed.user_id;
-    calendarSession.refreshToken = refreshed.refresh_token;
-    calendarSession.pendingRequestId = "";
-    calendarSaveSession(calendarSession);
+    const auth = await backendRuntime.refresh();
+    calendarSession.idToken = auth.idToken; calendarSession.uid = auth.uid; calendarSession.refreshToken = auth.refreshToken || ''; calendarSession.pendingRequestId = ''; calendarSaveSession(calendarSession);
   };
   const loadServerState = async (allowReauthentication) => {
     if (!calendarSession.idToken) await authenticate();
     try {
-      const prepared = await callCallable(endpoints.prepare, { integration: "L&L-042" }, calendarSession.idToken);
-      if (!prepared || !Number.isSafeInteger(prepared.calendarVersion)) throw Object.assign(new Error("Kalender-Testdaten fehlen."), { status: "INVALID_RESPONSE" });
+      const prepared = await backendRuntime.prepare("L&L-042");
+      if (backendRuntime.isLocal && (!prepared || !Number.isSafeInteger(prepared.calendarVersion))) throw Object.assign(new Error("Kalender-Testdaten fehlen."), { status: "INVALID_RESPONSE" });
       const snapshot = await callCallable(endpoints.bootstrap, { integration: "L&L-042" }, calendarSession.idToken);
       if (!snapshot || snapshot.uid !== calendarSession.uid) throw Object.assign(new Error("Bootstrap-UID stimmt nicht."), { status: "INVALID_RESPONSE" });
       calendarApplyWallet(state, snapshot);
@@ -562,7 +680,7 @@ if (calendarState && calendarAction) {
   }
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0x8d7f60 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xcf9070 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-045 · professioneller Schatzkarten-Renderer: sechs Seiten mit je fünf Loginstufen.
 // Rein visuelle Projektion clientsicherer Serverdaten; Claim und Wallet bleiben in L&L-045 Phase A serverautoritativ.
@@ -819,7 +937,7 @@ placeSprite(first("CalendarShopButton"), 262, 1060, 88, 88, 255, "255;230;175");
 placeCenteredText(first("CalendarShopButtonText"), mapBookT("calendar.shop"), 306, 1113, 76, 32, 18, "255;252;214");
 placeSprite(first("CalendarBackButton"), 370, 1060, 88, 88);
 };
-gdjs.TreasureCalendarSceneCode.userFunc0x8d8038 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0x8b1698 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Kalender-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -833,20 +951,22 @@ if (!runtimeScene.__lockLootL047Calendar || runtimeScene.__lockLootL047Calendar 
   const state = runtimeScene.__lockLootCalendarScene; if (state && state.calendar && state.wallet && typeof calendarRender === "function") calendarRender(state);
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0x8d81f8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xa05c10 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
 if (!resourceHudGame.__lockLootResourceHud) {
   const resourceHudConfig = JSON.parse(resourceHudGame.getVariables().get("resourceHudConfigJson").getAsString());
   const resourceHudStorageKey = "lockloot.wallet-confirmed.v1";
-  const resourceHudAuthStorageKey = "__lockLootL040LocalAuth";
+  const resourceHudAuthStorageKey = resourceHudGame.__lockLootBackendRuntime ? resourceHudGame.__lockLootBackendRuntime.sessionStorageKey : "__lockLootL040LocalAuth";
   const normalizeWallet = (wallet) => {
     if (!wallet || !Number.isSafeInteger(wallet.cookies) || wallet.cookies < 0 || !Number.isSafeInteger(wallet.lockpicks) || wallet.lockpicks < 0 || !Number.isSafeInteger(wallet.revision) || wallet.revision < 0) return null;
     return {cookies: wallet.cookies, lockpicks: wallet.lockpicks, revision: wallet.revision};
   };
   const readAuthUid = () => {
     try {
+      const backendUid = resourceHudGame.__lockLootBackendRuntime ? resourceHudGame.__lockLootBackendRuntime.getUid() : "";
+      if (backendUid) return backendUid;
       const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudAuthStorageKey) : "";
       const session = raw ? JSON.parse(raw) : null;
       return session && typeof session.uid === "string" ? session.uid : "";
@@ -918,7 +1038,15 @@ gdjs.TreasureCalendarSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xaa1ca8(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xa0b198(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TreasureCalendarSceneCode.userFunc0xa981e0(runtimeScene);
 
 }
 
@@ -1040,7 +1168,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0x8d7e88(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xb801c8(runtimeScene);
 
 }
 
@@ -1048,7 +1176,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0x8d7e88(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0x8d7f60(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xcf9070(runtimeScene);
 
 }
 
@@ -1056,7 +1184,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0x8d7f60(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0x8d8038(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0x8b1698(runtimeScene);
 
 }
 
@@ -1064,7 +1192,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0x8d8038(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0x8d81f8(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xa05c10(runtimeScene);
 
 }
 
@@ -1158,6 +1286,8 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDStagingBadgeObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDStagingBadgeObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
@@ -1256,6 +1386,8 @@ gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumBodyTextObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDCalendarL045PremiumPriceTextObjects2.length = 0;
+gdjs.TreasureCalendarSceneCode.GDStagingBadgeObjects1.length = 0;
+gdjs.TreasureCalendarSceneCode.GDStagingBadgeObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.TreasureCalendarSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.TreasureCalendarSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
