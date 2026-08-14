@@ -58,7 +58,7 @@ gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1= [];
 gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1= [];
 
 
-gdjs.MainMenuCode.userFunc0xce2940 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xc16338 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -97,7 +97,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.MainMenuCode.userFunc0xbe90f0 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xcde128 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -185,7 +185,7 @@ if (controller.state.mainMenuScene !== runtimeScene) {
 }
 controller.update(runtimeScene);
 };
-gdjs.MainMenuCode.userFunc0xbedb40 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xcdddc8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-024: Rein visuelle Steuerung des modularen Hauptmenüs.
 // Die bestehende modulare Welt und alle anderen Szenen bleiben unverändert.
@@ -254,7 +254,7 @@ for (let index = 0; index < sparkles.length; index += 1) {
 
 
 };
-gdjs.MainMenuCode.userFunc0xbeddb8 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xcdd5d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-046/L&L-047: Aufgeräumte Hauptnavigation, unveränderte Musiksteuerung und lokale Sprachwahl.
 const menuGame = runtimeScene.getGame();
@@ -293,7 +293,11 @@ for (const [name, button] of buttonEntries) {
   const available = !["de", "en"].includes(name) || menuState.languagePanelOpen;
   const hovered = available && cursorOnMenuObject(button);
   if (hovered) menuState.hoverName = name;
-  if (button) { button.setOpacity(hovered ? 255 : 238); button.setColor(hovered ? "255;239;184" : "255;255;255"); }
+  if (button) {
+    const selectedLanguage = menuState.languagePanelOpen && ((name === "de" && menuI18n.language === "de") || (name === "en" && menuI18n.language === "en"));
+    button.setOpacity(hovered || selectedLanguage ? 255 : 238);
+    button.setColor(hovered ? "255;239;184" : selectedLanguage ? "255;223;142" : "255;255;255");
+  }
 }
 gdjs.evtTools.sound.setMusicOnChannelVolume(runtimeScene, 20, menuState.musicEnabled ? 70 : 0);
 if (gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left")) {
@@ -315,7 +319,7 @@ gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.MainMenuCode.userFunc0xce2940(runtimeScene);
+gdjs.MainMenuCode.userFunc0xc16338(runtimeScene);
 
 }
 
@@ -323,7 +327,7 @@ gdjs.MainMenuCode.userFunc0xce2940(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xbe90f0(runtimeScene);
+gdjs.MainMenuCode.userFunc0xcde128(runtimeScene);
 
 }
 
@@ -331,7 +335,7 @@ gdjs.MainMenuCode.userFunc0xbe90f0(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xbedb40(runtimeScene);
+gdjs.MainMenuCode.userFunc0xcdddc8(runtimeScene);
 
 }
 
@@ -339,7 +343,7 @@ gdjs.MainMenuCode.userFunc0xbedb40(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xbeddb8(runtimeScene);
+gdjs.MainMenuCode.userFunc0xcdd5d0(runtimeScene);
 
 }
 
