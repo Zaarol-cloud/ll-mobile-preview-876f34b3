@@ -58,7 +58,7 @@ gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1= [];
 gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1= [];
 
 
-gdjs.MainMenuCode.userFunc0xc16338 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xc01d48 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -97,7 +97,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.MainMenuCode.userFunc0xcde128 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xce5c50 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -185,7 +185,7 @@ if (controller.state.mainMenuScene !== runtimeScene) {
 }
 controller.update(runtimeScene);
 };
-gdjs.MainMenuCode.userFunc0xcdddc8 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xce5878 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-024: Rein visuelle Steuerung des modularen Hauptmenüs.
 // Die bestehende modulare Welt und alle anderen Szenen bleiben unverändert.
@@ -208,7 +208,7 @@ for (let index = 0; index < clouds.length; index += 1) {
 const waves = runtimeScene.getObjects("MainMenuWave");
 for (let index = 0; index < waves.length; index += 1) {
   const wave = waves[index];
-  const baseX = index === 0 ? 0 : 320;
+  const baseX = index === 0 ? -1 : 319;
   const baseY = index === 0 ? 465 : 475;
   wave.setPosition(
     baseX + Math.sin(visualState.time * 0.75 + index * 1.7) * 10,
@@ -254,7 +254,7 @@ for (let index = 0; index < sparkles.length; index += 1) {
 
 
 };
-gdjs.MainMenuCode.userFunc0xcdd5d0 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xc15be0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-046/L&L-047: Aufgeräumte Hauptnavigation, unveränderte Musiksteuerung und lokale Sprachwahl.
 const menuGame = runtimeScene.getGame();
@@ -319,7 +319,7 @@ gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.MainMenuCode.userFunc0xc16338(runtimeScene);
+gdjs.MainMenuCode.userFunc0xc01d48(runtimeScene);
 
 }
 
@@ -327,7 +327,7 @@ gdjs.MainMenuCode.userFunc0xc16338(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xcde128(runtimeScene);
+gdjs.MainMenuCode.userFunc0xce5c50(runtimeScene);
 
 }
 
@@ -335,7 +335,7 @@ gdjs.MainMenuCode.userFunc0xcde128(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xcdddc8(runtimeScene);
+gdjs.MainMenuCode.userFunc0xce5878(runtimeScene);
 
 }
 
@@ -343,7 +343,7 @@ gdjs.MainMenuCode.userFunc0xcdddc8(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xcdd5d0(runtimeScene);
+gdjs.MainMenuCode.userFunc0xc15be0(runtimeScene);
 
 }
 

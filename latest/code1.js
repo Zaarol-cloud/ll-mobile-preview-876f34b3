@@ -163,6 +163,9 @@ gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3= [];
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1= [];
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2= [];
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3= [];
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1= [];
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2= [];
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3= [];
@@ -183,7 +186,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xcdd2e0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa9fd88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -222,7 +225,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xcde128 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xbf7390 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const game = runtimeScene.getGame();
 const controllerKey = '__lockLootMusicController';
@@ -305,7 +308,7 @@ const controller = game[controllerKey];
 if (!controller.state.currentTrack) controller.forceMain(runtimeScene);
 controller.update(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xcdddc8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc14a40 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -490,7 +493,7 @@ const waves = runtimeScene.getObjects("TrainingWave");
 for (let index = 0; index < waves.length; index += 1) {
   const wave = waves[index];
   const baseX = index === 0 ? 0 : 320;
-  const baseY = index === 0 ? 482 : 490;
+  const baseY = index === 0 ? 484 : 492;
   wave.setPosition(
     baseX + Math.sin(visualState.waveTime * 0.8 + index * 1.7) * 12,
     baseY + Math.sin(visualState.waveTime * 1.25 + index) * 3
@@ -921,7 +924,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xb7b568 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xbf0208 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -945,7 +948,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb7b568(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf0208(runtimeScene);
 
 }
 
@@ -956,7 +959,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xa9dc78 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa35400 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -978,7 +981,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa9dc78(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa35400(runtimeScene);
 
 }
 
@@ -1517,7 +1520,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xe9cde0 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xaaf780 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -3660,14 +3663,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xe9cde0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaaf780(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xe33fe8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaacaa8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -4078,7 +4081,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xb03f40 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa4528 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
 // Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
@@ -4102,7 +4105,7 @@ if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.userFunc0xb04018 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa4600 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -4124,11 +4127,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xacbcc8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa3020 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xac9720 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa1dc8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -4213,7 +4216,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcdd2e0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa9fd88(runtimeScene);
 
 }
 
@@ -4221,7 +4224,7 @@ gdjs.TrainingSceneCode.userFunc0xcdd2e0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcde128(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf7390(runtimeScene);
 
 }
 
@@ -4229,7 +4232,7 @@ gdjs.TrainingSceneCode.userFunc0xcde128(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcdddc8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc14a40(runtimeScene);
 
 }
 
@@ -5695,7 +5698,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xe33fe8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaacaa8(runtimeScene);
 
 }
 
@@ -5789,7 +5792,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb03f40(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa4528(runtimeScene);
 
 }
 
@@ -5814,7 +5817,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb04018(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa4600(runtimeScene);
 
 }
 
@@ -5822,7 +5825,7 @@ gdjs.TrainingSceneCode.userFunc0xb04018(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xacbcc8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa3020(runtimeScene);
 
 }
 
@@ -5830,7 +5833,7 @@ gdjs.TrainingSceneCode.userFunc0xacbcc8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xac9720(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa1dc8(runtimeScene);
 
 }
 
@@ -6002,6 +6005,9 @@ gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3.length = 0;
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1.length = 0;
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2.length = 0;
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3.length = 0;
@@ -6184,6 +6190,9 @@ gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2.length = 0;
 gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3.length = 0;
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1.length = 0;
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2.length = 0;
+gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3.length = 0;

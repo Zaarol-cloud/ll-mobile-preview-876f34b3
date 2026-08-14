@@ -61,7 +61,7 @@ gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.ShopSzeneCode.userFunc0xac9600 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xaa1ca8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -104,7 +104,7 @@ gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Obj
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
-gdjs.ShopSzeneCode.userFunc0xa0b640 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xb05d38 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
 const shopVariables = runtimeScene.getVariables();
@@ -286,7 +286,7 @@ if (shopState && shopAction) {
 };
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
-gdjs.ShopSzeneCode.userFunc0xc11440 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xaa8870 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Shop-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -299,7 +299,7 @@ if (!runtimeScene.__lockLootL047Shop || runtimeScene.__lockLootL047Shop !== i18n
   const state = runtimeScene.__lockLootShopScene; if (state && typeof shopRender === "function") shopRender(state);
 }
 };
-gdjs.ShopSzeneCode.userFunc0xafbca8 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xa0c968 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -384,7 +384,7 @@ gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xac9600(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xaa1ca8(runtimeScene);
 
 }
 
@@ -468,7 +468,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xa0b640(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xb05d38(runtimeScene);
 
 }
 
@@ -514,7 +514,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xc11440(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xaa8870(runtimeScene);
 
 }
 
@@ -522,7 +522,7 @@ gdjs.ShopSzeneCode.userFunc0xc11440(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xafbca8(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xa0c968(runtimeScene);
 
 }
 
