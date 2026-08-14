@@ -63,7 +63,7 @@ gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.ShopSzeneCode.userFunc0xae3810 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xbe7450 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -224,7 +224,192 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.ShopSzeneCode.userFunc0xa981e0 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xce3628 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
+const musicGame = runtimeScene.getGame();
+const musicControllerKey = '__lockLootMusicController';
+if (!musicGame[musicControllerKey]) {
+  const musicChannel = 20;
+  const musicStorageKey = 'lockloot.music.enabled.v1';
+  const forcedMainTrack = { name: 'music_main_always', style: 'Neutral', category: 'main' };
+  const mainTracks = [
+    forcedMainTrack,
+    { name: 'music_main_accordion_1', style: 'Akkordeon', category: 'main' },
+    { name: 'music_main_accordion_2', style: 'Akkordeon', category: 'main' },
+    { name: 'music_main_marimba_1', style: 'Marimba', category: 'main' },
+    { name: 'music_main_marimba_2', style: 'Marimba', category: 'main' }
+  ];
+  const puzzleTracks = [
+    { name: 'music_puzzle_accordion_1', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_2', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_3', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_4', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_1', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_2', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_3', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_4', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_1', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_2', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_3', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_4', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_5', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_6', style: 'Marimba', category: 'puzzle' }
+  ];
+  let storedMusicEnabled = '';
+  try { storedMusicEnabled = globalThis.localStorage ? String(globalThis.localStorage.getItem(musicStorageKey) || '') : ''; } catch (error) {}
+  const state = {
+    storageKey: musicStorageKey,
+    musicEnabled: storedMusicEnabled !== 'false',
+    sessionStarted: false,
+    currentTrack: null,
+    currentCategory: '',
+    recentTracks: [],
+    lastStyle: '',
+    puzzleTracksRemaining: 2,
+    wasPlaying: false,
+    lastStartAttempt: 0,
+    activeScene: null,
+    solutionState: null,
+    error: ''
+  };
+  const persistEnabled = () => {
+    try { if (globalThis.localStorage) globalThis.localStorage.setItem(musicStorageKey, state.musicEnabled ? 'true' : 'false'); } catch (error) {}
+  };
+  const chooseTrack = pool => {
+    const eligible = pool.filter(track => track.style !== state.lastStyle && !state.recentTracks.includes(track.name));
+    if (eligible.length === 0) { state.error = 'Keine Musik erfüllt Stil- und Wiederholungsschutz.'; return null; }
+    return eligible[Math.floor(Math.random() * eligible.length)];
+  };
+  const rememberTrack = track => {
+    state.recentTracks.unshift(track.name);
+    state.recentTracks = state.recentTracks.slice(0, 5);
+    state.lastStyle = track.style;
+  };
+  const startTrack = (scene, track, remember) => {
+    if (!state.musicEnabled || !track) return false;
+    if (remember) rememberTrack(track);
+    state.currentTrack = track;
+    state.currentCategory = track.category;
+    state.wasPlaying = false;
+    state.lastStartAttempt = Date.now();
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 70);
+    gdjs.evtTools.sound.playMusicOnChannel(scene, track.name, musicChannel, false, 70, 1);
+    return true;
+  };
+  const startNextTrack = scene => {
+    let nextTrack = null;
+    if (state.puzzleTracksRemaining > 0) {
+      nextTrack = chooseTrack(puzzleTracks);
+      if (nextTrack) state.puzzleTracksRemaining -= 1;
+    } else {
+      nextTrack = chooseTrack(mainTracks);
+      if (nextTrack) state.puzzleTracksRemaining = 2;
+    }
+    return startTrack(scene, nextTrack, true);
+  };
+  const startMainTrack = scene => {
+    state.error = '';
+    const nextTrack = chooseTrack(mainTracks);
+    if (nextTrack) state.puzzleTracksRemaining = 2;
+    return startTrack(scene, nextTrack, true);
+  };
+  const startApplication = scene => {
+    state.error = '';
+    state.puzzleTracksRemaining = 2;
+    return startTrack(scene, forcedMainTrack, true);
+  };
+  const stopCurrentTrack = scene => {
+    gdjs.evtTools.sound.stopMusicOnChannel(scene, musicChannel);
+    state.currentTrack = null;
+    state.currentCategory = '';
+    state.wasPlaying = false;
+    state.lastStartAttempt = 0;
+  };
+  const enterMainMenu = scene => {
+    if (!state.musicEnabled) return;
+    const currentTrack = state.currentTrack;
+    const mainTrackIsPlaying = currentTrack && currentTrack.category === 'main' && gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (mainTrackIsPlaying) return;
+    stopCurrentTrack(scene);
+    startMainTrack(scene);
+  };
+  const enterSolution = scene => {
+    stopCurrentTrack(scene);
+    state.currentCategory = 'solution';
+    state.solutionState = { scene, started: false, completed: false, lastStartAttempt: Date.now() };
+    if (!state.musicEnabled) return;
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
+  };
+  const updateSolution = scene => {
+    if (!state.musicEnabled || !state.solutionState || state.solutionState.scene !== scene) return;
+    const solutionPlaying = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (solutionPlaying) {
+      state.solutionState.started = true;
+    } else if (state.solutionState.started) {
+      state.solutionState.completed = true;
+    } else if (!state.solutionState.completed && Date.now() - state.solutionState.lastStartAttempt >= 1500) {
+      state.solutionState.lastStartAttempt = Date.now();
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
+    }
+  };
+  const updateRotation = scene => {
+    if (!state.musicEnabled || !state.currentTrack || state.error) return;
+    const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (playing) { state.wasPlaying = true; return; }
+    if (state.wasPlaying) { state.wasPlaying = false; startNextTrack(scene); return; }
+    if (Date.now() - state.lastStartAttempt >= 1500) {
+      state.lastStartAttempt = Date.now();
+      gdjs.evtTools.sound.playMusicOnChannel(scene, state.currentTrack.name, musicChannel, false, 70, 1);
+    }
+  };
+  const updateForScene = scene => {
+    const sceneName = scene.getName();
+    if (state.activeScene !== scene) {
+      state.activeScene = scene;
+      if (!state.sessionStarted) {
+        state.sessionStarted = true;
+        if (sceneName === 'SolutionScene') enterSolution(scene);
+        else if (sceneName === 'MainMenu' || sceneName === 'TrainingScene') startApplication(scene);
+      } else if (sceneName === 'MainMenu') {
+        enterMainMenu(scene);
+      } else if (sceneName === 'SolutionScene') {
+        enterSolution(scene);
+      } else if (sceneName === 'TrainingScene' && state.musicEnabled && !state.currentTrack) {
+        startNextTrack(scene);
+      }
+    }
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, state.musicEnabled ? (sceneName === 'SolutionScene' ? 75 : 70) : 0);
+    if (!state.musicEnabled) return;
+    if (sceneName === 'SolutionScene') updateSolution(scene);
+    else updateRotation(scene);
+  };
+  const setEnabled = (scene, enabled) => {
+    const nextEnabled = enabled === true;
+    const changed = state.musicEnabled !== nextEnabled;
+    state.musicEnabled = nextEnabled;
+    persistEnabled();
+    if (!state.musicEnabled) {
+      stopCurrentTrack(scene);
+      state.solutionState = null;
+      gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 0);
+      return false;
+    }
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 70);
+    if (!changed) return true;
+    state.error = '';
+    const sceneName = scene.getName();
+    if (sceneName === 'MainMenu') startMainTrack(scene);
+    else if (sceneName === 'TrainingScene') startNextTrack(scene);
+    else if (sceneName === 'SolutionScene') enterSolution(scene);
+    return true;
+  };
+  musicGame[musicControllerKey] = { state, setEnabled, updateForScene };
+}
+musicGame[musicControllerKey].updateForScene(runtimeScene);
+};
+gdjs.ShopSzeneCode.userFunc0xc100a0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -267,7 +452,7 @@ gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Obj
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
-gdjs.ShopSzeneCode.userFunc0xa0b198 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xce8310 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
 const shopVariables = runtimeScene.getVariables();
@@ -434,7 +619,7 @@ if (shopState && shopAction) {
 };
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
-gdjs.ShopSzeneCode.userFunc0xb0ea28 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xbe1de8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Shop-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -447,7 +632,7 @@ if (!runtimeScene.__lockLootL047Shop || runtimeScene.__lockLootL047Shop !== i18n
   const state = runtimeScene.__lockLootShopScene; if (state && typeof shopRender === "function") shopRender(state);
 }
 };
-gdjs.ShopSzeneCode.userFunc0xbef090 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xa20e00 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -534,7 +719,7 @@ gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xae3810(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xbe7450(runtimeScene);
 
 }
 
@@ -542,7 +727,15 @@ gdjs.ShopSzeneCode.userFunc0xae3810(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xa981e0(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xce3628(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.ShopSzeneCode.userFunc0xc100a0(runtimeScene);
 
 }
 
@@ -626,7 +819,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xa0b198(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xce8310(runtimeScene);
 
 }
 
@@ -672,7 +865,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xb0ea28(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xbe1de8(runtimeScene);
 
 }
 
@@ -680,7 +873,7 @@ gdjs.ShopSzeneCode.userFunc0xb0ea28(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xbef090(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xa20e00(runtimeScene);
 
 }
 

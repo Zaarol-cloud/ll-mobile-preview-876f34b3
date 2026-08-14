@@ -177,7 +177,7 @@ gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.SolutionSceneCode.userFunc0xbf7460 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xce0a70 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -338,7 +338,192 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.SolutionSceneCode.userFunc0xa981e0 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa25be0 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
+const musicGame = runtimeScene.getGame();
+const musicControllerKey = '__lockLootMusicController';
+if (!musicGame[musicControllerKey]) {
+  const musicChannel = 20;
+  const musicStorageKey = 'lockloot.music.enabled.v1';
+  const forcedMainTrack = { name: 'music_main_always', style: 'Neutral', category: 'main' };
+  const mainTracks = [
+    forcedMainTrack,
+    { name: 'music_main_accordion_1', style: 'Akkordeon', category: 'main' },
+    { name: 'music_main_accordion_2', style: 'Akkordeon', category: 'main' },
+    { name: 'music_main_marimba_1', style: 'Marimba', category: 'main' },
+    { name: 'music_main_marimba_2', style: 'Marimba', category: 'main' }
+  ];
+  const puzzleTracks = [
+    { name: 'music_puzzle_accordion_1', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_2', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_3', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_4', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_1', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_2', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_3', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_4', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_1', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_2', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_3', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_4', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_5', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_6', style: 'Marimba', category: 'puzzle' }
+  ];
+  let storedMusicEnabled = '';
+  try { storedMusicEnabled = globalThis.localStorage ? String(globalThis.localStorage.getItem(musicStorageKey) || '') : ''; } catch (error) {}
+  const state = {
+    storageKey: musicStorageKey,
+    musicEnabled: storedMusicEnabled !== 'false',
+    sessionStarted: false,
+    currentTrack: null,
+    currentCategory: '',
+    recentTracks: [],
+    lastStyle: '',
+    puzzleTracksRemaining: 2,
+    wasPlaying: false,
+    lastStartAttempt: 0,
+    activeScene: null,
+    solutionState: null,
+    error: ''
+  };
+  const persistEnabled = () => {
+    try { if (globalThis.localStorage) globalThis.localStorage.setItem(musicStorageKey, state.musicEnabled ? 'true' : 'false'); } catch (error) {}
+  };
+  const chooseTrack = pool => {
+    const eligible = pool.filter(track => track.style !== state.lastStyle && !state.recentTracks.includes(track.name));
+    if (eligible.length === 0) { state.error = 'Keine Musik erfüllt Stil- und Wiederholungsschutz.'; return null; }
+    return eligible[Math.floor(Math.random() * eligible.length)];
+  };
+  const rememberTrack = track => {
+    state.recentTracks.unshift(track.name);
+    state.recentTracks = state.recentTracks.slice(0, 5);
+    state.lastStyle = track.style;
+  };
+  const startTrack = (scene, track, remember) => {
+    if (!state.musicEnabled || !track) return false;
+    if (remember) rememberTrack(track);
+    state.currentTrack = track;
+    state.currentCategory = track.category;
+    state.wasPlaying = false;
+    state.lastStartAttempt = Date.now();
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 70);
+    gdjs.evtTools.sound.playMusicOnChannel(scene, track.name, musicChannel, false, 70, 1);
+    return true;
+  };
+  const startNextTrack = scene => {
+    let nextTrack = null;
+    if (state.puzzleTracksRemaining > 0) {
+      nextTrack = chooseTrack(puzzleTracks);
+      if (nextTrack) state.puzzleTracksRemaining -= 1;
+    } else {
+      nextTrack = chooseTrack(mainTracks);
+      if (nextTrack) state.puzzleTracksRemaining = 2;
+    }
+    return startTrack(scene, nextTrack, true);
+  };
+  const startMainTrack = scene => {
+    state.error = '';
+    const nextTrack = chooseTrack(mainTracks);
+    if (nextTrack) state.puzzleTracksRemaining = 2;
+    return startTrack(scene, nextTrack, true);
+  };
+  const startApplication = scene => {
+    state.error = '';
+    state.puzzleTracksRemaining = 2;
+    return startTrack(scene, forcedMainTrack, true);
+  };
+  const stopCurrentTrack = scene => {
+    gdjs.evtTools.sound.stopMusicOnChannel(scene, musicChannel);
+    state.currentTrack = null;
+    state.currentCategory = '';
+    state.wasPlaying = false;
+    state.lastStartAttempt = 0;
+  };
+  const enterMainMenu = scene => {
+    if (!state.musicEnabled) return;
+    const currentTrack = state.currentTrack;
+    const mainTrackIsPlaying = currentTrack && currentTrack.category === 'main' && gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (mainTrackIsPlaying) return;
+    stopCurrentTrack(scene);
+    startMainTrack(scene);
+  };
+  const enterSolution = scene => {
+    stopCurrentTrack(scene);
+    state.currentCategory = 'solution';
+    state.solutionState = { scene, started: false, completed: false, lastStartAttempt: Date.now() };
+    if (!state.musicEnabled) return;
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
+  };
+  const updateSolution = scene => {
+    if (!state.musicEnabled || !state.solutionState || state.solutionState.scene !== scene) return;
+    const solutionPlaying = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (solutionPlaying) {
+      state.solutionState.started = true;
+    } else if (state.solutionState.started) {
+      state.solutionState.completed = true;
+    } else if (!state.solutionState.completed && Date.now() - state.solutionState.lastStartAttempt >= 1500) {
+      state.solutionState.lastStartAttempt = Date.now();
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
+    }
+  };
+  const updateRotation = scene => {
+    if (!state.musicEnabled || !state.currentTrack || state.error) return;
+    const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (playing) { state.wasPlaying = true; return; }
+    if (state.wasPlaying) { state.wasPlaying = false; startNextTrack(scene); return; }
+    if (Date.now() - state.lastStartAttempt >= 1500) {
+      state.lastStartAttempt = Date.now();
+      gdjs.evtTools.sound.playMusicOnChannel(scene, state.currentTrack.name, musicChannel, false, 70, 1);
+    }
+  };
+  const updateForScene = scene => {
+    const sceneName = scene.getName();
+    if (state.activeScene !== scene) {
+      state.activeScene = scene;
+      if (!state.sessionStarted) {
+        state.sessionStarted = true;
+        if (sceneName === 'SolutionScene') enterSolution(scene);
+        else if (sceneName === 'MainMenu' || sceneName === 'TrainingScene') startApplication(scene);
+      } else if (sceneName === 'MainMenu') {
+        enterMainMenu(scene);
+      } else if (sceneName === 'SolutionScene') {
+        enterSolution(scene);
+      } else if (sceneName === 'TrainingScene' && state.musicEnabled && !state.currentTrack) {
+        startNextTrack(scene);
+      }
+    }
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, state.musicEnabled ? (sceneName === 'SolutionScene' ? 75 : 70) : 0);
+    if (!state.musicEnabled) return;
+    if (sceneName === 'SolutionScene') updateSolution(scene);
+    else updateRotation(scene);
+  };
+  const setEnabled = (scene, enabled) => {
+    const nextEnabled = enabled === true;
+    const changed = state.musicEnabled !== nextEnabled;
+    state.musicEnabled = nextEnabled;
+    persistEnabled();
+    if (!state.musicEnabled) {
+      stopCurrentTrack(scene);
+      state.solutionState = null;
+      gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 0);
+      return false;
+    }
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 70);
+    if (!changed) return true;
+    state.error = '';
+    const sceneName = scene.getName();
+    if (sceneName === 'MainMenu') startMainTrack(scene);
+    else if (sceneName === 'TrainingScene') startNextTrack(scene);
+    else if (sceneName === 'SolutionScene') enterSolution(scene);
+    return true;
+  };
+  musicGame[musicControllerKey] = { state, setEnabled, updateForScene };
+}
+musicGame[musicControllerKey].updateForScene(runtimeScene);
+};
+gdjs.SolutionSceneCode.userFunc0xa0dab0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -377,33 +562,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.SolutionSceneCode.userFunc0xb00278 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xc4b2b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-const game = runtimeScene.getGame();
-const musicChannel = 20;
-const playlist = game.__lockLootMusicController;
-const solutionKey = '__lockLootSolutionMusicState';
-if (!game[solutionKey] || game[solutionKey].scene !== runtimeScene) {
-  gdjs.evtTools.sound.stopMusicOnChannel(runtimeScene, musicChannel);
-  if (playlist) {
-    playlist.state.currentTrack = null;
-    playlist.state.wasPlaying = false;
-  }
-  game[solutionKey] = { scene: runtimeScene, started: false, completed: false, lastStartAttempt: Date.now() };
-  gdjs.evtTools.sound.playMusicOnChannel(runtimeScene, 'music_solution_once', musicChannel, false, 75, 1);
-}
-const solutionState = game[solutionKey];
-const solutionPlaying = gdjs.evtTools.sound.isMusicOnChannelPlaying(runtimeScene, musicChannel);
-if (solutionPlaying) {
-  solutionState.started = true;
-} else if (solutionState.started) {
-  solutionState.completed = true;
-} else if (!solutionState.completed && Date.now() - solutionState.lastStartAttempt >= 1500) {
-  solutionState.lastStartAttempt = Date.now();
-  gdjs.evtTools.sound.playMusicOnChannel(runtimeScene, 'music_solution_once', musicChannel, false, 75, 1);
-}
+// L&L-052: Einmalige Auflösungsmusik und AUS-Schutz erfolgen zentral über MusicController_Events.
 };
-gdjs.SolutionSceneCode.userFunc0xc05920 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xce3740 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
 // Datenquelle sind ausschließlich die global gesicherten Werte der vorherigen Kiste.
@@ -691,7 +854,7 @@ gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPri
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionBackObjects1Objects = Hashtable.newFrom({"SolutionBack": gdjs.SolutionSceneCode.GDSolutionBackObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
-gdjs.SolutionSceneCode.userFunc0xbf7328 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa06920 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische SolutionScene-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -706,7 +869,7 @@ gdjs.SolutionSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xbf7460(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xce0a70(runtimeScene);
 
 }
 
@@ -714,7 +877,7 @@ gdjs.SolutionSceneCode.userFunc0xbf7460(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xa981e0(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa25be0(runtimeScene);
 
 }
 
@@ -722,7 +885,7 @@ gdjs.SolutionSceneCode.userFunc0xa981e0(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xb00278(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa0dab0(runtimeScene);
 
 }
 
@@ -730,7 +893,15 @@ gdjs.SolutionSceneCode.userFunc0xb00278(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xc05920(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xc4b2b0(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.SolutionSceneCode.userFunc0xce3740(runtimeScene);
 
 }
 
@@ -1120,7 +1291,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xbf7328(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa06920(runtimeScene);
 
 }
 

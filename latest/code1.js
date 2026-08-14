@@ -189,7 +189,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xb20170 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf33e8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -350,7 +350,192 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TrainingSceneCode.userFunc0xbf5d38 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa0dab0 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
+const musicGame = runtimeScene.getGame();
+const musicControllerKey = '__lockLootMusicController';
+if (!musicGame[musicControllerKey]) {
+  const musicChannel = 20;
+  const musicStorageKey = 'lockloot.music.enabled.v1';
+  const forcedMainTrack = { name: 'music_main_always', style: 'Neutral', category: 'main' };
+  const mainTracks = [
+    forcedMainTrack,
+    { name: 'music_main_accordion_1', style: 'Akkordeon', category: 'main' },
+    { name: 'music_main_accordion_2', style: 'Akkordeon', category: 'main' },
+    { name: 'music_main_marimba_1', style: 'Marimba', category: 'main' },
+    { name: 'music_main_marimba_2', style: 'Marimba', category: 'main' }
+  ];
+  const puzzleTracks = [
+    { name: 'music_puzzle_accordion_1', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_2', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_3', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_4', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_1', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_2', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_3', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_4', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_1', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_2', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_3', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_4', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_5', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_6', style: 'Marimba', category: 'puzzle' }
+  ];
+  let storedMusicEnabled = '';
+  try { storedMusicEnabled = globalThis.localStorage ? String(globalThis.localStorage.getItem(musicStorageKey) || '') : ''; } catch (error) {}
+  const state = {
+    storageKey: musicStorageKey,
+    musicEnabled: storedMusicEnabled !== 'false',
+    sessionStarted: false,
+    currentTrack: null,
+    currentCategory: '',
+    recentTracks: [],
+    lastStyle: '',
+    puzzleTracksRemaining: 2,
+    wasPlaying: false,
+    lastStartAttempt: 0,
+    activeScene: null,
+    solutionState: null,
+    error: ''
+  };
+  const persistEnabled = () => {
+    try { if (globalThis.localStorage) globalThis.localStorage.setItem(musicStorageKey, state.musicEnabled ? 'true' : 'false'); } catch (error) {}
+  };
+  const chooseTrack = pool => {
+    const eligible = pool.filter(track => track.style !== state.lastStyle && !state.recentTracks.includes(track.name));
+    if (eligible.length === 0) { state.error = 'Keine Musik erfüllt Stil- und Wiederholungsschutz.'; return null; }
+    return eligible[Math.floor(Math.random() * eligible.length)];
+  };
+  const rememberTrack = track => {
+    state.recentTracks.unshift(track.name);
+    state.recentTracks = state.recentTracks.slice(0, 5);
+    state.lastStyle = track.style;
+  };
+  const startTrack = (scene, track, remember) => {
+    if (!state.musicEnabled || !track) return false;
+    if (remember) rememberTrack(track);
+    state.currentTrack = track;
+    state.currentCategory = track.category;
+    state.wasPlaying = false;
+    state.lastStartAttempt = Date.now();
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 70);
+    gdjs.evtTools.sound.playMusicOnChannel(scene, track.name, musicChannel, false, 70, 1);
+    return true;
+  };
+  const startNextTrack = scene => {
+    let nextTrack = null;
+    if (state.puzzleTracksRemaining > 0) {
+      nextTrack = chooseTrack(puzzleTracks);
+      if (nextTrack) state.puzzleTracksRemaining -= 1;
+    } else {
+      nextTrack = chooseTrack(mainTracks);
+      if (nextTrack) state.puzzleTracksRemaining = 2;
+    }
+    return startTrack(scene, nextTrack, true);
+  };
+  const startMainTrack = scene => {
+    state.error = '';
+    const nextTrack = chooseTrack(mainTracks);
+    if (nextTrack) state.puzzleTracksRemaining = 2;
+    return startTrack(scene, nextTrack, true);
+  };
+  const startApplication = scene => {
+    state.error = '';
+    state.puzzleTracksRemaining = 2;
+    return startTrack(scene, forcedMainTrack, true);
+  };
+  const stopCurrentTrack = scene => {
+    gdjs.evtTools.sound.stopMusicOnChannel(scene, musicChannel);
+    state.currentTrack = null;
+    state.currentCategory = '';
+    state.wasPlaying = false;
+    state.lastStartAttempt = 0;
+  };
+  const enterMainMenu = scene => {
+    if (!state.musicEnabled) return;
+    const currentTrack = state.currentTrack;
+    const mainTrackIsPlaying = currentTrack && currentTrack.category === 'main' && gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (mainTrackIsPlaying) return;
+    stopCurrentTrack(scene);
+    startMainTrack(scene);
+  };
+  const enterSolution = scene => {
+    stopCurrentTrack(scene);
+    state.currentCategory = 'solution';
+    state.solutionState = { scene, started: false, completed: false, lastStartAttempt: Date.now() };
+    if (!state.musicEnabled) return;
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
+  };
+  const updateSolution = scene => {
+    if (!state.musicEnabled || !state.solutionState || state.solutionState.scene !== scene) return;
+    const solutionPlaying = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (solutionPlaying) {
+      state.solutionState.started = true;
+    } else if (state.solutionState.started) {
+      state.solutionState.completed = true;
+    } else if (!state.solutionState.completed && Date.now() - state.solutionState.lastStartAttempt >= 1500) {
+      state.solutionState.lastStartAttempt = Date.now();
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
+    }
+  };
+  const updateRotation = scene => {
+    if (!state.musicEnabled || !state.currentTrack || state.error) return;
+    const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (playing) { state.wasPlaying = true; return; }
+    if (state.wasPlaying) { state.wasPlaying = false; startNextTrack(scene); return; }
+    if (Date.now() - state.lastStartAttempt >= 1500) {
+      state.lastStartAttempt = Date.now();
+      gdjs.evtTools.sound.playMusicOnChannel(scene, state.currentTrack.name, musicChannel, false, 70, 1);
+    }
+  };
+  const updateForScene = scene => {
+    const sceneName = scene.getName();
+    if (state.activeScene !== scene) {
+      state.activeScene = scene;
+      if (!state.sessionStarted) {
+        state.sessionStarted = true;
+        if (sceneName === 'SolutionScene') enterSolution(scene);
+        else if (sceneName === 'MainMenu' || sceneName === 'TrainingScene') startApplication(scene);
+      } else if (sceneName === 'MainMenu') {
+        enterMainMenu(scene);
+      } else if (sceneName === 'SolutionScene') {
+        enterSolution(scene);
+      } else if (sceneName === 'TrainingScene' && state.musicEnabled && !state.currentTrack) {
+        startNextTrack(scene);
+      }
+    }
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, state.musicEnabled ? (sceneName === 'SolutionScene' ? 75 : 70) : 0);
+    if (!state.musicEnabled) return;
+    if (sceneName === 'SolutionScene') updateSolution(scene);
+    else updateRotation(scene);
+  };
+  const setEnabled = (scene, enabled) => {
+    const nextEnabled = enabled === true;
+    const changed = state.musicEnabled !== nextEnabled;
+    state.musicEnabled = nextEnabled;
+    persistEnabled();
+    if (!state.musicEnabled) {
+      stopCurrentTrack(scene);
+      state.solutionState = null;
+      gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 0);
+      return false;
+    }
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 70);
+    if (!changed) return true;
+    state.error = '';
+    const sceneName = scene.getName();
+    if (sceneName === 'MainMenu') startMainTrack(scene);
+    else if (sceneName === 'TrainingScene') startNextTrack(scene);
+    else if (sceneName === 'SolutionScene') enterSolution(scene);
+    return true;
+  };
+  musicGame[musicControllerKey] = { state, setEnabled, updateForScene };
+}
+musicGame[musicControllerKey].updateForScene(runtimeScene);
+};
+gdjs.TrainingSceneCode.userFunc0xceb010 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -389,90 +574,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xbf5ec8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xce82a8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-const game = runtimeScene.getGame();
-const controllerKey = '__lockLootMusicController';
-if (!game[controllerKey]) {
-  const musicChannel = 20;
-  const forcedMainTrack = { name: 'music_main_always', style: 'Neutral' };
-  const mainTracks = [
-    { name: 'music_main_accordion_1', style: 'Akkordeon' },
-    { name: 'music_main_accordion_2', style: 'Akkordeon' },
-    { name: 'music_main_marimba_1', style: 'Marimba' },
-    { name: 'music_main_marimba_2', style: 'Marimba' }
-  ];
-  const puzzleTracks = [
-    { name: 'music_puzzle_accordion_1', style: 'Akkordeon' },
-    { name: 'music_puzzle_accordion_2', style: 'Akkordeon' },
-    { name: 'music_puzzle_accordion_3', style: 'Akkordeon' },
-    { name: 'music_puzzle_accordion_4', style: 'Akkordeon' },
-    { name: 'music_puzzle_acoustic_1', style: 'Akustik' },
-    { name: 'music_puzzle_acoustic_2', style: 'Akustik' },
-    { name: 'music_puzzle_acoustic_3', style: 'Akustik' },
-    { name: 'music_puzzle_acoustic_4', style: 'Akustik' },
-    { name: 'music_puzzle_marimba_1', style: 'Marimba' },
-    { name: 'music_puzzle_marimba_2', style: 'Marimba' },
-    { name: 'music_puzzle_marimba_3', style: 'Marimba' },
-    { name: 'music_puzzle_marimba_4', style: 'Marimba' },
-    { name: 'music_puzzle_marimba_5', style: 'Marimba' },
-    { name: 'music_puzzle_marimba_6', style: 'Marimba' }
-  ];
-  const state = { currentTrack: null, recentTracks: [], lastStyle: '', puzzleTracksRemaining: 2, wasPlaying: false, lastStartAttempt: 0, mainMenuScene: null, error: '' };
-  const chooseTrack = pool => {
-    const eligible = pool.filter(track => track.style !== state.lastStyle && !state.recentTracks.includes(track.name));
-    if (eligible.length === 0) { state.error = 'Keine Musik erfüllt Stil- und Wiederholungsschutz.'; return null; }
-    return eligible[Math.floor(Math.random() * eligible.length)];
-  };
-  const rememberTrack = track => {
-    state.recentTracks.unshift(track.name);
-    state.recentTracks = state.recentTracks.slice(0, 5);
-    state.lastStyle = track.style;
-  };
-  const startTrack = (scene, track, remember) => {
-    if (!track) return;
-    if (remember) rememberTrack(track);
-    state.currentTrack = track;
-    state.wasPlaying = false;
-    state.lastStartAttempt = Date.now();
-    gdjs.evtTools.sound.playMusicOnChannel(scene, track.name, musicChannel, false, 70, 1);
-  };
-  const startNextTrack = scene => {
-    let nextTrack = null;
-    if (state.puzzleTracksRemaining > 0) {
-      nextTrack = chooseTrack(puzzleTracks);
-      if (nextTrack) state.puzzleTracksRemaining--;
-    } else {
-      nextTrack = chooseTrack(mainTracks);
-      if (nextTrack) state.puzzleTracksRemaining = 2;
-    }
-    startTrack(scene, nextTrack, true);
-  };
-  const forceMain = scene => {
-    gdjs.evtTools.sound.stopMusicOnChannel(scene, musicChannel);
-    state.recentTracks = [];
-    state.lastStyle = '';
-    state.puzzleTracksRemaining = 2;
-    state.error = '';
-    startTrack(scene, forcedMainTrack, true);
-  };
-  const update = scene => {
-    if (!state.currentTrack || state.error) return;
-    const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
-    if (playing) { state.wasPlaying = true; return; }
-    if (state.wasPlaying) { state.wasPlaying = false; startNextTrack(scene); return; }
-    if (Date.now() - state.lastStartAttempt >= 1500) {
-      state.lastStartAttempt = Date.now();
-      gdjs.evtTools.sound.playMusicOnChannel(scene, state.currentTrack.name, musicChannel, false, 70, 1);
-    }
-  };
-  game[controllerKey] = { state, forceMain, update };
-}
-const controller = game[controllerKey];
-if (!controller.state.currentTrack) controller.forceMain(runtimeScene);
-controller.update(runtimeScene);
+// L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xced410 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xce41d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1088,7 +1194,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xbf32e0 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xbf6288 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -1112,7 +1218,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf32e0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf6288(runtimeScene);
 
 }
 
@@ -1123,7 +1229,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xae3810 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc646a0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -1145,7 +1251,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xae3810(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc646a0(runtimeScene);
 
 }
 
@@ -1684,7 +1790,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xcac900 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xb774c0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -3827,14 +3933,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcac900(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb774c0(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xcaca10 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xafb238 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -4202,7 +4308,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xb21ea0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf64c0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
 // Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
@@ -4226,7 +4332,7 @@ if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.userFunc0xb1fdb0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf2ff0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -4248,11 +4354,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xb1fe88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf30b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xb0ea40 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xae92b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -4339,7 +4445,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb20170(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf33e8(runtimeScene);
 
 }
 
@@ -4347,7 +4453,7 @@ gdjs.TrainingSceneCode.userFunc0xb20170(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf5d38(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa0dab0(runtimeScene);
 
 }
 
@@ -4355,7 +4461,7 @@ gdjs.TrainingSceneCode.userFunc0xbf5d38(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf5ec8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xceb010(runtimeScene);
 
 }
 
@@ -4363,7 +4469,15 @@ gdjs.TrainingSceneCode.userFunc0xbf5ec8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xced410(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xce82a8(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TrainingSceneCode.userFunc0xce41d0(runtimeScene);
 
 }
 
@@ -5829,7 +5943,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcaca10(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xafb238(runtimeScene);
 
 }
 
@@ -5923,7 +6037,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb21ea0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf64c0(runtimeScene);
 
 }
 
@@ -5948,7 +6062,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb1fdb0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf2ff0(runtimeScene);
 
 }
 
@@ -5956,7 +6070,7 @@ gdjs.TrainingSceneCode.userFunc0xb1fdb0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb1fe88(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf30b8(runtimeScene);
 
 }
 
@@ -5964,7 +6078,7 @@ gdjs.TrainingSceneCode.userFunc0xb1fe88(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb0ea40(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xae92b0(runtimeScene);
 
 }
 
