@@ -63,7 +63,7 @@ gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.ShopSzeneCode.userFunc0xbe7450 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xcf9858 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -224,7 +224,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.ShopSzeneCode.userFunc0xce3628 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xcfa340 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -409,7 +409,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.ShopSzeneCode.userFunc0xc100a0 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xa182c0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -452,7 +452,7 @@ gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Obj
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
-gdjs.ShopSzeneCode.userFunc0xce8310 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xcfdc00 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
 const shopVariables = runtimeScene.getVariables();
@@ -619,7 +619,7 @@ if (shopState && shopAction) {
 };
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
-gdjs.ShopSzeneCode.userFunc0xbe1de8 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xc18f18 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Shop-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -632,7 +632,7 @@ if (!runtimeScene.__lockLootL047Shop || runtimeScene.__lockLootL047Shop !== i18n
   const state = runtimeScene.__lockLootShopScene; if (state && typeof shopRender === "function") shopRender(state);
 }
 };
-gdjs.ShopSzeneCode.userFunc0xa20e00 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xa09d78 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -719,7 +719,7 @@ gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xbe7450(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xcf9858(runtimeScene);
 
 }
 
@@ -727,7 +727,7 @@ gdjs.ShopSzeneCode.userFunc0xbe7450(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xce3628(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xcfa340(runtimeScene);
 
 }
 
@@ -735,7 +735,7 @@ gdjs.ShopSzeneCode.userFunc0xce3628(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xc100a0(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xa182c0(runtimeScene);
 
 }
 
@@ -819,7 +819,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xce8310(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xcfdc00(runtimeScene);
 
 }
 
@@ -865,7 +865,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xbe1de8(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xc18f18(runtimeScene);
 
 }
 
@@ -873,7 +873,7 @@ gdjs.ShopSzeneCode.userFunc0xbe1de8(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xa20e00(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xa09d78(runtimeScene);
 
 }
 

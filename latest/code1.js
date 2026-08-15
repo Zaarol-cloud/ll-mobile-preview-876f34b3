@@ -189,7 +189,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xaf33e8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf9008 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -350,7 +350,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TrainingSceneCode.userFunc0xa0dab0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcfa340 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -535,7 +535,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xceb010 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa09f10 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -574,11 +574,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xce82a8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcfa3e0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xce41d0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xbef250 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1194,7 +1194,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xbf6288 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xc14d68 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -1218,7 +1218,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf6288(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc14d68(runtimeScene);
 
 }
 
@@ -1229,7 +1229,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xc646a0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcbe9c8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -1251,7 +1251,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc646a0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcbe9c8(runtimeScene);
 
 }
 
@@ -1790,7 +1790,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xb774c0 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xa16878 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -1809,6 +1809,20 @@ const DISTINCT_PRIME_SUM_DIGITS = new Set([5, 7, 8, 9]);
 const FACTORIAL_DIGITS = new Set([1, 2, 6]);
 const SQUARE_SUMS = new Set([0, 1, 4, 9, 16]);
 const FIBONACCI_SUMS = new Set([0, 1, 2, 3, 5, 8, 13]);
+const DIGIT_HINT_DEFINITIONS = Object.freeze([
+  Object.freeze({ id: 'T1-DIGIT-00', digit: 0, propertyKey: 'additiveIdentity', expression: '0', germanProperty: 'das neutrale Element der Addition' }),
+  Object.freeze({ id: 'T1-DIGIT-01', digit: 1, propertyKey: 'multiplicativeIdentity', expression: '1', germanProperty: 'das neutrale Element der Multiplikation' }),
+  Object.freeze({ id: 'T1-DIGIT-02', digit: 2, propertyKey: 'onlyEvenPrime', expression: '2', germanProperty: 'die einzige gerade Primzahl' }),
+  Object.freeze({ id: 'T1-DIGIT-03', digit: 3, propertyKey: 'smallestOddPrime', expression: '3', germanProperty: 'die kleinste ungerade Primzahl' }),
+  Object.freeze({ id: 'T1-DIGIT-04', digit: 4, propertyKey: 'squareOfSmallestPrime', expression: '2² = 4', germanProperty: 'das Quadrat der kleinsten Primzahl' }),
+  Object.freeze({ id: 'T1-DIGIT-05', digit: 5, propertyKey: 'onlyOddPrimeDivisorOfTen', expression: '10 : 5 = 2', germanProperty: 'die einzige ungerade Primzahl, die ein Teiler von 10 ist' }),
+  Object.freeze({ id: 'T1-DIGIT-06', digit: 6, propertyKey: 'factorialOfThree', expression: '3! = 6', sourceDigit: 3 }),
+  Object.freeze({ id: 'T1-DIGIT-07', digit: 7, propertyKey: 'largestSingleDigitPrime', expression: '7', germanProperty: 'die größte einstellige Primzahl' }),
+  Object.freeze({ id: 'T1-DIGIT-08', digit: 8, propertyKey: 'cubeOfSmallestPrime', expression: '2³ = 8', germanProperty: 'der Kubus der kleinsten Primzahl' }),
+  Object.freeze({ id: 'T1-DIGIT-09', digit: 9, propertyKey: 'squareOfSmallestOddPrime', expression: '3² = 9', germanProperty: 'das Quadrat der kleinsten ungeraden Primzahl' })
+]);
+const DIGIT_HINT_BY_DIGIT = new Map(DIGIT_HINT_DEFINITIONS.map(definition => [definition.digit, definition]));
+const DIGIT_HINT_IDS = new Set(DIGIT_HINT_DEFINITIONS.map(definition => definition.id));
 const ORDINAL_NOMINATIVE = ['', 'erste', 'zweite', 'dritte', 'vierte', 'fünfte', 'sechste', 'siebte', 'achte', 'neunte', 'zehnte', 'elfte'];
 const ORDINAL_DATIVE = ['', 'ersten', 'zweiten', 'dritten', 'vierten', 'fünften', 'sechsten', 'siebten', 'achten', 'neunten', 'zehnten', 'elften'];
 
@@ -1845,6 +1859,11 @@ function comparisonText(code, positions) {
   return 'Die Ziffer an Position ' + (first + 1) + ' ist ' + comparison + ' als die an Position ' + (second + 1) + '.';
 }
 
+function digitHintText(definition, positions) {
+  if (definition.id === 'T1-DIGIT-06') return 'Die Ziffer an Position ' + (positions[0] + 1) + ' ist die Fakultät der Ziffer an Position ' + (positions[1] + 1) + '.';
+  return 'Die Ziffer an Position ' + (positions[0] + 1) + ' ist ' + definition.germanProperty + '.';
+}
+
 function tier1ParityText(code, positions) {
   return 'Die Zahl an Position ' + (positions[0] + 1) + ' ist ' + (code[positions[0]] % 2 === 0 ? 'gerade.' : 'ungerade.');
 }
@@ -1877,7 +1896,7 @@ function tier1FibonacciText(code, positions) {
 
 function tier1PositionParityText(code, positions) {
   const sameParity = code[positions[0]] % 2 === (positions[0] + 1) % 2;
-  return 'Die Zahl an Position ' + (positions[0] + 1) + ' hat ' + (sameParity ? 'dieselbe' : 'eine andere') + ' Parität wie ihre Positionsnummer.';
+  return 'Die Zahl an Position ' + (positions[0] + 1) + ' hat ' + (sameParity ? 'dieselbe Parität wie' : 'eine andere Parität als') + ' ihre Positionsnummer.';
 }
 
 function tier1DistinctPrimeSumText(code, positions) {
@@ -2068,7 +2087,7 @@ function tier4PairSumParityText(code, positions) {
   const sameParity = firstSum % 2 === secondSum % 2;
   const firstPair = 'Die Summe der Zahlen an Position ' + (positions[0] + 1) + ' und Position ' + (positions[1] + 1);
   const secondPair = 'die Summe der Zahlen an Position ' + (positions[2] + 1) + ' und Position ' + (positions[3] + 1);
-  return sameParity ? firstPair + ' und ' + secondPair + ' sind entweder beide gerade oder beide ungerade.' : 'Von ' + firstPair.toLowerCase() + ' und ' + secondPair + ' ist genau eine gerade.';
+  return sameParity ? firstPair + ' und ' + secondPair + ' sind entweder beide gerade oder beide ungerade.' : firstPair + ' und ' + secondPair + ' besitzen unterschiedliche Parität; genau eine der beiden Summen ist gerade.';
 }
 
 function tier4ProductComparisonText(code, positions) {
@@ -2217,9 +2236,10 @@ function codewideTextVariants(id, positions, details) {
   if (id === 'T1-CODE-04') return comparisonVariants('Der Median aller Zahlen im Code', positions[0], details.comparison);
   if (id === 'T2-CODE-01') {
     const subject = details.subject;
-    if (details.mode === 'greaterBoth') return [subject + ' ist größer als die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + '.', 'Die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' sind beide kleiner als ' + subject.toLowerCase() + '.'];
-    if (details.mode === 'lessBoth') return [subject + ' ist kleiner als die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + '.', 'Die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' sind beide größer als ' + subject.toLowerCase() + '.'];
-    return [subject + ' ist größer als die Zahl an Position ' + p(0) + ', aber kleiner als die Zahl an Position ' + p(1) + '.', 'Zwischen den Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' liegt ' + subject.toLowerCase() + '.'];
+    const lowerSubject = subject.charAt(0).toLowerCase() + subject.slice(1);
+    if (details.mode === 'greaterBoth') return [subject + ' ist größer als die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + '.', 'Die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' sind beide kleiner als ' + lowerSubject + '.'];
+    if (details.mode === 'lessBoth') return [subject + ' ist kleiner als die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + '.', 'Die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' sind beide größer als ' + lowerSubject + '.'];
+    return [subject + ' ist größer als die Zahl an Position ' + p(0) + ', aber kleiner als die Zahl an Position ' + p(1) + '.', 'Zwischen den Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' liegt ' + lowerSubject + '.'];
   }
   if (id === 'T2-CODE-02') return ['Die Zahl an Position ' + p(0) + ' ist größer als die kleinste und kleiner als die größte Zahl im Code.', 'Position ' + p(0) + ' liegt mit ihrem Wert strikt zwischen den beiden globalen Extremwerten des Codes.'];
   if (id === 'T2-CODE-03') {
@@ -2252,6 +2272,7 @@ function codewideTextVariants(id, positions, details) {
   }
   if (id === 'T4-CODE-05') return ['Die Zahl unmittelbar nach der ersten Primzahl entspricht dem Unterschied zwischen der größten und der kleinsten Zahl des Codes.', 'Der rechte Nachbar der ersten Primzahl ist genauso groß wie der Abstand der globalen Extremwerte.'];
   if (id === 'T4-CODE-06') return ['Weder Position 1 noch Position 11 enthält das Maximum oder Minimum des Codes. Beide Zahlen liegen strikt zwischen diesen Extremwerten.', 'Beide Randzahlen befinden sich wertmäßig zwischen dem globalen Minimum und Maximum, ohne selbst ein Extremwert zu sein.'];
+  if (id === 'T4-CODE-07') return ['Im Code gilt: Die kleinste gerade Ziffer ist kleiner als die größte Primzahl, und diese ist kleiner als die Ziffer an Position ' + p(0) + '.', 'Die kleinste gerade Ziffer im Code ist kleiner als die größte Primzahl; diese wiederum ist kleiner als die Ziffer an Position ' + p(0) + '.'];
   return [];
 }
 
@@ -2347,6 +2368,10 @@ function languageVariantsForCandidate(candidate, code) {
   if (candidate.id === 'T5-04' || candidate.intentionallyFalse === true) {
     return [{ id: 'wortgetreu-geschuetzt', text: candidate.text, opening: sentenceOpening(candidate.text), stableRank: 0 }];
   }
+  if (candidate.id === 'T1-DIGIT-06') {
+    const exactText = candidate.canonicalText || candidate.text;
+    return [{ id: 'fakultaet-wortgetreu', text: exactText, opening: sentenceOpening(exactText), stableRank: 0 }];
+  }
   if (candidate.id === 'T5-01') {
     const rightPositions = candidate.details.rightVisiblePositions;
     const comparison = candidate.details.comparison;
@@ -2434,12 +2459,36 @@ function freePositionOrder(positions) {
   return ordered;
 }
 
+const MIN_HINT_EXCLUSION_PERCENT = 40;
+
+function estimateInformationExclusionPercent(candidate) {
+  const details = candidate && candidate.details ? candidate.details : {};
+  if (!candidate || typeof candidate.id !== 'string') return 100;
+  if (candidate.id === 'T2-02') return details.square ? 79 : 21;
+  if (candidate.id === 'T2-07') return details.square ? 64 : 36;
+  if (candidate.id === 'T2-10') return details.fibonacci ? 69 : 31;
+  if (candidate.id === 'T2-16') return details.prime ? 63 : 37;
+  if (candidate.id === 'T2-14') return details.equal ? 90 : 10;
+  if (candidate.id === 'T1-CODE-02') {
+    if (details.comparison === 'gleich') return 90;
+    if (details.comparison === 'kleiner') return 10 + 10 * details.derivedValue;
+    return 100 - 10 * details.derivedValue;
+  }
+  if (candidate.id === 'T2-CODE-01') {
+    if (details.mode === 'lessBoth') return 100 - Math.pow(9 - details.derivedValue, 2);
+    if (details.mode === 'greaterBoth') return 100 - Math.pow(details.derivedValue, 2);
+    return 100 - details.derivedValue * (9 - details.derivedValue);
+  }
+  if (candidate.id === 'T2-CODE-02') return 100 - Math.max(0, details.maximum - details.minimum - 1) * 10;
+  return 100;
+}
+
 function createGenerator(code, existingComparison) {
   const candidateGroups = {
-    1: { 'T1-01': [], 'T1-02': [], 'T1-03': [], 'T1-05': [], 'T1-06': [], 'T1-07': [], 'T1-08': [], 'T1-09': [], 'T1-12': [], 'T1-13': [], 'T1-14': [], 'T1-CODE-01': [], 'T1-CODE-02': [], 'T1-CODE-03': [] },
+    1: { 'T1-01': [], 'T1-02': [], 'T1-03': [], 'T1-05': [], 'T1-06': [], 'T1-07': [], 'T1-08': [], 'T1-09': [], 'T1-12': [], 'T1-13': [], 'T1-14': [], 'T1-DIGIT-00': [], 'T1-DIGIT-01': [], 'T1-DIGIT-02': [], 'T1-DIGIT-03': [], 'T1-DIGIT-04': [], 'T1-DIGIT-05': [], 'T1-DIGIT-06': [], 'T1-DIGIT-07': [], 'T1-DIGIT-08': [], 'T1-DIGIT-09': [], 'T1-CODE-01': [], 'T1-CODE-02': [], 'T1-CODE-03': [] },
     2: { 'T2-01': [], 'T2-02': [], 'T2-03': [], 'T2-04': [], 'T2-06': [], 'T2-07': [], 'T2-08': [], 'T2-09': [], 'T2-10': [], 'T2-11': [], 'T2-12': [], 'T2-13': [], 'T2-14': [], 'T2-15': [], 'T2-16': [], 'T2-CODE-01': [], 'T2-CODE-02': [], 'T2-CODE-03': [], 'T2-CODE-04': [] },
     3: { 'T3-01': [], 'T3-02': [], 'T3-03': [], 'T3-04': [], 'T3-05': [], 'T3-06': [], 'T3-07': [], 'T3-08': [], 'T3-09': [], 'T3-10': [], 'T3-11': [], 'T3-12': [], 'T3-13': [], 'T3-14': [], 'T3-15': [], 'T3-16': [], 'T3-CODE-01': [], 'T3-CODE-02': [], 'T3-CODE-03': [], 'T3-CODE-04': [] },
-    4: { 'T4-01': [], 'T4-02': [], 'T4-03': [], 'T4-04': [], 'T4-05': [], 'T4-06': [], 'T4-07': [], 'T4-08': [], 'T4-09': [], 'T4-10': [], 'T4-11': [], 'T4-12': [], 'T4-13': [], 'T4-14': [], 'T4-15': [], 'T4-16': [], 'T4-17': [], 'T4-18': [], 'T4-19': [], 'T4-20': [], 'T4-21': [], 'T4-22': [], 'T4-CODE-01': [], 'T4-CODE-02': [], 'T4-CODE-03': [], 'T4-CODE-05': [], 'T4-CODE-06': [] },
+    4: { 'T4-01': [], 'T4-02': [], 'T4-03': [], 'T4-04': [], 'T4-05': [], 'T4-06': [], 'T4-07': [], 'T4-08': [], 'T4-09': [], 'T4-10': [], 'T4-11': [], 'T4-12': [], 'T4-13': [], 'T4-14': [], 'T4-15': [], 'T4-16': [], 'T4-17': [], 'T4-18': [], 'T4-19': [], 'T4-20': [], 'T4-21': [], 'T4-22': [], 'T4-CODE-01': [], 'T4-CODE-02': [], 'T4-CODE-03': [], 'T4-CODE-05': [], 'T4-CODE-06': [], 'T4-CODE-07': [] },
     5: { 'T1-CODE-04': [], 'T4-CODE-04': [], 'T5-01': [], 'T5-02': [], 'T5-03': [], 'T5-04': [] }
   };
   const codewide = analyzeCodewide(code);
@@ -2472,7 +2521,8 @@ function createGenerator(code, existingComparison) {
       codewideDerivations: candidateOptions.codewideDerivations || [],
       mathematicalRule: candidateOptions.mathematicalRule || id,
       requiresUnlock: tier === 5,
-      specialRuleType: tier === 5 ? 'median-expertenhinweis' : 'normal'
+      specialRuleType: tier === 5 ? 'median-expertenhinweis' : 'normal',
+      selectionPriority: candidateOptions.selectionPriority
     }));
   }
 
@@ -2583,7 +2633,7 @@ function createGenerator(code, existingComparison) {
     }
 
     if (codewide.hasPrime && code[0] !== codewide.maximum && code[code.length - 1] !== codewide.maximum && code[0] > codewide.largestPrime && code[code.length - 1] > codewide.largestPrime) {
-      addCodewideCandidate(4, 'T4-CODE-01', [0, code.length - 1], { maximum: codewide.maximum, largestPrime: codewide.largestPrime, semanticKey: 'edgeAbovePrimes' }, { positionRoles: ['Erste Position', 'Letzte Position'], codewideDerivations: ['globale größte Ziffer', 'größte vorkommende Primzahl'], mathematicalRule: 'Beide Randwerte sind keine globalen Maxima und liegen über sämtlichen Primzahlen des Codes' });
+      addCodewideCandidate(4, 'T4-CODE-01', [0, code.length - 1], { maximum: codewide.maximum, largestPrime: codewide.largestPrime, semanticKey: 'edgeAbovePrimes' }, { selectionPriority: -18, positionRoles: ['Erste Position', 'Letzte Position'], codewideDerivations: ['globale größte Ziffer', 'größte vorkommende Primzahl'], mathematicalRule: 'Beide Randwerte sind keine globalen Maxima und liegen über sämtlichen Primzahlen des Codes' });
     }
     if (codewide.hasPrime && codewide.hasEven && codewide.hasOdd && Number.isInteger(codewide.afterFirstPrime)) {
       const neighborValue = code[codewide.afterFirstPrime];
@@ -2618,6 +2668,12 @@ function createGenerator(code, existingComparison) {
     }
     if (codewide.minimum !== codewide.maximum && codewide.minimum < code[0] && code[0] < codewide.maximum && codewide.minimum < code[code.length - 1] && code[code.length - 1] < codewide.maximum) {
       addCodewideCandidate(4, 'T4-CODE-06', [0, code.length - 1], { minimum: codewide.minimum, maximum: codewide.maximum, semanticKey: 'edgeBetweenGlobalExtrema' }, { positionRoles: ['Erste Position', 'Letzte Position'], codewideDerivations: ['globale kleinste Ziffer', 'globale größte Ziffer'], mathematicalRule: 'Beide Randwerte liegen strikt zwischen globalem Minimum und Maximum' });
+    }
+    if (codewide.hasEven && codewide.hasPrime && codewide.smallestEven < codewide.largestPrime) {
+      for (let targetPosition = 0; targetPosition < code.length; targetPosition++) {
+        if (codewide.largestPrime >= code[targetPosition]) continue;
+        addCodewideCandidate(4, 'T4-CODE-07', [targetPosition], { smallestEven: codewide.smallestEven, largestPrime: codewide.largestPrime, targetPosition, semanticKey: 'smallestEvenBelowLargestPrimeBelowTarget|' + targetPosition }, { informationStrength: 6, selectionPriority: 8, positionRoles: ['Zielposition oberhalb der größten Primzahl'], codewideDerivations: ['kleinste gerade Ziffer', 'größte vorkommende Primzahl'], mathematicalRule: 'Kleinste gerade Ziffer < größte Primzahl < Wert der Zielposition' });
+      }
     }
   }
 
@@ -2883,6 +2939,16 @@ function createGenerator(code, existingComparison) {
     const factorialAllowedValues = factorial ? [1, 2, 6] : [0, 3, 4, 5, 7, 8, 9];
     add(makeCandidate(1, 'T1-13', positions, tier1FactorialText(code, positions), null, { informationStrength: factorial ? 3 : 1, details: { factorial, allowedValues: factorialAllowedValues }, mathematicalRule: 'Ziffer ist eine Fakultätszahl der Folge 1, 2, 6' }));
     add(makeCandidate(1, 'T1-14', positions, tier1TriangularText(code, positions), null, { informationStrength: 2, details: { triangular: TRIANGULAR_DIGITS.has(code[position]) }, mathematicalRule: 'Ziffer ist eine Dreieckszahl der Folge 0, 1, 3, 6' }));
+    const digitHint = DIGIT_HINT_BY_DIGIT.get(code[position]);
+    if (digitHint.id === 'T1-DIGIT-06') {
+      for (let sourcePosition = 0; sourcePosition < code.length; sourcePosition++) {
+        if (sourcePosition === position || code[sourcePosition] !== digitHint.sourceDigit) continue;
+        const relationPositions = [position, sourcePosition];
+        add(makeCandidate(1, digitHint.id, relationPositions, digitHintText(digitHint, relationPositions), digitHint.id + '|' + position + '|' + sourcePosition, { informationStrength: 6, optional: true, selectionPriority: 2, positionRoles: ['Fakultätsziel 6', 'Fakultätsbasis 3'], details: { digitValue: digitHint.digit, propertyKey: digitHint.propertyKey, expression: digitHint.expression, targetPosition: position, sourcePosition, sourceDigit: digitHint.sourceDigit }, mathematicalRule: 'Die Ziffer an der Quellposition ist exakt 3 und 3! = 6 bestimmt die Ziffer an der Zielposition.' }));
+      }
+    } else {
+      add(makeCandidate(1, digitHint.id, positions, digitHintText(digitHint, positions), digitHint.id + '|' + position, { informationStrength: 6, optional: true, selectionPriority: 2, positionRoles: ['Direkt mathematisch bestimmte Ziffer'], details: { digitValue: digitHint.digit, propertyKey: digitHint.propertyKey, expression: digitHint.expression }, mathematicalRule: 'Die mathematische Eigenschaft ' + digitHint.propertyKey + ' bestimmt eindeutig die Ziffer ' + digitHint.digit + '.' }));
+    }
   }
 
   const comparisonPositions = existingComparison.positions;
@@ -2909,7 +2975,8 @@ function createGenerator(code, existingComparison) {
     const firstValue = code[pair[0]];
     const secondValue = code[pair[1]];
     if (firstValue !== secondValue && (firstValue === secondValue * 2 || secondValue === firstValue * 2)) {
-      add(makeCandidate(2, 'T2-09', pair, tier2DoubleHalfText(code, pair), null, { informationStrength: 3, optional: true }));
+      const ratioDirection = code[pair[0]] === code[pair[1]] * 2 ? 'double' : 'half';
+      add(makeCandidate(2, 'T2-09', pair, tier2DoubleHalfText(code, pair), null, { informationStrength: 3, optional: true, details: { ratioDirection }, mathematicalRule: ratioDirection === 'double' ? 'Wert A = 2 × Wert B' : 'Wert A × 2 = Wert B' }));
     }
     add(makeCandidate(2, 'T2-10', pair, tier2SumFibonacciText(code, pair), null, { informationStrength: 2, details: { sum: pairSum, fibonacci: FIBONACCI_SUMS.has(pairSum) }, mathematicalRule: 'Fibonacci-Eigenschaft der Summe zweier Positionen' }));
     for (const order of [pair, pair.slice().reverse()]) {
@@ -3020,7 +3087,7 @@ function createGenerator(code, existingComparison) {
   const oddPositionSum = oddPositions.reduce((sum, position) => sum + code[position], 0);
   const evenPositionSum = evenPositions.reduce((sum, position) => sum + code[position], 0);
   const positionSumComparison = relation(oddPositionSum, evenPositionSum);
-  add(makeCandidate(4, 'T4-20', oddPositions.concat(evenPositions), tier4OddEvenPositionSumText(code), null, { informationStrength: 4, positionRoles: oddPositions.map(() => 'Ungerade sichtbare Position').concat(evenPositions.map(() => 'Gerade sichtbare Position')), details: { oddPositions, evenPositions, oddPositionSum, evenPositionSum, comparison: positionSumComparison, scope: 'entireCode' }, mathematicalRule: 'Summe der Werte an ungeraden sichtbaren Positionen wird mit der Summe an geraden sichtbaren Positionen verglichen' }));
+  add(makeCandidate(4, 'T4-20', oddPositions.concat(evenPositions), tier4OddEvenPositionSumText(code), null, { informationStrength: 4, selectionPriority: -30, positionRoles: oddPositions.map(() => 'Ungerade sichtbare Position').concat(evenPositions.map(() => 'Gerade sichtbare Position')), details: { oddPositions, evenPositions, oddPositionSum, evenPositionSum, comparison: positionSumComparison, scope: 'entireCode' }, mathematicalRule: 'Summe der Werte an ungeraden sichtbaren Positionen wird mit der Summe an geraden sichtbaren Positionen verglichen' }));
   addAbcAbcCandidates();
 
   for (const selectedPositions of combinations(code.length, 4)) {
@@ -3163,6 +3230,7 @@ function createGenerator(code, existingComparison) {
       const difference = Math.abs(codewide.maximum - codewide.minimum);
       valid = positions.length === 2 && codewide.minimum !== codewide.maximum && Number.isInteger(codewide.afterFirstPrime) && positions[0] === codewide.firstPrimePosition && positions[1] === codewide.afterFirstPrime && code[positions[1]] === difference && details.globalDifference === difference && details.minimum === codewide.minimum && details.maximum === codewide.maximum;
     } else if (id === 'T4-CODE-06') valid = positions.length === 2 && positions[0] === 0 && positions[1] === code.length - 1 && codewide.minimum !== codewide.maximum && details.minimum === codewide.minimum && details.maximum === codewide.maximum && codewide.minimum < code[0] && code[0] < codewide.maximum && codewide.minimum < code[code.length - 1] && code[code.length - 1] < codewide.maximum;
+    else if (id === 'T4-CODE-07') valid = positions.length === 1 && codewide.hasEven && codewide.hasPrime && details.smallestEven === codewide.smallestEven && details.largestPrime === codewide.largestPrime && details.targetPosition === positions[0] && codewide.smallestEven < codewide.largestPrime && codewide.largestPrime < code[positions[0]];
     if (!valid) return false;
     const texts = codewideTextVariants(id, positions, details);
     let variantSeed = 2166136261;
@@ -3189,6 +3257,12 @@ function createGenerator(code, existingComparison) {
     if (candidate.tier === 5 && (!TIER_5_UNLOCKED || !candidate.requiresUnlock || !candidate.independentValidation)) return false;
     const positions = candidate.internalPositions;
     if (candidate.id.includes('-CODE-')) return verifyCodewideCandidate(candidate);
+    if (DIGIT_HINT_IDS.has(candidate.id)) {
+      const definition = DIGIT_HINT_DEFINITIONS.find(entry => entry.id === candidate.id);
+      if (!definition || candidate.tier !== 1 || candidate.specialRuleType !== 'normal' || candidate.details.digitValue !== definition.digit || candidate.details.propertyKey !== definition.propertyKey || candidate.details.expression !== definition.expression) return false;
+      if (candidate.id === 'T1-DIGIT-06') return positions.length === 2 && positions[0] !== positions[1] && code[positions[0]] === 6 && code[positions[1]] === 3 && candidate.details.targetPosition === positions[0] && candidate.details.sourcePosition === positions[1] && candidate.details.sourceDigit === 3 && candidate.text === digitHintText(definition, positions);
+      return positions.length === 1 && code[positions[0]] === definition.digit && candidate.text === digitHintText(definition, positions);
+    }
     if (candidate.id === 'T1-01') return candidate.text === tier1ParityText(code, positions);
     if (candidate.id === 'T1-02') return candidate.text === tier1PrimeText(code, positions);
     if (candidate.id === 'T1-03') return candidate.text === tier1SquareText(code, positions);
@@ -3223,7 +3297,8 @@ function createGenerator(code, existingComparison) {
     if (candidate.id === 'T2-09') {
       const firstValue = code[positions[0]];
       const secondValue = code[positions[1]];
-      return positions.length === 2 && firstValue !== secondValue && (firstValue === secondValue * 2 || secondValue === firstValue * 2) && candidate.text === tier2DoubleHalfText(code, positions);
+      const ratioDirection = firstValue === secondValue * 2 ? 'double' : 'half';
+      return positions.length === 2 && firstValue !== secondValue && (firstValue === secondValue * 2 || secondValue === firstValue * 2) && candidate.details.ratioDirection === ratioDirection && candidate.text === tier2DoubleHalfText(code, positions);
     }
     if (candidate.id === 'T2-10') {
       const sum = code[positions[0]] + code[positions[1]];
@@ -3567,13 +3642,18 @@ function createGenerator(code, existingComparison) {
   const positionUsage = Array(code.length).fill(0);
 
   function usageScore(candidate) {
-    return candidate.internalPositions.reduce((score, position) => score + positionUsage[position], 0);
+    if (candidate.internalPositions.length === 0) return 0;
+    return candidate.internalPositions.reduce((score, position) => score + positionUsage[position], 0) / candidate.internalPositions.length;
+  }
+
+  function typeVarietyPenalty(candidate) {
+    return stableTextHash('type-variety|' + candidate.tier + '|' + candidate.id + '|' + code.join('')) % 25;
   }
 
   const SHORT_HINT_MAX_CHARS = 82;
   const MEDIUM_HINT_MAX_CHARS = 132;
   const MAX_TIER_5_HINTS = 1;
-  const EXPLICIT_LONG_HINT_IDS = new Set(['T4-08', 'T4-14', 'T4-20', 'T4-CODE-01', 'T4-CODE-02', 'T4-CODE-03', 'T4-CODE-04', 'T5-01', 'T5-03']);
+  const EXPLICIT_LONG_HINT_IDS = new Set(['T4-08', 'T4-14', 'T4-20', 'T4-CODE-01', 'T4-CODE-02', 'T4-CODE-03', 'T4-CODE-04', 'T4-CODE-07', 'T5-01', 'T5-03']);
 
   function classifyHintLength(candidate) {
     const visibleLength = candidate.text.replace(/\s+/g, ' ').trim().length;
@@ -3596,6 +3676,7 @@ function createGenerator(code, existingComparison) {
     tierPools[tier] = [];
     for (const id of Object.keys(candidateGroups[tier] || {})) {
       const candidates = shuffled(candidateGroups[tier][id])
+        .filter(candidate => estimateInformationExclusionPercent(candidate) >= MIN_HINT_EXCLUSION_PERCENT)
         .sort((first, second) => second.informationStrength - first.informationStrength)
         .slice(0, 18);
       for (const candidate of candidates) {
@@ -3641,7 +3722,7 @@ function createGenerator(code, existingComparison) {
     for (const allowRepeatedIds of [false, true]) {
       for (let patternIndex = 0; patternIndex < patterns.length; patternIndex++) {
         const pattern = patterns[patternIndex];
-        const rankCandidate = candidate => usageScore(candidate) * 14 + (candidate.lengthClass === 'lang' ? 18 : candidate.lengthClass === 'mittel' ? 5 : 0) - candidate.informationStrength + candidate.selectionPriority + (candidate.tier === 5 ? tier5TypeOrder.indexOf(candidate.id) * 1000 : 0);
+        const rankCandidate = candidate => usageScore(candidate) * 14 + (candidate.lengthClass === 'lang' ? 6 : candidate.lengthClass === 'mittel' ? 3 : 0) - candidate.informationStrength + candidate.selectionPriority + typeVarietyPenalty(candidate) + (candidate.tier === 5 ? tier5TypeOrder.indexOf(candidate.id) * 1000 : 0);
         const firstSource = requiredId ? tierPools[pattern[0]].filter(candidate => candidate.id === requiredId) : tierPools[pattern[0]];
         const firstPool = shuffled(firstSource).sort((first, second) => rankCandidate(first) - rankCandidate(second)).slice(0, 48);
         const secondPool = shuffled(tierPools[pattern[1]]).sort((first, second) => rankCandidate(first) - rankCandidate(second)).slice(0, 48);
@@ -3658,9 +3739,9 @@ function createGenerator(code, existingComparison) {
             if (!allowRepeatedIds && usedIds.has(second.id)) continue;
             if (conflictsWithPrevious(second, allowRepeatedIds) || candidatesConflict(first, second) || !lengthPairAllowed(first, second)) continue;
             const overlap = overlapCount(first, second);
-            const lengthPenalty = first.lengthClass === 'lang' || second.lengthClass === 'lang' ? 18 : first.lengthClass === 'mittel' && second.lengthClass === 'mittel' ? 8 : 0;
+            const lengthPenalty = first.lengthClass === 'lang' || second.lengthClass === 'lang' ? 6 : first.lengthClass === 'mittel' && second.lengthClass === 'mittel' ? 4 : 0;
             const tier5TypePenalty = (first.tier === 5 ? tier5TypeOrder.indexOf(first.id) * 1000 : 0) + (second.tier === 5 ? tier5TypeOrder.indexOf(second.id) * 1000 : 0);
-            const score = patternIndex * 10000 + overlap * 120 + (usageScore(first) + usageScore(second)) * 14 + lengthPenalty + tier5TypePenalty - first.informationStrength - second.informationStrength;
+            const score = patternIndex * 10000 + overlap * 8 + (usageScore(first) + usageScore(second)) * 14 + lengthPenalty + tier5TypePenalty - first.informationStrength - second.informationStrength + first.selectionPriority + second.selectionPriority + typeVarietyPenalty(first) + typeVarietyPenalty(second);
             if (score < bestScore) {
               bestPair = [first, second];
               bestScore = score;
@@ -3933,14 +4014,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb774c0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa16878(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xafb238 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa131d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -4308,7 +4389,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xaf64c0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xafb248 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
 // Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
@@ -4332,7 +4413,7 @@ if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaf2ff0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xafad10 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -4354,11 +4435,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaf30b8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf8cd8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xae92b0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xeb6bd0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -4445,7 +4526,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf33e8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf9008(runtimeScene);
 
 }
 
@@ -4453,7 +4534,7 @@ gdjs.TrainingSceneCode.userFunc0xaf33e8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa0dab0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcfa340(runtimeScene);
 
 }
 
@@ -4461,7 +4542,7 @@ gdjs.TrainingSceneCode.userFunc0xa0dab0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xceb010(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa09f10(runtimeScene);
 
 }
 
@@ -4469,7 +4550,7 @@ gdjs.TrainingSceneCode.userFunc0xceb010(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xce82a8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcfa3e0(runtimeScene);
 
 }
 
@@ -4477,7 +4558,7 @@ gdjs.TrainingSceneCode.userFunc0xce82a8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xce41d0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbef250(runtimeScene);
 
 }
 
@@ -5943,7 +6024,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xafb238(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa131d0(runtimeScene);
 
 }
 
@@ -6037,7 +6118,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf64c0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xafb248(runtimeScene);
 
 }
 
@@ -6062,7 +6143,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf2ff0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xafad10(runtimeScene);
 
 }
 
@@ -6070,7 +6151,7 @@ gdjs.TrainingSceneCode.userFunc0xaf2ff0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf30b8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf8cd8(runtimeScene);
 
 }
 
@@ -6078,7 +6159,7 @@ gdjs.TrainingSceneCode.userFunc0xaf30b8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xae92b0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xeb6bd0(runtimeScene);
 
 }
 
