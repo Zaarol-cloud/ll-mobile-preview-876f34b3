@@ -59,7 +59,7 @@ gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1= [];
 gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1= [];
 
 
-gdjs.MainMenuCode.userFunc0xbef1b0 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xa04668 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -220,7 +220,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.MainMenuCode.userFunc0xeb6bd0 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xec49a0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -405,7 +405,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.MainMenuCode.userFunc0xcfa340 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xcf3588 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -444,11 +444,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.MainMenuCode.userFunc0xcfb910 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xcf1fb8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.MainMenuCode.userFunc0xcfc6c0 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xa08a78 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-024: Rein visuelle Steuerung des modularen Hauptmenüs.
 // Die bestehende modulare Welt und alle anderen Szenen bleiben unverändert.
@@ -517,7 +517,7 @@ for (let index = 0; index < sparkles.length; index += 1) {
 
 
 };
-gdjs.MainMenuCode.userFunc0xd01420 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xcfdee0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-046/L&L-047/L&L-052: Aufgeräumte Hauptnavigation, zentrale persistente Musiksteuerung und lokale Sprachwahl.
 const menuGame = runtimeScene.getGame();
@@ -579,7 +579,7 @@ gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.MainMenuCode.userFunc0xbef1b0(runtimeScene);
+gdjs.MainMenuCode.userFunc0xa04668(runtimeScene);
 
 }
 
@@ -587,7 +587,7 @@ gdjs.MainMenuCode.userFunc0xbef1b0(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xeb6bd0(runtimeScene);
+gdjs.MainMenuCode.userFunc0xec49a0(runtimeScene);
 
 }
 
@@ -595,7 +595,7 @@ gdjs.MainMenuCode.userFunc0xeb6bd0(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xcfa340(runtimeScene);
+gdjs.MainMenuCode.userFunc0xcf3588(runtimeScene);
 
 }
 
@@ -603,7 +603,7 @@ gdjs.MainMenuCode.userFunc0xcfa340(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xcfb910(runtimeScene);
+gdjs.MainMenuCode.userFunc0xcf1fb8(runtimeScene);
 
 }
 
@@ -611,7 +611,7 @@ gdjs.MainMenuCode.userFunc0xcfb910(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xcfc6c0(runtimeScene);
+gdjs.MainMenuCode.userFunc0xa08a78(runtimeScene);
 
 }
 
@@ -619,7 +619,7 @@ gdjs.MainMenuCode.userFunc0xcfc6c0(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xd01420(runtimeScene);
+gdjs.MainMenuCode.userFunc0xcfdee0(runtimeScene);
 
 }
 

@@ -189,7 +189,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xaf9008 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf7630 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -350,7 +350,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TrainingSceneCode.userFunc0xcfa340 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xec49a0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -535,7 +535,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xa09f10 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcf7ab8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -574,11 +574,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xcfa3e0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcf4eb8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xbef250 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa04560 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1194,7 +1194,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xc14d68 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xbf9790 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -1218,7 +1218,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc14d68(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf9790(runtimeScene);
 
 }
 
@@ -1229,7 +1229,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xcbe9c8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcc7950 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -1251,7 +1251,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcbe9c8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcc7950(runtimeScene);
 
 }
 
@@ -1790,7 +1790,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xa16878 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xa13138 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -1809,6 +1809,32 @@ const DISTINCT_PRIME_SUM_DIGITS = new Set([5, 7, 8, 9]);
 const FACTORIAL_DIGITS = new Set([1, 2, 6]);
 const SQUARE_SUMS = new Set([0, 1, 4, 9, 16]);
 const FIBONACCI_SUMS = new Set([0, 1, 2, 3, 5, 8, 13]);
+const L054_DIVISORS = Object.freeze([2, 3, 4, 5, 6, 8, 9]);
+const L054_HINT_IDS = new Set(['T3-17', 'T3-18', 'T3-19', 'T3-20', 'T4-23']);
+const L054_MAX_RESULT = 45;
+const L054_EXACT_RESULT_COUNTS = Object.freeze({ productPlus: Array(163).fill(0), productMinus: Array(163).fill(0), groupedPlus: Array(163).fill(0), groupedMinus: Array(163).fill(0) });
+for (let first = 0; first <= 9; first++) {
+  for (let second = 0; second <= 9; second++) {
+    for (let third = 0; third <= 9; third++) {
+      const results = { productPlus: third + first * second, productMinus: third - first * second, groupedPlus: (first + second) * third, groupedMinus: (first - second) * third };
+      for (const variant of Object.keys(results)) if (results[variant] >= 0) L054_EXACT_RESULT_COUNTS[variant][results[variant]]++;
+    }
+  }
+}
+let l054ProductDigitSumAssignments = 0;
+for (let first = 0; first <= 9; first++) {
+  for (let second = 0; second <= 9; second++) {
+    const product = first * second;
+    const sum = l054DigitSum(product);
+    if (product >= 10 && sum <= 9) l054ProductDigitSumAssignments++;
+  }
+}
+const L054_PRODUCT_DIGIT_SUM_EXCLUSION_PERCENT = l054ExclusionPercent(l054ProductDigitSumAssignments, 1000);
+const l054MixedValueCounts = Array(91).fill(0);
+for (let first = 0; first <= 9; first++) for (let second = 0; second <= 9; second++) for (let third = 0; third <= 9; third++) l054MixedValueCounts[first * second + third]++;
+let l054MixedLessAssignments = 0;
+for (let left = 0; left < l054MixedValueCounts.length; left++) for (let right = left + 1; right < l054MixedValueCounts.length; right++) l054MixedLessAssignments += l054MixedValueCounts[left] * l054MixedValueCounts[right];
+const L054_MIXED_EXCLUSION_PERCENT = l054ExclusionPercent(l054MixedLessAssignments, 1000000);
 const DIGIT_HINT_DEFINITIONS = Object.freeze([
   Object.freeze({ id: 'T1-DIGIT-00', digit: 0, propertyKey: 'additiveIdentity', expression: '0', germanProperty: 'das neutrale Element der Addition' }),
   Object.freeze({ id: 'T1-DIGIT-01', digit: 1, propertyKey: 'multiplicativeIdentity', expression: '1', germanProperty: 'das neutrale Element der Multiplikation' }),
@@ -2057,6 +2083,57 @@ function tier3SumParityText(code, positions) {
 
 function tier3ProductDigitText(positions) {
   return 'Das Produkt der Zahlen an Position ' + (positions[0] + 1) + ' und Position ' + (positions[1] + 1) + ' endet auf die Zahl an Position ' + (positions[2] + 1) + '.';
+}
+
+function l054ExclusionPercent(validAssignments, domainSize) {
+  return Number((100 * (1 - validAssignments / domainSize)).toFixed(2));
+}
+
+function l054ExactInformation(variant, result) {
+  const counts = L054_EXACT_RESULT_COUNTS[variant];
+  return counts && Number.isInteger(result) && result >= 0 && result < counts.length ? l054ExclusionPercent(counts[result], 1000) : 0;
+}
+
+function l054DigitSum(value) {
+  return String(value).split('').reduce((sum, digit) => sum + Number(digit), 0);
+}
+
+function l054PointBeforeEvaluation(factorA, factorB, term, variant) {
+  const result = variant === 'productPlus' ? term + factorA * factorB : variant === 'productMinus' ? term - factorA * factorB : NaN;
+  const leftToRightResult = variant === 'productPlus' ? (term + factorA) * factorB : variant === 'productMinus' ? (term - factorA) * factorB : NaN;
+  return { result, leftToRightResult, didacticallyValid: Number.isFinite(result) && result !== leftToRightResult };
+}
+
+function l054MixedComparisonEvaluation(code, positions) {
+  const leftResult = code[positions[2]] + code[positions[0]] * code[positions[1]];
+  const rightResult = code[positions[3]] + code[positions[4]] * code[positions[5]];
+  const leftToRightLeftResult = (code[positions[2]] + code[positions[0]]) * code[positions[1]];
+  const leftToRightRightResult = (code[positions[3]] + code[positions[4]]) * code[positions[5]];
+  const comparison = relation(leftResult, rightResult);
+  const leftToRightComparison = relation(leftToRightLeftResult, leftToRightRightResult);
+  return { leftResult, rightResult, leftToRightLeftResult, leftToRightRightResult, comparison, leftToRightComparison, didacticallyValid: comparison !== 'gleich' && leftToRightComparison !== comparison };
+}
+
+function tier3PointBeforeText(positions, variant, result) {
+  const operation = variant === 'productPlus' ? 'Summe' : 'Differenz';
+  return 'Die ' + operation + ' aus der Ziffer an Position ' + (positions[2] + 1) + ' und dem Produkt der Ziffern an Position ' + (positions[0] + 1) + ' und ' + (positions[1] + 1) + ' beträgt ' + result + '.';
+}
+
+function tier3ParenthesesText(positions, variant, result) {
+  const groupedOperation = variant === 'groupedPlus' ? 'Summe' : 'Differenz';
+  return 'Das Produkt aus der Ziffer an Position ' + (positions[2] + 1) + ' und der ' + groupedOperation + ' der Ziffern an Position ' + (positions[0] + 1) + ' und ' + (positions[1] + 1) + ' beträgt ' + result + '.';
+}
+
+function tier3ProductDigitSumText(positions) {
+  return 'Die Ziffer an Position ' + (positions[2] + 1) + ' entspricht der Quersumme des Produkts der Ziffern an Position ' + (positions[0] + 1) + ' und ' + (positions[1] + 1) + '.';
+}
+
+function tier3ComposedDivisibilityText(positions, divisor) {
+  return 'Die Ziffern an Position ' + (positions[0] + 1) + ' und ' + (positions[1] + 1) + ' bilden in dieser Reihenfolge eine zweistellige Zahl, die durch ' + divisor + ' teilbar ist.';
+}
+
+function tier4MixedExpressionComparisonText(positions, comparison) {
+  return 'Position ' + (positions[2] + 1) + ' + Position ' + (positions[0] + 1) + ' × Position ' + (positions[1] + 1) + ' ist ' + comparison + ' als Position ' + (positions[3] + 1) + ' + Position ' + (positions[4] + 1) + ' × Position ' + (positions[5] + 1) + '.';
 }
 
 function palindromeText(positions) {
@@ -2372,6 +2449,10 @@ function languageVariantsForCandidate(candidate, code) {
     const exactText = candidate.canonicalText || candidate.text;
     return [{ id: 'fakultaet-wortgetreu', text: exactText, opening: sentenceOpening(exactText), stableRank: 0 }];
   }
+  if (candidate.id === 'T3-17' || candidate.id === 'T3-18' || candidate.id === 'T3-19' || candidate.id === 'T4-23') {
+    const exactText = candidate.canonicalText || candidate.text;
+    return [{ id: 'l054-mathematisch-wortgetreu', text: exactText, opening: sentenceOpening(exactText), stableRank: 0 }];
+  }
   if (candidate.id === 'T5-01') {
     const rightPositions = candidate.details.rightVisiblePositions;
     const comparison = candidate.details.comparison;
@@ -2464,6 +2545,7 @@ const MIN_HINT_EXCLUSION_PERCENT = 40;
 function estimateInformationExclusionPercent(candidate) {
   const details = candidate && candidate.details ? candidate.details : {};
   if (!candidate || typeof candidate.id !== 'string') return 100;
+  if (candidate.id === 'T3-17' || candidate.id === 'T3-18' || candidate.id === 'T3-19' || candidate.id === 'T3-20' || candidate.id === 'T4-23') return Number.isFinite(details.informationExclusionPercent) ? details.informationExclusionPercent : 0;
   if (candidate.id === 'T2-02') return details.square ? 79 : 21;
   if (candidate.id === 'T2-07') return details.square ? 64 : 36;
   if (candidate.id === 'T2-10') return details.fibonacci ? 69 : 31;
@@ -2487,8 +2569,8 @@ function createGenerator(code, existingComparison) {
   const candidateGroups = {
     1: { 'T1-01': [], 'T1-02': [], 'T1-03': [], 'T1-05': [], 'T1-06': [], 'T1-07': [], 'T1-08': [], 'T1-09': [], 'T1-12': [], 'T1-13': [], 'T1-14': [], 'T1-DIGIT-00': [], 'T1-DIGIT-01': [], 'T1-DIGIT-02': [], 'T1-DIGIT-03': [], 'T1-DIGIT-04': [], 'T1-DIGIT-05': [], 'T1-DIGIT-06': [], 'T1-DIGIT-07': [], 'T1-DIGIT-08': [], 'T1-DIGIT-09': [], 'T1-CODE-01': [], 'T1-CODE-02': [], 'T1-CODE-03': [] },
     2: { 'T2-01': [], 'T2-02': [], 'T2-03': [], 'T2-04': [], 'T2-06': [], 'T2-07': [], 'T2-08': [], 'T2-09': [], 'T2-10': [], 'T2-11': [], 'T2-12': [], 'T2-13': [], 'T2-14': [], 'T2-15': [], 'T2-16': [], 'T2-CODE-01': [], 'T2-CODE-02': [], 'T2-CODE-03': [], 'T2-CODE-04': [] },
-    3: { 'T3-01': [], 'T3-02': [], 'T3-03': [], 'T3-04': [], 'T3-05': [], 'T3-06': [], 'T3-07': [], 'T3-08': [], 'T3-09': [], 'T3-10': [], 'T3-11': [], 'T3-12': [], 'T3-13': [], 'T3-14': [], 'T3-15': [], 'T3-16': [], 'T3-CODE-01': [], 'T3-CODE-02': [], 'T3-CODE-03': [], 'T3-CODE-04': [] },
-    4: { 'T4-01': [], 'T4-02': [], 'T4-03': [], 'T4-04': [], 'T4-05': [], 'T4-06': [], 'T4-07': [], 'T4-08': [], 'T4-09': [], 'T4-10': [], 'T4-11': [], 'T4-12': [], 'T4-13': [], 'T4-14': [], 'T4-15': [], 'T4-16': [], 'T4-17': [], 'T4-18': [], 'T4-19': [], 'T4-20': [], 'T4-21': [], 'T4-22': [], 'T4-CODE-01': [], 'T4-CODE-02': [], 'T4-CODE-03': [], 'T4-CODE-05': [], 'T4-CODE-06': [], 'T4-CODE-07': [] },
+    3: { 'T3-01': [], 'T3-02': [], 'T3-03': [], 'T3-04': [], 'T3-05': [], 'T3-06': [], 'T3-07': [], 'T3-08': [], 'T3-09': [], 'T3-10': [], 'T3-11': [], 'T3-12': [], 'T3-13': [], 'T3-14': [], 'T3-15': [], 'T3-16': [], 'T3-17': [], 'T3-18': [], 'T3-19': [], 'T3-20': [], 'T3-CODE-01': [], 'T3-CODE-02': [], 'T3-CODE-03': [], 'T3-CODE-04': [] },
+    4: { 'T4-01': [], 'T4-02': [], 'T4-03': [], 'T4-04': [], 'T4-05': [], 'T4-06': [], 'T4-07': [], 'T4-08': [], 'T4-09': [], 'T4-10': [], 'T4-11': [], 'T4-12': [], 'T4-13': [], 'T4-14': [], 'T4-15': [], 'T4-16': [], 'T4-17': [], 'T4-18': [], 'T4-19': [], 'T4-20': [], 'T4-21': [], 'T4-22': [], 'T4-23': [], 'T4-CODE-01': [], 'T4-CODE-02': [], 'T4-CODE-03': [], 'T4-CODE-05': [], 'T4-CODE-06': [], 'T4-CODE-07': [] },
     5: { 'T1-CODE-04': [], 'T4-CODE-04': [], 'T5-01': [], 'T5-02': [], 'T5-03': [], 'T5-04': [] }
   };
   const codewide = analyzeCodewide(code);
@@ -2923,6 +3005,108 @@ function createGenerator(code, existingComparison) {
     }
   }
 
+  function l054OrderedGroups(count, familyKey) {
+    const offset = stableTextHash(familyKey + '|offset|' + code.join('')) % code.length;
+    const step = 1 + stableTextHash(familyKey + '|step|' + code.join('')) % (code.length - 1);
+    const positionOrder = Array.from({ length: code.length }, (_, index) => (offset + index * step) % code.length);
+    return combinations(code.length, count).map(group => group.map(position => positionOrder[position]));
+  }
+
+  function addL054PointBeforeCandidates() {
+    for (const triple of l054OrderedGroups(3, 'T3-17')) {
+      for (const termPosition of triple) {
+        const factors = triple.filter(position => position !== termPosition);
+        if (code[factors[0]] < 2 || code[factors[1]] < 2 || code[termPosition] < 1) continue;
+        const positions = [factors[0], factors[1], termPosition];
+        const plusEvaluation = l054PointBeforeEvaluation(code[factors[0]], code[factors[1]], code[termPosition], 'productPlus');
+        if (plusEvaluation.didacticallyValid && plusEvaluation.result <= L054_MAX_RESULT) {
+          const informationExclusionPercent = l054ExactInformation('productPlus', plusEvaluation.result);
+          add(makeCandidate(3, 'T3-17', positions, tier3PointBeforeText(positions, 'productPlus', plusEvaluation.result), 'T3-17|productPlus|' + positions.join('-') + '|' + plusEvaluation.result, { informationStrength: 5, optional: true, positionRoles: ['Faktor A', 'Faktor B', 'Summand'], details: { variant: 'productPlus', result: plusEvaluation.result, leftToRightResult: plusEvaluation.leftToRightResult, visibleOperatorOrder: 'summand-plus-product', factorPositions: factors, termPosition, informationExclusionPercent }, mathematicalRule: 'Wert C + Wert A × Wert B = gespeichertes Ergebnis; eine strikt links-nach-rechts berechnete Alternative muss davon abweichen.' }));
+        }
+        const minusEvaluation = l054PointBeforeEvaluation(code[factors[0]], code[factors[1]], code[termPosition], 'productMinus');
+        if (minusEvaluation.didacticallyValid && minusEvaluation.result >= 0 && minusEvaluation.result <= L054_MAX_RESULT) {
+          const informationExclusionPercent = l054ExactInformation('productMinus', minusEvaluation.result);
+          add(makeCandidate(3, 'T3-17', positions, tier3PointBeforeText(positions, 'productMinus', minusEvaluation.result), 'T3-17|productMinus|' + positions.join('-') + '|' + minusEvaluation.result, { informationStrength: 5, optional: true, positionRoles: ['Faktor A', 'Faktor B', 'Minuend'], details: { variant: 'productMinus', result: minusEvaluation.result, leftToRightResult: minusEvaluation.leftToRightResult, visibleOperatorOrder: 'minuend-minus-product', factorPositions: factors, termPosition, informationExclusionPercent }, mathematicalRule: 'Wert C - Wert A × Wert B = gespeichertes nichtnegatives Ergebnis; eine strikt links-nach-rechts berechnete Alternative muss davon abweichen.' }));
+        }
+        if (candidateGroups[3]['T3-17'].length >= MAX_OPTIONAL_CANDIDATES) return;
+      }
+    }
+  }
+
+  function addL054ParenthesesCandidates() {
+    for (const triple of l054OrderedGroups(3, 'T3-18')) {
+      for (const multiplierPosition of triple) {
+        const operands = triple.filter(position => position !== multiplierPosition);
+        if (code[multiplierPosition] < 2) continue;
+        const sum = code[operands[0]] + code[operands[1]];
+        const plusResult = sum * code[multiplierPosition];
+        if (sum > 0 && plusResult <= L054_MAX_RESULT) {
+          const positions = [operands[0], operands[1], multiplierPosition];
+          const informationExclusionPercent = l054ExactInformation('groupedPlus', plusResult);
+          add(makeCandidate(3, 'T3-18', positions, tier3ParenthesesText(positions, 'groupedPlus', plusResult), 'T3-18|groupedPlus|' + positions.join('-') + '|' + plusResult, { informationStrength: 5, optional: true, positionRoles: ['Klammeroperand A', 'Klammeroperand B', 'Multiplikator'], details: { variant: 'groupedPlus', result: plusResult, operandPositions: operands, multiplierPosition, informationExclusionPercent }, mathematicalRule: '(Wert A + Wert B) × Wert C = gespeichertes Ergebnis; die Klammer wird zuerst berechnet.' }));
+        }
+        const highPosition = code[operands[0]] >= code[operands[1]] ? operands[0] : operands[1];
+        const lowPosition = highPosition === operands[0] ? operands[1] : operands[0];
+        const difference = code[highPosition] - code[lowPosition];
+        const minusResult = difference * code[multiplierPosition];
+        if (difference > 0 && minusResult <= L054_MAX_RESULT) {
+          const positions = [highPosition, lowPosition, multiplierPosition];
+          const informationExclusionPercent = l054ExactInformation('groupedMinus', minusResult);
+          add(makeCandidate(3, 'T3-18', positions, tier3ParenthesesText(positions, 'groupedMinus', minusResult), 'T3-18|groupedMinus|' + positions.join('-') + '|' + minusResult, { informationStrength: 5, optional: true, positionRoles: ['Minuend in Klammer', 'Subtrahend in Klammer', 'Multiplikator'], details: { variant: 'groupedMinus', result: minusResult, operandPositions: [highPosition, lowPosition], multiplierPosition, informationExclusionPercent }, mathematicalRule: '(Wert A - Wert B) × Wert C = gespeichertes Ergebnis; die Klammer wird zuerst berechnet.' }));
+        }
+        if (candidateGroups[3]['T3-18'].length >= MAX_OPTIONAL_CANDIDATES) return;
+      }
+    }
+  }
+
+  function addL054ProductDigitSumCandidates() {
+    for (const triple of l054OrderedGroups(3, 'T3-19')) {
+      for (const targetPosition of triple) {
+        const factors = triple.filter(position => position !== targetPosition);
+        const product = code[factors[0]] * code[factors[1]];
+        const digitSum = l054DigitSum(product);
+        if (product < 10 || digitSum > 9 || code[targetPosition] !== digitSum) continue;
+        const positions = [factors[0], factors[1], targetPosition];
+        add(makeCandidate(3, 'T3-19', positions, tier3ProductDigitSumText(positions), 'T3-19|productDigitSum|' + positions.join('-'), { informationStrength: 5, optional: true, positionRoles: ['Faktor A', 'Faktor B', 'Quersummenziel'], details: { variant: 'productDigitSum', product, digitSum, targetPosition, informationExclusionPercent: L054_PRODUCT_DIGIT_SUM_EXCLUSION_PERCENT }, mathematicalRule: 'Das mindestens zweistellige Produkt aus Wert A und Wert B besitzt eine erste Quersumme von 0 bis 9, die exakt Wert C entspricht.' }));
+        if (candidateGroups[3]['T3-19'].length >= MAX_OPTIONAL_CANDIDATES) return;
+      }
+    }
+  }
+
+  function addL054ComposedDivisibilityCandidates() {
+    const orderedPairs = l054OrderedGroups(2, 'T3-20').flatMap(pair => [pair, pair.slice().reverse()]);
+    for (const pair of orderedPairs) {
+      if (code[pair[0]] === 0) continue;
+      const composedNumber = code[pair[0]] * 10 + code[pair[1]];
+      for (const divisor of L054_DIVISORS) {
+        if (composedNumber % divisor !== 0) continue;
+        const validNumbers = Math.floor(99 / divisor) - Math.floor(9 / divisor);
+        const informationExclusionPercent = l054ExclusionPercent(validNumbers, 100);
+        add(makeCandidate(3, 'T3-20', pair, tier3ComposedDivisibilityText(pair, divisor), 'T3-20|composedDivisibility|' + pair.join('-') + '|' + divisor, { informationStrength: 4, optional: true, positionRoles: ['Zehnerstelle', 'Einerstelle'], details: { variant: 'composedDivisibility', composedNumber, divisor, informationExclusionPercent }, mathematicalRule: '10 × Wert A + Wert B bildet ohne führende Null eine zweistellige Zahl, die durch den gespeicherten Divisor größer 1 teilbar ist.' }));
+        if (candidateGroups[3]['T3-20'].length >= MAX_OPTIONAL_CANDIDATES) return;
+      }
+    }
+  }
+
+  function addL054MixedComparisonCandidates() {
+    for (const positions of l054OrderedGroups(6, 'T4-23')) {
+      if (code[positions[0]] < 2 || code[positions[1]] < 2 || code[positions[2]] < 1 || code[positions[3]] < 1 || code[positions[4]] < 2 || code[positions[5]] < 2) continue;
+      const evaluation = l054MixedComparisonEvaluation(code, positions);
+      if (!evaluation.didacticallyValid || Math.max(evaluation.leftResult, evaluation.rightResult) > L054_MAX_RESULT) continue;
+      add(makeCandidate(4, 'T4-23', positions, tier4MixedExpressionComparisonText(positions, evaluation.comparison), 'T4-23|mixedComparison|' + positions.join('-') + '|' + evaluation.comparison, { informationStrength: 6, optional: true, positionRoles: ['Linker Faktor A', 'Linker Faktor B', 'Linker Summand', 'Rechter Summand', 'Rechter Faktor A', 'Rechter Faktor B'], details: { variant: 'mixedComparison', leftResult: evaluation.leftResult, rightResult: evaluation.rightResult, leftToRightLeftResult: evaluation.leftToRightLeftResult, leftToRightRightResult: evaluation.leftToRightRightResult, comparison: evaluation.comparison, leftToRightComparison: evaluation.leftToRightComparison, informationExclusionPercent: L054_MIXED_EXCLUSION_PERCENT }, mathematicalRule: 'Wert C + Wert A × Wert B wird mit Wert D + Wert E × Wert F verglichen; die strikt links-nach-rechts berechnete Vergleichsaussage muss falsch oder gleich sein.' }));
+      if (candidateGroups[4]['T4-23'].length >= MAX_OPTIONAL_CANDIDATES) return;
+    }
+  }
+
+  function addL054Candidates() {
+    addL054PointBeforeCandidates();
+    addL054ParenthesesCandidates();
+    addL054ProductDigitSumCandidates();
+    addL054ComposedDivisibilityCandidates();
+    addL054MixedComparisonCandidates();
+    for (const tier of [3, 4]) for (const id of L054_HINT_IDS) for (const candidate of candidateGroups[tier][id] || []) candidate.selectionPriority = 8;
+  }
+
   for (let position = 0; position < code.length; position++) {
     const positions = [position];
     add(makeCandidate(1, 'T1-01', positions, tier1ParityText(code, positions)));
@@ -3154,6 +3338,7 @@ function createGenerator(code, existingComparison) {
     addCheckDigitCandidates(selectedPositions);
   }
 
+  addL054Candidates();
   addCodewideCandidates();
   addTier5Candidates();
 
@@ -3382,6 +3567,31 @@ function createGenerator(code, existingComparison) {
       const product = code[positions[0]] * code[positions[1]];
       return positions.length === 3 && product % 10 === code[positions[2]] && candidate.details.targetPosition === positions[2] && candidate.details.product === product && candidate.details.lastDigit === code[positions[2]] && candidate.text === tier3ProductDigitText(positions);
     }
+    if (candidate.id === 'T3-17') {
+      if (positions.length !== 3 || !['productPlus', 'productMinus'].includes(candidate.details.variant)) return false;
+      const evaluation = l054PointBeforeEvaluation(code[positions[0]], code[positions[1]], code[positions[2]], candidate.details.variant);
+      const expectedInformation = l054ExactInformation(candidate.details.variant, evaluation.result);
+      return code[positions[0]] >= 2 && code[positions[1]] >= 2 && code[positions[2]] >= 1 && evaluation.didacticallyValid && evaluation.result >= 0 && evaluation.result <= L054_MAX_RESULT && candidate.details.result === evaluation.result && candidate.details.leftToRightResult === evaluation.leftToRightResult && candidate.details.termPosition === positions[2] && candidate.details.factorPositions.join('-') === positions.slice(0, 2).join('-') && candidate.details.informationExclusionPercent === expectedInformation && expectedInformation >= MIN_HINT_EXCLUSION_PERCENT && candidate.text === tier3PointBeforeText(positions, candidate.details.variant, evaluation.result);
+    }
+    if (candidate.id === 'T3-18') {
+      if (positions.length !== 3 || !['groupedPlus', 'groupedMinus'].includes(candidate.details.variant)) return false;
+      const groupedValue = candidate.details.variant === 'groupedPlus' ? code[positions[0]] + code[positions[1]] : code[positions[0]] - code[positions[1]];
+      const result = groupedValue * code[positions[2]];
+      const expectedInformation = l054ExactInformation(candidate.details.variant, result);
+      return code[positions[2]] >= 2 && groupedValue > 0 && result <= L054_MAX_RESULT && candidate.details.result === result && candidate.details.multiplierPosition === positions[2] && candidate.details.operandPositions.join('-') === positions.slice(0, 2).join('-') && candidate.details.informationExclusionPercent === expectedInformation && expectedInformation >= MIN_HINT_EXCLUSION_PERCENT && candidate.text === tier3ParenthesesText(positions, candidate.details.variant, result);
+    }
+    if (candidate.id === 'T3-19') {
+      const product = code[positions[0]] * code[positions[1]];
+      const digitSum = l054DigitSum(product);
+      return positions.length === 3 && product >= 10 && digitSum <= 9 && digitSum === code[positions[2]] && candidate.details.product === product && candidate.details.digitSum === digitSum && candidate.details.targetPosition === positions[2] && candidate.details.informationExclusionPercent === L054_PRODUCT_DIGIT_SUM_EXCLUSION_PERCENT && L054_PRODUCT_DIGIT_SUM_EXCLUSION_PERCENT >= MIN_HINT_EXCLUSION_PERCENT && candidate.text === tier3ProductDigitSumText(positions);
+    }
+    if (candidate.id === 'T3-20') {
+      const composedNumber = code[positions[0]] * 10 + code[positions[1]];
+      const divisor = candidate.details.divisor;
+      const validNumbers = L054_DIVISORS.includes(divisor) ? Math.floor(99 / divisor) - Math.floor(9 / divisor) : 100;
+      const expectedInformation = l054ExclusionPercent(validNumbers, 100);
+      return positions.length === 2 && code[positions[0]] !== 0 && divisor !== 0 && divisor !== 1 && L054_DIVISORS.includes(divisor) && composedNumber % divisor === 0 && candidate.details.composedNumber === composedNumber && candidate.details.informationExclusionPercent === expectedInformation && expectedInformation >= MIN_HINT_EXCLUSION_PERCENT && candidate.text === tier3ComposedDivisibilityText(positions, divisor);
+    }
     if (candidate.id === 'T4-01') {
       const isPalindrome = positions.length >= 4 && positions.every((position, index) => code[position] === code[positions[positions.length - 1 - index]]);
       return isPalindrome && candidate.text === palindromeText(positions);
@@ -3482,6 +3692,10 @@ function createGenerator(code, existingComparison) {
       for (const position of positions) counts.set(code[position], (counts.get(code[position]) || 0) + 1);
       const frequencies = Array.from(counts.values());
       return positions.length >= 4 && positions.length <= 6 && frequencies.filter(count => count === 3).length === 1 && frequencies.every(count => count === 1 || count === 3) && candidate.text === tier4ExactlyThreeEqualText(positions);
+    }
+    if (candidate.id === 'T4-23') {
+      const evaluation = l054MixedComparisonEvaluation(code, positions);
+      return positions.length === 6 && code[positions[0]] >= 2 && code[positions[1]] >= 2 && code[positions[2]] >= 1 && code[positions[3]] >= 1 && code[positions[4]] >= 2 && code[positions[5]] >= 2 && evaluation.didacticallyValid && Math.max(evaluation.leftResult, evaluation.rightResult) <= L054_MAX_RESULT && candidate.details.leftResult === evaluation.leftResult && candidate.details.rightResult === evaluation.rightResult && candidate.details.leftToRightLeftResult === evaluation.leftToRightLeftResult && candidate.details.leftToRightRightResult === evaluation.leftToRightRightResult && candidate.details.comparison === evaluation.comparison && candidate.details.leftToRightComparison === evaluation.leftToRightComparison && candidate.details.informationExclusionPercent === L054_MIXED_EXCLUSION_PERCENT && L054_MIXED_EXCLUSION_PERCENT >= MIN_HINT_EXCLUSION_PERCENT && candidate.text === tier4MixedExpressionComparisonText(positions, evaluation.comparison);
     }
     if (candidate.id === 'T5-01') {
       if (positions.length !== 2 || positions[0] === positions[1] || candidate.details.positionCounting !== 'right') return false;
@@ -3634,7 +3848,19 @@ function createGenerator(code, existingComparison) {
       ['T5-03', 'T3-02'],
       ['T5-03', 'T3-06'],
       ['T5-03', 'T3-12'],
-      ['T5-03', 'T4-CODE-04']
+      ['T5-03', 'T4-CODE-04'],
+      ['T3-17', 'T3-18'],
+      ['T3-17', 'T3-19'],
+      ['T3-18', 'T3-19'],
+      ['T3-17', 'T3-03'],
+      ['T3-17', 'T3-10'],
+      ['T3-17', 'T3-16'],
+      ['T3-18', 'T3-03'],
+      ['T3-18', 'T3-10'],
+      ['T3-18', 'T3-16'],
+      ['T3-19', 'T3-03'],
+      ['T3-19', 'T3-16'],
+      ['T3-20', 'T2-12'],
     ];
     return conflictingTypeGroups.some(group => group.includes(first.id) && group.includes(second.id));
   }
@@ -3675,7 +3901,11 @@ function createGenerator(code, existingComparison) {
   for (let tier = 1; tier <= 5; tier++) {
     tierPools[tier] = [];
     for (const id of Object.keys(candidateGroups[tier] || {})) {
-      const candidates = shuffled(candidateGroups[tier][id])
+      const groupCandidates = candidateGroups[tier][id];
+      const orderedCandidates = L054_HINT_IDS.has(id)
+        ? groupCandidates.slice().sort((first, second) => stableTextHash('l054-pool|' + first.signature) - stableTextHash('l054-pool|' + second.signature) || first.signature.localeCompare(second.signature))
+        : shuffled(groupCandidates);
+      const candidates = orderedCandidates
         .filter(candidate => estimateInformationExclusionPercent(candidate) >= MIN_HINT_EXCLUSION_PERCENT)
         .sort((first, second) => second.informationStrength - first.informationStrength)
         .slice(0, 18);
@@ -3717,6 +3947,13 @@ function createGenerator(code, existingComparison) {
     return false;
   }
 
+  function shuffledSelectionPool(source) {
+    const existing = source.filter(candidate => !L054_HINT_IDS.has(candidate.id));
+    const additions = source.filter(candidate => L054_HINT_IDS.has(candidate.id))
+      .sort((first, second) => stableTextHash('l054-selection|' + first.signature) - stableTextHash('l054-selection|' + second.signature) || first.signature.localeCompare(second.signature));
+    return shuffled(existing).concat(additions);
+  }
+
   function selectPackage(packageIndex, requiredId) {
     const patterns = packageTierPatterns[packageIndex];
     for (const allowRepeatedIds of [false, true]) {
@@ -3724,8 +3961,8 @@ function createGenerator(code, existingComparison) {
         const pattern = patterns[patternIndex];
         const rankCandidate = candidate => usageScore(candidate) * 14 + (candidate.lengthClass === 'lang' ? 6 : candidate.lengthClass === 'mittel' ? 3 : 0) - candidate.informationStrength + candidate.selectionPriority + typeVarietyPenalty(candidate) + (candidate.tier === 5 ? tier5TypeOrder.indexOf(candidate.id) * 1000 : 0);
         const firstSource = requiredId ? tierPools[pattern[0]].filter(candidate => candidate.id === requiredId) : tierPools[pattern[0]];
-        const firstPool = shuffled(firstSource).sort((first, second) => rankCandidate(first) - rankCandidate(second)).slice(0, 48);
-        const secondPool = shuffled(tierPools[pattern[1]]).sort((first, second) => rankCandidate(first) - rankCandidate(second)).slice(0, 48);
+        const firstPool = shuffledSelectionPool(firstSource).sort((first, second) => rankCandidate(first) - rankCandidate(second)).slice(0, 48);
+        const secondPool = shuffledSelectionPool(tierPools[pattern[1]]).sort((first, second) => rankCandidate(first) - rankCandidate(second)).slice(0, 48);
         let bestPair = null;
         let bestScore = Number.POSITIVE_INFINITY;
         for (const first of firstPool) {
@@ -4014,14 +4251,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa16878(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa13138(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xa131d0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe8d8a0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -4389,7 +4626,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xafb248 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf7780 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
 // Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
@@ -4413,7 +4650,7 @@ if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.userFunc0xafad10 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf7b88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -4435,11 +4672,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaf8cd8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf7328 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xeb6bd0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf6998 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -4526,7 +4763,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf9008(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf7630(runtimeScene);
 
 }
 
@@ -4534,7 +4771,7 @@ gdjs.TrainingSceneCode.userFunc0xaf9008(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcfa340(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xec49a0(runtimeScene);
 
 }
 
@@ -4542,7 +4779,7 @@ gdjs.TrainingSceneCode.userFunc0xcfa340(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa09f10(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcf7ab8(runtimeScene);
 
 }
 
@@ -4550,7 +4787,7 @@ gdjs.TrainingSceneCode.userFunc0xa09f10(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcfa3e0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcf4eb8(runtimeScene);
 
 }
 
@@ -4558,7 +4795,7 @@ gdjs.TrainingSceneCode.userFunc0xcfa3e0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbef250(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa04560(runtimeScene);
 
 }
 
@@ -6024,7 +6261,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa131d0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe8d8a0(runtimeScene);
 
 }
 
@@ -6118,7 +6355,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xafb248(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf7780(runtimeScene);
 
 }
 
@@ -6143,7 +6380,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xafad10(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf7b88(runtimeScene);
 
 }
 
@@ -6151,7 +6388,7 @@ gdjs.TrainingSceneCode.userFunc0xafad10(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf8cd8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf7328(runtimeScene);
 
 }
 
@@ -6159,7 +6396,7 @@ gdjs.TrainingSceneCode.userFunc0xaf8cd8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xeb6bd0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf6998(runtimeScene);
 
 }
 
