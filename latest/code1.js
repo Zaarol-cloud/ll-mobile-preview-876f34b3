@@ -189,7 +189,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xbf2f80 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa03d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -350,7 +350,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TrainingSceneCode.userFunc0xd9ff18 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xda9048 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -535,7 +535,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xc18db0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc256c0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -574,11 +574,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xda41b0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xdaae20 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xda6460 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xda82d8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1194,23 +1194,32 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xda5a68 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xdafa00 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
+// L&L-058: Genau eine Trefferdimension wird exakt, die andere nur als serverbestätigtes Band dargestellt.
 const sceneVariables = runtimeScene.getVariables();
 const i18n = runtimeScene.getGame().__lockLootI18n;
 const bonusActiveVariable = sceneVariables.get("bonusHintActive");
 const bonusTextVariable = sceneVariables.get("bonusHintText");
-const totalHitsVariable = sceneVariables.get("richtigeZiffernGesamt");
-const positionHitsVariable = sceneVariables.get("richtigePositionen");
-const totalHits = totalHitsVariable.getAsNumber();
-const positionHits = positionHitsVariable.getAsNumber();
-if (!Number.isSafeInteger(totalHits) || !Number.isSafeInteger(positionHits) || totalHits < 0 || totalHits > 11 || positionHits < 0 || positionHits > totalHits) {
-  bonusActiveVariable.setBoolean(false); bonusTextVariable.setString(""); totalHitsVariable.setNumber(0); positionHitsVariable.setNumber(0);
-} else {
-  const key = totalHits === 0 ? "training.bonus.none" : totalHits === 1 ? (positionHits === 1 ? "training.bonus.one_exact" : "training.bonus.one_wrong_position") : positionHits === 0 ? "training.bonus.many_none_exact" : positionHits === 1 ? "training.bonus.many_one_exact" : "training.bonus.many_exact";
-  const parameters = key === "training.bonus.many_exact" ? { matching: totalHits, exact: positionHits } : key.startsWith("training.bonus.many_") ? { matching: totalHits } : {};
-  bonusTextVariable.setString(i18n.t(key, parameters));
+const structuredFeedback = sceneVariables.get("bonusFeedbackJson").getAsString();
+const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort());
+const renderDimension = (name, value) => {
+  const prefix = name === "matchingDigits" ? "training.feedback.matching." : "training.feedback.positions.";
+  if (value.precision === "vague") return i18n.t(prefix + "vague_" + value.band);
+  const suffix = value.value === 0 ? "exact_zero" : value.value === 1 ? "exact_one" : "exact_many";
+  return i18n.t(prefix + suffix, suffix === "exact_many" ? { count: value.value } : {});
+};
+let rendered = false;
+if (structuredFeedback) {
+  try {
+    const feedback = JSON.parse(structuredFeedback);
+    const dimensions = [feedback && feedback.matchingDigits, feedback && feedback.exactPositions];
+    const valid = exactKeys(feedback, ["schemaVersion", "policyVersion", "exactDimension", "matchingDigits", "exactPositions"]) && feedback.schemaVersion === 1 && feedback.policyVersion === 1 && ["matchingDigits", "exactPositions"].includes(feedback.exactDimension) && dimensions.every((value, index) => value && (value.precision === "exact" ? exactKeys(value, ["precision", "value"]) && Number.isSafeInteger(value.value) && value.value >= 0 && value.value <= (index === 0 ? 11 : 10) : value.precision === "vague" && exactKeys(value, ["precision", "band"]) && ["low", "medium", "high"].includes(value.band))) && dimensions.filter((value) => value.precision === "exact").length === 1 && dimensions.filter((value) => value.precision === "vague").length === 1 && feedback[feedback.exactDimension].precision === "exact";
+    if (valid) { bonusTextVariable.setString(renderDimension("matchingDigits", feedback.matchingDigits) + " " + renderDimension("exactPositions", feedback.exactPositions)); rendered = true; }
+  } catch (error) { rendered = false; }
+}
+if (!rendered) {
+  bonusActiveVariable.setBoolean(false); bonusTextVariable.setString("");
 }
 };
 gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
@@ -1218,7 +1227,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xda5a68(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xdafa00(runtimeScene);
 
 }
 
@@ -1229,7 +1238,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xe46de0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe4c5d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -1251,7 +1260,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xe46de0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe4c5d0(runtimeScene);
 
 }
 
@@ -1303,29 +1312,29 @@ gdjs.copyArray(runtimeScene.getObjects("TxtCode_richtig"), gdjs.TrainingSceneCod
     gdjs.TrainingSceneCode.GDTxtCode_9595richtigObjects2[i].hide(false);
 }
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(0).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(0).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(1).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(1).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(2).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(2).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(3).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(3).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(4).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(4).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(5).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(5).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(6).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(6).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(7).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(7).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(8).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(8).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(9).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(9).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(42).getChild(10).setNumber(gdjs.randomInRange(0, 9));
+{runtimeScene.getScene().getVariables().getFromIndex(43).getChild(10).setNumber(gdjs.randomInRange(0, 9));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(14).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(0))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(1))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(2))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(3))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(4))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(5))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(6))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(7))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(8))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(9))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(10))));
+{runtimeScene.getScene().getVariables().getFromIndex(14).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(0))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(1))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(2))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(3))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(4))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(5))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(6))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(7))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(8))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(9))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(10))));
 }
 {runtimeScene.getScene().getVariables().getFromIndex(30).setBoolean(true);
 }
@@ -1400,42 +1409,42 @@ isConditionTrue_0 = false;
 {let isConditionTrue_1 = false;
 isConditionTrue_0 = false;
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 0);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 0);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 2);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 2);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 4);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 4);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 6);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 6);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 8);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 8);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 10);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 10);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
@@ -1462,35 +1471,35 @@ isConditionTrue_0 = false;
 {let isConditionTrue_1 = false;
 isConditionTrue_0 = false;
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 1);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 1);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 3);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 3);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 5);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 5);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 7);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 7);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
 }
 }
 {
-{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(40)) == 9);
+{isConditionTrue_1 = (gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(41)) == 9);
 }
 if(isConditionTrue_1) {
     isConditionTrue_0 = true;
@@ -1723,16 +1732,16 @@ gdjs.TrainingSceneCode.eventsList17(runtimeScene);} //End of subevents
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(43).getAsNumber() == runtimeScene.getScene().getVariables().getFromIndex(26).getAsNumber());
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(44).getAsNumber() == runtimeScene.getScene().getVariables().getFromIndex(26).getAsNumber());
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(43).setNumber(gdjs.evtTools.common.mod(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(26)) + 1, 11));
+{runtimeScene.getScene().getVariables().getFromIndex(44).setNumber(gdjs.evtTools.common.mod(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(26)) + 1, 11));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(44).setNumber(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43)))));
+{runtimeScene.getScene().getVariables().getFromIndex(45).setNumber(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(44)))));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(27).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(26))))));
+{runtimeScene.getScene().getVariables().getFromIndex(27).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(26))))));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(40).setNumber(gdjs.evtTools.common.toNumber(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(27))));
+{runtimeScene.getScene().getVariables().getFromIndex(41).setNumber(gdjs.evtTools.common.toNumber(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(27))));
 }
 }
 
@@ -1744,10 +1753,10 @@ if (isConditionTrue_0) {
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(40).getAsNumber() > runtimeScene.getScene().getVariables().getFromIndex(44).getAsNumber());
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(41).getAsNumber() > runtimeScene.getScene().getVariables().getFromIndex(45).getAsNumber());
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(29).setString("Die Ziffer an Position " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(26).getAsNumber() + 1) + " ist größer als die an Position " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(43).getAsNumber() + 1) + ".");
+{runtimeScene.getScene().getVariables().getFromIndex(29).setString("Die Ziffer an Position " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(26).getAsNumber() + 1) + " ist größer als die an Position " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(44).getAsNumber() + 1) + ".");
 }
 {runtimeScene.getScene().getVariables().getFromIndex(23).getChild(0).setString(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(29)));
 }
@@ -1761,10 +1770,10 @@ if (isConditionTrue_0) {
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(40).getAsNumber() < runtimeScene.getScene().getVariables().getFromIndex(44).getAsNumber());
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(41).getAsNumber() < runtimeScene.getScene().getVariables().getFromIndex(45).getAsNumber());
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(29).setString("Die Ziffer an Position " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(26).getAsNumber() + 1) + " ist kleiner als die an Position " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(43).getAsNumber() + 1) + ".");
+{runtimeScene.getScene().getVariables().getFromIndex(29).setString("Die Ziffer an Position " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(26).getAsNumber() + 1) + " ist kleiner als die an Position " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(44).getAsNumber() + 1) + ".");
 }
 {runtimeScene.getScene().getVariables().getFromIndex(23).getChild(0).setString(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(29)));
 }
@@ -1778,10 +1787,10 @@ if (isConditionTrue_0) {
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(40).getAsNumber() == runtimeScene.getScene().getVariables().getFromIndex(44).getAsNumber());
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(41).getAsNumber() == runtimeScene.getScene().getVariables().getFromIndex(45).getAsNumber());
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(29).setString("Die Ziffern an den Positionen " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(26).getAsNumber() + 1) + " und " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(43).getAsNumber() + 1) + " sind gleich.");
+{runtimeScene.getScene().getVariables().getFromIndex(29).setString("Die Ziffern an den Positionen " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(26).getAsNumber() + 1) + " und " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(44).getAsNumber() + 1) + " sind gleich.");
 }
 {runtimeScene.getScene().getVariables().getFromIndex(23).getChild(0).setString(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(29)));
 }
@@ -1790,7 +1799,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xbc38d8 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xb6cef0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -4249,14 +4258,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbc38d8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb6cef0(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xafe3d0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaff750 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -4283,6 +4292,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     globalThis.crypto.getRandomValues(bytes);
     return 'training-' + Array.from(bytes, (value) => value.toString(16).padStart(2, '0')).join('');
   };
+  const pendingAttemptStorageKey = 'lockloot.training.pendingAttempt.v1';
   const state = {
     runtimeScene, endpoints, callCallable, setStatus, setHintText,
     idToken: '', uid: '', refreshToken: '', wallet: null, currentChest: null, hintState: null,
@@ -4290,9 +4300,31 @@ if (!runtimeScene.__lockLootTrainingBackend) {
   };
   runtimeScene.__lockLootTrainingBackend = state;
   const sceneIsCurrent = () => runtimeScene.__lockLootTrainingBackend === state;
-  const validateWallet = (wallet) => {
+  const applyEnteredCode = (enteredCode) => {
+    if (!/^\d{11}$/.test(enteredCode)) throw Object.assign(new Error('Ungültige Schlosseingabe.'), { status: 'INVALID_INPUT' });
+    for (let index = 0; index < 11; index += 1) {
+      const digit = Number(enteredCode[index]);
+      sceneVariables.get('digit' + index + 'Value').setNumber(digit);
+      const objects = runtimeScene.getObjects('digit' + index);
+      if (objects.length) objects[0].setString(String(digit));
+    }
+    sceneVariables.get('enteredCode').setString(enteredCode);
+  };
+  const clearPendingAttempt = () => { try { globalThis.localStorage.removeItem(pendingAttemptStorageKey); } catch (error) { } };
+  const persistPendingAttempt = (request) => { try { globalThis.localStorage.setItem(pendingAttemptStorageKey, JSON.stringify({ schemaVersion: 1, uid: state.uid, request })); } catch (error) { throw Object.assign(new Error('Fehlversuch konnte nicht sicher für Wiederholung gespeichert werden.'), { status: 'PERSISTENCE_FAILED' }); } };
+  const restorePendingAttempt = () => {
+    try {
+      const stored = JSON.parse(globalThis.localStorage.getItem(pendingAttemptStorageKey) || 'null');
+      const request = stored && stored.request;
+      const valid = stored && stored.schemaVersion === 1 && stored.uid === state.uid && request && request.integration === 'L&L-041' && request.expectedFeedbackPolicyVersion === 1 && /^[A-Za-z0-9_-]{1,64}$/.test(request.requestId) && /^[A-Za-z0-9_-]{1,64}$/.test(request.chestId) && /^\d{11}$/.test(request.enteredCode) && Number.isSafeInteger(request.expectedRevision) && request.expectedRevision >= 0;
+      if (!valid || !state.currentChest || request.chestId !== state.currentChest.chestId) { clearPendingAttempt(); return null; }
+      return request;
+    } catch (error) { clearPendingAttempt(); return null; }
+  };
+  const exactKeys = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort());
+  const validateWallet = (wallet, requireExactFields = false) => {
     const fields = ['cookies', 'lockpicks', 'booster5', 'booster10', 'booster25', 'totalBoost', 'revision', 'schemaVersion'];
-    if (!wallet || fields.some((field) => !Number.isSafeInteger(wallet[field]) || wallet[field] < 0) || wallet.schemaVersion !== 1) throw Object.assign(new Error('Ungültige Serverwallet-Antwort.'), { status: 'INVALID_RESPONSE' });
+    if (!wallet || (requireExactFields && !exactKeys(wallet, fields)) || fields.some((field) => !Number.isSafeInteger(wallet[field]) || wallet[field] < 0) || wallet.schemaVersion !== 1 || wallet.totalBoost !== wallet.booster5 * 5 + wallet.booster10 * 10 + wallet.booster25 * 25) throw Object.assign(new Error('Ungültige Serverwallet-Antwort.'), { status: 'INVALID_RESPONSE' });
     return wallet;
   };
   const validateChest = (chest) => {
@@ -4307,6 +4339,14 @@ if (!runtimeScene.__lockLootTrainingBackend) {
       if (!hint || !Number.isSafeInteger(hint.index) || !Number.isSafeInteger(hint.packageNumber) || !Number.isSafeInteger(hint.tier) || typeof hint.id !== 'string' || typeof hint.text !== 'string' || !hint.textByLanguage || typeof hint.textByLanguage.de !== 'string' || typeof hint.textByLanguage.en !== 'string' || hint.textByLanguage.de !== hint.text) throw Object.assign(new Error('Ungültiger clientsicherer Hinweis.'), { status: 'INVALID_RESPONSE' });
     }
     return hintState;
+  };
+  const validateAttemptFeedback = (feedback) => {
+    if (!feedback || feedback.schemaVersion !== 1 || feedback.policyVersion !== 1 || !['matchingDigits', 'exactPositions'].includes(feedback.exactDimension)) throw Object.assign(new Error('Ungültige Fehlversuchsantwort.'), { status: 'INVALID_RESPONSE' });
+    if (JSON.stringify(Object.keys(feedback).sort()) !== JSON.stringify(['exactDimension', 'exactPositions', 'matchingDigits', 'policyVersion', 'schemaVersion'])) throw Object.assign(new Error('Unerwartete Fehlversuchsfelder.'), { status: 'INVALID_RESPONSE' });
+    const dimensions = [feedback.matchingDigits, feedback.exactPositions];
+    const validDimension = (value, index) => value && typeof value === 'object' && !Array.isArray(value) && (value.precision === 'exact' ? JSON.stringify(Object.keys(value).sort()) === JSON.stringify(['precision', 'value']) && Number.isSafeInteger(value.value) && value.value >= 0 && value.value <= (index === 0 ? 11 : 10) : value.precision === 'vague' && JSON.stringify(Object.keys(value).sort()) === JSON.stringify(['band', 'precision']) && ['low', 'medium', 'high'].includes(value.band));
+    if (!dimensions.every(validDimension) || dimensions.filter((value) => value.precision === 'exact').length !== 1 || dimensions.filter((value) => value.precision === 'vague').length !== 1 || feedback[feedback.exactDimension].precision !== 'exact') throw Object.assign(new Error('Fehlversuchsantwort verletzt Exakt/Vage-Vertrag.'), { status: 'INVALID_RESPONSE' });
+    return feedback;
   };
   const applyWallet = (wallet) => {
     validateWallet(wallet);
@@ -4326,7 +4366,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     return value;
   };
   const validateEconomy = (economy, chest) => {
-    if (!economy || economy.economyVersion !== chest.economyVersion || !Array.isArray(economy.futureChests) || economy.futureChests.length !== 3 || !economy.activeChestBoosters) throw Object.assign(new Error('Ungültiger Kistenökonomiezustand.'), { status: 'INVALID_RESPONSE' });
+    if (!economy || economy.economyVersion !== chest.economyVersion || economy.activeChestId !== chest.chestId || !Array.isArray(economy.futureChests) || economy.futureChests.length !== 3 || !economy.activeChestBoosters) throw Object.assign(new Error('Ungültiger Kistenökonomiezustand.'), { status: 'INVALID_RESPONSE' });
     validateRational(economy.activeBaseValue);
     for (const [index, slot] of economy.futureChests.entries()) { if (!slot || slot.slot !== ['B', 'C', 'D'][index]) throw Object.assign(new Error('Ungültiger Folgekistenplatz.'), { status: 'INVALID_RESPONSE' }); validateRational(slot.value); validateRational(slot.maximumValue); }
     for (const field of ['booster5', 'booster10', 'booster25']) if (!Number.isSafeInteger(economy.activeChestBoosters[field]) || economy.activeChestBoosters[field] < 0) throw Object.assign(new Error('Ungültiger Kistenbooster.'), { status: 'INVALID_RESPONSE' });
@@ -4357,6 +4397,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     sceneVariables.get('bonusHintPending').setBoolean(false);
     sceneVariables.get('bonusHintActive').setBoolean(false);
     sceneVariables.get('bonusHintText').setString('');
+    sceneVariables.get('bonusFeedbackJson').setString('');
     sceneVariables.get('richtigeZiffernGesamt').setNumber(0);
     sceneVariables.get('richtigePositionen').setNumber(0);
   };
@@ -4378,42 +4419,48 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     sceneVariables.get('normalHintText').setString(normalText);
     if (!sceneVariables.get('bonusHintActive').getAsBoolean()) setHintText(normalText);
   };
-  const applyClosedSolutionSnapshot = (snapshot) => {
-    if (!snapshot) return;
+  const validateClosedSolutionSnapshot = (snapshot) => {
+    if (!snapshot) return null;
     if (typeof snapshot.closedCode !== 'string' || !/^\d{11}$/.test(snapshot.closedCode) || typeof snapshot.chestId !== 'string' || !Array.isArray(snapshot.revealedHints)) throw Object.assign(new Error('Ungueltiger geschlossener Loesungssnapshot.'), { status: 'INVALID_RESPONSE' });
+    return snapshot;
+  };
+  const applyClosedSolutionSnapshot = (validated) => {
+    if (!validated) return;
     const globals = runtimeScene.getGame().getVariables();
-    const hints = snapshot.revealedHints.map(trainingHintText);
-    globals.get('previousSolutionCode').fromJSObject(snapshot.closedCode.split('').map(Number));
+    const hints = validated.revealedHints.map(trainingHintText);
+    globals.get('previousSolutionCode').fromJSObject(validated.closedCode.split('').map(Number));
     globals.get('previousSolutionHints').fromJSObject(hints);
-    globals.get('previousSolutionMetadata').fromJSObject(snapshot.revealedHints);
+    globals.get('previousSolutionMetadata').fromJSObject(validated.revealedHints);
     globals.get('previousSolutionHintCount').setNumber(hints.length);
     globals.get('previousSolutionSourceMode').setString('Staging');
     globals.get('previousSolutionAvailable').setBoolean(true);
   };
-  const applyBootstrap = (snapshot) => {
+  const applyBootstrap = (snapshot, minimumWalletRevision = 0) => {
     if (!snapshot || snapshot.uid !== state.uid) throw Object.assign(new Error('Bootstrap-UID stimmt nicht.'), { status: 'INVALID_RESPONSE' });
     const chest = validateChest(snapshot.currentChest);
-    validateWallet(snapshot);
+    const wallet = validateWallet(snapshot);
     validateHintState(snapshot.hintState, chest.chestId);
     validateEconomy(snapshot.economy, chest);
+    const solutionSnapshot = validateClosedSolutionSnapshot(snapshot.solutionSnapshot);
+    if (wallet.revision < minimumWalletRevision || (state.wallet && wallet.revision < state.wallet.revision)) throw Object.assign(new Error('Veralteter Bootstrap darf den bestätigten Zustand nicht zurückrollen.'), { status: 'INVALID_RESPONSE' });
     const chestChanged = !!state.currentChest && state.currentChest.chestId !== chest.chestId;
     state.currentChest = chest;
     sceneVariables.get('backendUid').setString(state.uid);
     sceneVariables.get('backendChestId').setString(chest.chestId);
     sceneVariables.get('backendContentVersion').setNumber(chest.contentVersion);
     if (chestChanged) resetDigitsForNewChest();
-    applyWallet(snapshot);
+    applyWallet(wallet);
     applyEconomy(snapshot.economy, chest);
     applyHintState(snapshot.hintState, !chestChanged);
-    applyClosedSolutionSnapshot(snapshot.solutionSnapshot);
+    applyClosedSolutionSnapshot(solutionSnapshot);
     return chestChanged;
   };
   const signUp = async () => backendRuntime.authenticate(false);
   const refresh = async () => backendRuntime.refresh();
-  state.loadBootstrap = async () => {
+  state.loadBootstrap = async (minimumWalletRevision = 0) => {
     await backendRuntime.prepare('L&L-041');
     const snapshot = await callCallable(endpoints.bootstrap, { integration: 'L&L-041' }, state.idToken);
-    return applyBootstrap(snapshot);
+    return applyBootstrap(snapshot, minimumWalletRevision);
   };
   state.connect = async () => {
     if (!sceneIsCurrent() || sceneVariables.get('backendRequestPending').getAsBoolean()) return;
@@ -4456,6 +4503,8 @@ if (!runtimeScene.__lockLootTrainingBackend) {
         await state.loadBootstrap();
       }
       if (!sceneIsCurrent()) return;
+      state.retryAttemptRequest = restorePendingAttempt();
+      if (state.retryAttemptRequest) applyEnteredCode(state.retryAttemptRequest.enteredCode);
       sceneVariables.get('backendInitState').setString('ready');
       sceneVariables.get('backendLastError').setString('');
       setStatus(trainingT("training.backend_connected", { economy: economySummary() }));
@@ -4501,24 +4550,34 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     const enteredCode = Array.from({ length: 11 }, (_, index) => sceneVariables.get('digit' + index + 'Value').getAsNumber()).join('');
     if (!/^\d{11}$/.test(enteredCode)) throw Object.assign(new Error('Ungültige Schlosseingabe.'), { status: 'INVALID_INPUT' });
     sceneVariables.get('enteredCode').setString(enteredCode);
-    const request = state.retryAttemptRequest || { integration: 'L&L-041', requestId: makeRequestId(), chestId: state.currentChest.chestId, enteredCode, expectedRevision: state.wallet.revision };
+    const request = state.retryAttemptRequest || { integration: 'L&L-041', requestId: makeRequestId(), chestId: state.currentChest.chestId, enteredCode, expectedRevision: state.wallet.revision, expectedFeedbackPolicyVersion: 1 };
+    applyEnteredCode(request.enteredCode);
     state.retryAttemptRequest = request;
+    persistPendingAttempt(request);
     setStatus(trainingT("training.attempt_running"));
     const result = await callCallable(endpoints.attemptChest, { ...request }, state.idToken);
-    if (!result || typeof result.success !== 'boolean' || result.chestId !== state.currentChest.chestId || !Number.isSafeInteger(result.lockpicksRemaining) || !Number.isSafeInteger(result.walletRevision) || !Number.isSafeInteger(result.chestRevision) || !result.wallet || !result.economy) throw Object.assign(new Error('Ungültige Schlossantwort.'), { status: 'INVALID_RESPONSE' });
-    applyWallet(result.wallet);
-    applyEconomy(result.economy);
-    sceneVariables.get('backendChestRevision').setNumber(result.chestRevision);
-    state.retryAttemptRequest = null;
+    if (!result || typeof result.success !== 'boolean' || result.chestId !== request.chestId || result.lockpickCost !== 1 || !Number.isSafeInteger(result.attempts) || result.attempts < 1 || !Number.isSafeInteger(result.lockpicksRemaining) || !Number.isSafeInteger(result.walletRevision) || !Number.isSafeInteger(result.chestRevision) || !result.wallet || !result.economy) throw Object.assign(new Error('Ungültige Schlossantwort.'), { status: 'INVALID_RESPONSE' });
+    if ('matchingDigitCount' in result || 'exactPositionCount' in result) throw Object.assign(new Error('Veralteter exakter Fehlversuchsvertrag.'), { status: 'INVALID_RESPONSE' });
+    const commonResultFields = ['success', 'lockpickCost', 'chestId', 'attempts', 'lockpicksRemaining', 'walletRevision', 'chestRevision', 'wallet', 'economy'];
+    const failureResultFields = [...commonResultFields, 'feedback'];
+    const successResultFields = [...commonResultFields, 'winner', 'reward', 'consumedPersonalBoost', 'consumedBoosters', 'chestBoosters', 'boosterOnBooster', 'boosterRolls', 'newCurrentChest', ...(backendRuntime.environment === 'staging' ? ['solutionSnapshot'] : [])];
+    if (!exactKeys(result, result.success ? successResultFields : failureResultFields)) throw Object.assign(new Error('Schlossantwort enthält unerwartete Zweigfelder.'), { status: 'INVALID_RESPONSE' });
+    const validatedWallet = validateWallet(result.wallet, true);
+    if (result.lockpicksRemaining !== validatedWallet.lockpicks || result.walletRevision !== validatedWallet.revision) throw Object.assign(new Error('Schlossantwort und Wallet widersprechen sich.'), { status: 'INVALID_RESPONSE' });
+    const feedback = result.success ? null : validateAttemptFeedback(result.feedback);
+    const nextChest = result.success ? validateChest(result.newCurrentChest) : (state.currentChest.chestId === result.chestId ? state.currentChest : { chestId: result.chestId, economyVersion: result.economy.economyVersion });
+    validateEconomy(result.economy, nextChest);
+    const validBoosters = (value) => exactKeys(value, ['booster5', 'booster10', 'booster25']) && ['booster5', 'booster10', 'booster25'].every((field) => Number.isSafeInteger(value[field]) && value[field] >= 0);
+    if (result.success && (result.feedback !== undefined || result.winner !== true || nextChest.chestId === result.chestId || !exactKeys(result.reward, ['cookies', 'lockpicks']) || !Number.isSafeInteger(result.reward.cookies) || result.reward.cookies < 0 || !Number.isSafeInteger(result.reward.lockpicks) || result.reward.lockpicks < 0 || !Number.isSafeInteger(result.consumedPersonalBoost) || result.consumedPersonalBoost < 0 || !validBoosters(result.consumedBoosters) || !validBoosters(result.chestBoosters) || !validBoosters(result.boosterOnBooster) || !result.boosterRolls || typeof result.boosterRolls !== 'object')) throw Object.assign(new Error('Ungültige Gewinner- oder Rotationsantwort.'), { status: 'INVALID_RESPONSE' });
+    if (result.success && backendRuntime.environment === 'staging') validateClosedSolutionSnapshot(result.solutionSnapshot);
+    await state.loadBootstrap(result.walletRevision);
     if (result.success) {
-      if (result.winner !== true || !result.reward || !result.newCurrentChest || result.newCurrentChest.chestId === result.chestId) throw Object.assign(new Error('Ungültige Gewinner- oder Rotationsantwort.'), { status: 'INVALID_RESPONSE' });
-      if (backendRuntime.environment === 'staging') applyClosedSolutionSnapshot(result.solutionSnapshot);
-      await state.loadBootstrap();
       sceneVariables.get('rihtCode').setBoolean(true);
       sceneVariables.get('wrongCode').setBoolean(false);
       sceneVariables.get('bonusHintPending').setBoolean(false);
       sceneVariables.get('bonusHintActive').setBoolean(false);
       sceneVariables.get('bonusHintText').setString('');
+      sceneVariables.get('bonusFeedbackJson').setString('');
       sceneVariables.get('richtigeZiffernGesamt').setNumber(0);
       sceneVariables.get('richtigePositionen').setNumber(0);
       setHintText(sceneVariables.get('normalHintText').getAsString());
@@ -4526,15 +4585,27 @@ if (!runtimeScene.__lockLootTrainingBackend) {
       for (const object of runtimeScene.getObjects('TxtCode_falsch')) object.hide();
       setStatus(trainingT("training.attempt_won", { rewardCookies: result.reward.cookies, rewardLockpicks: result.reward.lockpicks, consumedBoost: result.consumedPersonalBoost, booster5: state.wallet.booster5, booster10: state.wallet.booster10, booster25: state.wallet.booster25, chestId: state.currentChest.chestId, economy: economySummary() }));
     } else {
-      if (!Number.isSafeInteger(result.matchingDigitCount) || !Number.isSafeInteger(result.exactPositionCount) || result.matchingDigitCount < 0 || result.matchingDigitCount > 11 || result.exactPositionCount < 0 || result.exactPositionCount > result.matchingDigitCount) throw Object.assign(new Error('Ungültige Fehlversuchsbonus-Antwort.'), { status: 'INVALID_RESPONSE' });
+      if (state.currentChest.chestId !== result.chestId) {
+        sceneVariables.get('bonusHintPending').setBoolean(false);
+        sceneVariables.get('bonusHintActive').setBoolean(false);
+        sceneVariables.get('bonusHintText').setString('');
+        sceneVariables.get('bonusFeedbackJson').setString('');
+        setHintText(sceneVariables.get('normalHintText').getAsString());
+        setStatus(trainingT("training.chest_changed"));
+      } else {
+      sceneVariables.get('backendChestRevision').setNumber(Math.max(sceneVariables.get('backendChestRevision').getAsNumber(), result.chestRevision));
       sceneVariables.get('wrongCode').setBoolean(true);
       sceneVariables.get('rihtCode').setBoolean(false);
-      sceneVariables.get('richtigeZiffernGesamt').setNumber(result.matchingDigitCount);
-      sceneVariables.get('richtigePositionen').setNumber(result.exactPositionCount);
+      sceneVariables.get('bonusFeedbackJson').setString(JSON.stringify(feedback));
+      sceneVariables.get('richtigeZiffernGesamt').setNumber(0);
+      sceneVariables.get('richtigePositionen').setNumber(0);
       sceneVariables.get('bonusHintPending').setBoolean(true);
       for (const object of runtimeScene.getObjects('TxtCode_falsch')) object.hide(false);
       setStatus(trainingT("training.attempt_wrong", { economy: economySummary() }));
+      }
     }
+    state.retryAttemptRequest = null;
+    clearPendingAttempt();
   };
   state.handleActionError = async (error, action) => {
     const networkError = error && (error.name === 'AbortError' || error instanceof TypeError);
@@ -4548,12 +4619,14 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     if (error && error.reason === 'STALE_CHEST') {
       state.retryHintRequest = null;
       state.retryAttemptRequest = null;
+      clearPendingAttempt();
       await state.loadBootstrap();
       setStatus(trainingT("training.chest_changed"));
       return;
     }
     if (action === 'hint') state.retryHintRequest = null;
-    if (action === 'attempt') state.retryAttemptRequest = null;
+    const ambiguousAttemptStatuses = ['INVALID_RESPONSE', 'INTERNAL', 'UNKNOWN', 'UNAVAILABLE', 'DEADLINE_EXCEEDED', 'CANCELLED'];
+    if (action === 'attempt' && error && !ambiguousAttemptStatuses.includes(error.status)) { state.retryAttemptRequest = null; clearPendingAttempt(); }
     if (error && error.reason === 'NOT_ENOUGH_COOKIES') setStatus(trainingT("training.not_enough_cookies"));
     else if (error && error.reason === 'ALL_HINT_PACKAGES_PURCHASED') setStatus(trainingT("training.all_hints_bought"));
     else if (error && error.status === 'RESOURCE_EXHAUSTED') setStatus(trainingT("training.no_lockpick"));
@@ -4624,7 +4697,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xab0dd0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa8c38 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025/L&L-056A: Übergibt echte Lösungsdaten oder eine rein lokale, generatorbasierte Testfixture.
 // Der sichtbare Testbutton verwendet immer dieselbe generatorbasierte Fixture, damit Code, Hinttext und Metadaten atomar zusammengehören.
@@ -4653,7 +4726,7 @@ if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaaca60 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa4890 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -4675,11 +4748,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xbf2c60 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa4968 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xaa84b8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa0558 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -4766,7 +4839,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf2f80(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa03d0(runtimeScene);
 
 }
 
@@ -4774,7 +4847,7 @@ gdjs.TrainingSceneCode.userFunc0xbf2f80(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xd9ff18(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xda9048(runtimeScene);
 
 }
 
@@ -4782,7 +4855,7 @@ gdjs.TrainingSceneCode.userFunc0xd9ff18(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc18db0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc256c0(runtimeScene);
 
 }
 
@@ -4790,7 +4863,7 @@ gdjs.TrainingSceneCode.userFunc0xc18db0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xda41b0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xdaae20(runtimeScene);
 
 }
 
@@ -4798,7 +4871,7 @@ gdjs.TrainingSceneCode.userFunc0xda41b0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xda6460(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xda82d8(runtimeScene);
 
 }
 
@@ -5430,9 +5503,9 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 }
 {runtimeScene.getScene().getVariables().getFromIndex(37).setString("");
 }
-{runtimeScene.getScene().getVariables().getFromIndex(38).setNumber(0);
-}
 {runtimeScene.getScene().getVariables().getFromIndex(39).setNumber(0);
+}
+{runtimeScene.getScene().getVariables().getFromIndex(40).setNumber(0);
 }
 {for(var i = 0, len = gdjs.TrainingSceneCode.GDtxtHintObjects1.length ;i < len;++i) {
     gdjs.TrainingSceneCode.GDtxtHintObjects1[i].getBehavior("Text").setText(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(34)));
@@ -5722,7 +5795,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 }
@@ -5754,7 +5827,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 }
@@ -5788,7 +5861,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 }
@@ -5824,7 +5897,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 }
@@ -5913,7 +5986,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 if (isConditionTrue_0) {
@@ -6005,17 +6078,17 @@ gdjs.copyArray(runtimeScene.getObjects("txtHintCounter"), gdjs.TrainingSceneCode
 }
 {runtimeScene.getScene().getVariables().getFromIndex(13).setString("00000000000");
 }
-{runtimeScene.getScene().getVariables().getFromIndex(14).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(0))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(1))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(2))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(3))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(4))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(5))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(6))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(7))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(8))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(9))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(10))));
+{runtimeScene.getScene().getVariables().getFromIndex(14).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(0))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(1))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(2))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(3))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(4))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(5))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(6))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(7))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(8))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(9))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(10))));
 }
 {runtimeScene.getScene().getVariables().getFromIndex(26).setNumber(gdjs.randomInRange(0, 10));
 }
 {runtimeScene.getScene().getVariables().getFromIndex(31).setString(gdjs.evtTools.common.toString(gdjs.randomInRange(9, 9)));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(27).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(26))))));
+{runtimeScene.getScene().getVariables().getFromIndex(27).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(26))))));
 }
 {runtimeScene.getScene().getVariables().getFromIndex(28).setNumber(gdjs.randomInRange(3, 3));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(40).setNumber(gdjs.evtTools.common.toNumber(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(27))));
+{runtimeScene.getScene().getVariables().getFromIndex(41).setNumber(gdjs.evtTools.common.toNumber(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(27))));
 }
 {runtimeScene.getScene().getVariables().getFromIndex(32).setBoolean(false);
 }
@@ -6039,9 +6112,9 @@ gdjs.copyArray(runtimeScene.getObjects("txtHintCounter"), gdjs.TrainingSceneCode
 }
 {runtimeScene.getScene().getVariables().getFromIndex(37).setString("");
 }
-{runtimeScene.getScene().getVariables().getFromIndex(38).setNumber(0);
-}
 {runtimeScene.getScene().getVariables().getFromIndex(39).setNumber(0);
+}
+{runtimeScene.getScene().getVariables().getFromIndex(40).setNumber(0);
 }
 {gdjs.evtTools.runtimeScene.resetTimer(runtimeScene, "bonusHintTimer");
 }
@@ -6118,7 +6191,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 if (isConditionTrue_0) {
@@ -6139,7 +6212,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 if (isConditionTrue_0) {
@@ -6164,18 +6237,18 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(43).setNumber(gdjs.randomInRange(0, 10));
+{runtimeScene.getScene().getVariables().getFromIndex(44).setNumber(gdjs.randomInRange(0, 10));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(44).setNumber(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43)))));
+{runtimeScene.getScene().getVariables().getFromIndex(45).setNumber(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(44)))));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(27).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(26))))));
+{runtimeScene.getScene().getVariables().getFromIndex(27).setString(gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(26))))));
 }
-{runtimeScene.getScene().getVariables().getFromIndex(40).setNumber(gdjs.evtTools.common.toNumber(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(27))));
+{runtimeScene.getScene().getVariables().getFromIndex(41).setNumber(gdjs.evtTools.common.toNumber(gdjs.evtTools.variable.getVariableString(runtimeScene.getScene().getVariables().getFromIndex(27))));
 }
 {runtimeScene.getScene().getVariables().getFromIndex(32).setBoolean(true);
 }
@@ -6200,7 +6273,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 }
@@ -6225,12 +6298,12 @@ isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(49).setString("hint");
+{runtimeScene.getScene().getVariables().getFromIndex(50).setString("hint");
 }
 }
 
@@ -6249,12 +6322,12 @@ isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 }
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(49).setString("attempt");
+{runtimeScene.getScene().getVariables().getFromIndex(50).setString("attempt");
 }
 }
 
@@ -6264,7 +6337,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xafe3d0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaff750(runtimeScene);
 
 }
 
@@ -6274,10 +6347,10 @@ gdjs.TrainingSceneCode.userFunc0xafe3d0(runtimeScene);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(51).getAsBoolean();
+{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(52).getAsBoolean();
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(51).setBoolean(false);
+{runtimeScene.getScene().getVariables().getFromIndex(52).setBoolean(false);
 }
 {gdjs.evtTools.runtimeScene.resetTimer(runtimeScene, "feedTimer");
 }
@@ -6296,18 +6369,18 @@ gdjs.TrainingSceneCode.eventsList21(runtimeScene);} //End of subevents
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
 }
 if (isConditionTrue_0) {
 gdjs.copyArray(runtimeScene.getObjects("Debug_CorrectCode"), gdjs.TrainingSceneCode.GDDebug_9595CorrectCodeObjects1);
 gdjs.copyArray(runtimeScene.getObjects("Debug_digit"), gdjs.TrainingSceneCode.GDDebug_9595digitObjects1);
 gdjs.copyArray(runtimeScene.getObjects("Debug_digitValue"), gdjs.TrainingSceneCode.GDDebug_9595digitValueObjects1);
 {for(var i = 0, len = gdjs.TrainingSceneCode.GDDebug_9595CorrectCodeObjects1.length ;i < len;++i) {
-    gdjs.TrainingSceneCode.GDDebug_9595CorrectCodeObjects1[i].getBehavior("Text").setText("correctCode: " + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(0))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(1))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(2))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(3))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(4))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(5))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(6))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(7))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(8))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(9))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(42).getChild(10))));
+    gdjs.TrainingSceneCode.GDDebug_9595CorrectCodeObjects1[i].getBehavior("Text").setText("correctCode: " + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(0))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(1))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(2))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(3))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(4))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(5))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(6))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(7))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(8))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(9))) + gdjs.evtTools.common.toString(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(43).getChild(10))));
 }
 }
 {for(var i = 0, len = gdjs.TrainingSceneCode.GDDebug_9595digitValueObjects1.length ;i < len;++i) {
-    gdjs.TrainingSceneCode.GDDebug_9595digitValueObjects1[i].getBehavior("Text").setText("digitValue = " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(40).getAsNumber()));
+    gdjs.TrainingSceneCode.GDDebug_9595digitValueObjects1[i].getBehavior("Text").setText("digitValue = " + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(41).getAsNumber()));
 }
 }
 {for(var i = 0, len = gdjs.TrainingSceneCode.GDDebug_9595digitObjects1.length ;i < len;++i) {
@@ -6348,7 +6421,7 @@ isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(45).setBoolean(true);
+{runtimeScene.getScene().getVariables().getFromIndex(46).setBoolean(true);
 }
 }
 
@@ -6358,7 +6431,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xab0dd0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa8c38(runtimeScene);
 
 }
 
@@ -6368,10 +6441,10 @@ gdjs.TrainingSceneCode.userFunc0xab0dd0(runtimeScene);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
+{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(46).setBoolean(false);
+{runtimeScene.getScene().getVariables().getFromIndex(47).setBoolean(false);
 }
 {gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "SolutionScene", true);
 }
@@ -6383,7 +6456,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaaca60(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa4890(runtimeScene);
 
 }
 
@@ -6391,7 +6464,7 @@ gdjs.TrainingSceneCode.userFunc0xaaca60(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf2c60(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa4968(runtimeScene);
 
 }
 
@@ -6399,7 +6472,7 @@ gdjs.TrainingSceneCode.userFunc0xbf2c60(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaa84b8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa0558(runtimeScene);
 
 }
 

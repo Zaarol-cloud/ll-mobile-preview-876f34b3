@@ -59,7 +59,7 @@ gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCalendarClaimButtonObjects1Objects = Hashtable.newFrom({"BackendCalendarClaimButton": gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintRepeatButtonObjects1Objects = Hashtable.newFrom({"BackendHintRepeatButton": gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintReloadButtonObjects1Objects = Hashtable.newFrom({"BackendHintReloadButton": gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1});
-gdjs.BackendTestScene_95L035Code.userFunc0xcdfb68 = function GDJSInlineCode(runtimeScene) {
+gdjs.BackendTestScene_95L035Code.userFunc0xca6e80 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-035 bis L&L-042: Lokale Firebase-Emulator-Verbindung über offizielle REST-/Callable-Protokolle.
 // Keine Firebase-Projektkonfiguration, kein externes SDK und niemals eine Produktionsverbindung.
@@ -217,7 +217,7 @@ gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCookieButtonObjects1Objects = Hashtable.newFrom({"BackendCookieButton": gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendWalletRepeatButtonObjects1Objects = Hashtable.newFrom({"BackendWalletRepeatButton": gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects1});
 gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendBoosterButtonObjects1Objects = Hashtable.newFrom({"BackendBoosterButton": gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects1});
-gdjs.BackendTestScene_95L035Code.userFunc0xd6b608 = function GDJSInlineCode(runtimeScene) {
+gdjs.BackendTestScene_95L035Code.userFunc0xda29b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-035 bis L&L-042: Aktiver lokaler REST-/Callable-Adapter; keine bestehende TrainingScene-Variable wird benutzt.
 const sceneVariables = runtimeScene.getVariables();
@@ -284,7 +284,7 @@ if (requestedAction && initState.getAsString() === "ready" && !pendingVariable.g
       const beforeRevision = clientState.wallet.revision;
       let staleRejected = false;
       try {
-        await clientState.callCallable(clientState.endpoints.attempt, { requestId: makeRequestId(), chestId: clientState.previousChestId, enteredCode: "00000000000" }, clientState.idToken);
+        await clientState.callCallable(clientState.endpoints.attempt, { requestId: makeRequestId(), chestId: clientState.previousChestId, enteredCode: "00000000000", expectedFeedbackPolicyVersion: 1 }, clientState.idToken);
       } catch (error) {
         staleRejected = error && error.status === "FAILED_PRECONDITION" && error.reason === "STALE_CHEST";
       }
@@ -360,7 +360,7 @@ if (requestedAction && initState.getAsString() === "ready" && !pendingVariable.g
     if (requestedAction === "auth-error") {
       let rejectedAsExpected = false;
       try {
-        await clientState.callCallable(clientState.endpoints.attempt, { requestId: makeRequestId(), chestId: clientState.currentChest.chestId, enteredCode: "00000000000" });
+        await clientState.callCallable(clientState.endpoints.attempt, { requestId: makeRequestId(), chestId: clientState.currentChest.chestId, enteredCode: "00000000000", expectedFeedbackPolicyVersion: 1 });
       } catch (error) {
         rejectedAsExpected = error && error.status === "UNAUTHENTICATED";
       }
@@ -381,7 +381,7 @@ if (requestedAction && initState.getAsString() === "ready" && !pendingVariable.g
       const localCorrectCodes = { "test-chest-001": "58310472961", "test-chest-002": "17420583649" };
       const enteredCode = requestedAction === "correct" ? localCorrectCodes[clientState.currentChest.chestId] : "00000000000";
       if (requestedAction === "correct" && typeof enteredCode !== "string") throw Object.assign(new Error("Kein lokaler Testcode für diese Kiste."), { status: "INVALID_RESPONSE" });
-      clientState.lastRequest = { requestId: makeRequestId(), chestId: clientState.currentChest.chestId, enteredCode };
+      clientState.lastRequest = { requestId: makeRequestId(), chestId: clientState.currentChest.chestId, enteredCode, expectedFeedbackPolicyVersion: 1 };
     }
     setStatus(repeated ? "Gleiche requestId wird erneut gesendet …" : "Backend-Testaufruf läuft …");
     const result = await clientState.callCallable(clientState.endpoints.attempt, { ...clientState.lastRequest }, clientState.idToken);
@@ -502,7 +502,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.BackendTestScene_95L035Code.userFunc0xcdfb68(runtimeScene);
+gdjs.BackendTestScene_95L035Code.userFunc0xca6e80(runtimeScene);
 
 }
 
@@ -700,7 +700,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.BackendTestScene_95L035Code.userFunc0xd6b608(runtimeScene);
+gdjs.BackendTestScene_95L035Code.userFunc0xda29b0(runtimeScene);
 
 }
 
