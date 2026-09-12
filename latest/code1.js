@@ -189,7 +189,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xaf7630 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xbf2f80 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -350,7 +350,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TrainingSceneCode.userFunc0xec49a0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xd9ff18 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -535,7 +535,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xcf7ab8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc18db0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -574,11 +574,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xcf4eb8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xda41b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xa04560 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xda6460 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1194,7 +1194,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xbf9790 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xda5a68 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-040/L&L-047: Nur die zwei clientsicheren Trefferzahlen werden sprachgebunden dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -1218,7 +1218,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbf9790(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xda5a68(runtimeScene);
 
 }
 
@@ -1229,7 +1229,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xcc7950 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe46de0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
 const sceneVariables = runtimeScene.getVariables();
@@ -1251,7 +1251,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcc7950(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe46de0(runtimeScene);
 
 }
 
@@ -1790,7 +1790,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xa13138 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xbc38d8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -2028,10 +2028,6 @@ function tier3ProductComparisonText(code, positions) {
 
 function tier3ExactlyTwoEqualText(positions) {
   return 'Von den Zahlen an ' + positionList(positions) + ' sind genau zwei gleich.';
-}
-
-function tier3AllDifferentText(positions) {
-  return 'Die Zahlen an ' + positionList(positions) + ' sind alle verschieden.';
 }
 
 function tier3ArithmeticSequenceText(positions) {
@@ -2318,7 +2314,6 @@ function codewideTextVariants(id, positions, details) {
     if (details.mode === 'lessBoth') return [subject + ' ist kleiner als die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + '.', 'Die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' sind beide größer als ' + lowerSubject + '.'];
     return [subject + ' ist größer als die Zahl an Position ' + p(0) + ', aber kleiner als die Zahl an Position ' + p(1) + '.', 'Zwischen den Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' liegt ' + lowerSubject + '.'];
   }
-  if (id === 'T2-CODE-02') return ['Die Zahl an Position ' + p(0) + ' ist größer als die kleinste und kleiner als die größte Zahl im Code.', 'Position ' + p(0) + ' liegt mit ihrem Wert strikt zwischen den beiden globalen Extremwerten des Codes.'];
   if (id === 'T2-CODE-03') {
     if (details.mode === 'bothGreater') return ['Die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' sind beide größer als jede im Code vorkommende Primzahl.', 'Jede Primzahl des Codes ist kleiner als die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + '.'];
     if (details.mode === 'bothSmaller') return ['Die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + ' sind beide kleiner als die größte Primzahl im Code.', 'Die größte im Code vorkommende Primzahl übertrifft die Zahlen an Position ' + p(0) + ' und Position ' + p(1) + '.'];
@@ -2541,35 +2536,48 @@ function freePositionOrder(positions) {
 }
 
 const MIN_HINT_EXCLUSION_PERCENT = 40;
+const VISIBLE_SEMANTIC_AUDITED_HINT_IDS = new Set(["T1-01","T1-02","T1-03","T1-05","T1-06","T1-08","T1-09","T1-12","T1-14","T1-DIGIT-00","T1-DIGIT-01","T1-DIGIT-02","T1-DIGIT-03","T1-DIGIT-04","T1-DIGIT-05","T1-DIGIT-06","T1-DIGIT-07","T1-DIGIT-08","T1-DIGIT-09","T2-01","T2-03","T2-04","T2-06","T2-08","T2-09","T2-11","T2-13","T2-15","T2-CODE-03","T2-CODE-04","T3-02","T3-04","T3-06","T3-07","T3-08","T3-10","T3-11","T3-12","T3-13","T3-14","T3-15","T3-16","T3-CODE-01","T3-CODE-02","T3-CODE-03","T3-CODE-04","T4-01","T4-02","T4-03","T4-04","T4-05","T4-06","T4-07","T4-08","T4-09","T4-10","T4-11","T4-12","T4-13","T4-15","T4-16","T4-17","T4-18","T4-19","T4-21","T4-22","T4-CODE-01","T4-CODE-02","T4-CODE-03","T4-CODE-05","T4-CODE-06","T4-CODE-07","T1-CODE-04","T4-CODE-04","T5-01","T5-02","T5-03"]);
 
 function estimateInformationExclusionPercent(candidate) {
   const details = candidate && candidate.details ? candidate.details : {};
-  if (!candidate || typeof candidate.id !== 'string') return 100;
+  if (!candidate || typeof candidate.id !== 'string') return 0;
+  if (candidate.id === 'T5-04') return 100;
   if (candidate.id === 'T3-17' || candidate.id === 'T3-18' || candidate.id === 'T3-19' || candidate.id === 'T3-20' || candidate.id === 'T4-23') return Number.isFinite(details.informationExclusionPercent) ? details.informationExclusionPercent : 0;
-  if (candidate.id === 'T2-02') return details.square ? 79 : 21;
-  if (candidate.id === 'T2-07') return details.square ? 64 : 36;
-  if (candidate.id === 'T2-10') return details.fibonacci ? 69 : 31;
-  if (candidate.id === 'T2-16') return details.prime ? 63 : 37;
-  if (candidate.id === 'T2-14') return details.equal ? 90 : 10;
-  if (candidate.id === 'T1-CODE-02') {
-    if (details.comparison === 'gleich') return 90;
-    if (details.comparison === 'kleiner') return 10 + 10 * details.derivedValue;
-    return 100 - 10 * details.derivedValue;
-  }
+  if (candidate.id === 'T1-07') return details.cube === true ? 70 : details.cube === false ? 30 : 0;
+  if (candidate.id === 'T1-13') return details.factorial === true ? 70 : details.factorial === false ? 30 : 0;
+  if (candidate.id === 'T1-CODE-01') return details.comparison === 'größer' ? 39.52446 : details.comparison === 'kleiner' ? 75.681338 : details.comparison === 'gleich' ? 85.156999 : 0;
+  if (candidate.id === 'T1-CODE-02') return details.comparison === 'größer' ? 95.135595 : details.comparison === 'kleiner' ? 19.816701 : details.comparison === 'gleich' ? 85.096532 : 0;
+  if (candidate.id === 'T1-CODE-03') return details.extremum === 'maximum' || details.extremum === 'minimum' ? 85.085658 : details.extremum === 'neither' ? 29.828684 : 0;
+  if (candidate.id === 'T2-02') return details.square === true ? 79 : details.square === false ? 21 : 0;
+  if (candidate.id === 'T2-07') return details.square === true ? 64 : details.square === false ? 36 : 0;
+  if (candidate.id === 'T2-10') return details.fibonacci === true ? 69 : details.fibonacci === false ? 31 : 0;
+  if (candidate.id === 'T2-12') return details.square === true ? 94 : details.square === false ? 6 : 0;
+  if (candidate.id === 'T2-14') return details.equal === true ? 90 : details.equal === false ? 10 : 0;
+  if (candidate.id === 'T2-16') return details.prime === true ? 63 : details.prime === false ? 37 : 0;
   if (candidate.id === 'T2-CODE-01') {
-    if (details.mode === 'lessBoth') return 100 - Math.pow(9 - details.derivedValue, 2);
-    if (details.mode === 'greaterBoth') return 100 - Math.pow(details.derivedValue, 2);
-    return 100 - details.derivedValue * (9 - details.derivedValue);
+    if (details.sourceKey === 'smallestEven') return details.mode === 'greaterBoth' ? 98.968864 : details.mode === 'lessBoth' ? 35.346914 : details.mode === 'between' ? 96.983958 : 0;
+    if (details.sourceKey === 'largestPrime') return details.mode === 'greaterBoth' ? 62.687654 : details.mode === 'lessBoth' ? 93.284617 : details.mode === 'between' ? 86.257269 : 0;
+    if (details.sourceKey === 'largestOdd') return details.mode === 'greaterBoth' ? 35.346914 : details.mode === 'lessBoth' ? 98.968864 : details.mode === 'between' ? 96.983958 : 0;
+    return 0;
   }
-  if (candidate.id === 'T2-CODE-02') return 100 - Math.max(0, details.maximum - details.minimum - 1) * 10;
-  return 100;
+  if (candidate.id === 'T3-01') return details.comparison === 'größer' ? 22 : details.comparison === 'kleiner' ? 83.5 : details.comparison === 'gleich' ? 94.5 : 0;
+  if (candidate.id === 'T3-03') return details.comparison === 'größer' ? 29 : details.comparison === 'kleiner' ? 75.2 : details.comparison === 'gleich' ? 95.8 : 0;
+  if (candidate.id === 'T3-09') return details.palindrome === true ? 91 : details.palindrome === false ? 9 : 0;
+  if (candidate.id === 'T4-14') {
+    if (!Array.isArray(details.firstGroup) || !Array.isArray(details.secondGroup)) return 0;
+    if (details.firstGroup.length === 2 && details.secondGroup.length === 3) return details.relation === 'mehr' ? 77.626 : details.relation === 'weniger' ? 27.214 : 0;
+    if (details.firstGroup.length === 3 && details.secondGroup.length === 3) return details.relation === 'mehr' || details.relation === 'weniger' ? 52.7626 : 0;
+    return 0;
+  }
+  if (candidate.id === 'T4-20') return details.comparison === 'größer' ? 33.924516 : details.comparison === 'kleiner' ? 69.790585 : details.comparison === 'gleich' ? 96.284898 : 0;
+  return VISIBLE_SEMANTIC_AUDITED_HINT_IDS.has(candidate.id) ? MIN_HINT_EXCLUSION_PERCENT : 0;
 }
 
 function createGenerator(code, existingComparison) {
   const candidateGroups = {
     1: { 'T1-01': [], 'T1-02': [], 'T1-03': [], 'T1-05': [], 'T1-06': [], 'T1-07': [], 'T1-08': [], 'T1-09': [], 'T1-12': [], 'T1-13': [], 'T1-14': [], 'T1-DIGIT-00': [], 'T1-DIGIT-01': [], 'T1-DIGIT-02': [], 'T1-DIGIT-03': [], 'T1-DIGIT-04': [], 'T1-DIGIT-05': [], 'T1-DIGIT-06': [], 'T1-DIGIT-07': [], 'T1-DIGIT-08': [], 'T1-DIGIT-09': [], 'T1-CODE-01': [], 'T1-CODE-02': [], 'T1-CODE-03': [] },
-    2: { 'T2-01': [], 'T2-02': [], 'T2-03': [], 'T2-04': [], 'T2-06': [], 'T2-07': [], 'T2-08': [], 'T2-09': [], 'T2-10': [], 'T2-11': [], 'T2-12': [], 'T2-13': [], 'T2-14': [], 'T2-15': [], 'T2-16': [], 'T2-CODE-01': [], 'T2-CODE-02': [], 'T2-CODE-03': [], 'T2-CODE-04': [] },
-    3: { 'T3-01': [], 'T3-02': [], 'T3-03': [], 'T3-04': [], 'T3-05': [], 'T3-06': [], 'T3-07': [], 'T3-08': [], 'T3-09': [], 'T3-10': [], 'T3-11': [], 'T3-12': [], 'T3-13': [], 'T3-14': [], 'T3-15': [], 'T3-16': [], 'T3-17': [], 'T3-18': [], 'T3-19': [], 'T3-20': [], 'T3-CODE-01': [], 'T3-CODE-02': [], 'T3-CODE-03': [], 'T3-CODE-04': [] },
+    2: { 'T2-01': [], 'T2-02': [], 'T2-03': [], 'T2-04': [], 'T2-06': [], 'T2-07': [], 'T2-08': [], 'T2-09': [], 'T2-10': [], 'T2-11': [], 'T2-12': [], 'T2-13': [], 'T2-14': [], 'T2-15': [], 'T2-16': [], 'T2-CODE-01': [], 'T2-CODE-03': [], 'T2-CODE-04': [] },
+    3: { 'T3-01': [], 'T3-02': [], 'T3-03': [], 'T3-04': [], 'T3-06': [], 'T3-07': [], 'T3-08': [], 'T3-09': [], 'T3-10': [], 'T3-11': [], 'T3-12': [], 'T3-13': [], 'T3-14': [], 'T3-15': [], 'T3-16': [], 'T3-17': [], 'T3-18': [], 'T3-19': [], 'T3-20': [], 'T3-CODE-01': [], 'T3-CODE-02': [], 'T3-CODE-03': [], 'T3-CODE-04': [] },
     4: { 'T4-01': [], 'T4-02': [], 'T4-03': [], 'T4-04': [], 'T4-05': [], 'T4-06': [], 'T4-07': [], 'T4-08': [], 'T4-09': [], 'T4-10': [], 'T4-11': [], 'T4-12': [], 'T4-13': [], 'T4-14': [], 'T4-15': [], 'T4-16': [], 'T4-17': [], 'T4-18': [], 'T4-19': [], 'T4-20': [], 'T4-21': [], 'T4-22': [], 'T4-23': [], 'T4-CODE-01': [], 'T4-CODE-02': [], 'T4-CODE-03': [], 'T4-CODE-05': [], 'T4-CODE-06': [], 'T4-CODE-07': [] },
     5: { 'T1-CODE-04': [], 'T4-CODE-04': [], 'T5-01': [], 'T5-02': [], 'T5-03': [], 'T5-04': [] }
   };
@@ -2670,14 +2678,6 @@ function createGenerator(code, existingComparison) {
         addCodewideCandidate(2, 'T2-CODE-04', orderedPair, { extremum: extremum.key, extremumValue: extremum.value, extremumLabel: extremum.label, extremumNoun: extremum.noun, closerDistance: Math.min(firstDistance, secondDistance), fartherDistance: Math.max(firstDistance, secondDistance), semanticKey: 'extremumDistance|' + extremum.key + '|' + orderedPair.join('-') }, { positionRoles: ['Nähere Position', 'Entferntere Position'], codewideDerivations: ['globales ' + extremum.noun], mathematicalRule: 'Absolute Abstände zweier Positionswerte zu einem globalen Extremwert werden strikt verglichen' });
       }
     }
-    if (codewide.minimum !== codewide.maximum) {
-      for (let position = 0; position < code.length; position++) {
-        if (codewide.minimum < code[position] && code[position] < codewide.maximum) {
-          addCodewideCandidate(2, 'T2-CODE-02', [position], { minimum: codewide.minimum, maximum: codewide.maximum, semanticKey: 'betweenGlobalExtrema|' + position }, { positionRoles: ['Position zwischen Extremwerten'], codewideDerivations: ['globale kleinste Ziffer', 'globale größte Ziffer'], mathematicalRule: 'Positionswert liegt strikt zwischen globalem Minimum und Maximum' });
-        }
-      }
-    }
-
     function addPrimeNeighborComparisons(id, anchorPosition, neighborPosition, directionLabel) {
       if (!Number.isInteger(anchorPosition) || !Number.isInteger(neighborPosition)) return;
       const parity = code[neighborPosition] % 2 === 0 ? 'even' : 'odd';
@@ -3114,7 +3114,7 @@ function createGenerator(code, existingComparison) {
     add(makeCandidate(1, 'T1-03', positions, tier1SquareText(code, positions)));
     add(makeCandidate(1, 'T1-05', positions, tier1CompositeText(code, positions), null, { informationStrength: 2, details: { composite: COMPOSITE_DIGITS.has(code[position]) }, mathematicalRule: 'Zusammengesetzte Ziffer mit mehr als zwei positiven Teilern' }));
     add(makeCandidate(1, 'T1-06', positions, tier1PowerOfTwoText(code, positions), null, { informationStrength: 2, details: { powerOfTwo: POWER_OF_TWO_DIGITS.has(code[position]) }, mathematicalRule: 'Ziffer ist eine Potenz der Basis 2' }));
-    add(makeCandidate(1, 'T1-07', positions, tier1CubeText(code, positions)));
+    add(makeCandidate(1, 'T1-07', positions, tier1CubeText(code, positions), null, { details: { cube: CUBE_DIGITS.has(code[position]) }, mathematicalRule: 'Ziffer ist eine Kubikzahl 0, 1 oder 8' }));
     add(makeCandidate(1, 'T1-08', positions, tier1FibonacciText(code, positions)));
     const samePositionParity = code[position] % 2 === (position + 1) % 2;
     add(makeCandidate(1, 'T1-09', positions, tier1PositionParityText(code, positions), null, { informationStrength: 2, details: { samePositionParity }, mathematicalRule: 'Parität der Ziffer im Vergleich zur sichtbaren Positionsnummer' }));
@@ -3185,7 +3185,8 @@ function createGenerator(code, existingComparison) {
   }
 
   for (const triple of combinations(code.length, 3)) {
-    add(makeCandidate(3, 'T3-01', triple, tier3SumComparisonText(code, triple)));
+    const sumComparison = relation(code[triple[0]] + code[triple[1]], code[triple[2]]);
+    add(makeCandidate(3, 'T3-01', triple, tier3SumComparisonText(code, triple), null, { details: { comparison: sumComparison }, mathematicalRule: 'Summe der ersten zwei Werte wird mit dem dritten Wert verglichen' }));
     const tripleProduct = code[triple[0]] * code[triple[1]];
     const productComparison = relation(tripleProduct, code[triple[2]]);
     add(makeCandidate(3, 'T3-03', triple, tier3ProductComparisonText(code, triple), null, { informationStrength: 3, positionRoles: ['Faktor A', 'Faktor B', 'Vergleichsposition'], details: { product: tripleProduct, comparison: productComparison }, mathematicalRule: 'Produkt der ersten zwei Werte wird mit dem dritten Wert verglichen' }));
@@ -3194,7 +3195,6 @@ function createGenerator(code, existingComparison) {
     const valuesAreDifferent = distinctValueCount === 3;
     const exactlyTwoEqual = distinctValueCount === 2 && tripleValues.some(value => tripleValues.filter(otherValue => otherValue === value).length === 2);
     if (exactlyTwoEqual) add(makeCandidate(3, 'T3-04', triple, tier3ExactlyTwoEqualText(triple), null, { informationStrength: 3, optional: true }));
-    if (valuesAreDifferent) add(makeCandidate(3, 'T3-05', triple, tier3AllDifferentText(triple), null, { informationStrength: 2 }));
     if (valuesAreDifferent) {
       const ascending = triple.slice().sort((first, second) => code[first] - code[second]);
       const descending = ascending.slice().reverse();
@@ -3365,7 +3365,7 @@ function createGenerator(code, existingComparison) {
         const secondValue = code[positions[1]];
         valid = details.mode === 'greaterBoth' ? source.value > firstValue && source.value > secondValue : details.mode === 'lessBoth' ? source.value < firstValue && source.value < secondValue : details.mode === 'between' ? firstValue < source.value && source.value < secondValue : false;
       }
-    } else if (id === 'T2-CODE-02') valid = positions.length === 1 && codewide.minimum !== codewide.maximum && details.minimum === codewide.minimum && details.maximum === codewide.maximum && codewide.minimum < code[positions[0]] && code[positions[0]] < codewide.maximum;
+    }
     else if (id === 'T2-CODE-03') {
       if (positions.length === 2 && codewide.hasPrime && details.largestPrime === codewide.largestPrime) {
         const firstValue = code[positions[0]];
@@ -3525,7 +3525,6 @@ function createGenerator(code, existingComparison) {
       const exactlyTwoEqual = new Set(values).size === 2 && values.some(value => values.filter(otherValue => otherValue === value).length === 2);
       return positions.length === 3 && exactlyTwoEqual && candidate.text === tier3ExactlyTwoEqualText(positions);
     }
-    if (candidate.id === 'T3-05') return positions.length === 3 && new Set(positions.map(position => code[position])).size === 3 && candidate.text === tier3AllDifferentText(positions);
     if (candidate.id === 'T3-06') {
       const firstDistance = code[positions[1]] - code[positions[0]];
       const secondDistance = code[positions[2]] - code[positions[1]];
@@ -3832,7 +3831,6 @@ function createGenerator(code, existingComparison) {
       ['T3-01', 'T3-10'],
       ['T3-02', 'T3-06'],
       ['T3-02', 'T3-07'],
-      ['T3-05', 'T3-07'],
       ['T3-06', 'T3-07'],
       ['T3-06', 'T3-12'],
       ['T3-03', 'T3-16'],
@@ -4251,14 +4249,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa13138(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbc38d8(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xe8d8a0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xafe3d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -4626,10 +4624,11 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xaf7780 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xab0dd0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-025: Übergibt Code, gekaufte Hinweise und vollständige Hinweismetadaten szenenübergreifend.
-// Beim Testzugang werden alle zehn aktuell erzeugten Hinweise verwendet; im echten Lösungsfall nur gekaufte Pakete.
+// L&L-025/L&L-056A: Übergibt echte Lösungsdaten oder eine rein lokale, generatorbasierte Testfixture.
+// Der sichtbare Testbutton verwendet immer dieselbe generatorbasierte Fixture, damit Code, Hinttext und Metadaten atomar zusammengehören.
+const solutionTestFixture = {"code":[1,9,3,2,3,1,9,8,4,8,5],"hints":["Position 9 + Position 10 × Position 4 ist größer als Position 7 + Position 5 × Position 3.","Die Differenz aus der Ziffer an Position 2 und dem Produkt der Ziffern an Position 5 und 3 beträgt 0.","Das Produkt aus der Ziffer an Position 4 und der Summe der Ziffern an Position 11 und 3 beträgt 16.","Die Ziffer an Position 2 entspricht der Quersumme des Produkts der Ziffern an Position 7 und 5.","Die Ziffern an Position 11 und 9 bilden in dieser Reihenfolge eine zweistellige Zahl, die durch 9 teilbar ist.","Das Produkt der Zahlen an Position 2 und Position 6 ist kleiner als das Produkt der Zahlen an Position 11 und Position 3.","Die letzte ungerade Zahl von links, der Median des Codes an seinem ersten Vorkommen und die Zahl unmittelbar nach der ersten Primzahl bilden in dieser Reihenfolge eine streng absteigende Folge.","Die erste gerade Zahl von links, die letzte ungerade Zahl von links und die Zahl unmittelbar vor der letzten Primzahl bilden in dieser Reihenfolge eine arithmetische Folge mit gleichem, von null verschiedenem Abstand.","Die Zahlen an Position 1, Position 4, Position 3 und Position 9 bilden in dieser Reihenfolge eine arithmetische Folge mit gleichbleibendem Abstand.","Die Ziffer an Position 3 ist kleiner als die an Position 11."],"metadata":[{"index":0,"packageNumber":1,"tier":4,"id":"T4-23","text":"Position 9 + Position 10 × Position 4 ist größer als Position 7 + Position 5 × Position 3.","textByLanguage":{"de":"Position 9 + Position 10 × Position 4 ist größer als Position 7 + Position 5 × Position 3.","en":"Position 9 + position 10 × position 4 is greater than position 7 + position 5 × position 3."},"visiblePositions":[10,4,9,7,5,3],"positionRoles":["Linker Faktor A","Linker Faktor B","Linker Summand","Rechter Summand","Rechter Faktor A","Rechter Faktor B"],"explanationType":"gemischter-ausdrucksvergleich","explanationData":{"hintId":"T4-23","visiblePositions":[10,4,9,7,5,3],"positionRoles":["Linker Faktor A","Linker Faktor B","Linker Summand","Rechter Summand","Rechter Faktor A","Rechter Faktor B"],"comparison":"größer"}},{"index":1,"packageNumber":1,"tier":3,"id":"T3-17","text":"Die Differenz aus der Ziffer an Position 2 und dem Produkt der Ziffern an Position 5 und 3 beträgt 0.","textByLanguage":{"de":"Die Differenz aus der Ziffer an Position 2 und dem Produkt der Ziffern an Position 5 und 3 beträgt 0.","en":"The difference between the digit at position 2 and the product of the digits at positions 5 and 3 is 0."},"visiblePositions":[5,3,2],"positionRoles":["Faktor A","Faktor B","Minuend"],"explanationType":"punkt-vor-strich","explanationData":{"hintId":"T3-17","visiblePositions":[5,3,2],"positionRoles":["Faktor A","Faktor B","Minuend"],"variant":"productMinus","result":0}},{"index":2,"packageNumber":2,"tier":3,"id":"T3-18","text":"Das Produkt aus der Ziffer an Position 4 und der Summe der Ziffern an Position 11 und 3 beträgt 16.","textByLanguage":{"de":"Das Produkt aus der Ziffer an Position 4 und der Summe der Ziffern an Position 11 und 3 beträgt 16.","en":"The product of the digit at position 4 and the sum of the digits at positions 11 and 3 is 16."},"visiblePositions":[11,3,4],"positionRoles":["Klammeroperand A","Klammeroperand B","Multiplikator"],"explanationType":"klammerrechnung","explanationData":{"hintId":"T3-18","visiblePositions":[11,3,4],"positionRoles":["Klammeroperand A","Klammeroperand B","Multiplikator"],"variant":"groupedPlus","result":16}},{"index":3,"packageNumber":2,"tier":3,"id":"T3-19","text":"Die Ziffer an Position 2 entspricht der Quersumme des Produkts der Ziffern an Position 7 und 5.","textByLanguage":{"de":"Die Ziffer an Position 2 entspricht der Quersumme des Produkts der Ziffern an Position 7 und 5.","en":"The digit at position 2 equals the digit sum of the product of the digits at positions 7 and 5."},"visiblePositions":[7,5,2],"positionRoles":["Faktor A","Faktor B","Quersummenziel"],"explanationType":"produktquersumme","explanationData":{"hintId":"T3-19","visiblePositions":[7,5,2],"positionRoles":["Faktor A","Faktor B","Quersummenziel"],"operation":"product-then-first-digit-sum"}},{"index":4,"packageNumber":3,"tier":3,"id":"T3-20","text":"Die Ziffern an Position 11 und 9 bilden in dieser Reihenfolge eine zweistellige Zahl, die durch 9 teilbar ist.","textByLanguage":{"de":"Die Ziffern an Position 11 und 9 bilden in dieser Reihenfolge eine zweistellige Zahl, die durch 9 teilbar ist.","en":"The digits at positions 11 and 9 form, in that order, a two-digit number divisible by 9."},"visiblePositions":[11,9],"positionRoles":["Zehnerstelle","Einerstelle"],"explanationType":"zweistellige-teilbarkeit","explanationData":{"hintId":"T3-20","visiblePositions":[11,9],"positionRoles":["Zehnerstelle","Einerstelle"],"divisor":9}},{"index":5,"packageNumber":3,"tier":4,"id":"T4-06","text":"Das Produkt der Zahlen an Position 2 und Position 6 ist kleiner als das Produkt der Zahlen an Position 11 und Position 3.","textByLanguage":{"de":"Das Produkt der Zahlen an Position 2 und Position 6 ist kleiner als das Produkt der Zahlen an Position 11 und Position 3.","en":"The product of the digits at position 2 and position 6 is smaller than the product of the digits at position 11 and position 3."},"visiblePositions":[2,6,11,3],"positionRoles":["Produkt A","Produkt A","Produkt B","Produkt B"],"explanationType":"mehrpositionsbeziehung","explanationData":{"hintId":"T4-06","visiblePositions":[2,6,11,3],"positionRoles":["Produkt A","Produkt A","Produkt B","Produkt B"]}},{"index":6,"packageNumber":4,"tier":5,"id":"T5-03","text":"Die letzte ungerade Zahl von links, der Median des Codes an seinem ersten Vorkommen und die Zahl unmittelbar nach der ersten Primzahl bilden in dieser Reihenfolge eine streng absteigende Folge.","textByLanguage":{"de":"Die letzte ungerade Zahl von links, der Median des Codes an seinem ersten Vorkommen und die Zahl unmittelbar nach der ersten Primzahl bilden in dieser Reihenfolge eine streng absteigende Folge.","en":"The last odd digit from the left, the median of the code at its first occurrence and the digit immediately after the first prime digit form a strictly descending sequence in that order."},"visiblePositions":[11,9,4],"positionRoles":["die letzte ungerade Zahl von links","der Median des Codes an seinem ersten Vorkommen","die Zahl unmittelbar nach der ersten Primzahl"],"explanationType":"codeweite-ableitung","explanationData":{"hintId":"T5-03","visiblePositions":[11,9,4],"positionRoles":["die letzte ungerade Zahl von links","der Median des Codes an seinem ersten Vorkommen","die Zahl unmittelbar nach der ersten Primzahl"]}},{"index":7,"packageNumber":4,"tier":5,"id":"T5-03","text":"Die erste gerade Zahl von links, die letzte ungerade Zahl von links und die Zahl unmittelbar vor der letzten Primzahl bilden in dieser Reihenfolge eine arithmetische Folge mit gleichem, von null verschiedenem Abstand.","textByLanguage":{"de":"Die erste gerade Zahl von links, die letzte ungerade Zahl von links und die Zahl unmittelbar vor der letzten Primzahl bilden in dieser Reihenfolge eine arithmetische Folge mit gleichem, von null verschiedenem Abstand.","en":"The first even digit from the left, the last odd digit from the left and the digit immediately before the last prime digit form an arithmetic sequence with a common non-zero difference in that order."},"visiblePositions":[4,11,10],"positionRoles":["die erste gerade Zahl von links","die letzte ungerade Zahl von links","die Zahl unmittelbar vor der letzten Primzahl"],"explanationType":"codeweite-ableitung","explanationData":{"hintId":"T5-03","visiblePositions":[4,11,10],"positionRoles":["die erste gerade Zahl von links","die letzte ungerade Zahl von links","die Zahl unmittelbar vor der letzten Primzahl"]}},{"index":8,"packageNumber":5,"tier":4,"id":"T4-13","text":"Die Zahlen an Position 1, Position 4, Position 3 und Position 9 bilden in dieser Reihenfolge eine arithmetische Folge mit gleichbleibendem Abstand.","textByLanguage":{"de":"Die Zahlen an Position 1, Position 4, Position 3 und Position 9 bilden in dieser Reihenfolge eine arithmetische Folge mit gleichbleibendem Abstand.","en":"The digits at position 1, position 4, position 3 and position 9 form an arithmetic sequence with a constant difference in this order."},"visiblePositions":[1,4,3,9],"positionRoles":["Position 1","Position 2","Position 3","Position 4"],"explanationType":"mehrpositionsbeziehung","explanationData":{"hintId":"T4-13","visiblePositions":[1,4,3,9],"positionRoles":["Position 1","Position 2","Position 3","Position 4"]}},{"index":9,"packageNumber":5,"tier":2,"id":"T2-01","text":"Die Ziffer an Position 3 ist kleiner als die an Position 11.","textByLanguage":{"de":"Die Ziffer an Position 3 ist kleiner als die an Position 11.","en":"The digit at position 3 is smaller than the digit at position 11."},"visiblePositions":[3,11],"positionRoles":["Position 1","Position 2"],"explanationType":"positionsbeziehung","explanationData":{"hintId":"T2-01","visiblePositions":[3,11],"positionRoles":["Position 1","Position 2"]}}]};
 const sceneVariables = runtimeScene.getVariables();
 const globalVariables = runtimeScene.getGame().getVariables();
 const copyPreviousSolution = (hintCount, sourceMode) => {
@@ -4637,20 +4636,24 @@ const copyPreviousSolution = (hintCount, sourceMode) => {
   const hints = sceneVariables.get("Hinweise").toJSObject();
   const metadata = sceneVariables.get("HinweisMetadaten").toJSObject();
   const safeCount = Math.max(0, Math.min(10, Math.floor(hintCount)));
-  globalVariables.get("previousSolutionCode").fromJSObject(Array.isArray(code) ? code.slice(0, 11) : []);
-  globalVariables.get("previousSolutionHints").fromJSObject(Array.isArray(hints) ? hints.slice(0, safeCount) : []);
-  globalVariables.get("previousSolutionMetadata").fromJSObject(Array.isArray(metadata) ? metadata.slice(0, safeCount) : []);
+  const useFixture = sourceMode === "Training-Test";
+  const transferCode = useFixture ? solutionTestFixture.code : code;
+  const transferHints = useFixture ? solutionTestFixture.hints : hints;
+  const transferMetadata = useFixture ? solutionTestFixture.metadata : metadata;
+  globalVariables.get("previousSolutionCode").fromJSObject(Array.isArray(transferCode) ? transferCode.slice(0, 11) : []);
+  globalVariables.get("previousSolutionHints").fromJSObject(Array.isArray(transferHints) ? transferHints.slice(0, safeCount) : []);
+  globalVariables.get("previousSolutionMetadata").fromJSObject(Array.isArray(transferMetadata) ? transferMetadata.slice(0, safeCount) : []);
   globalVariables.get("previousSolutionHintCount").setNumber(safeCount);
-  globalVariables.get("previousSolutionSourceMode").setString(sourceMode);
+  globalVariables.get("previousSolutionSourceMode").setString(useFixture ? "Training-Test-Fixture" : sourceMode);
   globalVariables.get("previousSolutionAvailable").setBoolean(true);
 };
 if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
-  if (!globalVariables.get("previousSolutionAvailable").getAsBoolean()) copyPreviousSolution(10, "Training-Test");
+  copyPreviousSolution(10, "Training-Test");
   sceneVariables.get("solutionTestRequested").setBoolean(false);
   sceneVariables.get("solutionTransferReady").setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaf7b88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaaca60 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -4672,11 +4675,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaf7328 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xbf2c60 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xaf6998 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaa84b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -4763,7 +4766,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf7630(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf2f80(runtimeScene);
 
 }
 
@@ -4771,7 +4774,7 @@ gdjs.TrainingSceneCode.userFunc0xaf7630(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xec49a0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xd9ff18(runtimeScene);
 
 }
 
@@ -4779,7 +4782,7 @@ gdjs.TrainingSceneCode.userFunc0xec49a0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcf7ab8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc18db0(runtimeScene);
 
 }
 
@@ -4787,7 +4790,7 @@ gdjs.TrainingSceneCode.userFunc0xcf7ab8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcf4eb8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xda41b0(runtimeScene);
 
 }
 
@@ -4795,7 +4798,7 @@ gdjs.TrainingSceneCode.userFunc0xcf4eb8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa04560(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xda6460(runtimeScene);
 
 }
 
@@ -6261,7 +6264,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xe8d8a0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xafe3d0(runtimeScene);
 
 }
 
@@ -6355,7 +6358,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf7780(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xab0dd0(runtimeScene);
 
 }
 
@@ -6380,7 +6383,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf7b88(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaaca60(runtimeScene);
 
 }
 
@@ -6388,7 +6391,7 @@ gdjs.TrainingSceneCode.userFunc0xaf7b88(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf7328(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xbf2c60(runtimeScene);
 
 }
 
@@ -6396,7 +6399,7 @@ gdjs.TrainingSceneCode.userFunc0xaf7328(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaf6998(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaa84b8(runtimeScene);
 
 }
 

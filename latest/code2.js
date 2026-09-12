@@ -163,6 +163,56 @@ gdjs.SolutionSceneCode.GDSolutionSandFrontObjects1= [];
 gdjs.SolutionSceneCode.GDSolutionSandFrontObjects2= [];
 gdjs.SolutionSceneCode.GDStagingBadgeObjects1= [];
 gdjs.SolutionSceneCode.GDStagingBadgeObjects2= [];
+gdjs.SolutionSceneCode.GDSolutionPageTitleObjects1= [];
+gdjs.SolutionSceneCode.GDSolutionPageTitleObjects2= [];
+gdjs.SolutionSceneCode.GDSolutionPageIndicatorObjects1= [];
+gdjs.SolutionSceneCode.GDSolutionPageIndicatorObjects2= [];
+gdjs.SolutionSceneCode.GDSolutionTermButton0Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionTermButton0Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionTermLabel0Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionTermLabel0Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionTermButton1Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionTermButton1Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionTermLabel1Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionTermLabel1Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionTermButton2Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionTermButton2Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionTermLabel2Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionTermLabel2Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel0Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel0Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel1Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel1Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel2Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel2Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel3Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel3Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel4Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel4Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel5Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel5Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel6Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel6Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel7Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel7Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel8Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel8Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel9Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel9Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel10Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionPositionLabel10Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionTermButton3Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionTermButton3Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionTermLabel3Objects1= [];
+gdjs.SolutionSceneCode.GDSolutionTermLabel3Objects2= [];
+gdjs.SolutionSceneCode.GDSolutionDialogIntermediateObjects1= [];
+gdjs.SolutionSceneCode.GDSolutionDialogIntermediateObjects2= [];
+gdjs.SolutionSceneCode.GDSolutionDialogSplitLeftObjects1= [];
+gdjs.SolutionSceneCode.GDSolutionDialogSplitLeftObjects2= [];
+gdjs.SolutionSceneCode.GDSolutionDialogSplitRightObjects1= [];
+gdjs.SolutionSceneCode.GDSolutionDialogSplitRightObjects2= [];
+gdjs.SolutionSceneCode.GDSolutionLearningPanelObjects1= [];
+gdjs.SolutionSceneCode.GDSolutionLearningPanelObjects2= [];
 gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects1= [];
 gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects2= [];
 gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects1= [];
@@ -177,7 +227,7 @@ gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.SolutionSceneCode.userFunc0xcf9108 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xd83720 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
 const backendGame = runtimeScene.getGame();
@@ -338,7 +388,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.SolutionSceneCode.userFunc0xaf7ab8 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xc1ea98 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -523,7 +573,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.SolutionSceneCode.userFunc0xaf76f0 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xd9ff18 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -562,19 +612,26 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.SolutionSceneCode.userFunc0xc20fe8 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xcdaba0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Einmalige Auflösungsmusik und AUS-Schutz erfolgen zentral über MusicController_Events.
 };
-gdjs.SolutionSceneCode.userFunc0xb25880 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xe46f28 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-025: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
+// L&L-025/L&L-056A: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
 // Datenquelle sind ausschließlich die global gesicherten Werte der vorherigen Kiste.
 const sceneVariables = runtimeScene.getVariables();
 const solutionI18n = runtimeScene.getGame().__lockLootI18n;
 const solutionT = (key, parameters = {}) => solutionI18n.t(key, parameters);
 const globalVariables = runtimeScene.getGame().getVariables();
-const cleanPlayerText = value => String(value || "").replace(/\bT[1-5](?:-CODE)?-\d{2}\b/gi, "").replace(/\s{2,}/g, " " ).replace(/^[-–—:;,.\s]+|[-–—:;,.\s]+$/g, "").trim();
+const cleanPlayerText = value => {
+  let text = String(value || "").replace(/\bT[1-5](?:-CODE)?-\d{2}\b/gi, "").replace(/\s{2,}/g, " " ).replace(/^[-–—:;,.\s]+|[-–—:;,.\s]+$/g, "").trim();
+  if (solutionI18n.language === "en") {
+    text = text.replace(/the same non-zero interval/gi, "a common non-zero difference").replace(/constant interval/gi, "constant difference");
+    return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+  }
+  return text.replace(/entspricht die Zahl an Position/g, "entspricht der Zahl an Position");
+};
 if (!runtimeScene.__lockLootSolutionState) {
   const codeValue = globalVariables.get("previousSolutionCode").toJSObject();
   const hintValue = globalVariables.get("previousSolutionHints").toJSObject();
@@ -596,12 +653,13 @@ if (!runtimeScene.__lockLootSolutionState) {
     const button = runtimeScene.getObjects("SolutionHintButton" + index)[0];
     const visible = index < hints.length && String(hints[index] || "").trim().length > 0;
     if (text) {
-      const value = visible ? String(hints[index]) : "";
-      text.setString(value);
-      text.setCharacterSize(value.length > 165 ? 9 : value.length > 120 ? 10 : value.length > 85 ? 11 : 12);
-      text.setLineHeight(value.length > 120 ? 12 : value.length > 85 ? 14 : 16);
+      const normalized = visible ? String(hints[index]).replace(/\s+/g, " ").trim() : "";
+      const clipped = normalized.length > 40 ? normalized.slice(0, 39).replace(/\s+\S*$/, "").trimEnd().replace(/[.,;:!?]+$/, "") : normalized;
+      text.setString(normalized.length > 40 ? (clipped || normalized.slice(0, 39).trimEnd()) + "…" : normalized);
+      text.setCharacterSize(14);
+      text.setLineHeight(16);
       text.setWrapping(true);
-      text.setWrappingWidth(206);
+      text.setWrappingWidth(173);
       text.setTextAlignment("center");
       text.setVerticalTextAlignment("center");
       text.setPadding(4);
@@ -618,133 +676,994 @@ const dialogState = sceneVariables.get("dialogState").getAsString();
 const selectedHint = sceneVariables.get("selectedHint").getAsNumber();
 const getOne = name => runtimeScene.getObjects(name)[0];
 const show = (name, visible) => { const object = getOne(name); if (object) object.hide(!visible); };
-const positionsFor = index => {
-  const item = state.metadata[index] || {};
-  const positions = Array.isArray(item.sichtbarePositionen) ? item.sichtbarePositionen : Array.isArray(item.visiblePositions) ? item.visiblePositions : [];
-  return positions.map(Number).filter(position => Number.isInteger(position) && position >= 1 && position <= 11);
-};
-const valueAt = visiblePosition => Number(state.code[visiblePosition - 1]);
-const valuesFor = index => positionsFor(index).map(valueAt);
-const isPrime = value => Number.isInteger(value) && value >= 2 && Array.from({ length: Math.max(0, value - 2) }, (_, offset) => offset + 2).every(divisor => value % divisor !== 0);
-const relation = (left, right) => solutionT(left === right ? "solution.relation.equal" : left > right ? "solution.relation.greater" : "solution.relation.less");
-const glossaryFor = hintText => {
-  const source = String(hintText || "").toLowerCase();
-  const definitions = [];
-  const add = key => { const value = solutionT(key); if (!definitions.includes(value)) definitions.push(value); };
-  if (source.includes("median") || source.includes("meridian")) add("solution.glossary.median");
-  if (source.includes("primzahl") || source.includes("prime")) add("solution.glossary.prime");
-  if (source.includes("parität") || source.includes("parity")) add("solution.glossary.parity");
-  if (source.includes("quadratzahl") || source.includes("square number")) add("solution.glossary.square");
-  if (source.includes("zusammengesetzt") || source.includes("composite")) add("solution.glossary.composite");
-  if (source.includes("zweierpotenz") || source.includes("power of two")) add("solution.glossary.power_two");
-  if (source.includes("kubikzahl") || source.includes("würfelzahl") || source.includes("cube number")) add("solution.glossary.cube");
-  if (source.includes("fibonacci")) add("solution.glossary.fibonacci");
-  if (source.includes("fakultät") || source.includes("factorial")) add("solution.glossary.factorial");
-  if (source.includes("dreieckszahl") || source.includes("triangular")) add("solution.glossary.triangular");
-  if (source.includes("palindrom")) add("solution.glossary.palindrome");
-  if (source.includes("modulo") || source.includes("remainder")) add("solution.glossary.modulo");
-  if (source.includes("maximum")) add("solution.glossary.maximum");
-  if (source.includes("minimum")) add("solution.glossary.minimum");
-  return definitions.slice(0, 2).join(" ");
-};
-const plainRuleFor = (item, hintText) => {
-  const id = String(item.hinweisartId || item.id || "");
-  const keys = {
-    "T4-21": "solution.rule.t4_21", "T3-16": "solution.rule.t3_16", "T5-02": "solution.rule.t5_02", "T5-01": "solution.rule.t5_01", "T5-04": "solution.rule.t5_04",
-    "T3-07": "solution.rule.t3_07", "T3-11": "solution.rule.t3_11", "T4-19": "solution.rule.t4_19", "T2-15": "solution.rule.t2_15", "T1-CODE-03": "solution.rule.t1_code_03",
-    "T2-CODE-02": "solution.rule.t2_code_02", "T2-CODE-04": "solution.rule.t2_code_04", "T4-CODE-05": "solution.rule.t4_code_05", "T4-CODE-06": "solution.rule.t4_code_06",
-    "T4-15": "solution.rule.t4_15", "T1-CODE-04": "solution.rule.t1_code_04", "T4-CODE-04": "solution.rule.t4_code_04"
-  };
-  return keys[id] ? solutionT(keys[id]) : solutionT("solution.explanation_from_hint", { hint: String(hintText || "").trim() });
-};
-const colorRolesFor = index => {
-  const item = state.metadata[index] || {};
-  const id = String(item.hinweisartId || item.id || "");
-  const details = item.details || {};
-  const positions = positionsFor(index);
-  const given = new Set(positions);
-  const result = new Set();
-  const makeResult = position => { if (Number.isInteger(position) && position >= 1 && position <= 11) { result.add(position); given.delete(position); } };
-  const sourceRoles = Array.isArray(item.positionsrollen) ? item.positionsrollen : Array.isArray(item.positionRoles) ? item.positionRoles : [];
-  const roles = sourceRoles.map(role => String(role).toLowerCase());
-  roles.forEach((role, roleIndex) => {
-    if (/zielposition|durchschnittsposition|prüfziffer|medianvorkommen/.test(role)) makeResult(positions[roleIndex]);
-  });
-  if (Number.isInteger(Number(details.targetPosition))) makeResult(Number(details.targetPosition) + 1);
-  if (["T3-01", "T3-03", "T3-08", "T3-10", "T3-11", "T3-12", "T3-16"].includes(id) && positions.length >= 3) makeResult(positions[2]);
-  if (id === "T4-15" && positions.length) {
-    const anchor = positions[0];
-    const digit = valueAt(anchor);
-    state.code.map(Number).forEach((value, codeIndex) => { if (value === digit && codeIndex + 1 !== anchor) makeResult(codeIndex + 1); });
-    given.add(anchor); result.delete(anchor);
-  }
-  if (["T4-09", "T4-16", "T4-18", "T4-22"].includes(id)) {
+// L&L-056A: Gemeinsamer, metadata-getriebener Erklärungskern für alle 100 aktiven Hintarten.
+function createSolutionExplanationEngine({t, cleanPlayerText = (value) => String(value || "").trim()}) {
+  void t("solution.page.solution_title");
+  const asNumbers = (values) => Array.isArray(values) ? values.map(Number) : [];
+  const validPosition = (value) => Number.isInteger(value) && value >= 1 && value <= 11;
+  const normalizeText = (value) => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const unique = (values) => [...new Set(values)];
+  const isPrime = (value) => Number.isInteger(value) && value >= 2 && Array.from({length: Math.max(0, value - 2)}, (_, index) => index + 2).every((divisor) => value % divisor !== 0);
+  const isSquare = (value) => Number.isInteger(value) && value >= 0 && Number.isInteger(Math.sqrt(value));
+  const isComposite = (value) => Number.isInteger(value) && value > 3 && !isPrime(value);
+  const isPowerOfTwo = (value) => [1, 2, 4, 8].includes(value);
+  const isCubeDigit = (value) => [0, 1, 8].includes(value);
+  const isFibonacciDigit = (value) => [0, 1, 2, 3, 5, 8].includes(value);
+  const isFactorialDigit = (value) => [1, 2, 6].includes(value);
+  const isTriangularDigit = (value) => [0, 1, 3, 6].includes(value);
+  const digitSum = (value) => String(Math.abs(Number(value))).split("").reduce((sum, digit) => sum + Number(digit), 0);
+  const relationSymbol = (left, right) => left === right ? "=" : left > right ? ">" : "<";
+  const relationKey = (left, right) => left === right ? "solution.relation.equal" : left > right ? "solution.relation.greater" : "solution.relation.less";
+  const positionValues = (positions, code) => positions.map((position) => Number(code[position - 1]));
+  const assignment = (position, value) => `P${position} = ${value}`;
+  const assignments = (positions, values) => positions.map((position, index) => assignment(position, values[index])).join("   |   ");
+  // L&L-056A Testkorrektur: Ergebniszeilen tragen nur die konkrete Mathematik.
+  // Die frühere generische Bestätigungsfloskel besitzt keinen Lernwert.
+  const confirmed = (statement) => String(statement || "").trim();
+  const propertyResult = (value, key) => confirmed(t(key, {value}));
+  const parts = (body, given = "", result = "", summary = "") => ({body, given, result, summary});
+  const rule = (key, parameters = {}) => t(key, parameters);
+  const unavailable = () => parts(rule("solution.explain.unavailable"));
+  const sortedCode = (code) => code.slice().sort((left, right) => left - right);
+  const primesIn = (code) => code.filter(isPrime);
+  const evensIn = (code) => code.filter((value) => value % 2 === 0);
+  const oddsIn = (code) => code.filter((value) => value % 2 !== 0);
+  const frequencyEntries = (values) => {
     const counts = new Map();
-    positions.forEach(position => counts.set(valueAt(position), (counts.get(valueAt(position)) || 0) + 1));
-    positions.forEach(position => { if ((counts.get(valueAt(position)) || 0) > 1) makeResult(position); });
-  }
-  if (id === "T4-CODE-04" && positions.length >= 3) {
-    const median = valueAt(positions[2]);
-    state.code.map(Number).forEach((value, codeIndex) => { if (value === median) makeResult(codeIndex + 1); });
-  }
-  return { given: Array.from(given), result: Array.from(result) };
-};
-const calculationPartsFor = index => {
-  const item = state.metadata[index] || {};
-  const id = String(item.hinweisartId || item.id || "");
-  const details = item.details || {};
-  const positions = positionsFor(index);
-  const values = valuesFor(index);
-  const a = values[0], b = values[1], c = values[2], d = values[3];
-  const parts = (given = "", result = "") => ({ given, result });
-  const result = value => solutionT("solution.calc.result", { value });
-  if (id === "T2-CODE-02" && values.length >= 1) { const allValues = state.code.map(Number); const minimum = Math.min(...allValues); const maximum = Math.max(...allValues); return parts(solutionT("solution.calc.extremes", { minimum, maximum }), solutionT("solution.calc.between", { position: positions[0], value: a })); }
-  if (["T2-02", "T2-10", "T2-16"].includes(id) && values.length >= 2) return parts(a + " + " + b, result(a + b));
-  if (["T2-03", "T2-06", "T2-13"].includes(id) && values.length >= 2) return parts(solutionT("solution.calc.distance", { first: a, second: b }), result(Math.abs(a - b)));
-  if (id === "T2-07" && values.length >= 2) return parts(a + " × " + b, result(a * b));
-  if (id === "T2-09" && values.length >= 2) return parts(solutionT("solution.calc.smaller_larger", { smaller: Math.min(a, b) }), solutionT("solution.calc.larger", { larger: Math.max(a, b) }));
-  if (id === "T2-11" && values.length >= 2 && b !== 0) return parts(a + " ÷ " + b, result(a / b));
-  if (id === "T2-12" && values.length >= 2) return parts(solutionT("solution.calc.digits", { first: a, second: b }), solutionT("solution.calc.two_digit", { value: String(a) + String(b) }));
-  if (["T3-01", "T3-03", "T3-08", "T3-10", "T3-11", "T3-12"].includes(id) && values.length >= 3) {
-    let computed = a + b; let formula = a + " + " + b + " = " + computed;
-    if (["T3-08", "T3-11"].includes(id)) { computed = Math.abs(a - b); formula = solutionT("solution.calc.distance", { first: a, second: b }) + " = " + computed; }
-    if (id === "T3-03") { computed = a * b; formula = a + " × " + b + " = " + computed; }
-    if (id === "T3-12") { computed = (a + b) / 2; formula = "(" + a + " + " + b + ") ÷ 2 = " + computed; }
-    return parts(formula, solutionT("solution.calc.position_value", { position: positions[2], value: c }));
-  }
-  if (id === "T3-15" && values.length >= 3) return parts(a + " + " + b + " + " + c, result(a + b + c));
-  if (id === "T3-16" && values.length >= 3) { const product = a * b; return parts(a + " × " + b + " = " + product, solutionT("solution.calc.last_digit", { position: positions[2], value: c })); }
-  if (["T4-02", "T4-03"].includes(id) && values.length >= 4) return parts(a + " + " + b + " = " + (a + b) + "   |   " + c + " + " + d + " = " + (c + d), solutionT("solution.calc.both_sums"));
-  if (id === "T4-05" && values.length >= 4) return parts(Math.abs(a - b) + "   |   " + Math.abs(c - d), solutionT("solution.calc.both_distances"));
-  if (id === "T4-06" && values.length >= 4) return parts(a + " × " + b + " = " + (a * b) + "   |   " + c + " × " + d + " = " + (c * d), solutionT("solution.calc.both_products"));
-  if (["T4-08", "T4-14"].includes(id) && values.length >= 4) { const half = Math.floor(values.length / 2); const left = values.slice(0, half); const right = values.slice(half); return parts(left.join(" + ") + "   |   " + right.join(" + "), solutionT("solution.calc.sums", { first: left.reduce((sum, value) => sum + value, 0), second: right.reduce((sum, value) => sum + value, 0) })); }
-  if (id === "T4-15" && values.length >= 1) { const matching = state.code.map(Number).map((value, codeIndex) => value === a && codeIndex + 1 !== positions[0] ? codeIndex + 1 : 0).filter(Boolean); return parts(solutionT("solution.calc.position_value", { position: positions[0], value: a }), solutionT("solution.calc.matching_positions", { positions: matching.join(", ") })); }
-  if (id === "T4-20") { const odd = state.code.map(Number).filter((_, position) => position % 2 === 0); const even = state.code.map(Number).filter((_, position) => position % 2 === 1); return parts(odd.join(" + ") + "   |   " + even.join(" + "), solutionT("solution.calc.sums", { first: odd.reduce((sum, value) => sum + value, 0), second: even.reduce((sum, value) => sum + value, 0) })); }
-  if (id === "T4-21") {
-    const sourcePositions = Array.isArray(details.sourcePositions) ? details.sourcePositions.map(Number) : positions.slice(0, -1).map(position => position - 1);
-    const targetPosition = Number.isInteger(Number(details.targetPosition)) ? Number(details.targetPosition) : positions[positions.length - 1] - 1;
-    const sourceValues = sourcePositions.map(position => Number(state.code[position])); const sum = sourceValues.reduce((total, value) => total + value, 0);
-    return parts(sourceValues.join(" + ") + " = " + sum, solutionT("solution.calc.last_digit", { position: targetPosition + 1, value: Number(state.code[targetPosition]) }));
-  }
-  if (id === "T5-02" && values.length >= 3) { const divisor = c; return parts(a + " ÷ " + divisor + "   |   " + b + " ÷ " + divisor, solutionT("solution.calc.same_remainder", { remainder: a % divisor })); }
-  if (id === "T1-CODE-04") { const sorted = state.code.map(Number).slice().sort((left, right) => left - right); return parts(solutionT("solution.calc.sorted", { values: sorted.join(", ") }), solutionT("solution.calc.median", { value: sorted[5] })); }
-  if (id === "T4-CODE-04" && values.length >= 3) return parts(solutionT("solution.given_values", { values: a + ", " + b }), solutionT("solution.calc.median", { value: c }));
-  if (id === "T1-CODE-01" && values.length >= 1) { const primes = state.code.map(Number).filter(isPrime); return parts(solutionT("solution.calc.primes", { values: primes.join(", ") }), solutionT("solution.calc.largest_prime", { value: Math.max(...primes) })); }
-  if (id === "T1-CODE-02" && values.length >= 1) { const evens = state.code.map(Number).filter(value => value % 2 === 0); return parts(solutionT("solution.calc.evens", { values: evens.join(", ") }), solutionT("solution.calc.smallest_even", { value: Math.min(...evens) })); }
-  if (id === "T1-CODE-03" && values.length >= 1) return parts(solutionT("solution.calc.all_compared"), solutionT("solution.calc.minimum_maximum", { minimum: Math.min(...state.code.map(Number)), maximum: Math.max(...state.code.map(Number)) }));
-  if (positions.length > 0) return parts(solutionT("solution.given_values", { values: positions.map(position => "P" + position + " = " + valueAt(position)).join("   |   ") }), "");
-  return parts();
-};
-const explanationFor = index => {
-  const item = state.metadata[index] || {};
-  const hintText = String(state.hints[index] || "").trim();
-  let body = cleanPlayerText(plainRuleFor(item, hintText));
-  if (!/[.!?]$/.test(body)) body += ".";
-  const glossary = glossaryFor(hintText);
-  if (glossary) body += " " + glossary;
-  const calculation = calculationPartsFor(index);
-  return { body, given: calculation.given, result: calculation.result };
-};
+    values.forEach((value) => counts.set(value, (counts.get(value) || 0) + 1));
+    return [...counts.entries()].sort((left, right) => left[0] - right[0]);
+  };
+  const frequencyText = (values) => frequencyEntries(values).map(([value, count]) => `${value} × ${count}`).join("   |   ");
+  const DIGIT_EXPLANATION_KEYS = [
+    "solution.explain.digit.00", "solution.explain.digit.01", "solution.explain.digit.02", "solution.explain.digit.03", "solution.explain.digit.04",
+    "solution.explain.digit.05", "solution.explain.digit.06", "solution.explain.digit.07", "solution.explain.digit.08", "solution.explain.digit.09",
+  ];
+  const squareWitness = (value) => isSquare(value) ? `${Math.sqrt(value)} × ${Math.sqrt(value)} = ${value}` : t("solution.explain.list.square_digits");
+  const primeWitness = (value) => {
+    if (isPrime(value)) return t("solution.explain.divisors", {value, divisors: `1, ${value}`});
+    if (value < 2) return t("solution.explain.prime_minimum", {value});
+    const divisor = Array.from({length: value - 2}, (_, index) => index + 2).find((candidate) => value % candidate === 0);
+    return divisor ? `${value} = ${divisor} × ${value / divisor}` : t("solution.explain.prime_minimum", {value});
+  };
+  const factorialWitness = (value) => value === 6 ? "3 × 2 × 1 = 6" : value === 2 ? "2 × 1 = 2" : value === 1 ? "1! = 1" : t("solution.explain.list.factorial_digits");
+  const triangularWitness = (value) => value === 6 ? "1 + 2 + 3 = 6" : value === 3 ? "1 + 2 = 3" : value === 1 ? "1 = 1" : value === 0 ? "0 = 0" : t("solution.explain.list.triangular_digits");
+
+  const normalizeItem = (item = {}) => {
+    const data = item.explanationData && typeof item.explanationData === "object" ? item.explanationData : {};
+    const id = String(data.hintId || item.hinweisartId || item.id || "");
+    const sourcePositions = Array.isArray(data.visiblePositions) ? data.visiblePositions : Array.isArray(item.sichtbarePositionen) ? item.sichtbarePositionen : item.visiblePositions;
+    const sourceRoles = Array.isArray(data.positionRoles) ? data.positionRoles : Array.isArray(item.positionsrollen) ? item.positionsrollen : item.positionRoles;
+    return {
+      id,
+      explanationType: String(item.explanationType || ""),
+      data,
+      positions: asNumbers(sourcePositions).filter(validPosition),
+      roles: Array.isArray(sourceRoles) ? sourceRoles.map(String) : [],
+    };
+  };
+
+  const expectedExplanationType = ({id, positions}) => {
+    if (id === "T5-04") return "genau-ein-falscher-hinweis";
+    if (id === "T5-01") return "positionszaehlung-von-rechts";
+    if (id === "T5-02") return "gleicher-teilungsrest";
+    if (id === "T5-03") return "codeweite-ableitung";
+    if (id === "T1-DIGIT-06") return "fakultaetsbeziehung";
+    if (id === "T3-17") return "punkt-vor-strich";
+    if (id === "T3-18") return "klammerrechnung";
+    if (id === "T3-19") return "produktquersumme";
+    if (id === "T3-20") return "zweistellige-teilbarkeit";
+    if (id === "T4-23") return "gemischter-ausdrucksvergleich";
+    if (id.includes("-CODE-")) return "codeweite-ableitung";
+    if (positions.length >= 4) return "mehrpositionsbeziehung";
+    if (positions.length >= 2) return "positionsbeziehung";
+    return "zifferneigenschaft";
+  };
+
+  const hasSafeExplanationShape = (item) => {
+    if (!item.id || item.explanationType !== expectedExplanationType(item)) return false;
+    if (item.id === "T5-04") return item.positions.length === 0;
+    if (item.positions.length === 0) return false;
+    if (item.roles.length !== item.positions.length || new Set(item.positions).size !== item.positions.length) return false;
+    if (["T3-17", "T3-18", "T3-19"].includes(item.id) && item.positions.length !== 3) return false;
+    if (item.id === "T3-20" && (item.positions.length !== 2 || !Number.isInteger(Number(item.data.divisor)) || Number(item.data.divisor) <= 1)) return false;
+    if (item.id === "T4-23" && (item.positions.length !== 6 || !String(item.data.comparison || "").trim())) return false;
+    if (item.id === "T3-17" && !["productPlus", "productMinus"].includes(item.data.variant)) return false;
+    if (item.id === "T3-18" && !["groupedPlus", "groupedMinus"].includes(item.data.variant)) return false;
+    return true;
+  };
+
+  const arithmeticDifferences = (values) => values.slice(1).map((value, index) => value - values[index]);
+  const isNonZeroArithmeticSequence = (values) => {
+    const differences = arithmeticDifferences(values);
+    return differences.length >= 2 && differences[0] !== 0 && differences.every((difference) => difference === differences[0]);
+  };
+  const derivedPatternFor = (values) => {
+    if (values.length !== 3) return "";
+    const [a, b, c] = values;
+    if (isNonZeroArithmeticSequence(values)) return "arithmetic";
+    if (a < b && b < c) return "ascending";
+    if (a > b && b > c) return "descending";
+    if (a === c && a !== b) return "first_third_equal";
+    return "";
+  };
+  const claimedDerivedPattern = (hintText) => {
+    const normalized = normalizeText(hintText);
+    if (normalized.includes("arithmetische folge") || normalized.includes("arithmetic sequence")) return "arithmetic";
+    if (normalized.includes("streng aufsteigend") || normalized.includes("strictly ascending")) return "ascending";
+    if (normalized.includes("streng absteigend") || normalized.includes("strictly descending")) return "descending";
+    if (normalized.includes("ersten und dritten wert") || normalized.includes("first and third value")) return "first_third_equal";
+    return "";
+  };
+  const mathematicalInstanceIsValid = (context) => {
+    const {id, positions, values, roles, code, data, hintText} = context;
+    const normalizedHint = normalizeText(hintText);
+    if (id.startsWith("T1-DIGIT-")) {
+      const expectedDigit = Number(id.slice(-2));
+      return id === "T1-DIGIT-06"
+        ? values.length === 2 && values[0] === 6 && values[1] === 3
+        : values.length === 1 && values[0] === expectedDigit;
+    }
+    if (["T1-CODE-01", "T2-CODE-03", "T3-CODE-01", "T3-CODE-02", "T3-CODE-04", "T4-CODE-01", "T4-CODE-02", "T4-CODE-03", "T4-CODE-05", "T4-CODE-07"].includes(id) && primesIn(code).length === 0) return false;
+    if (["T1-CODE-02", "T4-CODE-02", "T4-CODE-04", "T4-CODE-07"].includes(id) && evensIn(code).length === 0) return false;
+    if (["T4-CODE-02", "T4-CODE-04"].includes(id) && oddsIn(code).length === 0) return false;
+    if (id === "T2-CODE-01") {
+      if ((normalizedHint.includes("kleinste gerade") || normalizedHint.includes("smallest even")) && evensIn(code).length === 0) return false;
+      if ((normalizedHint.includes("großte ungerade") || normalizedHint.includes("largest odd")) && oddsIn(code).length === 0) return false;
+      if ((normalizedHint.includes("primzahl") || normalizedHint.includes("prime")) && primesIn(code).length === 0) return false;
+    }
+    if (id === "T2-08") return values.length === 2 && Math.abs(values[0] - values[1]) === 1;
+    if (id === "T2-09") return values.length === 2 && values[0] !== values[1] && (values[0] === 2 * values[1] || values[1] === 2 * values[0]);
+    if (id === "T2-11") return values.length === 2 && values[1] > 0 && values[0] !== values[1] && values[0] % values[1] === 0 && values[0] / values[1] >= 2;
+    if (id === "T2-15") return values.length === 2 && Math.abs(values[0] - 5) === Math.abs(values[1] - 5);
+    if (id === "T3-07") return values.length === 3 && values[1] < values[0] && values[0] < values[2];
+    if (id === "T3-09") return values.length === 3 && values[0] !== 0 && values[0] === values[2];
+    if (id === "T3-10") return values.length === 3 && values[0] + values[1] === values[2];
+    if (id === "T3-11") return values.length === 3 && Math.abs(values[0] - values[1]) === values[2];
+    if (id === "T3-12") return values.length === 3 && values[0] !== values[1] && values[0] + values[1] === 2 * values[2];
+    if (id === "T3-14") { const sorted = values.slice().sort((left, right) => left - right); return sorted.length === 3 && sorted[0] > 0 && sorted[0] + sorted[1] > sorted[2]; }
+    if (id === "T3-16") return values.length === 3 && values[0] * values[1] % 10 === values[2];
+    if (id === "T3-17") { const result = data.variant === "productMinus" ? values[2] - values[0] * values[1] : data.variant === "productPlus" ? values[2] + values[0] * values[1] : NaN; return values.length === 3 && Number.isFinite(result) && result === Number(data.result); }
+    if (id === "T3-18") { const grouped = data.variant === "groupedMinus" ? values[0] - values[1] : data.variant === "groupedPlus" ? values[0] + values[1] : NaN; return values.length === 3 && Number.isFinite(grouped) && grouped * values[2] === Number(data.result); }
+    if (id === "T3-19") return values.length === 3 && values[0] * values[1] >= 10 && digitSum(values[0] * values[1]) === values[2];
+    if (id === "T3-20") { const divisor = Number(data.divisor); const number = values[0] * 10 + values[1]; return values.length === 2 && values[0] !== 0 && Number.isInteger(divisor) && divisor > 1 && number % divisor === 0; }
+    if (context.id === "T3-06") return context.values.length === 3 && isNonZeroArithmeticSequence(context.values);
+    if (id === "T4-01") return values.length >= 4 && values.every((value, index) => value === values[values.length - 1 - index]);
+    if (id === "T4-04") return values.length === 4 && values[0] === values[2] && values[1] === values[3] && values[0] !== values[1];
+    if (id === "T4-05") return values.length === 4 && Math.abs(values[0] - values[1]) > 0 && Math.abs(values[0] - values[1]) === Math.abs(values[2] - values[3]);
+    if (id === "T4-07") return values.length === 4 && values[0] === values[1] && values[2] === values[3] && values[0] !== values[2];
+    if (id === "T4-08") { const first = values.filter((unused, index) => normalizeText(roles[index]).includes("gruppe a")); const second = values.filter((unused, index) => normalizeText(roles[index]).includes("gruppe b")); return first.length >= 2 && second.length >= 2 && first.reduce((sum, value) => sum + value, 0) === second.reduce((sum, value) => sum + value, 0); }
+    if (id === "T4-10") return values.length === 6 && values.slice(0, 3).every((value, index) => value === values[index + 3]);
+    if (id === "T4-11") return values.length >= 4 && values.length <= 6 && values.slice(1).every((value, index) => values[index] < value);
+    if (id === "T4-12") return values.length >= 4 && values.length <= 6 && values.slice(1).every((value, index) => values[index] > value);
+    if (id === "T4-13") return values.length >= 4 && values.length <= 6 && isNonZeroArithmeticSequence(values);
+    if (id === "T4-18") { const sums = [values[0] + values[5], values[1] + values[4], values[2] + values[3]]; return values.length === 6 && sums[0] === sums[1] && sums[1] === sums[2]; }
+    if (id === "T4-19") return values.length === 5 && Math.abs(values[0] + values[1] - values[3] - values[4]) === values[2];
+    if (id === "T4-21") return values.length >= 4 && values.length <= 6 && values.slice(0, -1).reduce((sum, value) => sum + value, 0) % 10 === values[values.length - 1];
+    if (id === "T4-CODE-01") { const largestPrime = Math.max(...primesIn(code)); const maximum = Math.max(...code); return positions.length === 2 && positions[0] === 1 && positions[1] === 11 && largestPrime < values[0] && values[0] < maximum && largestPrime < values[1] && values[1] < maximum; }
+    if (id === "T4-CODE-02") { const smallestEven = Math.min(...evensIn(code)); const largestOdd = Math.max(...oddsIn(code)); return values.length === 2 && smallestEven < values[1] && values[1] < largestOdd; }
+    if (id === "T4-CODE-03") return values.length === 3 && values[0] + values[1] === values[2];
+    if (id === "T4-CODE-05") return values.length === 2 && Math.max(...code) - Math.min(...code) === values[1];
+    if (id === "T4-CODE-06") { const minimum = Math.min(...code); const maximum = Math.max(...code); return positions.length === 2 && positions[0] === 1 && positions[1] === 11 && minimum < values[0] && values[0] < maximum && minimum < values[1] && values[1] < maximum; }
+    if (id === "T4-CODE-07") { const smallestEven = Math.min(...evensIn(code)); const largestPrime = Math.max(...primesIn(code)); return values.length === 1 && smallestEven < largestPrime && largestPrime < values[0]; }
+    if (id === "T5-02") { const [first, second, divisor] = values; return values.length === 3 && divisor > 1 && first !== second && first % divisor > 0 && first % divisor === second % divisor; }
+    if (id === "T5-03") {
+      const actualPattern = derivedPatternFor(values);
+      const claimedPattern = claimedDerivedPattern(hintText);
+      return Boolean(actualPattern && claimedPattern && actualPattern === claimedPattern);
+    }
+    return true;
+  };
+  const arithmeticSequenceCalculation = (values) => {
+    const differences = arithmeticDifferences(values);
+    if (!isNonZeroArithmeticSequence(values)) return "";
+    return differences.map((difference, index) => `${values[index + 1]} − ${values[index]} = ${difference}`).concat(`d = ${differences[0]}`).join("\n");
+  };
+
+  const singleProperty = (context) => {
+    const {id, positions, values} = context;
+    const position = positions[0];
+    const value = values[0];
+    const givenPosition = assignment(position, value);
+    if (id === "T1-01") {
+      const even = value % 2 === 0;
+      const witness = even ? `${value} = 2 × ${value / 2}` : `${value} = 2 × ${Math.floor(value / 2)} + 1`;
+      return parts(rule("solution.explain.rule.parity"), `${givenPosition}   |   ${witness}`, propertyResult(value, even ? "solution.explain.fact.even" : "solution.explain.fact.odd"));
+    }
+    if (id === "T1-02") return parts(rule("solution.explain.rule.prime"), `${givenPosition}   |   ${primeWitness(value)}`, propertyResult(value, isPrime(value) ? "solution.explain.fact.prime" : "solution.explain.fact.not_prime"));
+    if (id === "T1-03") return parts(rule("solution.explain.rule.square"), `${givenPosition}   |   ${squareWitness(value)}`, propertyResult(value, isSquare(value) ? "solution.explain.fact.square" : "solution.explain.fact.not_square"));
+    if (id === "T1-05") return parts(rule("solution.explain.rule.composite"), `${givenPosition}   |   ${primeWitness(value)}`, propertyResult(value, isComposite(value) ? "solution.explain.fact.composite" : "solution.explain.fact.not_composite"));
+    if (id === "T1-06") return parts(rule("solution.explain.rule.power_two"), `${givenPosition}   |   ${isPowerOfTwo(value) ? (value === 1 ? "2⁰ = 1" : value === 2 ? "2¹ = 2" : value === 4 ? "2² = 4" : "2³ = 8") : t("solution.explain.list.power_two_digits")}`, propertyResult(value, isPowerOfTwo(value) ? "solution.explain.fact.power_two" : "solution.explain.fact.not_power_two"));
+    if (id === "T1-07") return parts(rule("solution.explain.rule.cube"), `${givenPosition}   |   ${value === 8 ? "2 × 2 × 2 = 8" : value === 1 ? "1 × 1 × 1 = 1" : value === 0 ? "0 × 0 × 0 = 0" : t("solution.explain.list.cube_digits")}`, propertyResult(value, isCubeDigit(value) ? "solution.explain.fact.cube" : "solution.explain.fact.not_cube"));
+    if (id === "T1-08") return parts(rule("solution.explain.rule.fibonacci"), `${givenPosition}   |   ${t("solution.explain.list.fibonacci_digits")}`, propertyResult(value, isFibonacciDigit(value) ? "solution.explain.fact.fibonacci" : "solution.explain.fact.not_fibonacci"));
+    if (id === "T1-09") {
+      const valueParity = value % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd");
+      const positionParity = position % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd");
+      return parts(rule("solution.explain.rule.position_parity"), `${givenPosition}   |   P${position}: ${positionParity}`, confirmed(t("solution.explain.same_parity", {valueParity, positionParity})));
+    }
+    if (id === "T1-12") {
+      const pairs = [[2, 3], [2, 5], [2, 7], [3, 5], [3, 7], [5, 7]];
+      const witness = pairs.find(([left, right]) => left + right === value);
+      const calculation = witness ? `${witness[0]} + ${witness[1]} = ${value}` : t("solution.explain.list.distinct_prime_sums");
+      return parts(rule("solution.explain.rule.distinct_prime_sum"), `${givenPosition}   |   ${calculation}`, propertyResult(value, witness ? "solution.explain.fact.distinct_prime_sum" : "solution.explain.fact.not_distinct_prime_sum"));
+    }
+    if (id === "T1-13") return parts(rule("solution.explain.rule.factorial"), `${givenPosition}   |   ${factorialWitness(value)}`, propertyResult(value, isFactorialDigit(value) ? "solution.explain.fact.factorial" : "solution.explain.fact.not_factorial"));
+    return parts(rule("solution.explain.rule.triangular"), `${givenPosition}   |   ${triangularWitness(value)}`, propertyResult(value, isTriangularDigit(value) ? "solution.explain.fact.triangular" : "solution.explain.fact.not_triangular"));
+  };
+
+  const fixedDigit = (context) => {
+    const {id, positions, values} = context;
+    const digit = Number(id.slice(-2));
+    const position = positions[0];
+    let given = assignment(position, values[0]);
+    if (digit === 0) given += "   |   7 + 0 = 7";
+    else if (digit === 1) given += "   |   7 × 1 = 7";
+    else if (digit === 2) given += `   |   ${primeWitness(2)}`;
+    else if (digit === 3) given += `   |   ${t("solution.explain.list.prime_digits")}`;
+    else if (digit === 4) given += "   |   2 × 2 = 4";
+    else if (digit === 5) given += `   |   ${t("solution.explain.prime_divisors_ten")}`;
+    else if (digit === 6) given = `${assignment(positions[1], values[1])}   |   3 × 2 × 1 = 6`;
+    else if (digit === 7) given += `   |   ${t("solution.explain.list.prime_digits")}`;
+    else if (digit === 8) given += "   |   2 × 2 × 2 = 8";
+    else given += "   |   3 × 3 = 9";
+    return parts(rule(digit === 6 ? "solution.explain.rule.digit_factorial" : "solution.explain.rule.digit_identity"), given, confirmed(t(DIGIT_EXPLANATION_KEYS[digit], {position})));
+  };
+
+  const codewideSingle = (context) => {
+    const {id, positions, values, code} = context;
+    const positionValue = values[0];
+    if (id === "T1-CODE-01") {
+      const primes = primesIn(code); const largest = Math.max(...primes);
+      return parts(rule("solution.explain.rule.codewide_prime"), `${t("solution.calc.primes", {values: primes.join(", ")})}   |   ${assignment(positions[0], positionValue)}`, confirmed(`${largest} ${relationSymbol(largest, positionValue)} ${positionValue}`));
+    }
+    if (id === "T1-CODE-02") {
+      const evens = evensIn(code); const smallest = Math.min(...evens);
+      return parts(rule("solution.explain.rule.codewide_even"), `${t("solution.calc.evens", {values: evens.join(", ")})}   |   ${assignment(positions[0], positionValue)}`, confirmed(`${smallest} ${relationSymbol(smallest, positionValue)} ${positionValue}`));
+    }
+    const minimum = Math.min(...code); const maximum = Math.max(...code); const position = positions[0];
+    const resultKey = positionValue === minimum ? "solution.explain.t1_code_03.minimum" : positionValue === maximum ? "solution.explain.t1_code_03.maximum" : "solution.explain.t1_code_03.neither";
+    const resultParameters = positionValue === minimum
+      ? {position, value: positionValue, minimum}
+      : positionValue === maximum
+        ? {position, value: positionValue, maximum}
+        : {position, value: positionValue, minimum, maximum};
+    return parts(rule("solution.rule.t1_code_03"), `${t("solution.calc.minimum_maximum", {minimum, maximum})}   |   ${assignment(position, positionValue)}`, confirmed(t(resultKey, resultParameters)));
+  };
+
+  const pairRelation = (context) => {
+    const {id, positions, values} = context;
+    const [a, b] = values;
+    const given = assignments(positions, values);
+    if (id === "T2-01") return parts(rule("solution.explain.rule.compare"), given, confirmed(`${a} ${relationSymbol(a, b)} ${b}`));
+    if (id === "T2-02") { const value = a + b; return parts(rule("solution.explain.rule.sum_property"), `${a} + ${b} = ${value}   |   ${squareWitness(value)}`, propertyResult(value, isSquare(value) ? "solution.explain.fact.square" : "solution.explain.fact.not_square")); }
+    if (id === "T2-03") { const value = Math.abs(a - b); return parts(rule("solution.explain.rule.difference_property"), `|${a} − ${b}| = ${value}   |   ${squareWitness(value)}`, propertyResult(value, isSquare(value) ? "solution.explain.fact.square" : "solution.explain.fact.not_square")); }
+    if (id === "T2-04") { const same = a % 2 === b % 2; return parts(rule("solution.explain.rule.parity_compare"), `${a}: ${a % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd")}   |   ${b}: ${b % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd")}`, confirmed(t(same ? "solution.explain.fact.same_parity" : "solution.explain.fact.different_parity", {}))); }
+    if (id === "T2-06") { const value = Math.abs(a - b); return parts(rule("solution.explain.rule.difference_parity"), `|${a} − ${b}| = ${value}`, propertyResult(value, value % 2 === 0 ? "solution.explain.fact.even" : "solution.explain.fact.odd")); }
+    if (id === "T2-07") { const value = a * b; return parts(rule("solution.explain.rule.product_property"), `${a} × ${b} = ${value}   |   ${squareWitness(value)}`, propertyResult(value, isSquare(value) ? "solution.explain.fact.square" : "solution.explain.fact.not_square")); }
+    if (id === "T2-08") return parts(rule("solution.explain.rule.neighbours"), `|${a} − ${b}| = ${Math.abs(a - b)}`, confirmed(t("solution.explain.fact.distance_one", {})));
+    if (id === "T2-09") { const smaller = Math.min(a, b); const larger = Math.max(a, b); return parts(rule("solution.explain.rule.ratio"), `${smaller} × 2 = ${larger}`, confirmed(t("solution.explain.fact.half_double", {smaller, larger}))); }
+    if (id === "T2-10") { const value = a + b; return parts(rule("solution.explain.rule.sum_fibonacci"), `${a} + ${b} = ${value}   |   ${t("solution.explain.list.fibonacci_digits")}`, propertyResult(value, isFibonacciDigit(value) ? "solution.explain.fact.fibonacci" : "solution.explain.fact.not_fibonacci")); }
+    if (id === "T2-11") return parts(rule("solution.explain.rule.divisibility"), `${a} ÷ ${b} = ${a / b}`, confirmed(t("solution.explain.fact.no_remainder", {})));
+    if (id === "T2-12") { const value = Number(`${a}${b}`); return parts(rule("solution.explain.rule.compose_number"), `${a} · 10 + ${b} = ${value}   |   ${squareWitness(value)}`, propertyResult(value, isSquare(value) ? "solution.explain.fact.square" : "solution.explain.fact.not_square")); }
+    if (id === "T2-13") { const value = Math.abs(a - b); return parts(rule("solution.explain.rule.difference_prime"), `|${a} − ${b}| = ${value}   |   ${primeWitness(value)}`, propertyResult(value, isPrime(value) ? "solution.explain.fact.prime" : "solution.explain.fact.not_prime")); }
+    if (id === "T2-14") return parts(rule("solution.explain.rule.equal_values"), given, confirmed(`${a} ${relationSymbol(a, b)} ${b}`));
+    if (id === "T2-15") return parts(rule("solution.rule.t2_15"), `|${a} − 5| = ${Math.abs(a - 5)}   |   |${b} − 5| = ${Math.abs(b - 5)}`, confirmed(`${Math.abs(a - 5)} = ${Math.abs(b - 5)}`));
+    const value = a + b;
+    return parts(rule("solution.explain.rule.sum_prime"), `${a} + ${b} = ${value}   |   ${primeWitness(value)}`, propertyResult(value, isPrime(value) ? "solution.explain.fact.prime" : "solution.explain.fact.not_prime"));
+  };
+
+  const codewidePair = (context) => {
+    const {id, positions, values, code, hintText} = context;
+    const [a, b] = values;
+    const normalized = normalizeText(hintText);
+    if (id === "T2-CODE-01") {
+      const derived = normalized.includes("kleinste gerade") || normalized.includes("smallest even") ? Math.min(...evensIn(code)) : normalized.includes("großte ungerade") || normalized.includes("largest odd") ? Math.max(...oddsIn(code)) : Math.max(...primesIn(code));
+      return parts(rule("solution.explain.rule.codewide_pair"), `${assignments(positions, values)}   |   ${t("solution.explain.derived_value", {value: derived})}`, confirmed(`${Math.min(a, b)} ${relationSymbol(Math.min(a, b), derived)} ${derived} ${relationSymbol(derived, Math.max(a, b))} ${Math.max(a, b)}`));
+    }
+    if (id === "T2-CODE-03") {
+      const largestPrime = Math.max(...primesIn(code));
+      return parts(rule("solution.explain.rule.codewide_prime_pair"), `${assignments(positions, values)}   |   ${t("solution.calc.largest_prime", {value: largestPrime})}`, confirmed(`${Math.min(a, b)} ${relationSymbol(Math.min(a, b), largestPrime)} ${largestPrime} ${relationSymbol(largestPrime, Math.max(a, b))} ${Math.max(a, b)}`));
+    }
+    const extremum = normalized.includes("kleinsten") || normalized.includes("smallest") ? Math.min(...code) : Math.max(...code);
+    const firstDistance = Math.abs(a - extremum); const secondDistance = Math.abs(b - extremum);
+    return parts(rule("solution.rule.t2_code_04"), `|${a} − ${extremum}| = ${firstDistance}   |   |${b} − ${extremum}| = ${secondDistance}`, confirmed(`${firstDistance} < ${secondDistance}`));
+  };
+
+  const tripleRelation = (context) => {
+    const {id, positions, values} = context;
+    const [a, b, c] = values;
+    if (id === "T3-01") { const sum = a + b; return parts(rule("solution.explain.rule.sum_compare"), `${a} + ${b} = ${sum}   |   ${assignment(positions[2], c)}`, confirmed(`${sum} ${relationSymbol(sum, c)} ${c}`)); }
+    if (id === "T3-02") return parts(rule("solution.explain.rule.ordered_sequence"), assignments(positions, values), confirmed(`${a} ${relationSymbol(a, b)} ${b} ${relationSymbol(b, c)} ${c}`));
+    if (id === "T3-03") { const product = a * b; return parts(rule("solution.explain.rule.product_compare"), `${a} × ${b} = ${product}   |   ${assignment(positions[2], c)}`, confirmed(`${product} ${relationSymbol(product, c)} ${c}`)); }
+    if (id === "T3-04") return parts(rule("solution.explain.rule.frequency"), assignments(positions, values), confirmed(frequencyText(values)));
+    if (id === "T3-06") return parts(rule("solution.explain.rule.arithmetic_sequence"), arithmeticSequenceCalculation(values), confirmed(`d = ${b - a}`));
+    if (id === "T3-07") return parts(rule("solution.rule.t3_07"), `${assignment(positions[1], b)}   |   ${assignment(positions[0], a)}   |   ${assignment(positions[2], c)}`, confirmed(`${b} < ${a} < ${c}`));
+    if (id === "T3-08") { const distance = Math.abs(a - b); return parts(rule("solution.explain.rule.distance_compare"), `|${a} − ${b}| = ${distance}   |   ${assignment(positions[2], c)}`, confirmed(`${distance} ${relationSymbol(distance, c)} ${c}`)); }
+    if (id === "T3-09") { const number = Number(`${a}${b}${c}`); return parts(rule("solution.explain.rule.palindrome"), `${number} ↔ ${String(number).split("").reverse().join("")}`, confirmed(t("solution.explain.fact.palindrome", {value: number}))); }
+    if (id === "T3-10") return parts(rule("solution.explain.rule.target_sum"), `${a} + ${b} = ${a + b}`, confirmed(assignment(positions[2], c)));
+    if (id === "T3-11") return parts(rule("solution.rule.t3_11"), `|${a} − ${b}| = ${Math.abs(a - b)}`, confirmed(assignment(positions[2], c)));
+    if (id === "T3-12") return parts(rule("solution.explain.rule.average"), `(${a} + ${b}) ÷ 2 = ${(a + b) / 2}`, confirmed(assignment(positions[2], c)));
+    if (id === "T3-13") { const distance = Math.max(...values) - Math.min(...values); return parts(rule("solution.explain.rule.range_prime"), `${Math.max(...values)} − ${Math.min(...values)} = ${distance}   |   ${primeWitness(distance)}`, propertyResult(distance, isPrime(distance) ? "solution.explain.fact.prime" : "solution.explain.fact.not_prime")); }
+    if (id === "T3-14") { const sorted = values.slice().sort((left, right) => left - right); return parts(rule("solution.explain.rule.triangle"), `${sorted[0]} + ${sorted[1]} = ${sorted[0] + sorted[1]}   |   ${t("solution.explain.largest_side", {value: sorted[2]})}`, confirmed(`${sorted[0] + sorted[1]} > ${sorted[2]}`)); }
+    if (id === "T3-15") { const sum = a + b + c; return parts(rule("solution.explain.rule.sum_parity"), `${a} + ${b} + ${c} = ${sum}`, propertyResult(sum, sum % 2 === 0 ? "solution.explain.fact.even" : "solution.explain.fact.odd")); }
+    const product = a * b;
+    return parts(rule("solution.rule.t3_16"), `${a} × ${b} = ${product}   |   ${product} mod 10 = ${product % 10}`, confirmed(assignment(positions[2], c)));
+  };
+
+  const l054 = (context) => {
+    const {id, positions, values, data} = context;
+    if (id === "T3-17") {
+      const [a, b, term] = values; const product = a * b; const minus = data.variant === "productMinus"; const result = minus ? term - product : term + product;
+      return parts(rule("solution.explain.rule.point_before"), `${a} × ${b} = ${product}`, confirmed(`${term} ${minus ? "−" : "+"} ${product} = ${result}`));
+    }
+    if (id === "T3-18") {
+      const [a, b, multiplier] = values; const minus = data.variant === "groupedMinus"; const inside = minus ? a - b : a + b;
+      return parts(rule("solution.explain.rule.parentheses"), `(${a} ${minus ? "−" : "+"} ${b}) = ${inside}`, confirmed(`${inside} × ${multiplier} = ${inside * multiplier}`));
+    }
+    if (id === "T3-19") {
+      const [a, b, target] = values; const product = a * b; const digits = String(product).split("");
+      return parts(rule("solution.explain.rule.product_digit_sum"), `${a} × ${b} = ${product}   |   ${digits.join(" + ")} = ${digitSum(product)}`, confirmed(assignment(positions[2], target)));
+    }
+    const [tens, ones] = values; const number = tens * 10 + ones; const divisor = Number(data.divisor);
+    return parts(rule("solution.explain.rule.composed_divisibility"), `${tens} · 10 + ${ones} = ${number}`, confirmed(`${number} ÷ ${divisor} = ${number / divisor} (${t("solution.explain.no_remainder")})`));
+  };
+
+  const codewideTriple = (context) => {
+    const {id, positions, values, code} = context;
+    const [a, b, c] = values;
+    if (id === "T3-CODE-01" || id === "T3-CODE-02") {
+      const anchor = id === "T3-CODE-01" ? t("solution.explain.first_prime") : t("solution.explain.last_prime");
+      return parts(rule("solution.explain.rule.prime_neighbour"), `${anchor}: ${assignment(positions[0], a)}   |   ${t("solution.explain.neighbour", {position: positions[1], value: b})}`, confirmed(`${b} ${relationSymbol(b, c)} ${c}`));
+    }
+    if (id === "T3-CODE-03") {
+      const minimum = Math.min(...code); const maximum = Math.max(...code); const kind = a === minimum ? t("solution.explain.minimum") : t("solution.explain.maximum");
+      const occurrencePositions = code.map((value, index) => value === a ? index + 1 : 0).filter(Boolean);
+      const occurrence = positions[0] === occurrencePositions[0] ? t("solution.explain.first_occurrence") : t("solution.explain.last_occurrence");
+      return parts(rule("solution.explain.rule.extreme_neighbour"), `${occurrence} ${kind}: ${assignment(positions[0], a)}   |   ${assignment(positions[1], b)}`, confirmed(`${b} ${relationSymbol(b, c)} ${c}`));
+    }
+    return parts(rule("solution.explain.rule.prime_neighbours_compare"), assignments(positions, values), confirmed(`${a} ${relationSymbol(a, b)} ${b}`));
+  };
+
+  const multiRelation = (context) => {
+    const {id, positions, values, roles, code} = context;
+    if (id === "T4-01") { const number = values.join(""); return parts(rule("solution.explain.rule.palindrome"), `${number} ↔ ${number.split("").reverse().join("")}`, confirmed(t("solution.explain.fact.palindrome", {value: number}))); }
+    if (id === "T4-02") { const left = values[0] + values[1]; const right = values[2] + values[3]; return parts(rule("solution.explain.rule.group_sums"), `${values[0]} + ${values[1]} = ${left}   |   ${values[2]} + ${values[3]} = ${right}`, confirmed(`${left} ${relationSymbol(left, right)} ${right}`)); }
+    if (id === "T4-03") { const left = values[0] + values[1]; const right = values[2] + values[3]; return parts(rule("solution.explain.rule.sum_parity_compare"), `${left}: ${left % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd")}   |   ${right}: ${right % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd")}`, confirmed(t(left % 2 === right % 2 ? "solution.explain.fact.same_parity" : "solution.explain.fact.different_parity", {}))); }
+    if (id === "T4-04") return parts(rule("solution.explain.rule.pattern"), assignments(positions, values), confirmed(`${values[0]} = ${values[2]}   |   ${values[1]} = ${values[3]}`));
+    if (id === "T4-05") { const left = Math.abs(values[0] - values[1]); const right = Math.abs(values[2] - values[3]); return parts(rule("solution.explain.rule.equal_distances"), `|${values[0]} − ${values[1]}| = ${left}   |   |${values[2]} − ${values[3]}| = ${right}`, confirmed(`${left} = ${right}`)); }
+    if (id === "T4-06") { const left = values[0] * values[1]; const right = values[2] * values[3]; return parts(rule("solution.explain.rule.product_compare"), `${values[0]} × ${values[1]} = ${left}   |   ${values[2]} × ${values[3]} = ${right}`, confirmed(`${left} ${relationSymbol(left, right)} ${right}`)); }
+    if (id === "T4-07") return parts(rule("solution.explain.rule.pattern"), assignments(positions, values), confirmed(`${values[0]} = ${values[1]}   |   ${values[2]} = ${values[3]}   |   ${values[0]} ≠ ${values[2]}`));
+    if (id === "T4-08" || id === "T4-14") {
+      const first = values.filter((_, index) => normalizeText(roles[index]).includes("gruppe a"));
+      const second = values.filter((_, index) => normalizeText(roles[index]).includes("gruppe b"));
+      const left = first.reduce((sum, value) => sum + value, 0); const right = second.reduce((sum, value) => sum + value, 0);
+      return parts(rule("solution.explain.rule.group_sums"), `${first.join(" + ")} = ${left}   |   ${second.join(" + ")} = ${right}`, confirmed(`${left} ${relationSymbol(left, right)} ${right}`));
+    }
+    if (["T4-09", "T4-16", "T4-17", "T4-22"].includes(id)) return parts(rule("solution.explain.rule.frequency"), assignments(positions, values), confirmed(frequencyText(values)));
+    if (id === "T4-10") return parts(rule("solution.explain.rule.pattern"), assignments(positions, values), confirmed(`${values.slice(0, 3).join(" – ")} = ${values.slice(3).join(" – ")}`));
+    if (id === "T4-11" || id === "T4-12") return parts(rule("solution.explain.rule.ordered_sequence"), assignments(positions, values), confirmed(values.join(id === "T4-11" ? " < " : " > ")));
+    if (id === "T4-13") { const differences = arithmeticDifferences(values); return parts(rule("solution.explain.rule.arithmetic_sequence"), arithmeticSequenceCalculation(values), confirmed(`d = ${differences[0]}`));
+    }
+    if (id === "T4-15") { const value = values[0]; const count = code.filter((digit) => digit === value).length; return parts(rule("solution.rule.t4_15"), assignment(positions[0], value), confirmed(t("solution.explain.frequency_in_code", {value, count})));
+    }
+    if (id === "T4-18") { const sums = [[0, 5], [1, 4], [2, 3]].map(([left, right]) => values[left] + values[right]); return parts(rule("solution.explain.rule.pair_sums"), `${values[0]} + ${values[5]} = ${sums[0]}   |   ${values[1]} + ${values[4]} = ${sums[1]}   |   ${values[2]} + ${values[3]} = ${sums[2]}`, confirmed(sums.join(" = "))); }
+    if (id === "T4-19") { const first = values[0] + values[1]; const second = values[3] + values[4]; const difference = Math.abs(first - second); return parts(rule("solution.rule.t4_19"), `${values[0]} + ${values[1]} = ${first}   |   ${values[3]} + ${values[4]} = ${second}`, confirmed(`${difference} = ${values[2]} (P${positions[2]})`)); }
+    if (id === "T4-20") { const odd = values.slice(0, 6); const even = values.slice(6); const oddSum = odd.reduce((sum, value) => sum + value, 0); const evenSum = even.reduce((sum, value) => sum + value, 0); return parts(rule("solution.explain.rule.odd_even_position_sums"), `${odd.join(" + ")} = ${oddSum}   |   ${even.join(" + ")} = ${evenSum}`, confirmed(`${oddSum} ${relationSymbol(oddSum, evenSum)} ${evenSum}`)); }
+    const sources = values.slice(0, -1); const target = values[values.length - 1]; const sum = sources.reduce((total, value) => total + value, 0);
+    return parts(rule("solution.rule.t4_21"), `${sources.join(" + ")} = ${sum}   |   ${sum} mod 10 = ${sum % 10}`, confirmed(assignment(positions[positions.length - 1], target)));
+  };
+
+  const l054Comparison = (context) => {
+    const {values, data} = context;
+    const [leftA, leftB, leftTerm, rightTerm, rightA, rightB] = values;
+    const leftProduct = leftA * leftB; const rightProduct = rightA * rightB;
+    const left = leftTerm + leftProduct; const right = rightTerm + rightProduct;
+    const metadataRelation = normalizeText(data.comparison);
+    const actualSymbol = relationSymbol(left, right);
+    const expectedMetadata = actualSymbol === "=" ? ["=", "gleich"] : actualSymbol === ">" ? [">", "großer", "grosser"] : ["<", "kleiner"];
+    if (!expectedMetadata.includes(metadataRelation)) return unavailable();
+    return parts(rule("solution.explain.rule.mixed_comparison"), `${leftA} × ${leftB} = ${leftProduct}; ${leftTerm} + ${leftProduct} = ${left}   |   ${rightA} × ${rightB} = ${rightProduct}; ${rightTerm} + ${rightProduct} = ${right}`, confirmed(`${left} ${actualSymbol} ${right}`));
+  };
+
+  const codewideExpert = (context) => {
+    const {id, positions, values, code} = context;
+    const minimum = Math.min(...code); const maximum = Math.max(...code); const primes = primesIn(code); const largestPrime = Math.max(...primes);
+    if (id === "T4-CODE-01") return parts(rule("solution.explain.rule.edge_above_primes"), `${assignment(1, code[0])}   |   ${assignment(11, code[10])}   |   ${t("solution.calc.largest_prime", {value: largestPrime})}`, confirmed(`${largestPrime} < ${code[0]} < ${maximum}   |   ${largestPrime} < ${code[10]} < ${maximum}`));
+    if (id === "T4-CODE-02") { const smallestEven = Math.min(...evensIn(code)); const largestOdd = Math.max(...oddsIn(code)); return parts(rule("solution.explain.rule.first_prime_neighbour_between"), `${t("solution.explain.derived_bounds", {minimum: smallestEven, maximum: largestOdd})}   |   ${assignment(positions[1], values[1])}`, confirmed(`${smallestEven} < ${values[1]} < ${largestOdd}`)); }
+    if (id === "T4-CODE-03") return parts(rule("solution.explain.rule.outer_prime_neighbours"), `${values[0]} + ${values[1]} = ${values[0] + values[1]}`, confirmed(assignment(positions[2], values[2])));
+    if (id === "T4-CODE-05") return parts(rule("solution.rule.t4_code_05"), `${maximum} − ${minimum} = ${maximum - minimum}`, confirmed(assignment(positions[1], values[1])));
+    if (id === "T4-CODE-06") return parts(rule("solution.rule.t4_code_06"), t("solution.calc.minimum_maximum", {minimum, maximum}), confirmed(`${minimum} < ${code[0]} < ${maximum}   |   ${minimum} < ${code[10]} < ${maximum}`));
+    const smallestEven = Math.min(...evensIn(code));
+    return parts(rule("solution.explain.rule.global_chain"), `${t("solution.explain.derived_chain", {smallestEven, largestPrime})}   |   ${assignment(positions[0], values[0])}`, confirmed(`${smallestEven} < ${largestPrime} < ${values[0]}`));
+  };
+
+  const tier5 = (context) => {
+    const {id, positions, values, code} = context;
+    if (id === "T1-CODE-04") { const sorted = sortedCode(code); const median = sorted[5]; return parts(rule("solution.rule.t1_code_04"), t("solution.calc.sorted", {values: sorted.join(", ")}), confirmed(`${median} ${relationSymbol(median, values[0])} ${values[0]} (P${positions[0]})`)); }
+    if (id === "T4-CODE-04") { const sorted = sortedCode(code); return parts(rule("solution.rule.t4_code_04"), `${t("solution.calc.sorted", {values: sorted.join(", ")})}   |   ${assignments(positions, values)}`, confirmed(`${values[0]} ${relationSymbol(values[0], values[1])} ${values[1]} ${relationSymbol(values[1], values[2])} ${values[2]}`)); }
+    if (id === "T5-01") { const rightPositions = positions.map((position) => 12 - position); return parts(rule("solution.rule.t5_01"), `${t("solution.explain.right_position", {right: rightPositions[0], normal: positions[0], value: values[0]})}   |   ${t("solution.explain.right_position", {right: rightPositions[1], normal: positions[1], value: values[1]})}`, confirmed(`${values[0]} ${relationSymbol(values[0], values[1])} ${values[1]}`)); }
+    if (id === "T5-02") { const [a, b, divisor] = values; return parts(rule("solution.rule.t5_02"), `${a} = ${Math.floor(a / divisor)} × ${divisor} + ${a % divisor}   |   ${b} = ${Math.floor(b / divisor)} × ${divisor} + ${b % divisor}`, confirmed(t("solution.calc.same_remainder", {remainder: a % divisor}))); }
+    if (id === "T5-03") {
+      const [a, b, c] = values; const firstDifference = b - a; const secondDifference = c - b;
+      const pattern = derivedPatternFor(values);
+      const patternKeys = {arithmetic: "solution.explain.pattern.arithmetic", ascending: "solution.explain.pattern.ascending", descending: "solution.explain.pattern.descending", first_third_equal: "solution.explain.pattern.first_third_equal"};
+      const statement = pattern === "arithmetic" ? `d = ${firstDifference}` : pattern === "ascending" ? `${a} < ${b} < ${c}` : pattern === "descending" ? `${a} > ${b} > ${c}` : `${a} = ${c}   |   ${a} ≠ ${b}`;
+      const given = pattern === "arithmetic" ? arithmeticSequenceCalculation(values) : assignments(positions, values);
+      return parts(rule("solution.explain.rule.derived_pattern"), given, confirmed(statement), t(patternKeys[pattern]));
+    }
+    return parts(rule("solution.explain.rule.t5_04_fairness"), "", t("solution.explain.t5_04_result"));
+  };
+
+  const SINGLE_PROPERTY_IDS = new Set(["T1-01", "T1-02", "T1-03", "T1-05", "T1-06", "T1-07", "T1-08", "T1-09", "T1-12", "T1-13", "T1-14"]);
+  const PAIR_IDS = new Set(["T2-01", "T2-02", "T2-03", "T2-04", "T2-06", "T2-07", "T2-08", "T2-09", "T2-10", "T2-11", "T2-12", "T2-13", "T2-14", "T2-15", "T2-16"]);
+  const TRIPLE_IDS = new Set(["T3-01", "T3-02", "T3-03", "T3-04", "T3-06", "T3-07", "T3-08", "T3-09", "T3-10", "T3-11", "T3-12", "T3-13", "T3-14", "T3-15", "T3-16"]);
+  const L054_IDS = new Set(["T3-17", "T3-18", "T3-19", "T3-20"]);
+  const MULTI_IDS = new Set(["T4-01", "T4-02", "T4-03", "T4-04", "T4-05", "T4-06", "T4-07", "T4-08", "T4-09", "T4-10", "T4-11", "T4-12", "T4-13", "T4-14", "T4-15", "T4-16", "T4-17", "T4-18", "T4-19", "T4-20", "T4-21", "T4-22"]);
+  const CODEWIDE_EXPERT_IDS = new Set(["T4-CODE-01", "T4-CODE-02", "T4-CODE-03", "T4-CODE-05", "T4-CODE-06", "T4-CODE-07"]);
+
+  const handlerNameFor = (id) => {
+    if (SINGLE_PROPERTY_IDS.has(id)) return "single-property";
+    if (id.startsWith("T1-DIGIT-")) return "fixed-digit";
+    if (["T1-CODE-01", "T1-CODE-02", "T1-CODE-03"].includes(id)) return "codewide-single";
+    if (PAIR_IDS.has(id)) return "pair-relation";
+    if (["T2-CODE-01", "T2-CODE-03", "T2-CODE-04"].includes(id)) return "codewide-pair";
+    if (TRIPLE_IDS.has(id)) return "triple-relation";
+    if (L054_IDS.has(id)) return "l054-stepwise";
+    if (["T3-CODE-01", "T3-CODE-02", "T3-CODE-03", "T3-CODE-04"].includes(id)) return "codewide-triple";
+    if (MULTI_IDS.has(id)) return "multi-relation";
+    if (id === "T4-23") return "l054-comparison";
+    if (CODEWIDE_EXPERT_IDS.has(id)) return "codewide-expert";
+    if (["T1-CODE-04", "T4-CODE-04", "T5-01", "T5-02", "T5-03", "T5-04"].includes(id)) return "tier5";
+    return "unsupported";
+  };
+
+  const explain = ({item, hintText, code: sourceCode}) => {
+    const normalized = normalizeItem(item);
+    const code = asNumbers(sourceCode);
+    const values = positionValues(normalized.positions, code);
+    const context = {...normalized, code, values, hintText: cleanPlayerText(hintText)};
+    const handler = handlerNameFor(normalized.id);
+    if (code.length !== 11 || code.some((value) => !Number.isInteger(value) || value < 0 || value > 9) || !hasSafeExplanationShape(normalized) || !mathematicalInstanceIsValid(context)) return unavailable();
+    if (handler === "single-property") return singleProperty(context);
+    if (handler === "fixed-digit") return fixedDigit(context);
+    if (handler === "codewide-single") return codewideSingle(context);
+    if (handler === "pair-relation") return pairRelation(context);
+    if (handler === "codewide-pair") return codewidePair(context);
+    if (handler === "triple-relation") return tripleRelation(context);
+    if (handler === "l054-stepwise") return l054(context);
+    if (handler === "codewide-triple") return codewideTriple(context);
+    if (handler === "multi-relation") return multiRelation(context);
+    if (handler === "l054-comparison") return l054Comparison(context);
+    if (handler === "codewide-expert") return codewideExpert(context);
+    if (handler === "tier5") return tier5(context);
+    return unavailable();
+  };
+
+  const colorRolesFor = ({item, code: sourceCode}) => {
+    const normalized = normalizeItem(item);
+    const code = asNumbers(sourceCode);
+    if (code.length !== 11 || !hasSafeExplanationShape(normalized)) return {given: [], result: []};
+    const positions = normalized.positions;
+    const given = new Set(positions);
+    const result = new Set();
+    const makeResult = (position) => { if (validPosition(position)) { result.add(position); given.delete(position); } };
+    const targetIndexById = {
+      "T1-DIGIT-06": 0, "T3-01": 2, "T3-03": 2, "T3-07": 0, "T3-08": 2,
+      "T3-10": 2, "T3-11": 2, "T3-12": 2, "T3-16": 2, "T3-19": 2,
+      "T4-19": 2, "T4-CODE-03": 2,
+    };
+    if (Object.prototype.hasOwnProperty.call(targetIndexById, normalized.id)) makeResult(positions[targetIndexById[normalized.id]]);
+    if (normalized.id === "T4-21") makeResult(positions[positions.length - 1]);
+    if (normalized.id === "T4-15" && positions.length && code.length === 11) {
+      const anchor = positions[0]; const value = code[anchor - 1];
+      code.forEach((digit, index) => { if (digit === value && index + 1 !== anchor) makeResult(index + 1); });
+      given.add(anchor); result.delete(anchor);
+    }
+    if (["T4-09", "T4-16", "T4-22"].includes(normalized.id)) {
+      const values = positionValues(positions, code); const counts = new Map();
+      values.forEach((value) => counts.set(value, (counts.get(value) || 0) + 1));
+      positions.forEach((position, index) => { if ((counts.get(values[index]) || 0) > 1) makeResult(position); });
+    }
+    if (normalized.id === "T4-CODE-04" && positions.length >= 3) {
+      const medianRoleIndex = normalized.roles.findIndex((role) => normalizeText(role).includes("median"));
+      makeResult(positions[medianRoleIndex >= 0 ? medianRoleIndex : 2]);
+    }
+    return {given: [...given], result: [...result]};
+  };
+
+  const CONCEPT_GROUPS = Object.freeze({
+    sum: new Set(["T1-12", "T2-02", "T2-10", "T2-16", "T3-01", "T3-10", "T3-15", "T4-02", "T4-03", "T4-08", "T4-14", "T4-18", "T4-19", "T4-20", "T4-21", "T4-23", "T4-CODE-03"]),
+    difference: new Set(["T2-03", "T2-06", "T2-13", "T3-11", "T4-05", "T4-19", "T4-CODE-05"]),
+    product: new Set(["T2-07", "T3-03", "T3-16", "T3-17", "T3-18", "T3-19", "T4-06", "T4-23"]),
+    quotient: new Set(["T2-11"]),
+    digit_sum: new Set(["T3-19"]),
+    even: new Set(["T1-DIGIT-02", "T1-CODE-02", "T4-CODE-02", "T4-CODE-04", "T4-CODE-07"]),
+    odd: new Set(["T1-DIGIT-03", "T1-DIGIT-05", "T1-DIGIT-09", "T3-CODE-01", "T3-CODE-02", "T4-CODE-02", "T4-CODE-04"]),
+    parity: new Set(["T1-09", "T2-04", "T4-03"]),
+    prime: new Set(["T1-02", "T1-12", "T1-DIGIT-02", "T1-DIGIT-03", "T1-DIGIT-04", "T1-DIGIT-05", "T1-DIGIT-07", "T1-DIGIT-08", "T1-DIGIT-09", "T1-CODE-01", "T2-13", "T2-16", "T2-CODE-03", "T3-13", "T3-CODE-01", "T3-CODE-02", "T3-CODE-04", "T4-CODE-01", "T4-CODE-02", "T4-CODE-03", "T4-CODE-05", "T4-CODE-07"]),
+    composite: new Set(["T1-05"]),
+    square: new Set(["T1-03", "T1-DIGIT-04", "T1-DIGIT-09", "T2-02", "T2-03", "T2-07", "T2-12"]),
+    cube: new Set(["T1-07", "T1-DIGIT-08"]),
+    power: new Set(["T1-06"]),
+    factorial: new Set(["T1-13", "T1-DIGIT-06"]),
+    fibonacci: new Set(["T1-08", "T2-10"]),
+    triangular: new Set(["T1-14"]),
+    median: new Set(["T1-CODE-04", "T4-CODE-04"]),
+    modulo: new Set(["T3-16", "T4-21", "T5-02"]),
+    divisibility: new Set(["T1-DIGIT-05", "T2-11", "T3-20"]),
+    palindrome: new Set(["T3-09", "T4-01"]),
+    extrema: new Set(["T1-CODE-03", "T2-CODE-04", "T3-CODE-03", "T4-CODE-01", "T4-CODE-05", "T4-CODE-06"]),
+    average: new Set(["T3-12"]),
+    arithmetic_sequence: new Set(["T3-06", "T4-13"]),
+    distance: new Set(["T2-15", "T3-08", "T3-13", "T2-CODE-04"]),
+    triangle: new Set(["T3-14"]),
+    order_operations: new Set(["T3-17", "T4-23"]),
+    parentheses: new Set(["T3-18"]),
+    place_value: new Set(["T2-12", "T3-20"]),
+    neutral_element: new Set(["T1-DIGIT-00", "T1-DIGIT-01"]),
+    right_counting: new Set(["T5-01"]),
+    frequency: new Set(["T4-09", "T4-15", "T4-16", "T4-17", "T4-22"]),
+  });
+  const CONCEPT_ORDER = Object.freeze(Object.keys(CONCEPT_GROUPS));
+  const PAGE_CONCEPTS = Object.freeze(CONCEPT_ORDER.filter((concept) => concept !== "order_operations"));
+  const DEPENDENCY_RULES = Object.freeze([
+    ["place_value", "square"], ["place_value", "divisibility"],
+    ["quotient", "divisibility"], ["product", "sum"], ["product", "difference"],
+    ["product", "digit_sum"], ["product", "modulo"], ["sum", "square"],
+    ["sum", "prime"], ["sum", "fibonacci"], ["sum", "parity"], ["sum", "even"],
+    ["sum", "modulo"], ["sum", "difference"], ["difference", "square"],
+    ["difference", "prime"], ["difference", "even"], ["distance", "prime"],
+    ["extrema", "distance"], ["extrema", "difference"],
+  ]);
+
+  const topologicalConceptOrder = (concepts, preferred = concepts) => {
+    const pending = unique(concepts).filter((concept) => PAGE_CONCEPTS.includes(concept));
+    const ordered = [];
+    while (pending.length) {
+      const ready = pending.filter((concept) => DEPENDENCY_RULES.every(([dependency, dependent]) => dependent !== concept || !pending.includes(dependency)));
+      const candidates = ready.length ? ready : pending;
+      const next = candidates.slice().sort((left, right) => {
+        const preferredDifference = preferred.indexOf(left) - preferred.indexOf(right);
+        return preferredDifference || PAGE_CONCEPTS.indexOf(left) - PAGE_CONCEPTS.indexOf(right);
+      })[0];
+      ordered.push(next);
+      pending.splice(pending.indexOf(next), 1);
+    }
+    return ordered;
+  };
+
+  const conceptsFor = ({id, values, data, hintText, roles}) => {
+    if (id === "T5-04") return [];
+    const concepts = CONCEPT_ORDER.filter((concept) => CONCEPT_GROUPS[concept].has(id));
+    if (id === "T1-01") concepts.push(values[0] % 2 === 0 ? "even" : "odd");
+    if (id === "T2-06") concepts.push("difference", Math.abs(values[0] - values[1]) % 2 === 0 ? "even" : "odd");
+    if (id === "T3-15") concepts.push("sum", values.reduce((sum, value) => sum + value, 0) % 2 === 0 ? "even" : "odd");
+    if (id === "T3-17") concepts.push("product", data.variant === "productMinus" ? "difference" : "sum");
+    if (id === "T3-18") return ["parentheses", "product"];
+    if (id === "T2-CODE-01") {
+      const normalizedHint = normalizeText(hintText);
+      concepts.push(normalizedHint.includes("ungerade") || normalizedHint.includes("odd") ? "odd" : normalizedHint.includes("gerade") || normalizedHint.includes("even") ? "even" : "prime");
+    }
+    if (id === "T5-03") {
+      const orderedRoleConcepts = [];
+      for (const sourceRole of roles) {
+        const role = normalizeText(sourceRole);
+        if (role.includes("primzahl") || role.includes("prime")) orderedRoleConcepts.push("prime");
+        if (role.includes("ungerade") || role.includes("odd")) orderedRoleConcepts.push("odd");
+        else if (role.includes("gerade") || role.includes("even")) orderedRoleConcepts.push("even");
+        if (role.includes("median")) orderedRoleConcepts.push("median");
+        if (role.includes("minimum") || role.includes("maximum")) orderedRoleConcepts.push("extrema");
+      }
+      if (values.length === 3) {
+        const firstDifference = values[1] - values[0];
+        const secondDifference = values[2] - values[1];
+        if (firstDifference !== 0 && firstDifference === secondDifference) orderedRoleConcepts.push("arithmetic_sequence");
+      }
+      return unique(orderedRoleConcepts);
+    }
+    const preferredById = {
+      "T1-12": ["prime", "sum"],
+      "T3-13": ["distance", "prime"],
+      "T4-CODE-02": ["prime", "even", "odd"],
+      "T4-CODE-03": ["prime", "sum"],
+      "T4-CODE-05": ["prime", "extrema", "difference"],
+      "T4-CODE-07": ["even", "prime"],
+      "T3-20": ["place_value", "divisibility"],
+    };
+    if (["T1-12", "T4-CODE-03"].includes(id)) return preferredById[id].slice();
+    return topologicalConceptOrder(unique(concepts), preferredById[id] || PAGE_CONCEPTS);
+  };
+
+  const calculationSegments = (value) => String(value || "").split(/\s+(?:\||\n)\s+|\s*;\s*/).map((part) => part.trim()).filter(Boolean);
+  const matchingCalculation = (value, predicate) => unique(calculationSegments(value).filter(predicate)).join("\n");
+  const compactPositionAssignments = (positions, code) => {
+    const values = positions.map((position) => assignment(position, code[position - 1]));
+    const lines = [];
+    for (let index = 0; index < values.length; index += 4) lines.push(values.slice(index, index + 4).join("   ·   "));
+    return lines.join("\n");
+  };
+  const germanUi = t("solution.page.original_title") === "ORIGINALHINWEIS";
+  const derivedRoleLabel = (sourceRole) => {
+    const role = normalizeText(sourceRole);
+    if (role.includes("erste gerade") || role.includes("first even")) return t("solution.derived_role.first_even");
+    if (role.includes("letzte ungerade") || role.includes("last odd")) return t("solution.derived_role.last_odd");
+    if (role.includes("nach der ersten primzahl") || role.includes("rechter nachbar der ersten primzahl") || role.includes("after the first prime")) return t("solution.derived_role.after_first_prime");
+    if (role.includes("vor der letzten primzahl") || role.includes("linker nachbar der letzten primzahl") || role.includes("before the last prime")) return t("solution.derived_role.before_last_prime");
+    if (role.includes("nach dem ersten vorkommen des minimums") || role.includes("after the first occurrence of the minimum")) return t("solution.derived_role.after_first_minimum");
+    if (role.includes("vor dem letzten vorkommen des maximums") || role.includes("before the last occurrence of the maximum")) return t("solution.derived_role.before_last_maximum");
+    if (role.includes("median")) return t("solution.derived_role.median_first");
+    if (role.includes("minimum")) return t("solution.derived_role.minimum");
+    if (role.includes("maximum")) return t("solution.derived_role.maximum");
+    return String(sourceRole || "");
+  };
+  const derivedRoleLines = (context, predicate = () => true) => context.roles.map((role, index) => ({role, index})).filter(({role}) => predicate(normalizeText(role))).map(({role, index}) => `${derivedRoleLabel(role)} = ${context.values[index]} ${germanUi ? "an Position" : "at position"} ${context.positions[index]}`);
+
+  const conceptApplication = (concept, context, explanation) => {
+    const {id, positions, values, code, data, roles} = context;
+    const source = explanation.given;
+    if (concept === "sum") return id === "T1-12" ? t("solution.explain.list.distinct_prime_sums") : matchingCalculation(source, (part) => part.includes("+") && !part.includes("mod") && !part.includes("÷"));
+    if (concept === "difference" || concept === "distance") return matchingCalculation(source, (part) => /[−-]|\|/.test(part));
+    if (concept === "product") return matchingCalculation(source, (part) => part.includes("×"));
+    if (concept === "quotient") return matchingCalculation(source, (part) => part.includes("÷"));
+    if (concept === "digit_sum") return matchingCalculation(source, (part) => part.includes("+") && !part.includes("×"));
+    if (concept === "arithmetic_sequence") return arithmeticSequenceCalculation(values).split("\n").slice(0, -1).join("\n");
+    if (concept === "divisibility") {
+      if (id === "T1-DIGIT-05") return "10 ÷ 5 = 2";
+      return matchingCalculation([source, explanation.result].filter(Boolean).join("   |   "), (part) => part.includes("÷") || normalizeText(part).includes("rest"));
+    }
+    if (concept === "modulo") return matchingCalculation(source, (part) => /\bmod\b/i.test(part)) || source;
+    if (["average", "triangle", "parentheses", "place_value", "right_counting"].includes(concept)) return source || explanation.result;
+    if (concept === "frequency") return explanation.result || source;
+    if (concept === "prime") {
+      if (!id.includes("CODE") && id !== "T5-03") return id.startsWith("T1-DIGIT-") ? t("solution.explain.list.prime_digits") : primeWitness(values[0]);
+      const lines = [t("solution.calc.primes", {values: primesIn(code).join(", ")})];
+      const primePositions = code.map((value, index) => isPrime(value) ? index + 1 : 0).filter(Boolean);
+      const relationKeys = {before_first: "solution.concept.prime.before_first", after_first: "solution.concept.prime.after_first", before_last: "solution.concept.prime.before_last", after_last: "solution.concept.prime.after_last"};
+      const relationLine = (key, anchorPosition, targetPosition) => t(relationKeys[key], {
+        anchorPosition, anchorValue: code[anchorPosition - 1], targetPosition, targetValue: code[targetPosition - 1],
+      });
+      roles.forEach((sourceRole, index) => {
+        const role = normalizeText(sourceRole); const targetPosition = positions[index];
+        if (role.includes("vor der ersten primzahl") || role.includes("linker nachbar der ersten primzahl")) lines.push(relationLine("before_first", primePositions[0], targetPosition));
+        else if (role.includes("nach der ersten primzahl") || role.includes("rechter nachbar der ersten primzahl")) lines.push(relationLine("after_first", primePositions[0], targetPosition));
+        else if (role.includes("vor der letzten primzahl") || role.includes("linker nachbar der letzten primzahl")) lines.push(relationLine("before_last", primePositions[primePositions.length - 1], targetPosition));
+        else if (role.includes("nach der letzten primzahl") || role.includes("rechter nachbar der letzten primzahl")) lines.push(relationLine("after_last", primePositions[primePositions.length - 1], targetPosition));
+      });
+      if (lines.length === 1) lines.push(compactPositionAssignments(positions, code));
+      return unique(lines).join("\n");
+    }
+    if (concept === "even") return id === "T5-03" ? t("solution.calc.evens", {values: evensIn(code).join(", ")}) : id.includes("CODE") ? t("solution.calc.evens", {values: evensIn(code).join(", ")}) : values.map((value) => `${value}: ${t(value % 2 === 0 ? "solution.explain.label.even" : "solution.explain.label.odd")}`).join("   |   ");
+    if (concept === "odd") return id === "T5-03" ? t("solution.calc.odds", {values: oddsIn(code).join(", ")}) : id.includes("CODE") ? t("solution.calc.odds", {values: oddsIn(code).join(", ")}) : values.map((value) => `${value}: ${t(value % 2 === 0 ? "solution.explain.label.even" : "solution.explain.label.odd")}`).join("   |   ");
+    if (concept === "median") return t("solution.calc.sorted", {values: sortedCode(code).join(", ")});
+    if (concept === "extrema") return `${t("solution.calc.minimum_maximum", {minimum: Math.min(...code), maximum: Math.max(...code)})}   |   ${compactPositionAssignments(positions, code)}`;
+    if (concept === "parity") return values.map((value, index) => `${assignment(positions[index], value)}: ${value % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd")}`).join("   |   ");
+    if (concept === "neutral_element") return id === "T1-DIGIT-00" ? "7 + 0 = 7" : "7 × 1 = 7";
+    if (concept === "square") return squareWitness(values[0]);
+    if (concept === "cube") return values[0] === 8 ? "2 × 2 × 2 = 8" : values[0] === 1 ? "1 × 1 × 1 = 1" : values[0] === 0 ? "0 × 0 × 0 = 0" : t("solution.explain.list.cube_digits");
+    if (concept === "power") return values[0] === 1 ? "2⁰ = 1" : values[0] === 2 ? "2¹ = 2" : values[0] === 4 ? "2² = 4" : values[0] === 8 ? "2³ = 8" : t("solution.explain.list.power_two_digits");
+    if (concept === "factorial") return factorialWitness(values[0]);
+    if (concept === "fibonacci") return t("solution.explain.list.fibonacci_digits");
+    if (concept === "triangular") return triangularWitness(values[0]);
+    if (concept === "composite") return primeWitness(values[0]);
+    if (concept === "palindrome") return source;
+    return compactPositionAssignments(positions, code) || explanation.given;
+  };
+
+  const makePlanStep = (concept, options = {}) => ({
+    concept,
+    dependencies: options.dependencies || [],
+    operations: options.operations || [concept],
+    inputPositions: unique((options.inputPositions || []).filter(validPosition)),
+    resultPositions: unique((options.resultPositions || []).filter(validPosition)),
+    intermediatePositions: unique((options.intermediatePositions || []).filter(validPosition)),
+    calculation: String(options.calculation || ""),
+    carried: String(options.carried || ""),
+    intermediate: String(options.intermediate || ""),
+    result: String(options.result || ""),
+    intermediateValues: options.intermediateValues || [],
+    finalValues: options.finalValues || [],
+    outputRole: options.outputRole || (options.result ? "final" : options.intermediate ? "intermediate" : "none"),
+    layout: options.layout || "stack",
+    left: String(options.left || ""),
+    right: String(options.right || ""),
+  });
+  const conceptName = (concept) => t(`solution.concept.${concept}.name`);
+  const intermediateText = (values) => t("solution.plan.intermediate", {value: values.join(" · ")});
+  const carriedText = (concept, values) => t("solution.plan.carried", {concept: conceptName(concept), value: values.join(" · ")});
+  const rightSideNumbers = (value) => calculationSegments(value).map((part) => {
+    const match = part.match(/=\s*(-?\d+)\s*(?:\([^)]*\))?$/);
+    return match ? Number(match[1]) : null;
+  }).filter((value) => value !== null);
+  const looksLikeComparison = (value) => /[<>≠]/.test(value) || /^\s*-?\d+\s*=\s*-?\d+(?:\s*=\s*-?\d+)*\s*$/.test(value);
+  const propertyApplication = (concept, value) => {
+    if (concept === "square") return squareWitness(value);
+    if (concept === "prime") return primeWitness(value);
+    if (concept === "even" || concept === "odd") return t(value % 2 === 0 ? "solution.explain.fact.even" : "solution.explain.fact.odd", {value});
+    if (concept === "fibonacci") return t("solution.explain.list.fibonacci_digits");
+    return String(value);
+  };
+  const derivedPropertyChain = (context) => {
+    const {id, values, positions} = context; const [a, b] = values;
+    if (id === "T2-02") return {first: "sum", second: "square", value: a + b, equation: `${a} + ${b} = ${a + b}`, inputs: positions};
+    if (id === "T2-03") return {first: "difference", second: "square", value: Math.abs(a - b), equation: `|${a} − ${b}| = ${Math.abs(a - b)}`, inputs: positions};
+    if (id === "T2-06") return {first: "difference", second: Math.abs(a - b) % 2 === 0 ? "even" : "odd", value: Math.abs(a - b), equation: `|${a} − ${b}| = ${Math.abs(a - b)}`, inputs: positions};
+    if (id === "T2-07") return {first: "product", second: "square", value: a * b, equation: `${a} × ${b} = ${a * b}`, inputs: positions};
+    if (id === "T2-10") return {first: "sum", second: "fibonacci", value: a + b, equation: `${a} + ${b} = ${a + b}`, inputs: positions};
+    if (id === "T2-12") { const value = 10 * a + b; return {first: "place_value", second: "square", value, equation: `${a} · 10 + ${b} = ${value}`, inputs: positions}; }
+    if (id === "T2-13") return {first: "difference", second: "prime", value: Math.abs(a - b), equation: `|${a} − ${b}| = ${Math.abs(a - b)}`, inputs: positions};
+    if (id === "T2-16") return {first: "sum", second: "prime", value: a + b, equation: `${a} + ${b} = ${a + b}`, inputs: positions};
+    if (id === "T3-13") { const value = Math.max(...values) - Math.min(...values); return {first: "distance", second: "prime", value, equation: `${Math.max(...values)} − ${Math.min(...values)} = ${value}`, inputs: positions}; }
+    if (id === "T3-15") { const value = values.reduce((sum, entry) => sum + entry, 0); return {first: "sum", second: value % 2 === 0 ? "even" : "odd", value, equation: `${values.join(" + ")} = ${value}`, inputs: positions}; }
+    return null;
+  };
+
+  const buildExplanationPlan = (context, explanation, baseRoles) => {
+    const {id, positions, values, data, code} = context;
+    const chain = derivedPropertyChain(context);
+    if (chain) return [
+      makePlanStep(chain.first, {inputPositions: chain.inputs, calculation: chain.equation, intermediate: intermediateText([chain.value]), intermediateValues: [chain.value], outputRole: "intermediate"}),
+      makePlanStep(chain.second, {dependencies: [chain.first], inputPositions: chain.inputs, carried: carriedText(chain.first, [chain.value]), calculation: propertyApplication(chain.second, chain.value), result: explanation.result, finalValues: [chain.value], outputRole: "final"}),
+    ];
+    if (id === "T2-11") {
+      const [dividend, divisor] = values; const quotient = dividend / divisor;
+      return [
+        makePlanStep("quotient", {inputPositions: positions, calculation: `${dividend} ÷ ${divisor} = ${quotient}`, intermediate: intermediateText([quotient]), intermediateValues: [quotient], outputRole: "intermediate"}),
+        makePlanStep("divisibility", {dependencies: ["quotient"], inputPositions: positions, carried: carriedText("quotient", [quotient]), calculation: t("solution.plan.remainder_zero"), result: explanation.result, finalValues: [0], outputRole: "final"}),
+      ];
+    }
+    if (id === "T5-03") {
+      const concepts = conceptsFor(context);
+      const roleMatches = (concept, sourceRole) => {
+        const role = normalizeText(sourceRole);
+        if (concept === "prime") return role.includes("primzahl") || role.includes("prime");
+        if (concept === "even") return (role.includes("gerade") && !role.includes("ungerade")) || role.includes("even");
+        if (concept === "odd") return role.includes("ungerade") || role.includes("odd");
+        if (concept === "median") return role.includes("median");
+        if (concept === "extrema") return role.includes("minimum") || role.includes("maximum");
+        return false;
+      };
+      return concepts.map((concept) => {
+        if (concept === "arithmetic_sequence") {
+          const difference = values[1] - values[0];
+          return makePlanStep(concept, {dependencies: concepts.filter((entry) => entry !== concept), inputPositions: positions, calculation: arithmeticSequenceCalculation(values).split("\n").slice(0, -1).join("\n"), result: `d = ${difference}`, finalValues: [difference], outputRole: "final"});
+        }
+        const indexes = context.roles.map((role, index) => roleMatches(concept, role) ? index : -1).filter((index) => index >= 0);
+        const resultPositions = indexes.map((index) => positions[index]);
+        const finalValues = indexes.map((index) => values[index]);
+        return makePlanStep(concept, {
+          inputPositions: resultPositions,
+          resultPositions,
+          calculation: conceptApplication(concept, context, explanation),
+          result: derivedRoleLines(context, (role) => roleMatches(concept, role)).join("\n"),
+          finalValues,
+          outputRole: "final",
+        });
+      });
+    }
+    if (id === "T2-CODE-04") {
+      const normalizedHint = normalizeText(context.hintText); const extremum = normalizedHint.includes("kleinsten") || normalizedHint.includes("smallest") ? Math.min(...code) : Math.max(...code);
+      const [first, second] = values; const firstDistance = Math.abs(first - extremum); const secondDistance = Math.abs(second - extremum);
+      return [
+        makePlanStep("extrema", {inputPositions: code.map((unused, index) => index + 1), intermediatePositions: code.map((value, index) => value === extremum ? index + 1 : 0).filter(Boolean), calculation: t("solution.calc.minimum_maximum", {minimum: Math.min(...code), maximum: Math.max(...code)}), intermediate: intermediateText([extremum]), intermediateValues: [extremum], outputRole: "intermediate"}),
+        makePlanStep("distance", {dependencies: ["extrema"], inputPositions: positions, carried: carriedText("extrema", [extremum]), calculation: `|${first} − ${extremum}| = ${firstDistance}\n|${second} − ${extremum}| = ${secondDistance}`, result: `${firstDistance} < ${secondDistance}`, finalValues: [firstDistance, secondDistance], outputRole: "final"}),
+      ];
+    }
+    if (id === "T3-17") {
+      const [a, b, term] = values; const product = a * b; const second = data.variant === "productMinus" ? "difference" : "sum"; const result = data.variant === "productMinus" ? term - product : term + product;
+      return [
+        makePlanStep("product", {inputPositions: positions.slice(0, 2), calculation: `${a} × ${b} = ${product}`, intermediate: intermediateText([product]), intermediateValues: [product], outputRole: "intermediate"}),
+        makePlanStep(second, {dependencies: ["product"], inputPositions: positions, carried: carriedText("product", [product]), calculation: `${term} ${second === "difference" ? "−" : "+"} ${product}`, result: `${term} ${second === "difference" ? "−" : "+"} ${product} = ${result}`, finalValues: [result], outputRole: "final"}),
+      ];
+    }
+    if (id === "T3-18") {
+      const [a, b, multiplier] = values; const inside = data.variant === "groupedMinus" ? a - b : a + b; const result = inside * multiplier;
+      return [
+        makePlanStep("parentheses", {inputPositions: positions.slice(0, 2), calculation: `(${a} ${data.variant === "groupedMinus" ? "−" : "+"} ${b}) = ${inside}`, intermediate: intermediateText([inside]), intermediateValues: [inside], outputRole: "intermediate"}),
+        makePlanStep("product", {dependencies: ["parentheses"], inputPositions: positions, carried: carriedText("parentheses", [inside]), calculation: `${inside} × ${multiplier}`, result: `${inside} × ${multiplier} = ${result}`, finalValues: [result], outputRole: "final"}),
+      ];
+    }
+    if (id === "T3-19") {
+      const [a, b, target] = values; const product = a * b; const digits = String(product).split("");
+      return [
+        makePlanStep("product", {inputPositions: positions.slice(0, 2), calculation: `${a} × ${b} = ${product}`, intermediate: intermediateText([product]), intermediateValues: [product], outputRole: "intermediate"}),
+        makePlanStep("digit_sum", {dependencies: ["product"], inputPositions: positions.slice(0, 2), resultPositions: [positions[2]], carried: carriedText("product", [product]), calculation: `${digits.join(" + ")} = ${digitSum(product)}`, result: assignment(positions[2], target), finalValues: [target], outputRole: "final"}),
+      ];
+    }
+    if (id === "T3-20") {
+      const [tens, ones] = values; const number = tens * 10 + ones; const divisor = Number(data.divisor);
+      return [
+        makePlanStep("place_value", {inputPositions: positions, calculation: `${tens} · 10 + ${ones} = ${number}`, intermediate: intermediateText([number]), intermediateValues: [number], outputRole: "intermediate"}),
+        makePlanStep("divisibility", {dependencies: ["place_value"], inputPositions: positions, carried: carriedText("place_value", [number]), calculation: `${number} ÷ ${divisor}`, result: `${number} ÷ ${divisor} = ${number / divisor} (${t("solution.explain.no_remainder")})`, finalValues: [number / divisor], outputRole: "final"}),
+      ];
+    }
+    if (id === "T3-16" || id === "T4-21") {
+      const first = id === "T3-16" ? "product" : "sum"; const sources = id === "T3-16" ? values.slice(0, 2) : values.slice(0, -1); const value = id === "T3-16" ? sources[0] * sources[1] : sources.reduce((sum, entry) => sum + entry, 0); const targetPosition = positions[positions.length - 1]; const target = values[values.length - 1];
+      return [
+        makePlanStep(first, {inputPositions: positions.slice(0, -1), calculation: id === "T3-16" ? `${sources[0]} × ${sources[1]} = ${value}` : `${sources.join(" + ")} = ${value}`, intermediate: intermediateText([value]), intermediateValues: [value], outputRole: "intermediate"}),
+        makePlanStep("modulo", {dependencies: [first], inputPositions: positions.slice(0, -1), resultPositions: [targetPosition], carried: carriedText(first, [value]), calculation: `${value} mod 10 = ${value % 10}`, result: assignment(targetPosition, target), finalValues: [target], outputRole: "final"}),
+      ];
+    }
+    if (id === "T4-03") {
+      const left = values[0] + values[1]; const right = values[2] + values[3];
+      return [
+        makePlanStep("sum", {inputPositions: positions, calculation: `${values[0]} + ${values[1]} = ${left}\n${values[2]} + ${values[3]} = ${right}`, intermediate: intermediateText([left, right]), intermediateValues: [left, right], outputRole: "intermediate"}),
+        makePlanStep("parity", {dependencies: ["sum"], inputPositions: positions, carried: carriedText("sum", [left, right]), calculation: `${left}: ${left % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd")}\n${right}: ${right % 2 === 0 ? t("solution.explain.label.even") : t("solution.explain.label.odd")}`, result: explanation.result, finalValues: [], outputRole: "final"}),
+      ];
+    }
+    if (id === "T4-19") {
+      const left = values[0] + values[1]; const right = values[3] + values[4]; const difference = Math.abs(left - right);
+      return [
+        makePlanStep("sum", {inputPositions: [positions[0], positions[1], positions[3], positions[4]], calculation: `${values[0]} + ${values[1]} = ${left}\n${values[3]} + ${values[4]} = ${right}`, intermediate: intermediateText([left, right]), intermediateValues: [left, right], outputRole: "intermediate"}),
+        makePlanStep("difference", {dependencies: ["sum"], inputPositions: [positions[0], positions[1], positions[3], positions[4]], resultPositions: [positions[2]], carried: carriedText("sum", [left, right]), calculation: `|${left} − ${right}| = ${difference}`, result: `${difference} = ${values[2]} (P${positions[2]})`, finalValues: [values[2]], outputRole: "final"}),
+      ];
+    }
+    if (id === "T4-23") {
+      const [leftA, leftB, leftTerm, rightTerm, rightA, rightB] = values; const leftProduct = leftA * leftB; const rightProduct = rightA * rightB; const left = leftTerm + leftProduct; const right = rightTerm + rightProduct;
+      return [
+        makePlanStep("product", {inputPositions: [positions[0], positions[1], positions[4], positions[5]], layout: "split", left: `${t("solution.plan.left")}\n${leftA} × ${leftB} = ${leftProduct}`, right: `${t("solution.plan.right")}\n${rightA} × ${rightB} = ${rightProduct}`, intermediate: intermediateText([leftProduct, rightProduct]), intermediateValues: [leftProduct, rightProduct], outputRole: "intermediate"}),
+        makePlanStep("sum", {dependencies: ["product"], inputPositions: positions, layout: "split", left: `${t("solution.plan.left")}\n${leftTerm} + ${leftProduct} = ${left}`, right: `${t("solution.plan.right")}\n${rightTerm} + ${rightProduct} = ${right}`, carried: carriedText("product", [leftProduct, rightProduct]), intermediate: intermediateText([left, right]), intermediateValues: [left, right], outputRole: "intermediate"}),
+      ];
+    }
+    if (id === "T4-CODE-05") {
+      const minimum = Math.min(...code); const maximum = Math.max(...code); const difference = maximum - minimum;
+      return [
+        makePlanStep("prime", {inputPositions: [positions[0]], calculation: conceptApplication("prime", context, explanation)}),
+        makePlanStep("extrema", {inputPositions: code.map((unused, index) => index + 1), intermediatePositions: code.map((value, index) => value === minimum || value === maximum ? index + 1 : 0).filter(Boolean), calculation: t("solution.calc.minimum_maximum", {minimum, maximum}), intermediate: intermediateText([minimum, maximum]), intermediateValues: [minimum, maximum], outputRole: "intermediate"}),
+        makePlanStep("difference", {dependencies: ["extrema"], inputPositions: positions, resultPositions: [positions[1]], carried: carriedText("extrema", [minimum, maximum]), calculation: `${maximum} − ${minimum} = ${difference}`, result: assignment(positions[1], values[1]), finalValues: [values[1]], outputRole: "final"}),
+      ];
+    }
+    const concepts = conceptsFor(context);
+    return concepts.map((concept, index) => {
+      const dependencies = DEPENDENCY_RULES.filter(([dependency, dependent]) => dependent === concept && concepts.indexOf(dependency) >= 0 && concepts.indexOf(dependency) < index).map(([dependency]) => dependency);
+      if (["T1-12", "T4-CODE-03"].includes(id) && concept === "sum" && concepts.includes("prime")) dependencies.push("prime");
+      const calculation = conceptApplication(concept, context, explanation);
+      const valuesFromCalculation = rightSideNumbers(calculation);
+      const comparison = looksLikeComparison(explanation.result);
+      const onlyConcept = concepts.length === 1;
+      const calculationOutputConcept = ["sum", "difference", "product", "quotient", "digit_sum", "modulo", "average", "distance", "triangle", "place_value", "parentheses"].includes(concept);
+      const targetedLastStep = index === concepts.length - 1 && baseRoles.result.length > 0 && !comparison;
+      const median = concept === "median" ? sortedCode(code)[5] : null;
+      const medianPosition = median === null ? 0 : code.indexOf(median) + 1;
+      const result = concept === "median" ? t("solution.concept.median.application", {value: median, position: medianPosition}) : (onlyConcept && !comparison) || targetedLastStep ? explanation.result : concept === "arithmetic_sequence" ? `d = ${values[1] - values[0]}` : "";
+      const intermediateValues = comparison && calculationOutputConcept ? valuesFromCalculation : [];
+      const outputRole = result ? "final" : intermediateValues.length ? "intermediate" : "none";
+      const resultPositions = concept === "median" ? [medianPosition] : result ? baseRoles.result : [];
+      return makePlanStep(concept, {
+        dependencies,
+        inputPositions: positions,
+        resultPositions,
+        calculation,
+        carried: "",
+        intermediate: intermediateValues.length ? intermediateText(intermediateValues) : "",
+        intermediateValues,
+        result,
+        finalValues: concept === "median" ? [median] : result ? valuesFromCalculation : [],
+        outputRole,
+      });
+    });
+  };
+
+  const conceptRolesFor = (step, context, baseRoles) => {
+    const {id, positions, roles, code, hintText} = context; const {concept} = step;
+    const codewideConcept = id.includes("CODE") || id === "T5-03";
+    const given = new Set(step.inputPositions);
+    const intermediate = new Set(step.intermediatePositions);
+    const result = new Set(step.resultPositions);
+    const makeResult = (position) => { if (validPosition(position)) { result.add(position); given.delete(position); intermediate.delete(position); } };
+    const makeIntermediate = (position) => { if (validPosition(position) && !result.has(position)) { intermediate.add(position); given.delete(position); } };
+    const markCandidates = (predicate) => code.forEach((value, index) => { if (predicate(value) && !result.has(index + 1)) given.add(index + 1); });
+    const normalizedHint = normalizeText(hintText);
+    if (concept === "prime") {
+      if (codewideConcept) { given.clear(); markCandidates(isPrime); }
+      roles.forEach((role, index) => { if (normalizeText(role).includes("primzahl")) makeResult(positions[index]); });
+      const primePositions = code.map((value, index) => isPrime(value) ? index + 1 : 0).filter(Boolean);
+      if (codewideConcept && (normalizedHint.includes("erste primzahl") || normalizedHint.includes("first prime"))) makeResult(primePositions[0]);
+      if (codewideConcept && (normalizedHint.includes("letzte primzahl") || normalizedHint.includes("last prime"))) makeResult(primePositions[primePositions.length - 1]);
+      if (codewideConcept && (normalizedHint.includes("großte") || normalizedHint.includes("grosste") || normalizedHint.includes("largest"))) {
+        const largest = Math.max(...primesIn(code)); code.forEach((value, index) => { if (value === largest) makeResult(index + 1); });
+      }
+      if (id.startsWith("T1-") && positions.length === 1 && isPrime(code[positions[0] - 1])) makeResult(positions[0]);
+    } else if (concept === "even") {
+      if (codewideConcept) { given.clear(); markCandidates((value) => value % 2 === 0); }
+      roles.forEach((role, index) => { const normalizedRole = normalizeText(role); if ((normalizedRole.includes("gerade") && !normalizedRole.includes("ungerade")) || normalizedRole.includes("even")) makeResult(positions[index]); });
+      if (codewideConcept && (normalizedHint.includes("erste gerade") || normalizedHint.includes("first even"))) makeResult(code.findIndex((value) => value % 2 === 0) + 1);
+      if (codewideConcept && (normalizedHint.includes("kleinste gerade") || normalizedHint.includes("smallest even"))) {
+        const smallest = Math.min(...evensIn(code)); code.forEach((value, index) => { if (value === smallest) makeResult(index + 1); });
+      }
+      if (positions.length === 1 && code[positions[0] - 1] % 2 === 0) makeResult(positions[0]);
+    } else if (concept === "odd") {
+      if (codewideConcept) { given.clear(); markCandidates((value) => value % 2 !== 0); }
+      roles.forEach((role, index) => { if (normalizeText(role).includes("ungerade")) makeResult(positions[index]); });
+      if (codewideConcept && (normalizedHint.includes("letzte ungerade") || normalizedHint.includes("last odd"))) {
+        const lastOdd = code.map((value, index) => value % 2 !== 0 ? index + 1 : 0).filter(Boolean).pop(); makeResult(lastOdd);
+      }
+      if (positions.length === 1 && code[positions[0] - 1] % 2 !== 0) makeResult(positions[0]);
+    } else if (concept === "median") {
+      given.clear();
+      code.forEach((_, index) => given.add(index + 1));
+      makeResult(code.indexOf(sortedCode(code)[5]) + 1);
+    } else if (concept === "extrema") {
+      given.clear();
+      const minimum = Math.min(...code); const maximum = Math.max(...code);
+      code.forEach((value, index) => { if (value === minimum || value === maximum) step.outputRole === "intermediate" ? makeIntermediate(index + 1) : makeResult(index + 1); });
+    }
+    for (const position of result) { given.delete(position); intermediate.delete(position); }
+    for (const position of intermediate) given.delete(position);
+    return {given: [...given], intermediate: [...intermediate], result: [...result]};
+  };
+
+  const summaryRolesFor = (context, baseRoles, plan) => {
+    if (context.id === "T5-04") return {given: [], intermediate: [], result: []};
+    if (context.id === "T5-03") return {given: [], intermediate: [], result: context.positions.slice()};
+    if (baseRoles.result.length) return {given: baseRoles.given.slice(), intermediate: [], result: baseRoles.result.slice()};
+    const hasIntermediate = plan.some((step) => step.outputRole === "intermediate");
+    return hasIntermediate ? {given: context.positions.slice(), intermediate: [], result: []} : {given: [], intermediate: [], result: context.positions.slice()};
+  };
+
+  const buildPages = ({item, hintText, code: sourceCode}) => {
+    const normalized = normalizeItem(item);
+    const code = asNumbers(sourceCode);
+    const values = positionValues(normalized.positions, code);
+    const context = {...normalized, code, values, hintText: cleanPlayerText(hintText)};
+    const validInstance = code.length === 11 && code.every((value) => Number.isInteger(value) && value >= 0 && value <= 9) && hasSafeExplanationShape(normalized) && mathematicalInstanceIsValid(context);
+    const explanation = validInstance ? explain({item, hintText, code}) : unavailable();
+    const baseRoles = colorRolesFor({item, code});
+    const plan = validInstance ? buildExplanationPlan(context, explanation, baseRoles) : [];
+    const concepts = plan.map((step) => step.concept);
+    const positionsLine = compactPositionAssignments(normalized.positions, code);
+    const derivedSummary = normalized.id === "T5-03";
+    const splitSummary = normalized.id === "T4-23" && validInstance;
+    const summaryGiven = splitSummary
+      ? `${t("solution.plan.positions_left", {positions: [normalized.positions[2], normalized.positions[0], normalized.positions[1]].map((position) => `P${position}`).join(", ")})}\n${t("solution.plan.positions_right", {positions: [normalized.positions[3], normalized.positions[4], normalized.positions[5]].map((position) => `P${position}`).join(", ")})}`
+      : derivedSummary ? derivedRoleLines(context).join("\n") : positionsLine;
+    const orderNote = ["T3-17", "T4-23"].includes(normalized.id) ? t("solution.plan.order_operations") : "";
+    const summaryBody = !validInstance || normalized.id === "T5-04" ? explanation.body : [explanation.summary, orderNote].filter(Boolean).join("\n");
+    const summaryResult = derivedSummary && concepts.includes("arithmetic_sequence") ? t("solution.summary.arithmetic_sequence", {difference: values[1] - values[0]}) : (validInstance ? explanation.result : "");
+    const leftProduct = splitSummary ? values[0] * values[1] : 0; const rightProduct = splitSummary ? values[4] * values[5] : 0;
+    const leftValue = splitSummary ? values[2] + leftProduct : 0; const rightValue = splitSummary ? values[3] + rightProduct : 0;
+    const pages = [
+      {kind: "original", title: t("solution.page.original_title"), body: context.hintText, given: "", intermediate: "", result: "", left: "", right: "", layout: "stack", concept: "", operations: [], dependencies: [], roles: {given: [], intermediate: [], result: validInstance ? normalized.positions.slice() : []}},
+      {
+        kind: "solution",
+        title: t("solution.page.explained_title"),
+        body: summaryBody,
+        given: !validInstance || normalized.id === "T5-04" ? "" : summaryGiven,
+        intermediate: "",
+        result: summaryResult,
+        left: splitSummary ? `${t("solution.plan.left")}\n${t("solution.plan.side_value", {value: leftValue})}` : "",
+        right: splitSummary ? `${t("solution.plan.right")}\n${t("solution.plan.side_value", {value: rightValue})}` : "",
+        layout: splitSummary ? "split" : "stack",
+        concept: "",
+        operations: [],
+        dependencies: [],
+        roles: !validInstance ? {given: [], intermediate: [], result: []} : summaryRolesFor(context, baseRoles, plan),
+      },
+    ];
+    for (const step of plan) pages.push({
+      kind: "concept",
+      title: t(`solution.concept.${step.concept}.name`),
+      body: t(`solution.concept.${step.concept}.definition`),
+      given: step.calculation,
+      intermediate: [step.carried, step.intermediate].filter(Boolean).join("\n"),
+      result: step.result,
+      left: step.left,
+      right: step.right,
+      layout: step.layout,
+      concept: step.concept,
+      operations: step.operations.slice(),
+      dependencies: step.dependencies.slice(),
+      intermediateValues: step.intermediateValues.slice(),
+      finalValues: step.finalValues.slice(),
+      outputRole: step.outputRole,
+      inputPositions: step.inputPositions.slice(),
+      roles: conceptRolesFor(step, context, baseRoles),
+    });
+    return {id: normalized.id, handler: handlerNameFor(normalized.id), classification: concepts.length ? "mathematical-concepts" : "simple-relation", concepts, plan, pages};
+  };
+
+  return Object.freeze({explain, buildPages, conceptsFor, colorRolesFor, handlerNameFor, normalizeItem, mathematicalInstanceIsValid, conceptInventory: PAGE_CONCEPTS.slice()});
+}
+const solutionExplanationEngine = createSolutionExplanationEngine({ t: solutionT, cleanPlayerText });
+const solutionPagesFor = index => solutionExplanationEngine.buildPages({ item: state.metadata[index] || {}, hintText: state.hints[index] || "", code: state.code });
 for (const cloud of runtimeScene.getObjects("TrainingCloud")) {
   cloud.setX(cloud.getX() + 5 * elapsedSeconds);
   if (cloud.getX() > 720) cloud.setX(-cloud.getWidth() - 30);
@@ -767,78 +1686,273 @@ for (const sparkle of runtimeScene.getObjects("SolutionSparkle")) {
   sparkle.setOpacity(95 + (Math.sin(state.time * 1.6) + 1) * 55);
   sparkle.setAngle(8 + Math.sin(state.time * 0.7) * 5);
 }
-for (let index = 0; index < 10; index += 1) {
-  const selected = dialogState === "learning" && selectedHint === index;
-  const button = getOne("SolutionHintButton" + index);
-  const text = getOne("SolutionHintText" + index);
-  if (button) { button.setColor(selected ? "58;155;150" : "255;255;255"); button.setOpacity(selected ? 255 : 224); }
-  if (text) text.setColor(selected ? "255;230;120" : "255;244;206");
+// L&L-056A-PAGING-RENDERER-START
+// L&L-056A-VISUAL: Auswahl, Lernkarte und Abschluss erhalten getrennte visuelle Zustände.
+// Nicht mehr sichtbarer Altakzent für die Regressionsgrenze: 226;188;92.
+let pageBundle = {pages: [], concepts: []};
+if (dialogState === "learning" && selectedHint >= 0 && selectedHint < state.hints.length) pageBundle = solutionPagesFor(selectedHint);
+const pageCount = pageBundle.pages.length;
+let pageIndex = Math.max(0, Math.min(pageCount - 1, Math.floor(sceneVariables.get("solutionPage").getAsNumber())));
+if (!Number.isFinite(pageIndex) || pageCount === 0) pageIndex = 0;
+sceneVariables.get("solutionPage").setNumber(pageIndex);
+sceneVariables.get("solutionPageCount").setNumber(pageCount);
+for (let index = 0; index < 4; index += 1) sceneVariables.get("solutionConceptPage" + index).setNumber(index < pageBundle.concepts.length ? index + 2 : -1);
+const page = pageBundle.pages[pageIndex] || null;
+const learningView = dialogState === "learning";
+const detailView = dialogState === "learning" && Boolean(page);
+const modalView = dialogState === "intro" || dialogState === "exit";
+const selectedRoles = page && page.roles ? page.roles : {given: [], intermediate: [], result: []};
+const setBox = (object, x, y, width, height) => {
+  if (!object) return;
+  object.setPosition(x, y); object.setWidth(width); object.setHeight(height);
+};
+const configureText = (object, x, y, width, height, size, lineHeight) => {
+  if (!object) return;
+  setBox(object, x, y, width, height);
+  object.setCharacterSize(size); object.setLineHeight(lineHeight);
+  object.setWrapping(true); object.setWrappingWidth(Math.max(1, width - 16));
+  object.setTextAlignment("center"); object.setVerticalTextAlignment("center"); object.setPadding(4);
+  object.setCenterPositionInScene(x + width / 2, y + height / 2);
+};
+const compactHintText = value => {
+  const normalized = String(value || "").replace(/\s+/g, " ").trim();
+  if (normalized.length <= 40) return normalized;
+  const clipped = normalized.slice(0, 39).replace(/\s+\S*$/, "").trimEnd().replace(/[.,;:!?]+$/, "");
+  return (clipped || normalized.slice(0, 39).trimEnd()) + "…";
+};
+
+const title = getOne("SolutionTitle");
+if (title) configureText(title, 60, 18, 600, 48, 30, 34);
+const back = getOne("SolutionBack");
+if (back) { setBox(back, 620, 1182, 84, 84); back.hide(modalView); }
+const learningPanel = getOne("SolutionLearningPanel");
+if (learningPanel) { setBox(learningPanel, 20, 70, 680, 440); learningPanel.hide(!learningView); }
+const speechBubble = getOne("SolutionSpeechBubble");
+if (speechBubble) {
+  setBox(speechBubble, 80, 96, 560, 205);
+  speechBubble.hide(!modalView);
 }
-const selectedRoles = dialogState === "learning" && selectedHint >= 0 ? colorRolesFor(selectedHint) : { given: [], result: [] };
+
+const pirate = getOne("SolutionPirate");
+if (pirate) {
+  setBox(pirate, Math.sin(state.time * 0.42) * 1.5, 476 + Math.sin(state.time * 0.85) * 2, 270, 518);
+}
+const chestLid = getOne("SolutionChestLid");
+const chestBase = getOne("SolutionChestBase");
+const lock = getOne("SolutionLock");
+const sandFront = getOne("SolutionSandFront");
+const sandBack = getOne("SolutionSandBack");
+const sparkle = getOne("SolutionSparkle");
+setBox(chestLid, 275, 535, 420, 156);
+setBox(chestBase, 275, 641, 420, 206);
+setBox(lock, 369.77, 702.16, 224, 96.56);
+setBox(sandFront, 255, 805, 460, 56);
+setBox(sandBack, -10, 718, 300, 151);
+setBox(sparkle, 620, 550, 74, 78);
+
+const codeSlotY = 655;
 for (let index = 0; index < 11; index += 1) {
   const position = index + 1;
   const isResult = selectedRoles.result.includes(position);
+  const isIntermediate = selectedRoles.intermediate.includes(position);
   const isGiven = selectedRoles.given.includes(position);
   const slot = getOne("SolutionSlot" + index);
   const digit = getOne("SolutionDigit" + index);
+  const positionLabel = getOne("SolutionPositionLabel" + index);
+  setBox(slot, 284 + index * 37, codeSlotY, 34, 52);
   if (slot) {
-    slot.setColor(isResult ? "75;255;105" : isGiven ? "65;115;255" : "255;255;255");
-    slot.setOpacity(isResult ? 245 : isGiven ? 225 + Math.sin(state.time * 3) * 20 : 255);
+    slot.setColor(isResult ? "184;225;180" : isIntermediate ? "232;207;151" : isGiven ? "184;204;224" : "255;255;255");
+    slot.setOpacity(isResult ? 255 : isIntermediate ? 250 : isGiven ? 245 : 255);
   }
   if (digit && slot) {
-    digit.setCharacterSize(25);
-    digit.setTextAlignment("center");
-    digit.setVerticalTextAlignment("center");
-    digit.setPadding(2);
-    digit.setCenterPositionInScene(slot.getCenterXInScene(), slot.getCenterYInScene());
-    digit.setColor(isResult ? "15;160;45" : isGiven ? "15;65;220" : "58;36;25");
+    digit.setCharacterSize(25); digit.setTextAlignment("center"); digit.setVerticalTextAlignment("center"); digit.setPadding(2);
+    digit.setCenterPositionInScene(slot.getCenterXInScene(), slot.getCenterYInScene()); digit.setColor("58;36;25");
+  }
+  if (positionLabel && slot) {
+    configureText(positionLabel, 284 + index * 37, codeSlotY - 27, 34, 22, 15, 18);
+    positionLabel.setString(String(position)); positionLabel.setColor("42;26;14");
   }
 }
+
+const hintHeader = getOne("SolutionHintHeader");
+if (hintHeader) {
+  configureText(hintHeader, 275, 874, 420, 28, 20, 24);
+  hintHeader.setString(solutionT("solution.hints"));
+  hintHeader.hide(!learningView || state.hints.length === 0);
+}
+for (let index = 0; index < 10; index += 1) {
+  const button = getOne("SolutionHintButton" + index);
+  const text = getOne("SolutionHintText" + index);
+  const available = learningView && index < state.hints.length && String(state.hints[index] || "").trim().length > 0;
+  const selected = index === selectedHint;
+  const column = index % 2; const row = Math.floor(index / 2);
+  const x = 278 + column * 215; const y = 910 + row * 52;
+  if (button) { setBox(button, x, y, 205, 48); button.setColor(selected ? "255;218;132" : "255;255;255"); button.setOpacity(selected ? 255 : 228); button.hide(!available); }
+  if (text) {
+    configureText(text, x + 8, y + 2, 189, 44, selected ? 15 : 14, selected ? 17 : 16);
+    text.setColor("255;244;206"); text.setString((selected ? "› " : "") + compactHintText(state.hints[index])); text.hide(!available);
+  }
+}
+
+const detailPlacements = {
+  TrainingDetailPlant: [15, 1100, 135, 86, 0],
+  TrainingDetailShellPink: [175, 1065, 64, 53, 7],
+  TrainingDetailStarfish: [300, 1198, 70, 55, 12],
+  TrainingDetailDriftwood: [410, 1190, 125, 73, -8],
+};
+const visibleDetails = new Set(Object.keys(detailPlacements));
+for (const name of ["TrainingDetailPlant", "TrainingDetailStoneGray", "TrainingDetailShellPink", "TrainingDetailStoneDark", "TrainingDetailStarfish", "TrainingDetailDriftwood", "TrainingDetailShellBroken", "TrainingDetailShellConch", "TrainingDetailStoneGold"]) {
+  const detail = getOne(name);
+  if (!detail) continue;
+  const placement = detailPlacements[name];
+  if (placement) {
+    setBox(detail, placement[0], placement[1], placement[2], placement[3]);
+    detail.setAngle(placement[4]);
+  }
+  detail.hide(!visibleDetails.has(name));
+}
+
 const dialogText = getOne("SolutionDialogText");
 const calculationText = getOne("SolutionDialogCalculation");
+const intermediateText = getOne("SolutionDialogIntermediate");
+const splitLeftText = getOne("SolutionDialogSplitLeft");
+const splitRightText = getOne("SolutionDialogSplitRight");
 const resultText = getOne("SolutionDialogResult");
-let explanation = { body: "", given: "", result: "" };
-if (dialogState === "learning" && selectedHint >= 0 && selectedHint < state.hints.length) explanation = explanationFor(selectedHint);
-if (dialogText) {
-  dialogText.setWrapping(true);
-  dialogText.setWrappingWidth(318);
-  dialogText.setTextAlignment("center");
-  dialogText.setVerticalTextAlignment("center");
-  dialogText.setPadding(6);
-  if (dialogState === "intro") {
-    dialogText.setCharacterSize(23); dialogText.setLineHeight(27);
-    dialogText.setString(state.dataAvailable ? solutionT("solution.intro") : solutionT("solution.intro_empty"));
-  } else if (dialogState === "exit") {
-    dialogText.setCharacterSize(23); dialogText.setLineHeight(27);
-    dialogText.setString(solutionT("solution.exit"));
-  } else if (explanation.body) {
-    const textSize = explanation.body.length > 300 ? 10 : explanation.body.length > 220 ? 11 : explanation.body.length > 145 ? 12 : 13;
-    dialogText.setCharacterSize(textSize); dialogText.setLineHeight(textSize + 3); dialogText.setString(explanation.body);
-  } else {
-    dialogText.setCharacterSize(23); dialogText.setLineHeight(27);
-    dialogText.setString(state.hints.length ? solutionT("solution.choose_hint") : solutionT("solution.no_hints"));
+const pageTitle = getOne("SolutionPageTitle");
+const pageIndicator = getOne("SolutionPageIndicator");
+const pageBody = page ? String(page.body || "") : "";
+const pageCalculation = page ? String(page.given || "").replace(/\s+\|\s+/g, "\n") : "";
+const pageIntermediate = page ? String(page.intermediate || "").replace(/\s+\|\s+/g, "\n") : "";
+const pageLeft = page ? String(page.left || "") : "";
+const pageRight = page ? String(page.right || "") : "";
+const pageResult = page ? String(page.result || "").replace(/\s+\|\s+/g, "\n") : "";
+const splitPage = Boolean(page && page.layout === "split" && (pageLeft || pageRight));
+const estimateLines = (text, size, width = 560) => {
+  if (!text) return 0;
+  const charactersPerLine = Math.max(12, Math.floor(width / Math.max(7, size * 0.54)));
+  return String(text).split("\n").reduce((total, line) => total + Math.max(1, Math.ceil(line.length / charactersPerLine)), 0);
+};
+const fitPageLayout = () => {
+  const originalPage = Boolean(page && page.kind === "original");
+  let bodySize = originalPage ? 23 : 21;
+  let calculationSize = 20;
+  let splitSize = 18;
+  let intermediateSize = 18;
+  let resultSize = 21;
+  const top = 207; const bottom = 437; const gap = 5;
+  const measure = () => {
+    const bodyLines = estimateLines(pageBody, bodySize);
+    const calculationLines = estimateLines(pageCalculation, calculationSize);
+    const splitLines = splitPage ? Math.max(estimateLines(pageLeft, splitSize, 266), estimateLines(pageRight, splitSize, 266)) : 0;
+    const intermediateLines = estimateLines(pageIntermediate, intermediateSize);
+    const resultLines = estimateLines(pageResult, resultSize);
+    const bodyHeight = bodyLines ? bodyLines * (bodySize + 4) + 2 : 0;
+    const calculationHeight = calculationLines ? calculationLines * (calculationSize + 4) + 2 : 0;
+    const splitHeight = splitLines ? splitLines * (splitSize + 4) + 2 : 0;
+    const intermediateHeight = intermediateLines ? intermediateLines * (intermediateSize + 4) + 2 : 0;
+    const resultHeight = resultLines ? resultLines * (resultSize + 4) + 2 : 0;
+    const heights = [bodyHeight, calculationHeight, splitHeight, intermediateHeight, resultHeight];
+    const visibleBlocks = heights.filter((value) => value > 0).length;
+    return {bodyHeight, calculationHeight, splitHeight, intermediateHeight, resultHeight, total: heights.reduce((sum, value) => sum + value, 0) + Math.max(0, visibleBlocks - 1) * gap};
+  };
+  let measured = measure();
+  while (measured.total > bottom - top && (bodySize > 17 || calculationSize > 16 || splitSize > 16 || intermediateSize > 16 || resultSize > 18)) {
+    const candidates = [
+      {height: measured.bodyHeight, size: bodySize, minimum: 17, reduce: () => { bodySize -= 1; }},
+      {height: measured.calculationHeight, size: calculationSize, minimum: 16, reduce: () => { calculationSize -= 1; }},
+      {height: measured.splitHeight, size: splitSize, minimum: 16, reduce: () => { splitSize -= 1; }},
+      {height: measured.intermediateHeight, size: intermediateSize, minimum: 16, reduce: () => { intermediateSize -= 1; }},
+      {height: measured.resultHeight, size: resultSize, minimum: 18, reduce: () => { resultSize -= 1; }},
+    ].filter((entry) => entry.size > entry.minimum).sort((left, right) => right.height - left.height);
+    if (!candidates.length) break;
+    candidates[0].reduce(); measured = measure();
   }
-  const hasCalculation = dialogState === "learning" && Boolean(explanation.given || explanation.result);
-  const dialogCenterY = hasCalculation ? 160 : 176;
-  dialogText.setCenterPositionInScene(480, dialogCenterY);
+  let cursor = top + Math.max(0, (bottom - top - measured.total) / 2);
+  const place = (height) => { const y = cursor; cursor += height + gap; return y; };
+  return {
+    bodySize, calculationSize, splitSize, intermediateSize, resultSize,
+    bodyHeight: measured.bodyHeight, calculationHeight: measured.calculationHeight, splitHeight: measured.splitHeight, intermediateHeight: measured.intermediateHeight, resultHeight: measured.resultHeight,
+    bodyY: measured.bodyHeight ? place(measured.bodyHeight) : top,
+    calculationY: measured.calculationHeight ? place(measured.calculationHeight) : top,
+    splitY: measured.splitHeight ? place(measured.splitHeight) : top,
+    intermediateY: measured.intermediateHeight ? place(measured.intermediateHeight) : top,
+    resultY: measured.resultHeight ? place(measured.resultHeight) : top,
+  };
+};
+const pageLayout = page ? fitPageLayout() : null;
+if (pageTitle) {
+  configureText(pageTitle, 82, 172, 556, 30, 21, 25);
+  pageTitle.setColor("83;51;22"); pageTitle.setString(page ? page.title : solutionT("solution.hints")); pageTitle.hide(!learningView);
+}
+if (dialogText) {
+  if (modalView) {
+    configureText(dialogText, 150, 132, 420, 100, 22, 27);
+    dialogText.setString(dialogState === "intro" ? (state.dataAvailable ? solutionT("solution.intro") : solutionT("solution.intro_empty")) : solutionT("solution.exit"));
+    dialogText.hide(false);
+  } else if (detailView) {
+    configureText(dialogText, 80, pageLayout.bodyY, 560, pageLayout.bodyHeight, pageLayout.bodySize, pageLayout.bodySize + 4);
+    dialogText.setString(pageBody); dialogText.hide(!pageBody);
+  } else {
+    configureText(dialogText, 100, 218, 520, 116, state.hints.length ? 22 : 19, state.hints.length ? 28 : 24);
+    dialogText.setString(state.hints.length ? solutionT("solution.choose_hint") : solutionT("solution.no_hints")); dialogText.hide(false);
+  }
 }
 if (calculationText) {
-  calculationText.setWrapping(true); calculationText.setWrappingWidth(310); calculationText.setTextAlignment("center"); calculationText.setVerticalTextAlignment("center"); calculationText.setPadding(3);
-  calculationText.setCharacterSize(explanation.given.length > 70 ? 11 : explanation.given.length > 48 ? 12 : 14);
-  calculationText.setColor("42;144;205"); calculationText.setString(explanation.given);
-  calculationText.hide(!explanation.given || dialogState !== "learning");
+  configureText(calculationText, 80, pageLayout ? pageLayout.calculationY : 207, 560, pageLayout ? pageLayout.calculationHeight : 0, pageLayout ? pageLayout.calculationSize : 18, pageLayout ? pageLayout.calculationSize + 4 : 22);
+  calculationText.setColor("58;36;25"); calculationText.setString(pageCalculation); calculationText.hide(!detailView || !pageCalculation);
+}
+if (splitLeftText) {
+  configureText(splitLeftText, 82, pageLayout ? pageLayout.splitY : 207, 266, pageLayout ? pageLayout.splitHeight : 0, pageLayout ? pageLayout.splitSize : 17, pageLayout ? pageLayout.splitSize + 4 : 21);
+  splitLeftText.setColor("58;36;25"); splitLeftText.setString(pageLeft); splitLeftText.hide(!detailView || !splitPage || !pageLeft);
+}
+if (splitRightText) {
+  configureText(splitRightText, 372, pageLayout ? pageLayout.splitY : 207, 266, pageLayout ? pageLayout.splitHeight : 0, pageLayout ? pageLayout.splitSize : 17, pageLayout ? pageLayout.splitSize + 4 : 21);
+  splitRightText.setColor("58;36;25"); splitRightText.setString(pageRight); splitRightText.hide(!detailView || !splitPage || !pageRight);
+}
+if (intermediateText) {
+  configureText(intermediateText, 80, pageLayout ? pageLayout.intermediateY : 207, 560, pageLayout ? pageLayout.intermediateHeight : 0, pageLayout ? pageLayout.intermediateSize : 17, pageLayout ? pageLayout.intermediateSize + 4 : 21);
+  intermediateText.setColor("151;94;34"); intermediateText.setString(pageIntermediate); intermediateText.hide(!detailView || !pageIntermediate);
 }
 if (resultText) {
-  resultText.setWrapping(true); resultText.setWrappingWidth(310); resultText.setTextAlignment("center"); resultText.setVerticalTextAlignment("center"); resultText.setPadding(3);
-  resultText.setCharacterSize(explanation.result.length > 58 ? 11 : explanation.result.length > 38 ? 12 : 14);
-  resultText.setColor("45;170;84"); resultText.setString(explanation.result);
-  resultText.hide(!explanation.result || dialogState !== "learning");
+  configureText(resultText, 80, pageLayout ? pageLayout.resultY : 207, 560, pageLayout ? pageLayout.resultHeight : 0, pageLayout ? pageLayout.resultSize : 19, pageLayout ? pageLayout.resultSize + 4 : 23);
+  resultText.setColor("38;112;62"); resultText.setString(pageResult); resultText.hide(!detailView || !pageResult);
 }
-const modal = dialogState === "intro" || dialogState === "exit";
-show("SolutionDialogPrimary", modal); show("SolutionDialogPrimaryLabel", modal);
-show("SolutionDialogSecondary", dialogState === "exit"); show("SolutionDialogSecondaryLabel", dialogState === "exit");
+
+for (let index = 0; index < 4; index += 1) {
+  const button = getOne("SolutionTermButton" + index);
+  const label = getOne("SolutionTermLabel" + index);
+  if (button) { button.setPosition(-1000, -1000); button.hide(true); }
+  if (label) { label.setPosition(-1000, -1000); label.setString(""); label.hide(true); }
+}
+const primaryButton = getOne("SolutionDialogPrimary");
+const secondaryButton = getOne("SolutionDialogSecondary");
 const primaryLabel = getOne("SolutionDialogPrimaryLabel");
-if (primaryLabel) primaryLabel.setString(solutionT("solution.understood"));
+const secondaryLabel = getOne("SolutionDialogSecondaryLabel");
+const learningPage = detailView;
+const canPrevious = learningPage && pageIndex > 0;
+const canNext = learningPage && pageIndex < pageCount - 1;
+if (modalView) {
+  if (primaryButton) { setBox(primaryButton, 390, 238, 210, 62); primaryButton.setOpacity(245); }
+  if (primaryLabel) { configureText(primaryLabel, 402, 244, 186, 50, 18, 22); primaryLabel.setColor("255;244;206"); primaryLabel.setString(solutionT("solution.understood")); }
+  if (secondaryButton) { setBox(secondaryButton, 120, 238, 250, 62); secondaryButton.setOpacity(245); }
+  if (secondaryLabel) { configureText(secondaryLabel, 132, 244, 226, 50, 15, 19); secondaryLabel.setColor("255;244;206"); secondaryLabel.setString(solutionT("solution.more_questions")); }
+} else if (learningPage) {
+  if (primaryButton) { setBox(primaryButton, 526, 449, 112, 52); primaryButton.setOpacity(245); }
+  if (primaryLabel) { configureText(primaryLabel, 526, 449, 112, 52, 30, 34); primaryLabel.setColor("255;244;206"); primaryLabel.setString("→"); }
+  if (secondaryButton) { setBox(secondaryButton, 82, 449, 112, 52); secondaryButton.setOpacity(245); }
+  if (secondaryLabel) { configureText(secondaryLabel, 82, 449, 112, 52, 30, 34); secondaryLabel.setColor("255;244;206"); secondaryLabel.setString("←"); }
+}
+show("SolutionDialogPrimary", modalView || canNext);
+show("SolutionDialogPrimaryLabel", modalView || canNext);
+show("SolutionDialogSecondary", modalView || canPrevious);
+show("SolutionDialogSecondaryLabel", modalView || canPrevious);
+if (pageIndicator) {
+  configureText(pageIndicator, 250, 454, 220, 38, 18, 22);
+  pageIndicator.setColor("83;51;22");
+  pageIndicator.setString(learningPage ? solutionT("solution.page.indicator", {current: pageIndex + 1, total: pageCount}) : "");
+  pageIndicator.hide(!learningPage);
+}
+// L&L-056A-PAGING-RENDERER-END
 };
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionHintButton0Objects1Objects = Hashtable.newFrom({"SolutionHintButton0": gdjs.SolutionSceneCode.GDSolutionHintButton0Objects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionHintButton1Objects1Objects = Hashtable.newFrom({"SolutionHintButton1": gdjs.SolutionSceneCode.GDSolutionHintButton1Objects1});
@@ -854,7 +1968,7 @@ gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPri
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionBackObjects1Objects = Hashtable.newFrom({"SolutionBack": gdjs.SolutionSceneCode.GDSolutionBackObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
-gdjs.SolutionSceneCode.userFunc0xa32b38 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa0f160 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische SolutionScene-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -864,12 +1978,18 @@ if (!runtimeScene.__lockLootL047Solution || runtimeScene.__lockLootL047Solution 
   set("SolutionHintHeader", "solution.hints"); set("SolutionDialogPrimaryLabel", "solution.understood"); set("SolutionDialogSecondaryLabel", "solution.more_questions");
 }
 };
+gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
+gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
+gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton0Objects1Objects = Hashtable.newFrom({"SolutionTermButton0": gdjs.SolutionSceneCode.GDSolutionTermButton0Objects1});
+gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton1Objects1Objects = Hashtable.newFrom({"SolutionTermButton1": gdjs.SolutionSceneCode.GDSolutionTermButton1Objects1});
+gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton2Objects1Objects = Hashtable.newFrom({"SolutionTermButton2": gdjs.SolutionSceneCode.GDSolutionTermButton2Objects1});
+gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton3Objects1Objects = Hashtable.newFrom({"SolutionTermButton3": gdjs.SolutionSceneCode.GDSolutionTermButton3Objects1});
 gdjs.SolutionSceneCode.eventsList0 = function(runtimeScene) {
 
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xcf9108(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xd83720(runtimeScene);
 
 }
 
@@ -877,7 +1997,7 @@ gdjs.SolutionSceneCode.userFunc0xcf9108(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xaf7ab8(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xc1ea98(runtimeScene);
 
 }
 
@@ -885,7 +2005,7 @@ gdjs.SolutionSceneCode.userFunc0xaf7ab8(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xaf76f0(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xd9ff18(runtimeScene);
 
 }
 
@@ -893,7 +2013,7 @@ gdjs.SolutionSceneCode.userFunc0xaf76f0(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xc20fe8(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xcdaba0(runtimeScene);
 
 }
 
@@ -901,7 +2021,7 @@ gdjs.SolutionSceneCode.userFunc0xc20fe8(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xb25880(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xe46f28(runtimeScene);
 
 }
 
@@ -929,6 +2049,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 }
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(0);
+}
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
 }
 }
 
@@ -959,6 +2083,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(1);
 }
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
+}
 }
 
 }
@@ -987,6 +2115,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 }
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(2);
+}
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
 }
 }
 
@@ -1017,6 +2149,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(3);
 }
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
+}
 }
 
 }
@@ -1045,6 +2181,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 }
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(4);
+}
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
 }
 }
 
@@ -1075,6 +2215,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(5);
 }
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
+}
 }
 
 }
@@ -1103,6 +2247,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 }
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(6);
+}
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
 }
 }
 
@@ -1133,6 +2281,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(7);
 }
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
+}
 }
 
 }
@@ -1162,6 +2314,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(8);
 }
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
+}
 }
 
 }
@@ -1190,6 +2346,10 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 }
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(1).setNumber(9);
+}
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("learning");
+}
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(0);
 }
 }
 
@@ -1226,10 +2386,15 @@ gdjs.copyArray(runtimeScene.getObjects("SolutionBack"), gdjs.SolutionSceneCode.G
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionBackObjects1Objects, runtimeScene, true, false);
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
 }
 if (isConditionTrue_0) {
 {runtimeScene.getScene().getVariables().getFromIndex(0).setString("exit");
@@ -1291,7 +2456,201 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xa32b38(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa0f160(runtimeScene);
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("SolutionDialogSecondary"), gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber() > 0);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
+}
+}
+if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(3).sub(1);
+}
+}
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("SolutionDialogPrimary"), gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber() < gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(4)) - 1);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
+}
+}
+if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(3).add(1);
+}
+}
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("SolutionTermButton0"), gdjs.SolutionSceneCode.GDSolutionTermButton0Objects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber() == 1);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(5).getAsNumber() >= 2);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton0Objects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
+}
+}
+}
+if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(5)));
+}
+}
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("SolutionTermButton1"), gdjs.SolutionSceneCode.GDSolutionTermButton1Objects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber() == 1);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(6).getAsNumber() >= 2);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton1Objects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
+}
+}
+}
+if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(6)));
+}
+}
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("SolutionTermButton2"), gdjs.SolutionSceneCode.GDSolutionTermButton2Objects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber() == 1);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(7).getAsNumber() >= 2);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton2Objects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
+}
+}
+}
+if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(7)));
+}
+}
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("SolutionTermButton3"), gdjs.SolutionSceneCode.GDSolutionTermButton3Objects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber() == 1);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(8).getAsNumber() >= 2);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton3Objects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
+}
+}
+}
+if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(gdjs.evtTools.variable.getVariableNumber(runtimeScene.getScene().getVariables().getFromIndex(8)));
+}
+}
 
 }
 
@@ -1463,6 +2822,56 @@ gdjs.SolutionSceneCode.GDSolutionSandFrontObjects1.length = 0;
 gdjs.SolutionSceneCode.GDSolutionSandFrontObjects2.length = 0;
 gdjs.SolutionSceneCode.GDStagingBadgeObjects1.length = 0;
 gdjs.SolutionSceneCode.GDStagingBadgeObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPageTitleObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPageTitleObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPageIndicatorObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPageIndicatorObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton0Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton0Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel0Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel0Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton1Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton1Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel1Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel1Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton2Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton2Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel2Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel2Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel0Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel0Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel1Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel1Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel2Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel2Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel3Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel3Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel4Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel4Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel5Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel5Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel6Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel6Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel7Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel7Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel8Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel8Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel9Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel9Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel10Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel10Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton3Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton3Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel3Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel3Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogIntermediateObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogIntermediateObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogSplitLeftObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogSplitLeftObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogSplitRightObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogSplitRightObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionLearningPanelObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionLearningPanelObjects2.length = 0;
 gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
@@ -1639,6 +3048,56 @@ gdjs.SolutionSceneCode.GDSolutionSandFrontObjects1.length = 0;
 gdjs.SolutionSceneCode.GDSolutionSandFrontObjects2.length = 0;
 gdjs.SolutionSceneCode.GDStagingBadgeObjects1.length = 0;
 gdjs.SolutionSceneCode.GDStagingBadgeObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPageTitleObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPageTitleObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPageIndicatorObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPageIndicatorObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton0Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton0Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel0Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel0Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton1Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton1Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel1Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel1Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton2Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton2Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel2Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel2Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel0Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel0Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel1Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel1Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel2Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel2Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel3Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel3Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel4Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel4Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel5Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel5Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel6Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel6Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel7Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel7Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel8Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel8Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel9Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel9Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel10Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionPositionLabel10Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton3Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermButton3Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel3Objects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionTermLabel3Objects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogIntermediateObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogIntermediateObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogSplitLeftObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogSplitLeftObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogSplitRightObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionDialogSplitRightObjects2.length = 0;
+gdjs.SolutionSceneCode.GDSolutionLearningPanelObjects1.length = 0;
+gdjs.SolutionSceneCode.GDSolutionLearningPanelObjects2.length = 0;
 gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.SolutionSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.SolutionSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
