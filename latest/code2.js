@@ -227,9 +227,9 @@ gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.SolutionSceneCode.userFunc0xc12b48 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xab8200 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
+// L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
 if (!backendGame.__lockLootBackendRuntime) {
   const backendVariables = backendGame.getVariables();
@@ -349,6 +349,7 @@ if (!backendGame.__lockLootBackendRuntime) {
       }
       try {
         const sdk = await ensureStagingSdk();
+        if (typeof sdk.auth.authStateReady === "function") await sdk.auth.authStateReady();
         const user = sdk.auth.currentUser || (await sdk.authModule.signInAnonymously(sdk.auth)).user;
         if (forceRefresh) await user.getIdToken(true);
         currentUid = user.uid;
@@ -381,6 +382,211 @@ if (!backendGame.__lockLootBackendRuntime) {
     backendGame.__lockLootBackendRuntime = runtime;
   }
 }
+// L&L-059: Einziger clientseitiger Zugang zu einer serverautoritativen letzten Lösung.
+// Der Zustand ist UID-/Rotations-gebunden, tief eingefroren und wird vor jeder Mutation vollständig geprüft.
+if (!backendGame.__lockLootLastSolution) {
+  const globals = backendGame.getVariables();
+  const idPattern = /^[A-Za-z0-9_-]{1,128}$/;
+  const codePattern = /^\d{11}$/;
+  const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort());
+  const contractError = message => Object.assign(new Error(message), {status: "INVALID_RESPONSE"});
+  const requireId = (value, field) => {
+    if (typeof value !== "string" || !idPattern.test(value)) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requirePositiveInteger = (value, field) => {
+    if (!Number.isSafeInteger(value) || value < 1) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requireNonNegativeInteger = (value, field) => {
+    if (!Number.isSafeInteger(value) || value < 0) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const deepFreeze = value => {
+    if (!value || typeof value !== "object" || Object.isFrozen(value)) return value;
+    for (const child of Object.values(value)) deepFreeze(child);
+    return Object.freeze(value);
+  };
+  const forbiddenFields = new Set([
+    "solution" + "Code", "assignmentSalt", "assignmentSeedHash", "assignedHints",
+    "generatorSeedOverride", "t504Fairness", "signature", "truthValue",
+    "mathematicalRule", "internalPositions", "details", "specialRule",
+    "independentValidation", "codewideDerivations", "intentionallyFalse",
+    "fairnessValidated"
+  ]);
+  const containsForbiddenField = value => {
+    if (!value || typeof value !== "object") return false;
+    return Object.entries(value).some(([key, child]) => forbiddenFields.has(key) || containsForbiddenField(child));
+  };
+  const requireShortString = (value, field, maximum = 512) => {
+    if (typeof value !== "string" || !value.trim() || value.length > maximum) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requireJsonScalarTree = (value, depth = 0) => {
+    if (depth > 4) throw contractError("Erklärmetadaten sind zu tief verschachtelt.");
+    if (value === null || typeof value === "boolean") return;
+    if (typeof value === "string") { if (value.length > 256) throw contractError("Erklärtext ist zu lang."); return; }
+    if (typeof value === "number") { if (!Number.isSafeInteger(value) || Math.abs(value) > 1000000) throw contractError("Erklärzahl ist ungültig."); return; }
+    if (Array.isArray(value)) {
+      if (value.length > 16) throw contractError("Erklärliste ist zu lang.");
+      for (const child of value) requireJsonScalarTree(child, depth + 1);
+      return;
+    }
+    if (value && typeof value === "object") {
+      const keys = Object.keys(value);
+      if (keys.length > 12) throw contractError("Zu viele Erklärfelder.");
+      for (const child of Object.values(value)) requireJsonScalarTree(child, depth + 1);
+      return;
+    }
+    throw contractError("Erklärmetadaten sind ungültig.");
+  };
+  const validateHint = (hint, index) => {
+    const keys = ["index", "id", "tier", "text", "textByLanguage", "visiblePositions", "positionRoles", "lengthClass", "packageNumber", "packagePosition", "explanationType", "explanationData"];
+    if (!exactKeys(hint, keys) || containsForbiddenField(hint)) throw contractError("Hinweisvertrag enthält unerwartete Felder.");
+    if (hint.index !== index + 1 || hint.packageNumber !== Math.floor(index / 2) + 1 || hint.packagePosition !== index % 2 + 1) throw contractError("Hinweisreihenfolge ist ungültig.");
+    requireId(hint.id, "hint.id");
+    if (!Number.isSafeInteger(hint.tier) || hint.tier < 1 || hint.tier > 5) throw contractError("hint.tier ist ungültig.");
+    requireShortString(hint.text, "hint.text");
+    if (!exactKeys(hint.textByLanguage, ["de", "en"]) || hint.textByLanguage.de !== hint.text) throw contractError("Hintlokalisierung ist ungültig.");
+    requireShortString(hint.textByLanguage.de, "hint.textByLanguage.de");
+    requireShortString(hint.textByLanguage.en, "hint.textByLanguage.en");
+    if (!Array.isArray(hint.visiblePositions) || hint.visiblePositions.length > 11 || hint.visiblePositions.some(position => !Number.isSafeInteger(position) || position < 1 || position > 11)) throw contractError("Hintpositionen sind ungültig.");
+    if (!Array.isArray(hint.positionRoles) || hint.positionRoles.length !== hint.visiblePositions.length || hint.positionRoles.some(role => typeof role !== "string" || !role.trim() || role.length > 128)) throw contractError("Hintrollen sind ungültig.");
+    if (!["kurz", "mittel", "lang"].includes(hint.lengthClass)) throw contractError("Hintlängenklasse ist ungültig.");
+    requireShortString(hint.explanationType, "hint.explanationType", 64);
+    const explanationKeys = ["hintId", "visiblePositions", "positionRoles", "propertyKey", "derivationKeys", "variant", "result", "operation", "divisor", "comparison"];
+    if (!hint.explanationData || typeof hint.explanationData !== "object" || Array.isArray(hint.explanationData) || Object.keys(hint.explanationData).some(key => !explanationKeys.includes(key))) throw contractError("Erklärvertrag enthält unerwartete Felder.");
+    if (hint.explanationData.hintId !== hint.id || JSON.stringify(hint.explanationData.visiblePositions) !== JSON.stringify(hint.visiblePositions) || JSON.stringify(hint.explanationData.positionRoles) !== JSON.stringify(hint.positionRoles)) throw contractError("Erklärvertrag passt nicht zum Hinweis.");
+    requireJsonScalarTree(hint.explanationData);
+    return {
+      index: hint.index, id: hint.id, tier: hint.tier, text: hint.text,
+      textByLanguage: {de: hint.textByLanguage.de, en: hint.textByLanguage.en},
+      visiblePositions: [...hint.visiblePositions], positionRoles: [...hint.positionRoles],
+      lengthClass: hint.lengthClass, packageNumber: hint.packageNumber,
+      packagePosition: hint.packagePosition, explanationType: hint.explanationType,
+      explanationData: clone(hint.explanationData)
+    };
+  };
+  const normalizeContract = (value, context) => {
+    if (!context || typeof context !== "object") throw contractError("Lösungskontext fehlt.");
+    const generation = requirePositiveInteger(context.generation, "generation");
+    const uid = requireId(context.uid, "uid");
+    const activeChestId = requireId(context.activeChestId, "activeChestId");
+    const rotation = requireNonNegativeInteger(context.rotation, "rotation");
+    const activeContentVersion = requirePositiveInteger(context.activeContentVersion, "activeContentVersion");
+    const contractKeys = ["schemaVersion", "rotation", "activeChestId", "available", "reason", "previousChestId", "snapshot"];
+    if (!exactKeys(value, contractKeys) || value.schemaVersion !== 1 || value.rotation !== rotation || value.activeChestId !== activeChestId || typeof value.available !== "boolean") throw contractError("Letzte-Lösung-Vertrag ist ungültig.");
+    const previousChestId = value.previousChestId === "" ? "" : requireId(value.previousChestId, "previousChestId");
+    if (previousChestId === activeChestId) throw contractError("Aktive Kiste darf nie letzte Lösung sein.");
+    if (!value.available) {
+      if (!["NO_HISTORY", "NO_HINT_PURCHASE", "INVALID_SNAPSHOT"].includes(value.reason) || value.snapshot !== null) throw contractError("Deaktivierter Lösungsvertrag ist ungültig.");
+      if (value.reason === "NO_HISTORY" && previousChestId !== "") throw contractError("NO_HISTORY enthält eine Kiste.");
+      if (value.reason === "NO_HINT_PURCHASE" && previousChestId === "") throw contractError("NO_HINT_PURCHASE enthält keine Kiste.");
+      const contract = {schemaVersion: 1, rotation, activeChestId, available: false, reason: value.reason, previousChestId, snapshot: null};
+      return deepFreeze({uid, generation, rotation, activeChestId, activeContentVersion, contract, digest: JSON.stringify({activeContentVersion, contract})});
+    }
+    if (value.reason !== "ELIGIBLE" || !previousChestId) throw contractError("Berechtigter Lösungsvertrag ist ungültig.");
+    const snapshotKeys = ["schemaVersion", "chestId", "closedCode", "purchasedPackageCount", "revealedHintCount", "revealedHints", "contentVersion", "hintGeneratorVersion", "playerChestRevision", "rotation"];
+    const snapshot = value.snapshot;
+    if (!exactKeys(snapshot, snapshotKeys) || snapshot.schemaVersion !== 1 || snapshot.chestId !== previousChestId || snapshot.rotation !== rotation || typeof snapshot.closedCode !== "string" || !codePattern.test(snapshot.closedCode)) throw contractError("Lösungssnapshot ist ungültig.");
+    if (!Number.isSafeInteger(snapshot.purchasedPackageCount) || snapshot.purchasedPackageCount < 1 || snapshot.purchasedPackageCount > 5 || snapshot.revealedHintCount !== snapshot.purchasedPackageCount * 2 || !Array.isArray(snapshot.revealedHints) || snapshot.revealedHints.length !== snapshot.revealedHintCount) throw contractError("Gekaufte Hinweise stimmen nicht mit dem Snapshot überein.");
+    const contentVersion = requirePositiveInteger(snapshot.contentVersion, "snapshot.contentVersion");
+    if (contentVersion + 1 !== activeContentVersion) throw contractError("Lösungssnapshot gehört nicht zur vorherigen Kiste.");
+    const normalizedSnapshot = {
+      schemaVersion: 1, chestId: previousChestId, closedCode: snapshot.closedCode,
+      purchasedPackageCount: snapshot.purchasedPackageCount,
+      revealedHintCount: snapshot.revealedHintCount,
+      revealedHints: snapshot.revealedHints.map(validateHint),
+      contentVersion,
+      hintGeneratorVersion: requirePositiveInteger(snapshot.hintGeneratorVersion, "snapshot.hintGeneratorVersion"),
+      playerChestRevision: requireNonNegativeInteger(snapshot.playerChestRevision, "snapshot.playerChestRevision"),
+      rotation
+    };
+    if (containsForbiddenField(normalizedSnapshot)) throw contractError("Interne Felder im Lösungssnapshot.");
+    const contract = {schemaVersion: 1, rotation, activeChestId, available: true, reason: "ELIGIBLE", previousChestId, snapshot: normalizedSnapshot};
+    return deepFreeze({uid, generation, rotation, activeChestId, activeContentVersion, contract, digest: JSON.stringify({activeContentVersion, contract})});
+  };
+  const clearGlobals = () => {
+    globals.get("previousSolutionAvailable").setBoolean(false);
+    globals.get("previousSolutionCode").fromJSObject([]);
+    globals.get("previousSolutionHints").fromJSObject([]);
+    globals.get("previousSolutionMetadata").fromJSObject([]);
+    globals.get("previousSolutionHintCount").setNumber(0);
+    globals.get("previousSolutionSourceMode").setString("");
+  };
+  const applyGlobals = snapshot => {
+    clearGlobals();
+    const metadata = clone(snapshot.revealedHints);
+    globals.get("previousSolutionCode").fromJSObject(snapshot.closedCode.split("").map(Number));
+    globals.get("previousSolutionHints").fromJSObject(metadata.map(hint => hint.textByLanguage.de));
+    globals.get("previousSolutionMetadata").fromJSObject(metadata);
+    globals.get("previousSolutionHintCount").setNumber(metadata.length);
+    globals.get("previousSolutionSourceMode").setString("Server-L059");
+    globals.get("previousSolutionAvailable").setBoolean(true);
+  };
+  const state = {uid: "", generation: 0, highestRotation: -1, highestContentVersion: -1, digest: "", activeChestId: "", available: false, reason: "UNINITIALIZED", snapshot: null};
+  const markUnavailable = reason => {
+    state.available = false;
+    state.reason = typeof reason === "string" && reason ? reason : "UNAVAILABLE";
+    state.snapshot = null;
+    clearGlobals();
+  };
+  const begin = uid => {
+    const validatedUid = requireId(uid, "uid");
+    state.generation += 1;
+    if (state.uid !== validatedUid) {
+      state.uid = validatedUid;
+      state.highestRotation = -1;
+      state.highestContentVersion = -1;
+      state.digest = "";
+      state.activeChestId = "";
+    }
+    markUnavailable("LOADING");
+    return Object.freeze({uid: state.uid, generation: state.generation});
+  };
+  const invalidate = reason => {
+    state.generation += 1;
+    markUnavailable(reason || "LOADING");
+  };
+  const isCurrent = token => !!(token && token.uid === state.uid && token.generation === state.generation);
+  const commit = candidate => {
+    if (!candidate || typeof candidate !== "object" || !Object.isFrozen(candidate)) throw contractError("Ungeprüfter Lösungskandidat.");
+    if (state.uid !== candidate.uid || state.generation !== candidate.generation) return false;
+    if (candidate.rotation < state.highestRotation || candidate.activeContentVersion < state.highestContentVersion) {
+      markUnavailable("STALE_RESPONSE");
+      return false;
+    }
+    if (state.highestRotation >= 0 && ((candidate.rotation > state.highestRotation && candidate.activeContentVersion <= state.highestContentVersion) || (candidate.rotation === state.highestRotation && candidate.activeContentVersion !== state.highestContentVersion))) {
+      markUnavailable("INVALID_SNAPSHOT");
+      return false;
+    }
+    if (candidate.rotation === state.highestRotation && state.digest && candidate.digest !== state.digest) {
+      markUnavailable("INVALID_SNAPSHOT");
+      return false;
+    }
+    state.highestRotation = candidate.rotation;
+    state.highestContentVersion = candidate.activeContentVersion;
+    state.digest = candidate.digest;
+    state.activeChestId = candidate.activeChestId;
+    state.available = candidate.contract.available;
+    state.reason = candidate.contract.reason;
+    state.snapshot = candidate.contract.available ? candidate.contract.snapshot : null;
+    if (state.snapshot) applyGlobals(state.snapshot); else clearGlobals();
+    return true;
+  };
+  const currentSnapshot = () => state.available && state.snapshot ? state.snapshot : null;
+  const openSnapshot = () => {
+    const snapshot = currentSnapshot();
+    if (!snapshot) return false;
+    applyGlobals(snapshot);
+    return true;
+  };
+  backendGame.__lockLootLastSolution = Object.freeze({
+    validate: normalizeContract, commit, begin, invalidate, isCurrent, markUnavailable, currentSnapshot, openSnapshot,
+    getState: () => Object.freeze({uid: state.uid, generation: state.generation, highestRotation: state.highestRotation, highestContentVersion: state.highestContentVersion, activeChestId: state.activeChestId, available: state.available, reason: state.reason, snapshot: state.snapshot})
+  });
+}
 const backendRuntime = backendGame.__lockLootBackendRuntime;
 for (const badge of runtimeScene.getObjects("StagingBadge")) {
   const badgeI18n = backendGame.__lockLootI18n;
@@ -388,7 +594,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.SolutionSceneCode.userFunc0xc12c58 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xab8338 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -573,7 +779,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.SolutionSceneCode.userFunc0xa98890 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xc40e70 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -612,18 +818,19 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.SolutionSceneCode.userFunc0xdad8c8 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xc92ea0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Einmalige Auflösungsmusik und AUS-Schutz erfolgen zentral über MusicController_Events.
 };
-gdjs.SolutionSceneCode.userFunc0xca3bf0 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xc448b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025/L&L-056A: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
-// Datenquelle sind ausschließlich die global gesicherten Werte der vorherigen Kiste.
+// Datenquelle ist ausschließlich der tief eingefrorene, serverautoritativ geprüfte L&L-059-Snapshot.
 const sceneVariables = runtimeScene.getVariables();
-const solutionI18n = runtimeScene.getGame().__lockLootI18n;
+const solutionGame = runtimeScene.getGame();
+const solutionI18n = solutionGame.__lockLootI18n;
 const solutionT = (key, parameters = {}) => solutionI18n.t(key, parameters);
-const globalVariables = runtimeScene.getGame().getVariables();
+const solutionController = solutionGame.__lockLootLastSolution;
 const cleanPlayerText = value => {
   let text = String(value || "").replace(/\bT[1-5](?:-CODE)?-\d{2}\b/gi, "").replace(/\s{2,}/g, " " ).replace(/^[-–—:;,.\s]+|[-–—:;,.\s]+$/g, "").trim();
   if (solutionI18n.language === "en") {
@@ -633,14 +840,12 @@ const cleanPlayerText = value => {
   return text.replace(/entspricht die Zahl an Position/g, "entspricht der Zahl an Position");
 };
 if (!runtimeScene.__lockLootSolutionState) {
-  const codeValue = globalVariables.get("previousSolutionCode").toJSObject();
-  const hintValue = globalVariables.get("previousSolutionHints").toJSObject();
-  const metadataValue = globalVariables.get("previousSolutionMetadata").toJSObject();
-  const dataAvailable = globalVariables.get("previousSolutionAvailable").getAsBoolean();
-  const code = dataAvailable && Array.isArray(codeValue) && codeValue.length === 11 ? codeValue : Array(11).fill("–");
-  const metadata = dataAvailable && Array.isArray(metadataValue) ? metadataValue.slice(0, 10) : [];
-  const hints = dataAvailable && Array.isArray(hintValue) ? hintValue.slice(0, 10).map((value, index) => cleanPlayerText(metadata[index] && metadata[index].textByLanguage && metadata[index].textByLanguage[solutionI18n.language] || value)) : [];
-  runtimeScene.__lockLootSolutionState = { time: 0, code, hints, metadata, dataAvailable };
+  const immutableSnapshot = solutionController && solutionController.currentSnapshot();
+  const dataAvailable = !!(immutableSnapshot && Object.isFrozen(immutableSnapshot) && /^\d{11}$/.test(immutableSnapshot.closedCode) && immutableSnapshot.revealedHintCount === immutableSnapshot.revealedHints.length);
+  const code = dataAvailable ? immutableSnapshot.closedCode.split("").map(Number) : Array(11).fill("–");
+  const metadata = dataAvailable ? immutableSnapshot.revealedHints : [];
+  const hints = dataAvailable ? metadata.map(value => cleanPlayerText(value.textByLanguage && value.textByLanguage[solutionI18n.language] || value.text)) : [];
+  runtimeScene.__lockLootSolutionState = { time: 0, code, hints, metadata, dataAvailable, immutableSnapshot, languageRevision: solutionI18n.revision };
   sceneVariables.get("availableHintCount").setNumber(hints.length);
   const title = runtimeScene.getObjects("SolutionTitle")[0];
   if (title) title.setString(dataAvailable ? solutionT("solution.title") : solutionT("solution.no_solution"));
@@ -670,6 +875,12 @@ if (!runtimeScene.__lockLootSolutionState) {
   }
 }
 const state = runtimeScene.__lockLootSolutionState;
+if (state.languageRevision !== solutionI18n.revision) {
+  state.hints = state.dataAvailable ? state.metadata.map(value => cleanPlayerText(value.textByLanguage && value.textByLanguage[solutionI18n.language] || value.text)) : [];
+  state.languageRevision = solutionI18n.revision;
+  const refreshedTitle = runtimeScene.getObjects("SolutionTitle")[0];
+  if (refreshedTitle) refreshedTitle.setString(state.dataAvailable ? solutionT("solution.title") : solutionT("solution.no_solution"));
+}
 const elapsedSeconds = Math.min(runtimeScene.getElapsedTime() / 1000, 0.05);
 state.time += elapsedSeconds;
 const dialogState = sceneVariables.get("dialogState").getAsString();
@@ -1690,7 +1901,7 @@ for (const sparkle of runtimeScene.getObjects("SolutionSparkle")) {
 // L&L-056A-VISUAL: Auswahl, Lernkarte und Abschluss erhalten getrennte visuelle Zustände.
 // Nicht mehr sichtbarer Altakzent für die Regressionsgrenze: 226;188;92.
 let pageBundle = {pages: [], concepts: []};
-if (dialogState === "learning" && selectedHint >= 0 && selectedHint < state.hints.length) pageBundle = solutionPagesFor(selectedHint);
+if (selectedHint >= 0 && selectedHint < state.hints.length) pageBundle = solutionPagesFor(selectedHint);
 const pageCount = pageBundle.pages.length;
 let pageIndex = Math.max(0, Math.min(pageCount - 1, Math.floor(sceneVariables.get("solutionPage").getAsNumber())));
 if (!Number.isFinite(pageIndex) || pageCount === 0) pageIndex = 0;
@@ -1882,7 +2093,7 @@ const fitPageLayout = () => {
 const pageLayout = page ? fitPageLayout() : null;
 if (pageTitle) {
   configureText(pageTitle, 82, 172, 556, 30, 21, 25);
-  pageTitle.setColor("83;51;22"); pageTitle.setString(page ? page.title : solutionT("solution.hints")); pageTitle.hide(!learningView);
+  pageTitle.setColor("83;51;22"); pageTitle.setString(page ? page.title : solutionT("solution.hints")); pageTitle.hide(!detailView);
 }
 if (dialogText) {
   if (modalView) {
@@ -1953,6 +2164,119 @@ if (pageIndicator) {
   pageIndicator.hide(!learningPage);
 }
 // L&L-056A-PAGING-RENDERER-END
+// L&L-059-PORTRAIT-SAFE-AREA-START
+// Ausschließlich schmale Portraits erhalten eine eigene Anordnung innerhalb der
+// vorhandenen GDevelop-Auflösung. Native 720x1280 und Landscape bleiben unverändert.
+const portraitViewportWidth = typeof window !== "undefined" ? Math.max(1, window.innerWidth) : 720;
+const portraitViewportHeight = typeof window !== "undefined" ? Math.max(1, window.innerHeight) : 1280;
+const l059NarrowPortrait = portraitViewportWidth < 720 && portraitViewportHeight > portraitViewportWidth;
+if (l059NarrowPortrait) {
+  const safeWidth = solutionGame.getGameResolutionWidth();
+  const safeHeight = solutionGame.getGameResolutionHeight();
+  const portraitScale = safeWidth / portraitViewportWidth;
+  const portraitPx = value => value * portraitScale;
+  if (title) configureText(title, portraitPx(8), portraitPx(8), safeWidth - portraitPx(16), portraitPx(40), portraitPx(21), portraitPx(25));
+  if (learningPanel) setBox(learningPanel, portraitPx(8), portraitPx(50), safeWidth - portraitPx(16), portraitPx(270));
+  if (speechBubble) setBox(speechBubble, portraitPx(12), portraitPx(54), safeWidth - portraitPx(24), portraitPx(236));
+  if (pirate) setBox(pirate, Math.sin(state.time * 0.42) * portraitPx(1.2), portraitPx(286) + Math.sin(state.time * 0.85) * portraitPx(1.5), portraitPx(118), portraitPx(226));
+  const portraitChestX = portraitPx(112);
+  const portraitChestWidth = safeWidth - portraitChestX - portraitPx(8);
+  setBox(chestLid, portraitChestX, portraitPx(300), portraitChestWidth, portraitPx(88));
+  setBox(chestBase, portraitChestX, portraitPx(360), portraitChestWidth, portraitPx(116));
+  setBox(lock, portraitChestX + portraitChestWidth * 0.23, portraitPx(396), portraitChestWidth * 0.54, portraitPx(52));
+  setBox(sandBack, 0, portraitPx(417), portraitPx(126), portraitPx(63));
+  setBox(sandFront, portraitChestX - portraitPx(8), portraitPx(448), portraitChestWidth + portraitPx(16), portraitPx(34));
+  setBox(sparkle, safeWidth - portraitPx(47), portraitPx(310), portraitPx(42), portraitPx(44));
+  const portraitSlotStart = portraitChestX + portraitPx(7);
+  const portraitSlotStep = (portraitChestWidth - portraitPx(14)) / 11;
+  for (let index = 0; index < 11; index += 1) {
+    const slot = getOne("SolutionSlot" + index);
+    const digit = getOne("SolutionDigit" + index);
+    const positionLabel = getOne("SolutionPositionLabel" + index);
+    const x = portraitSlotStart + index * portraitSlotStep;
+    setBox(slot, x, portraitPx(365), Math.max(portraitPx(17), portraitSlotStep - portraitPx(2)), portraitPx(38));
+    if (digit && slot) { digit.setCharacterSize(portraitPx(17)); digit.setPadding(portraitPx(1)); digit.setCenterPositionInScene(slot.getCenterXInScene(), slot.getCenterYInScene()); }
+    if (positionLabel) configureText(positionLabel, x, portraitPx(342), Math.max(portraitPx(17), portraitSlotStep - portraitPx(2)), portraitPx(19), portraitPx(11), portraitPx(14));
+  }
+  if (hintHeader) configureText(hintHeader, portraitPx(8), portraitPx(454), safeWidth - portraitPx(16), portraitPx(30), portraitPx(18), portraitPx(22));
+  for (let index = 0; index < 10; index += 1) {
+    const button = getOne("SolutionHintButton" + index);
+    const text = getOne("SolutionHintText" + index);
+    const column = index % 2; const row = Math.floor(index / 2);
+    const gap = portraitPx(8); const buttonWidth = (safeWidth - gap * 3) / 2;
+    const x = gap + column * (buttonWidth + gap); const y = portraitPx(488 + row * 50);
+    if (button) setBox(button, x, y, buttonWidth, portraitPx(48));
+    if (text) configureText(text, x + portraitPx(5), y + portraitPx(2), buttonWidth - portraitPx(10), portraitPx(44), portraitPx(index === selectedHint ? 13 : 12), portraitPx(index === selectedHint ? 16 : 15));
+  }
+  if (back) setBox(back, safeWidth - portraitPx(60), safeHeight - portraitPx(60), portraitPx(52), portraitPx(52));
+  if (pageTitle) configureText(pageTitle, portraitPx(42), portraitPx(108), safeWidth - portraitPx(84), portraitPx(22), portraitPx(14), portraitPx(17));
+  if (modalView && dialogText) configureText(dialogText, portraitPx(56), portraitPx(92), safeWidth - portraitPx(112), portraitPx(112), portraitPx(15), portraitPx(19));
+  else if (detailView && dialogText) configureText(dialogText, portraitPx(42), portraitPx(132), safeWidth - portraitPx(84), portraitPx(72), portraitPx(15), portraitPx(19));
+  else if (dialogText) configureText(dialogText, portraitPx(28), portraitPx(112), safeWidth - portraitPx(56), portraitPx(108), portraitPx(16), portraitPx(21));
+  if (detailView) {
+    const contentTop = portraitPx(132); const contentBottom = portraitPx(252); const contentGap = portraitPx(3);
+    const contentInset = portraitPx(42); const contentWidth = safeWidth - contentInset * 2;
+    const splitGap = portraitPx(8); const splitWidth = (contentWidth - splitGap) / 2;
+    let bodySize = portraitPx(15); let calculationSize = portraitPx(14); let splitSize = portraitPx(13); let intermediateSize = portraitPx(13); let resultSize = portraitPx(15);
+    const measurePortrait = () => {
+      const lineHeight = size => size + portraitPx(3);
+      const blockHeight = (textValue, size, width) => textValue ? Math.max(lineHeight(size), estimateLines(textValue, size, width) * lineHeight(size)) : 0;
+      const bodyHeight = blockHeight(pageBody, bodySize, contentWidth);
+      const calculationHeight = blockHeight(pageCalculation, calculationSize, contentWidth);
+      const splitHeight = splitPage ? Math.max(blockHeight(pageLeft, splitSize, splitWidth), blockHeight(pageRight, splitSize, splitWidth)) : 0;
+      const intermediateHeight = blockHeight(pageIntermediate, intermediateSize, contentWidth);
+      const resultHeight = blockHeight(pageResult, resultSize, contentWidth);
+      const heights = [bodyHeight, calculationHeight, splitHeight, intermediateHeight, resultHeight];
+      return {bodyHeight, calculationHeight, splitHeight, intermediateHeight, resultHeight, total: heights.reduce((sum, value) => sum + value, 0) + Math.max(0, heights.filter(Boolean).length - 1) * contentGap};
+    };
+    let measured = measurePortrait();
+    while (measured.total > contentBottom - contentTop) {
+      const candidates = [
+        {height: measured.bodyHeight, size: bodySize, minimum: portraitPx(12), reduce: () => { bodySize -= portraitPx(1); }},
+        {height: measured.calculationHeight, size: calculationSize, minimum: portraitPx(12), reduce: () => { calculationSize -= portraitPx(1); }},
+        {height: measured.splitHeight, size: splitSize, minimum: portraitPx(12), reduce: () => { splitSize -= portraitPx(1); }},
+        {height: measured.intermediateHeight, size: intermediateSize, minimum: portraitPx(12), reduce: () => { intermediateSize -= portraitPx(1); }},
+        {height: measured.resultHeight, size: resultSize, minimum: portraitPx(13), reduce: () => { resultSize -= portraitPx(1); }},
+      ].filter(entry => entry.height > 0 && entry.size > entry.minimum).sort((left, right) => right.height - left.height);
+      if (!candidates.length) break;
+      candidates[0].reduce(); measured = measurePortrait();
+    }
+    let contentY = contentTop + Math.max(0, (contentBottom - contentTop - measured.total) / 2);
+    const nextY = height => { const y = contentY; contentY += height + contentGap; return y; };
+    const bodyY = measured.bodyHeight ? nextY(measured.bodyHeight) : contentTop;
+    const calculationY = measured.calculationHeight ? nextY(measured.calculationHeight) : contentTop;
+    const splitY = measured.splitHeight ? nextY(measured.splitHeight) : contentTop;
+    const intermediateY = measured.intermediateHeight ? nextY(measured.intermediateHeight) : contentTop;
+    const resultY = measured.resultHeight ? nextY(measured.resultHeight) : contentTop;
+    if (dialogText) configureText(dialogText, contentInset, bodyY, contentWidth, measured.bodyHeight, bodySize, bodySize + portraitPx(3));
+    if (calculationText) configureText(calculationText, contentInset, calculationY, contentWidth, measured.calculationHeight, calculationSize, calculationSize + portraitPx(3));
+    if (splitLeftText) configureText(splitLeftText, contentInset, splitY, splitWidth, measured.splitHeight, splitSize, splitSize + portraitPx(3));
+    if (splitRightText) configureText(splitRightText, contentInset + splitWidth + splitGap, splitY, splitWidth, measured.splitHeight, splitSize, splitSize + portraitPx(3));
+    if (intermediateText) configureText(intermediateText, contentInset, intermediateY, contentWidth, measured.intermediateHeight, intermediateSize, intermediateSize + portraitPx(3));
+    if (resultText) configureText(resultText, contentInset, resultY, contentWidth, measured.resultHeight, resultSize, resultSize + portraitPx(3));
+  }
+  if (modalView) {
+    if (primaryButton) setBox(primaryButton, safeWidth / 2 + portraitPx(5), portraitPx(222), safeWidth / 2 - portraitPx(25), portraitPx(58));
+    if (primaryLabel) configureText(primaryLabel, safeWidth / 2 + portraitPx(13), portraitPx(228), safeWidth / 2 - portraitPx(41), portraitPx(46), portraitPx(15), portraitPx(19));
+    if (secondaryButton) setBox(secondaryButton, portraitPx(20), portraitPx(222), safeWidth / 2 - portraitPx(25), portraitPx(58));
+    if (secondaryLabel) {
+      const portraitSecondaryText = solutionT("solution.more_questions");
+      const portraitSecondaryBreak = portraitSecondaryText.lastIndexOf(" ");
+      if (portraitSecondaryBreak > 0) secondaryLabel.setString(portraitSecondaryText.slice(0, portraitSecondaryBreak) + "\n" + portraitSecondaryText.slice(portraitSecondaryBreak + 1));
+      configureText(secondaryLabel, portraitPx(28), portraitPx(228), safeWidth / 2 - portraitPx(41), portraitPx(46), portraitPx(12), portraitPx(16));
+    }
+  } else if (learningPage) {
+    if (primaryButton) setBox(primaryButton, safeWidth - portraitPx(82), portraitPx(264), portraitPx(58), portraitPx(48));
+    if (primaryLabel) configureText(primaryLabel, safeWidth - portraitPx(82), portraitPx(264), portraitPx(58), portraitPx(48), portraitPx(25), portraitPx(29));
+    if (secondaryButton) setBox(secondaryButton, portraitPx(24), portraitPx(264), portraitPx(58), portraitPx(48));
+    if (secondaryLabel) configureText(secondaryLabel, portraitPx(24), portraitPx(264), portraitPx(58), portraitPx(48), portraitPx(25), portraitPx(29));
+  }
+  if (pageIndicator) configureText(pageIndicator, portraitPx(92), portraitPx(270), safeWidth - portraitPx(184), portraitPx(34), portraitPx(14), portraitPx(18));
+  for (const name of ["TrainingDetailPlant", "TrainingDetailShellPink", "TrainingDetailStarfish", "TrainingDetailDriftwood"]) {
+    const detail = getOne(name); if (detail) detail.hide(true);
+  }
+}
+// L&L-059-PORTRAIT-SAFE-AREA-END
 };
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionHintButton0Objects1Objects = Hashtable.newFrom({"SolutionHintButton0": gdjs.SolutionSceneCode.GDSolutionHintButton0Objects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionHintButton1Objects1Objects = Hashtable.newFrom({"SolutionHintButton1": gdjs.SolutionSceneCode.GDSolutionHintButton1Objects1});
@@ -1967,8 +2291,9 @@ gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionHintButto
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionBackObjects1Objects = Hashtable.newFrom({"SolutionBack": gdjs.SolutionSceneCode.GDSolutionBackObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
+gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
-gdjs.SolutionSceneCode.userFunc0xaa8b28 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa28eb0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische SolutionScene-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -1978,7 +2303,6 @@ if (!runtimeScene.__lockLootL047Solution || runtimeScene.__lockLootL047Solution 
   set("SolutionHintHeader", "solution.hints"); set("SolutionDialogPrimaryLabel", "solution.understood"); set("SolutionDialogSecondaryLabel", "solution.more_questions");
 }
 };
-gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton0Objects1Objects = Hashtable.newFrom({"SolutionTermButton0": gdjs.SolutionSceneCode.GDSolutionTermButton0Objects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionTermButton1Objects1Objects = Hashtable.newFrom({"SolutionTermButton1": gdjs.SolutionSceneCode.GDSolutionTermButton1Objects1});
@@ -1989,7 +2313,7 @@ gdjs.SolutionSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xc12b48(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xab8200(runtimeScene);
 
 }
 
@@ -1997,7 +2321,7 @@ gdjs.SolutionSceneCode.userFunc0xc12b48(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xc12c58(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xab8338(runtimeScene);
 
 }
 
@@ -2005,7 +2329,7 @@ gdjs.SolutionSceneCode.userFunc0xc12c58(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xa98890(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xc40e70(runtimeScene);
 
 }
 
@@ -2013,7 +2337,7 @@ gdjs.SolutionSceneCode.userFunc0xa98890(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xdad8c8(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xc92ea0(runtimeScene);
 
 }
 
@@ -2021,7 +2345,7 @@ gdjs.SolutionSceneCode.userFunc0xdad8c8(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xca3bf0(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xc448b8(runtimeScene);
 
 }
 
@@ -2410,6 +2734,35 @@ gdjs.copyArray(runtimeScene.getObjects("SolutionDialogSecondary"), gdjs.Solution
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber() > 0);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+}
+}
+}
+if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(3).sub(1);
+}
+}
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("SolutionDialogSecondary"), gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
 {isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "exit");
 }
 if (isConditionTrue_0) {
@@ -2445,7 +2798,6 @@ isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Lef
 }
 }
 if (isConditionTrue_0) {
-{/* Unknown instruction - skipped. */}
 {gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "MainMenu", true);
 }
 }
@@ -2456,36 +2808,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xaa8b28(runtimeScene);
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("SolutionDialogSecondary"), gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(0).getAsString() == "learning");
-}
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber() > 0);
-}
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-}
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(3).sub(1);
-}
-}
+gdjs.SolutionSceneCode.userFunc0xa28eb0(runtimeScene);
 
 }
 

@@ -157,12 +157,6 @@ gdjs.TrainingSceneCode.GDTrainingDetailStoneGoldObjects3= [];
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects1= [];
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects2= [];
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects3= [];
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1= [];
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects2= [];
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3= [];
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1= [];
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2= [];
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3= [];
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1= [];
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2= [];
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3= [];
@@ -189,9 +183,9 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xaa03d0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xab3fe8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
+// L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
 if (!backendGame.__lockLootBackendRuntime) {
   const backendVariables = backendGame.getVariables();
@@ -311,6 +305,7 @@ if (!backendGame.__lockLootBackendRuntime) {
       }
       try {
         const sdk = await ensureStagingSdk();
+        if (typeof sdk.auth.authStateReady === "function") await sdk.auth.authStateReady();
         const user = sdk.auth.currentUser || (await sdk.authModule.signInAnonymously(sdk.auth)).user;
         if (forceRefresh) await user.getIdToken(true);
         currentUid = user.uid;
@@ -343,6 +338,211 @@ if (!backendGame.__lockLootBackendRuntime) {
     backendGame.__lockLootBackendRuntime = runtime;
   }
 }
+// L&L-059: Einziger clientseitiger Zugang zu einer serverautoritativen letzten Lösung.
+// Der Zustand ist UID-/Rotations-gebunden, tief eingefroren und wird vor jeder Mutation vollständig geprüft.
+if (!backendGame.__lockLootLastSolution) {
+  const globals = backendGame.getVariables();
+  const idPattern = /^[A-Za-z0-9_-]{1,128}$/;
+  const codePattern = /^\d{11}$/;
+  const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort());
+  const contractError = message => Object.assign(new Error(message), {status: "INVALID_RESPONSE"});
+  const requireId = (value, field) => {
+    if (typeof value !== "string" || !idPattern.test(value)) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requirePositiveInteger = (value, field) => {
+    if (!Number.isSafeInteger(value) || value < 1) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requireNonNegativeInteger = (value, field) => {
+    if (!Number.isSafeInteger(value) || value < 0) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const deepFreeze = value => {
+    if (!value || typeof value !== "object" || Object.isFrozen(value)) return value;
+    for (const child of Object.values(value)) deepFreeze(child);
+    return Object.freeze(value);
+  };
+  const forbiddenFields = new Set([
+    "solution" + "Code", "assignmentSalt", "assignmentSeedHash", "assignedHints",
+    "generatorSeedOverride", "t504Fairness", "signature", "truthValue",
+    "mathematicalRule", "internalPositions", "details", "specialRule",
+    "independentValidation", "codewideDerivations", "intentionallyFalse",
+    "fairnessValidated"
+  ]);
+  const containsForbiddenField = value => {
+    if (!value || typeof value !== "object") return false;
+    return Object.entries(value).some(([key, child]) => forbiddenFields.has(key) || containsForbiddenField(child));
+  };
+  const requireShortString = (value, field, maximum = 512) => {
+    if (typeof value !== "string" || !value.trim() || value.length > maximum) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requireJsonScalarTree = (value, depth = 0) => {
+    if (depth > 4) throw contractError("Erklärmetadaten sind zu tief verschachtelt.");
+    if (value === null || typeof value === "boolean") return;
+    if (typeof value === "string") { if (value.length > 256) throw contractError("Erklärtext ist zu lang."); return; }
+    if (typeof value === "number") { if (!Number.isSafeInteger(value) || Math.abs(value) > 1000000) throw contractError("Erklärzahl ist ungültig."); return; }
+    if (Array.isArray(value)) {
+      if (value.length > 16) throw contractError("Erklärliste ist zu lang.");
+      for (const child of value) requireJsonScalarTree(child, depth + 1);
+      return;
+    }
+    if (value && typeof value === "object") {
+      const keys = Object.keys(value);
+      if (keys.length > 12) throw contractError("Zu viele Erklärfelder.");
+      for (const child of Object.values(value)) requireJsonScalarTree(child, depth + 1);
+      return;
+    }
+    throw contractError("Erklärmetadaten sind ungültig.");
+  };
+  const validateHint = (hint, index) => {
+    const keys = ["index", "id", "tier", "text", "textByLanguage", "visiblePositions", "positionRoles", "lengthClass", "packageNumber", "packagePosition", "explanationType", "explanationData"];
+    if (!exactKeys(hint, keys) || containsForbiddenField(hint)) throw contractError("Hinweisvertrag enthält unerwartete Felder.");
+    if (hint.index !== index + 1 || hint.packageNumber !== Math.floor(index / 2) + 1 || hint.packagePosition !== index % 2 + 1) throw contractError("Hinweisreihenfolge ist ungültig.");
+    requireId(hint.id, "hint.id");
+    if (!Number.isSafeInteger(hint.tier) || hint.tier < 1 || hint.tier > 5) throw contractError("hint.tier ist ungültig.");
+    requireShortString(hint.text, "hint.text");
+    if (!exactKeys(hint.textByLanguage, ["de", "en"]) || hint.textByLanguage.de !== hint.text) throw contractError("Hintlokalisierung ist ungültig.");
+    requireShortString(hint.textByLanguage.de, "hint.textByLanguage.de");
+    requireShortString(hint.textByLanguage.en, "hint.textByLanguage.en");
+    if (!Array.isArray(hint.visiblePositions) || hint.visiblePositions.length > 11 || hint.visiblePositions.some(position => !Number.isSafeInteger(position) || position < 1 || position > 11)) throw contractError("Hintpositionen sind ungültig.");
+    if (!Array.isArray(hint.positionRoles) || hint.positionRoles.length !== hint.visiblePositions.length || hint.positionRoles.some(role => typeof role !== "string" || !role.trim() || role.length > 128)) throw contractError("Hintrollen sind ungültig.");
+    if (!["kurz", "mittel", "lang"].includes(hint.lengthClass)) throw contractError("Hintlängenklasse ist ungültig.");
+    requireShortString(hint.explanationType, "hint.explanationType", 64);
+    const explanationKeys = ["hintId", "visiblePositions", "positionRoles", "propertyKey", "derivationKeys", "variant", "result", "operation", "divisor", "comparison"];
+    if (!hint.explanationData || typeof hint.explanationData !== "object" || Array.isArray(hint.explanationData) || Object.keys(hint.explanationData).some(key => !explanationKeys.includes(key))) throw contractError("Erklärvertrag enthält unerwartete Felder.");
+    if (hint.explanationData.hintId !== hint.id || JSON.stringify(hint.explanationData.visiblePositions) !== JSON.stringify(hint.visiblePositions) || JSON.stringify(hint.explanationData.positionRoles) !== JSON.stringify(hint.positionRoles)) throw contractError("Erklärvertrag passt nicht zum Hinweis.");
+    requireJsonScalarTree(hint.explanationData);
+    return {
+      index: hint.index, id: hint.id, tier: hint.tier, text: hint.text,
+      textByLanguage: {de: hint.textByLanguage.de, en: hint.textByLanguage.en},
+      visiblePositions: [...hint.visiblePositions], positionRoles: [...hint.positionRoles],
+      lengthClass: hint.lengthClass, packageNumber: hint.packageNumber,
+      packagePosition: hint.packagePosition, explanationType: hint.explanationType,
+      explanationData: clone(hint.explanationData)
+    };
+  };
+  const normalizeContract = (value, context) => {
+    if (!context || typeof context !== "object") throw contractError("Lösungskontext fehlt.");
+    const generation = requirePositiveInteger(context.generation, "generation");
+    const uid = requireId(context.uid, "uid");
+    const activeChestId = requireId(context.activeChestId, "activeChestId");
+    const rotation = requireNonNegativeInteger(context.rotation, "rotation");
+    const activeContentVersion = requirePositiveInteger(context.activeContentVersion, "activeContentVersion");
+    const contractKeys = ["schemaVersion", "rotation", "activeChestId", "available", "reason", "previousChestId", "snapshot"];
+    if (!exactKeys(value, contractKeys) || value.schemaVersion !== 1 || value.rotation !== rotation || value.activeChestId !== activeChestId || typeof value.available !== "boolean") throw contractError("Letzte-Lösung-Vertrag ist ungültig.");
+    const previousChestId = value.previousChestId === "" ? "" : requireId(value.previousChestId, "previousChestId");
+    if (previousChestId === activeChestId) throw contractError("Aktive Kiste darf nie letzte Lösung sein.");
+    if (!value.available) {
+      if (!["NO_HISTORY", "NO_HINT_PURCHASE", "INVALID_SNAPSHOT"].includes(value.reason) || value.snapshot !== null) throw contractError("Deaktivierter Lösungsvertrag ist ungültig.");
+      if (value.reason === "NO_HISTORY" && previousChestId !== "") throw contractError("NO_HISTORY enthält eine Kiste.");
+      if (value.reason === "NO_HINT_PURCHASE" && previousChestId === "") throw contractError("NO_HINT_PURCHASE enthält keine Kiste.");
+      const contract = {schemaVersion: 1, rotation, activeChestId, available: false, reason: value.reason, previousChestId, snapshot: null};
+      return deepFreeze({uid, generation, rotation, activeChestId, activeContentVersion, contract, digest: JSON.stringify({activeContentVersion, contract})});
+    }
+    if (value.reason !== "ELIGIBLE" || !previousChestId) throw contractError("Berechtigter Lösungsvertrag ist ungültig.");
+    const snapshotKeys = ["schemaVersion", "chestId", "closedCode", "purchasedPackageCount", "revealedHintCount", "revealedHints", "contentVersion", "hintGeneratorVersion", "playerChestRevision", "rotation"];
+    const snapshot = value.snapshot;
+    if (!exactKeys(snapshot, snapshotKeys) || snapshot.schemaVersion !== 1 || snapshot.chestId !== previousChestId || snapshot.rotation !== rotation || typeof snapshot.closedCode !== "string" || !codePattern.test(snapshot.closedCode)) throw contractError("Lösungssnapshot ist ungültig.");
+    if (!Number.isSafeInteger(snapshot.purchasedPackageCount) || snapshot.purchasedPackageCount < 1 || snapshot.purchasedPackageCount > 5 || snapshot.revealedHintCount !== snapshot.purchasedPackageCount * 2 || !Array.isArray(snapshot.revealedHints) || snapshot.revealedHints.length !== snapshot.revealedHintCount) throw contractError("Gekaufte Hinweise stimmen nicht mit dem Snapshot überein.");
+    const contentVersion = requirePositiveInteger(snapshot.contentVersion, "snapshot.contentVersion");
+    if (contentVersion + 1 !== activeContentVersion) throw contractError("Lösungssnapshot gehört nicht zur vorherigen Kiste.");
+    const normalizedSnapshot = {
+      schemaVersion: 1, chestId: previousChestId, closedCode: snapshot.closedCode,
+      purchasedPackageCount: snapshot.purchasedPackageCount,
+      revealedHintCount: snapshot.revealedHintCount,
+      revealedHints: snapshot.revealedHints.map(validateHint),
+      contentVersion,
+      hintGeneratorVersion: requirePositiveInteger(snapshot.hintGeneratorVersion, "snapshot.hintGeneratorVersion"),
+      playerChestRevision: requireNonNegativeInteger(snapshot.playerChestRevision, "snapshot.playerChestRevision"),
+      rotation
+    };
+    if (containsForbiddenField(normalizedSnapshot)) throw contractError("Interne Felder im Lösungssnapshot.");
+    const contract = {schemaVersion: 1, rotation, activeChestId, available: true, reason: "ELIGIBLE", previousChestId, snapshot: normalizedSnapshot};
+    return deepFreeze({uid, generation, rotation, activeChestId, activeContentVersion, contract, digest: JSON.stringify({activeContentVersion, contract})});
+  };
+  const clearGlobals = () => {
+    globals.get("previousSolutionAvailable").setBoolean(false);
+    globals.get("previousSolutionCode").fromJSObject([]);
+    globals.get("previousSolutionHints").fromJSObject([]);
+    globals.get("previousSolutionMetadata").fromJSObject([]);
+    globals.get("previousSolutionHintCount").setNumber(0);
+    globals.get("previousSolutionSourceMode").setString("");
+  };
+  const applyGlobals = snapshot => {
+    clearGlobals();
+    const metadata = clone(snapshot.revealedHints);
+    globals.get("previousSolutionCode").fromJSObject(snapshot.closedCode.split("").map(Number));
+    globals.get("previousSolutionHints").fromJSObject(metadata.map(hint => hint.textByLanguage.de));
+    globals.get("previousSolutionMetadata").fromJSObject(metadata);
+    globals.get("previousSolutionHintCount").setNumber(metadata.length);
+    globals.get("previousSolutionSourceMode").setString("Server-L059");
+    globals.get("previousSolutionAvailable").setBoolean(true);
+  };
+  const state = {uid: "", generation: 0, highestRotation: -1, highestContentVersion: -1, digest: "", activeChestId: "", available: false, reason: "UNINITIALIZED", snapshot: null};
+  const markUnavailable = reason => {
+    state.available = false;
+    state.reason = typeof reason === "string" && reason ? reason : "UNAVAILABLE";
+    state.snapshot = null;
+    clearGlobals();
+  };
+  const begin = uid => {
+    const validatedUid = requireId(uid, "uid");
+    state.generation += 1;
+    if (state.uid !== validatedUid) {
+      state.uid = validatedUid;
+      state.highestRotation = -1;
+      state.highestContentVersion = -1;
+      state.digest = "";
+      state.activeChestId = "";
+    }
+    markUnavailable("LOADING");
+    return Object.freeze({uid: state.uid, generation: state.generation});
+  };
+  const invalidate = reason => {
+    state.generation += 1;
+    markUnavailable(reason || "LOADING");
+  };
+  const isCurrent = token => !!(token && token.uid === state.uid && token.generation === state.generation);
+  const commit = candidate => {
+    if (!candidate || typeof candidate !== "object" || !Object.isFrozen(candidate)) throw contractError("Ungeprüfter Lösungskandidat.");
+    if (state.uid !== candidate.uid || state.generation !== candidate.generation) return false;
+    if (candidate.rotation < state.highestRotation || candidate.activeContentVersion < state.highestContentVersion) {
+      markUnavailable("STALE_RESPONSE");
+      return false;
+    }
+    if (state.highestRotation >= 0 && ((candidate.rotation > state.highestRotation && candidate.activeContentVersion <= state.highestContentVersion) || (candidate.rotation === state.highestRotation && candidate.activeContentVersion !== state.highestContentVersion))) {
+      markUnavailable("INVALID_SNAPSHOT");
+      return false;
+    }
+    if (candidate.rotation === state.highestRotation && state.digest && candidate.digest !== state.digest) {
+      markUnavailable("INVALID_SNAPSHOT");
+      return false;
+    }
+    state.highestRotation = candidate.rotation;
+    state.highestContentVersion = candidate.activeContentVersion;
+    state.digest = candidate.digest;
+    state.activeChestId = candidate.activeChestId;
+    state.available = candidate.contract.available;
+    state.reason = candidate.contract.reason;
+    state.snapshot = candidate.contract.available ? candidate.contract.snapshot : null;
+    if (state.snapshot) applyGlobals(state.snapshot); else clearGlobals();
+    return true;
+  };
+  const currentSnapshot = () => state.available && state.snapshot ? state.snapshot : null;
+  const openSnapshot = () => {
+    const snapshot = currentSnapshot();
+    if (!snapshot) return false;
+    applyGlobals(snapshot);
+    return true;
+  };
+  backendGame.__lockLootLastSolution = Object.freeze({
+    validate: normalizeContract, commit, begin, invalidate, isCurrent, markUnavailable, currentSnapshot, openSnapshot,
+    getState: () => Object.freeze({uid: state.uid, generation: state.generation, highestRotation: state.highestRotation, highestContentVersion: state.highestContentVersion, activeChestId: state.activeChestId, available: state.available, reason: state.reason, snapshot: state.snapshot})
+  });
+}
 const backendRuntime = backendGame.__lockLootBackendRuntime;
 for (const badge of runtimeScene.getObjects("StagingBadge")) {
   const badgeI18n = backendGame.__lockLootI18n;
@@ -350,7 +550,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TrainingSceneCode.userFunc0xda9048 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xab4140 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -535,7 +735,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xc256c0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xdb20f8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -574,11 +774,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xdaae20 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xdb0a68 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xda82d8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xda9c88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1194,7 +1394,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xdafa00 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xa03830 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-058: Genau eine Trefferdimension wird exakt, die andere nur als serverbestätigtes Band dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -1227,7 +1427,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xdafa00(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa03830(runtimeScene);
 
 }
 
@@ -1238,34 +1438,7 @@ gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjec
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xe4c5d0 = function GDJSInlineCode(runtimeScene) {
-"use strict";
-// L&L-025: Vor dem Erzeugen der nächsten Trainingskiste wird die gerade gelöste Kiste gesichert.
-const sceneVariables = runtimeScene.getVariables();
-const globalVariables = runtimeScene.getGame().getVariables();
-const paidPackages = sceneVariables.get("paidHintCount").getAsNumber();
-const hintCount = Math.max(0, Math.min(10, Math.floor(paidPackages) * 2));
-const code = sceneVariables.get("correctCode").toJSObject();
-const hints = sceneVariables.get("Hinweise").toJSObject();
-const metadata = sceneVariables.get("HinweisMetadaten").toJSObject();
-globalVariables.get("previousSolutionCode").fromJSObject(Array.isArray(code) ? code.slice(0, 11) : []);
-globalVariables.get("previousSolutionHints").fromJSObject(Array.isArray(hints) ? hints.slice(0, hintCount) : []);
-globalVariables.get("previousSolutionMetadata").fromJSObject(Array.isArray(metadata) ? metadata.slice(0, hintCount) : []);
-globalVariables.get("previousSolutionHintCount").setNumber(hintCount);
-globalVariables.get("previousSolutionSourceMode").setString("Training");
-globalVariables.get("previousSolutionAvailable").setBoolean(true);
-};
 gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
-
-{
-
-
-gdjs.TrainingSceneCode.userFunc0xe4c5d0(runtimeScene);
-
-}
-
-
-};gdjs.TrainingSceneCode.eventsList13 = function(runtimeScene) {
 
 {
 
@@ -1280,16 +1453,13 @@ isConditionTrue_0 = false;
 }
 }
 if (isConditionTrue_0) {
-
-{ //Subevents
-gdjs.TrainingSceneCode.eventsList12(runtimeScene);} //End of subevents
 }
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.eventsList14 = function(runtimeScene) {
+gdjs.TrainingSceneCode.eventsList13 = function(runtimeScene) {
 
 {
 
@@ -1379,7 +1549,7 @@ gdjs.copyArray(runtimeScene.getObjects("TxtCode_falsch"), gdjs.TrainingSceneCode
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
-gdjs.TrainingSceneCode.eventsList15 = function(runtimeScene) {
+gdjs.TrainingSceneCode.eventsList14 = function(runtimeScene) {
 
 {
 
@@ -1399,7 +1569,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 }
 
 
-};gdjs.TrainingSceneCode.eventsList16 = function(runtimeScene) {
+};gdjs.TrainingSceneCode.eventsList15 = function(runtimeScene) {
 
 {
 
@@ -1518,7 +1688,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.eventsList17 = function(runtimeScene) {
+};gdjs.TrainingSceneCode.eventsList16 = function(runtimeScene) {
 
 {
 
@@ -1690,7 +1860,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.eventsList18 = function(runtimeScene) {
+};gdjs.TrainingSceneCode.eventsList17 = function(runtimeScene) {
 
 {
 
@@ -1719,13 +1889,13 @@ isConditionTrue_0 = false;
 if (isConditionTrue_0) {
 
 { //Subevents
-gdjs.TrainingSceneCode.eventsList17(runtimeScene);} //End of subevents
+gdjs.TrainingSceneCode.eventsList16(runtimeScene);} //End of subevents
 }
 
 }
 
 
-};gdjs.TrainingSceneCode.eventsList19 = function(runtimeScene) {
+};gdjs.TrainingSceneCode.eventsList18 = function(runtimeScene) {
 
 {
 
@@ -1799,7 +1969,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xb6cef0 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xb72978 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -4253,19 +4423,19 @@ try {
   packageWrittenVariable.setBoolean(true);
 }
 };
-gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
+gdjs.TrainingSceneCode.eventsList19 = function(runtimeScene) {
 
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb6cef0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb72978(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xaff750 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xaf9530 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -4366,7 +4536,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     return value;
   };
   const validateEconomy = (economy, chest) => {
-    if (!economy || economy.economyVersion !== chest.economyVersion || economy.activeChestId !== chest.chestId || !Array.isArray(economy.futureChests) || economy.futureChests.length !== 3 || !economy.activeChestBoosters) throw Object.assign(new Error('Ungültiger Kistenökonomiezustand.'), { status: 'INVALID_RESPONSE' });
+    if (!economy || economy.economyVersion !== chest.economyVersion || economy.activeChestId !== chest.chestId || !Number.isSafeInteger(economy.rotation) || economy.rotation < 0 || !Array.isArray(economy.futureChests) || economy.futureChests.length !== 3 || !economy.activeChestBoosters) throw Object.assign(new Error('Ungültiger Kistenökonomiezustand.'), { status: 'INVALID_RESPONSE' });
     validateRational(economy.activeBaseValue);
     for (const [index, slot] of economy.futureChests.entries()) { if (!slot || slot.slot !== ['B', 'C', 'D'][index]) throw Object.assign(new Error('Ungültiger Folgekistenplatz.'), { status: 'INVALID_RESPONSE' }); validateRational(slot.value); validateRational(slot.maximumValue); }
     for (const field of ['booster5', 'booster10', 'booster25']) if (!Number.isSafeInteger(economy.activeChestBoosters[field]) || economy.activeChestBoosters[field] < 0) throw Object.assign(new Error('Ungültiger Kistenbooster.'), { status: 'INVALID_RESPONSE' });
@@ -4419,31 +4589,18 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     sceneVariables.get('normalHintText').setString(normalText);
     if (!sceneVariables.get('bonusHintActive').getAsBoolean()) setHintText(normalText);
   };
-  const validateClosedSolutionSnapshot = (snapshot) => {
-    if (!snapshot) return null;
-    if (typeof snapshot.closedCode !== 'string' || !/^\d{11}$/.test(snapshot.closedCode) || typeof snapshot.chestId !== 'string' || !Array.isArray(snapshot.revealedHints)) throw Object.assign(new Error('Ungueltiger geschlossener Loesungssnapshot.'), { status: 'INVALID_RESPONSE' });
-    return snapshot;
-  };
-  const applyClosedSolutionSnapshot = (validated) => {
-    if (!validated) return;
-    const globals = runtimeScene.getGame().getVariables();
-    const hints = validated.revealedHints.map(trainingHintText);
-    globals.get('previousSolutionCode').fromJSObject(validated.closedCode.split('').map(Number));
-    globals.get('previousSolutionHints').fromJSObject(hints);
-    globals.get('previousSolutionMetadata').fromJSObject(validated.revealedHints);
-    globals.get('previousSolutionHintCount').setNumber(hints.length);
-    globals.get('previousSolutionSourceMode').setString('Staging');
-    globals.get('previousSolutionAvailable').setBoolean(true);
-  };
-  const applyBootstrap = (snapshot, minimumWalletRevision = 0) => {
+  const applyBootstrap = (snapshot, minimumWalletRevision = 0, requestToken) => {
+    const lastSolutionController = runtimeScene.getGame().__lockLootLastSolution;
+    if (!lastSolutionController || !lastSolutionController.isCurrent(requestToken)) throw Object.assign(new Error('Verspätete Bootstrapantwort ignoriert.'), { ignored: true, status: 'IGNORED_STALE_RESPONSE' });
     if (!snapshot || snapshot.uid !== state.uid) throw Object.assign(new Error('Bootstrap-UID stimmt nicht.'), { status: 'INVALID_RESPONSE' });
     const chest = validateChest(snapshot.currentChest);
     const wallet = validateWallet(snapshot);
     validateHintState(snapshot.hintState, chest.chestId);
     validateEconomy(snapshot.economy, chest);
-    const solutionSnapshot = validateClosedSolutionSnapshot(snapshot.solutionSnapshot);
+    const solutionCandidate = lastSolutionController.validate(snapshot.lastSolution, { uid: state.uid, generation: requestToken.generation, activeChestId: chest.chestId, activeContentVersion: chest.contentVersion, rotation: snapshot.economy.rotation });
     if (wallet.revision < minimumWalletRevision || (state.wallet && wallet.revision < state.wallet.revision)) throw Object.assign(new Error('Veralteter Bootstrap darf den bestätigten Zustand nicht zurückrollen.'), { status: 'INVALID_RESPONSE' });
     const chestChanged = !!state.currentChest && state.currentChest.chestId !== chest.chestId;
+    if (!lastSolutionController.commit(solutionCandidate)) throw Object.assign(new Error('Veraltete oder widersprüchliche letzte Lösung.'), { status: 'INVALID_RESPONSE' });
     state.currentChest = chest;
     sceneVariables.get('backendUid').setString(state.uid);
     sceneVariables.get('backendChestId').setString(chest.chestId);
@@ -4452,15 +4609,25 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     applyWallet(wallet);
     applyEconomy(snapshot.economy, chest);
     applyHintState(snapshot.hintState, !chestChanged);
-    applyClosedSolutionSnapshot(solutionSnapshot);
     return chestChanged;
   };
   const signUp = async () => backendRuntime.authenticate(false);
   const refresh = async () => backendRuntime.refresh();
   state.loadBootstrap = async (minimumWalletRevision = 0) => {
-    await backendRuntime.prepare('L&L-041');
-    const snapshot = await callCallable(endpoints.bootstrap, { integration: 'L&L-041' }, state.idToken);
-    return applyBootstrap(snapshot, minimumWalletRevision);
+    const lastSolutionController = runtimeScene.getGame().__lockLootLastSolution;
+    if (!lastSolutionController) throw Object.assign(new Error('Letzte-Lösung-Controller fehlt.'), { status: 'INVALID_RESPONSE' });
+    const requestToken = lastSolutionController.begin(state.uid);
+    try {
+      await backendRuntime.prepare('L&L-041');
+      const snapshot = await callCallable(endpoints.bootstrap, { integration: 'L&L-041' }, state.idToken);
+      if (!lastSolutionController.isCurrent(requestToken)) throw Object.assign(new Error('Verspätete Bootstrapantwort ignoriert.'), { ignored: true, status: 'IGNORED_STALE_RESPONSE' });
+      return applyBootstrap(snapshot, minimumWalletRevision, requestToken);
+    } catch (error) {
+      if (!error || !error.ignored) {
+        if (lastSolutionController.isCurrent(requestToken)) lastSolutionController.markUnavailable(error && (error.name === 'AbortError' || error instanceof TypeError) ? 'BACKEND_UNREACHABLE' : 'INVALID_SNAPSHOT');
+      }
+      throw error;
+    }
   };
   state.connect = async () => {
     if (!sceneIsCurrent() || sceneVariables.get('backendRequestPending').getAsBoolean()) return;
@@ -4509,7 +4676,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
       sceneVariables.get('backendLastError').setString('');
       setStatus(trainingT("training.backend_connected", { economy: economySummary() }));
     } catch (error) {
-      if (!sceneIsCurrent()) return;
+      if (!sceneIsCurrent() || error && error.ignored) return;
       const networkError = error && (error.name === 'AbortError' || error instanceof TypeError);
       sceneVariables.get('backendInitState').setString(networkError ? 'offline' : 'error');
       sceneVariables.get('backendLastError').setString(networkError ? 'BACKEND_UNREACHABLE' : 'BOOTSTRAP_FAILED');
@@ -4560,7 +4727,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     if ('matchingDigitCount' in result || 'exactPositionCount' in result) throw Object.assign(new Error('Veralteter exakter Fehlversuchsvertrag.'), { status: 'INVALID_RESPONSE' });
     const commonResultFields = ['success', 'lockpickCost', 'chestId', 'attempts', 'lockpicksRemaining', 'walletRevision', 'chestRevision', 'wallet', 'economy'];
     const failureResultFields = [...commonResultFields, 'feedback'];
-    const successResultFields = [...commonResultFields, 'winner', 'reward', 'consumedPersonalBoost', 'consumedBoosters', 'chestBoosters', 'boosterOnBooster', 'boosterRolls', 'newCurrentChest', ...(backendRuntime.environment === 'staging' ? ['solutionSnapshot'] : [])];
+    const successResultFields = [...commonResultFields, 'winner', 'reward', 'consumedPersonalBoost', 'consumedBoosters', 'chestBoosters', 'boosterOnBooster', 'boosterRolls', 'newCurrentChest'];
     if (!exactKeys(result, result.success ? successResultFields : failureResultFields)) throw Object.assign(new Error('Schlossantwort enthält unerwartete Zweigfelder.'), { status: 'INVALID_RESPONSE' });
     const validatedWallet = validateWallet(result.wallet, true);
     if (result.lockpicksRemaining !== validatedWallet.lockpicks || result.walletRevision !== validatedWallet.revision) throw Object.assign(new Error('Schlossantwort und Wallet widersprechen sich.'), { status: 'INVALID_RESPONSE' });
@@ -4569,7 +4736,6 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     validateEconomy(result.economy, nextChest);
     const validBoosters = (value) => exactKeys(value, ['booster5', 'booster10', 'booster25']) && ['booster5', 'booster10', 'booster25'].every((field) => Number.isSafeInteger(value[field]) && value[field] >= 0);
     if (result.success && (result.feedback !== undefined || result.winner !== true || nextChest.chestId === result.chestId || !exactKeys(result.reward, ['cookies', 'lockpicks']) || !Number.isSafeInteger(result.reward.cookies) || result.reward.cookies < 0 || !Number.isSafeInteger(result.reward.lockpicks) || result.reward.lockpicks < 0 || !Number.isSafeInteger(result.consumedPersonalBoost) || result.consumedPersonalBoost < 0 || !validBoosters(result.consumedBoosters) || !validBoosters(result.chestBoosters) || !validBoosters(result.boosterOnBooster) || !result.boosterRolls || typeof result.boosterRolls !== 'object')) throw Object.assign(new Error('Ungültige Gewinner- oder Rotationsantwort.'), { status: 'INVALID_RESPONSE' });
-    if (result.success && backendRuntime.environment === 'staging') validateClosedSolutionSnapshot(result.solutionSnapshot);
     await state.loadBootstrap(result.walletRevision);
     if (result.success) {
       sceneVariables.get('rihtCode').setBoolean(true);
@@ -4608,6 +4774,7 @@ if (!runtimeScene.__lockLootTrainingBackend) {
     clearPendingAttempt();
   };
   state.handleActionError = async (error, action) => {
+    if (error && error.ignored) return;
     const networkError = error && (error.name === 'AbortError' || error instanceof TypeError);
     if (networkError) {
       sceneVariables.get('backendInitState').setString('offline');
@@ -4675,7 +4842,7 @@ if (trainingVariables.get('backendInitState').getAsString() === 'offline' && !tr
   void trainingBackend.connect();
 }
 };
-gdjs.TrainingSceneCode.eventsList21 = function(runtimeScene) {
+gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 
 {
 
@@ -4696,37 +4863,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
-gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects = Hashtable.newFrom({"SolutionTestButton": gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1});
-gdjs.TrainingSceneCode.userFunc0xaa8c38 = function GDJSInlineCode(runtimeScene) {
-"use strict";
-// L&L-025/L&L-056A: Übergibt echte Lösungsdaten oder eine rein lokale, generatorbasierte Testfixture.
-// Der sichtbare Testbutton verwendet immer dieselbe generatorbasierte Fixture, damit Code, Hinttext und Metadaten atomar zusammengehören.
-const solutionTestFixture = {"code":[1,9,3,2,3,1,9,8,4,8,5],"hints":["Position 9 + Position 10 × Position 4 ist größer als Position 7 + Position 5 × Position 3.","Die Differenz aus der Ziffer an Position 2 und dem Produkt der Ziffern an Position 5 und 3 beträgt 0.","Das Produkt aus der Ziffer an Position 4 und der Summe der Ziffern an Position 11 und 3 beträgt 16.","Die Ziffer an Position 2 entspricht der Quersumme des Produkts der Ziffern an Position 7 und 5.","Die Ziffern an Position 11 und 9 bilden in dieser Reihenfolge eine zweistellige Zahl, die durch 9 teilbar ist.","Das Produkt der Zahlen an Position 2 und Position 6 ist kleiner als das Produkt der Zahlen an Position 11 und Position 3.","Die letzte ungerade Zahl von links, der Median des Codes an seinem ersten Vorkommen und die Zahl unmittelbar nach der ersten Primzahl bilden in dieser Reihenfolge eine streng absteigende Folge.","Die erste gerade Zahl von links, die letzte ungerade Zahl von links und die Zahl unmittelbar vor der letzten Primzahl bilden in dieser Reihenfolge eine arithmetische Folge mit gleichem, von null verschiedenem Abstand.","Die Zahlen an Position 1, Position 4, Position 3 und Position 9 bilden in dieser Reihenfolge eine arithmetische Folge mit gleichbleibendem Abstand.","Die Ziffer an Position 3 ist kleiner als die an Position 11."],"metadata":[{"index":0,"packageNumber":1,"tier":4,"id":"T4-23","text":"Position 9 + Position 10 × Position 4 ist größer als Position 7 + Position 5 × Position 3.","textByLanguage":{"de":"Position 9 + Position 10 × Position 4 ist größer als Position 7 + Position 5 × Position 3.","en":"Position 9 + position 10 × position 4 is greater than position 7 + position 5 × position 3."},"visiblePositions":[10,4,9,7,5,3],"positionRoles":["Linker Faktor A","Linker Faktor B","Linker Summand","Rechter Summand","Rechter Faktor A","Rechter Faktor B"],"explanationType":"gemischter-ausdrucksvergleich","explanationData":{"hintId":"T4-23","visiblePositions":[10,4,9,7,5,3],"positionRoles":["Linker Faktor A","Linker Faktor B","Linker Summand","Rechter Summand","Rechter Faktor A","Rechter Faktor B"],"comparison":"größer"}},{"index":1,"packageNumber":1,"tier":3,"id":"T3-17","text":"Die Differenz aus der Ziffer an Position 2 und dem Produkt der Ziffern an Position 5 und 3 beträgt 0.","textByLanguage":{"de":"Die Differenz aus der Ziffer an Position 2 und dem Produkt der Ziffern an Position 5 und 3 beträgt 0.","en":"The difference between the digit at position 2 and the product of the digits at positions 5 and 3 is 0."},"visiblePositions":[5,3,2],"positionRoles":["Faktor A","Faktor B","Minuend"],"explanationType":"punkt-vor-strich","explanationData":{"hintId":"T3-17","visiblePositions":[5,3,2],"positionRoles":["Faktor A","Faktor B","Minuend"],"variant":"productMinus","result":0}},{"index":2,"packageNumber":2,"tier":3,"id":"T3-18","text":"Das Produkt aus der Ziffer an Position 4 und der Summe der Ziffern an Position 11 und 3 beträgt 16.","textByLanguage":{"de":"Das Produkt aus der Ziffer an Position 4 und der Summe der Ziffern an Position 11 und 3 beträgt 16.","en":"The product of the digit at position 4 and the sum of the digits at positions 11 and 3 is 16."},"visiblePositions":[11,3,4],"positionRoles":["Klammeroperand A","Klammeroperand B","Multiplikator"],"explanationType":"klammerrechnung","explanationData":{"hintId":"T3-18","visiblePositions":[11,3,4],"positionRoles":["Klammeroperand A","Klammeroperand B","Multiplikator"],"variant":"groupedPlus","result":16}},{"index":3,"packageNumber":2,"tier":3,"id":"T3-19","text":"Die Ziffer an Position 2 entspricht der Quersumme des Produkts der Ziffern an Position 7 und 5.","textByLanguage":{"de":"Die Ziffer an Position 2 entspricht der Quersumme des Produkts der Ziffern an Position 7 und 5.","en":"The digit at position 2 equals the digit sum of the product of the digits at positions 7 and 5."},"visiblePositions":[7,5,2],"positionRoles":["Faktor A","Faktor B","Quersummenziel"],"explanationType":"produktquersumme","explanationData":{"hintId":"T3-19","visiblePositions":[7,5,2],"positionRoles":["Faktor A","Faktor B","Quersummenziel"],"operation":"product-then-first-digit-sum"}},{"index":4,"packageNumber":3,"tier":3,"id":"T3-20","text":"Die Ziffern an Position 11 und 9 bilden in dieser Reihenfolge eine zweistellige Zahl, die durch 9 teilbar ist.","textByLanguage":{"de":"Die Ziffern an Position 11 und 9 bilden in dieser Reihenfolge eine zweistellige Zahl, die durch 9 teilbar ist.","en":"The digits at positions 11 and 9 form, in that order, a two-digit number divisible by 9."},"visiblePositions":[11,9],"positionRoles":["Zehnerstelle","Einerstelle"],"explanationType":"zweistellige-teilbarkeit","explanationData":{"hintId":"T3-20","visiblePositions":[11,9],"positionRoles":["Zehnerstelle","Einerstelle"],"divisor":9}},{"index":5,"packageNumber":3,"tier":4,"id":"T4-06","text":"Das Produkt der Zahlen an Position 2 und Position 6 ist kleiner als das Produkt der Zahlen an Position 11 und Position 3.","textByLanguage":{"de":"Das Produkt der Zahlen an Position 2 und Position 6 ist kleiner als das Produkt der Zahlen an Position 11 und Position 3.","en":"The product of the digits at position 2 and position 6 is smaller than the product of the digits at position 11 and position 3."},"visiblePositions":[2,6,11,3],"positionRoles":["Produkt A","Produkt A","Produkt B","Produkt B"],"explanationType":"mehrpositionsbeziehung","explanationData":{"hintId":"T4-06","visiblePositions":[2,6,11,3],"positionRoles":["Produkt A","Produkt A","Produkt B","Produkt B"]}},{"index":6,"packageNumber":4,"tier":5,"id":"T5-03","text":"Die letzte ungerade Zahl von links, der Median des Codes an seinem ersten Vorkommen und die Zahl unmittelbar nach der ersten Primzahl bilden in dieser Reihenfolge eine streng absteigende Folge.","textByLanguage":{"de":"Die letzte ungerade Zahl von links, der Median des Codes an seinem ersten Vorkommen und die Zahl unmittelbar nach der ersten Primzahl bilden in dieser Reihenfolge eine streng absteigende Folge.","en":"The last odd digit from the left, the median of the code at its first occurrence and the digit immediately after the first prime digit form a strictly descending sequence in that order."},"visiblePositions":[11,9,4],"positionRoles":["die letzte ungerade Zahl von links","der Median des Codes an seinem ersten Vorkommen","die Zahl unmittelbar nach der ersten Primzahl"],"explanationType":"codeweite-ableitung","explanationData":{"hintId":"T5-03","visiblePositions":[11,9,4],"positionRoles":["die letzte ungerade Zahl von links","der Median des Codes an seinem ersten Vorkommen","die Zahl unmittelbar nach der ersten Primzahl"]}},{"index":7,"packageNumber":4,"tier":5,"id":"T5-03","text":"Die erste gerade Zahl von links, die letzte ungerade Zahl von links und die Zahl unmittelbar vor der letzten Primzahl bilden in dieser Reihenfolge eine arithmetische Folge mit gleichem, von null verschiedenem Abstand.","textByLanguage":{"de":"Die erste gerade Zahl von links, die letzte ungerade Zahl von links und die Zahl unmittelbar vor der letzten Primzahl bilden in dieser Reihenfolge eine arithmetische Folge mit gleichem, von null verschiedenem Abstand.","en":"The first even digit from the left, the last odd digit from the left and the digit immediately before the last prime digit form an arithmetic sequence with a common non-zero difference in that order."},"visiblePositions":[4,11,10],"positionRoles":["die erste gerade Zahl von links","die letzte ungerade Zahl von links","die Zahl unmittelbar vor der letzten Primzahl"],"explanationType":"codeweite-ableitung","explanationData":{"hintId":"T5-03","visiblePositions":[4,11,10],"positionRoles":["die erste gerade Zahl von links","die letzte ungerade Zahl von links","die Zahl unmittelbar vor der letzten Primzahl"]}},{"index":8,"packageNumber":5,"tier":4,"id":"T4-13","text":"Die Zahlen an Position 1, Position 4, Position 3 und Position 9 bilden in dieser Reihenfolge eine arithmetische Folge mit gleichbleibendem Abstand.","textByLanguage":{"de":"Die Zahlen an Position 1, Position 4, Position 3 und Position 9 bilden in dieser Reihenfolge eine arithmetische Folge mit gleichbleibendem Abstand.","en":"The digits at position 1, position 4, position 3 and position 9 form an arithmetic sequence with a constant difference in this order."},"visiblePositions":[1,4,3,9],"positionRoles":["Position 1","Position 2","Position 3","Position 4"],"explanationType":"mehrpositionsbeziehung","explanationData":{"hintId":"T4-13","visiblePositions":[1,4,3,9],"positionRoles":["Position 1","Position 2","Position 3","Position 4"]}},{"index":9,"packageNumber":5,"tier":2,"id":"T2-01","text":"Die Ziffer an Position 3 ist kleiner als die an Position 11.","textByLanguage":{"de":"Die Ziffer an Position 3 ist kleiner als die an Position 11.","en":"The digit at position 3 is smaller than the digit at position 11."},"visiblePositions":[3,11],"positionRoles":["Position 1","Position 2"],"explanationType":"positionsbeziehung","explanationData":{"hintId":"T2-01","visiblePositions":[3,11],"positionRoles":["Position 1","Position 2"]}}]};
-const sceneVariables = runtimeScene.getVariables();
-const globalVariables = runtimeScene.getGame().getVariables();
-const copyPreviousSolution = (hintCount, sourceMode) => {
-  const code = sceneVariables.get("correctCode").toJSObject();
-  const hints = sceneVariables.get("Hinweise").toJSObject();
-  const metadata = sceneVariables.get("HinweisMetadaten").toJSObject();
-  const safeCount = Math.max(0, Math.min(10, Math.floor(hintCount)));
-  const useFixture = sourceMode === "Training-Test";
-  const transferCode = useFixture ? solutionTestFixture.code : code;
-  const transferHints = useFixture ? solutionTestFixture.hints : hints;
-  const transferMetadata = useFixture ? solutionTestFixture.metadata : metadata;
-  globalVariables.get("previousSolutionCode").fromJSObject(Array.isArray(transferCode) ? transferCode.slice(0, 11) : []);
-  globalVariables.get("previousSolutionHints").fromJSObject(Array.isArray(transferHints) ? transferHints.slice(0, safeCount) : []);
-  globalVariables.get("previousSolutionMetadata").fromJSObject(Array.isArray(transferMetadata) ? transferMetadata.slice(0, safeCount) : []);
-  globalVariables.get("previousSolutionHintCount").setNumber(safeCount);
-  globalVariables.get("previousSolutionSourceMode").setString(useFixture ? "Training-Test-Fixture" : sourceMode);
-  globalVariables.get("previousSolutionAvailable").setBoolean(true);
-};
-if (sceneVariables.get("solutionTestRequested").getAsBoolean()) {
-  copyPreviousSolution(10, "Training-Test");
-  sceneVariables.get("solutionTestRequested").setBoolean(false);
-  sceneVariables.get("solutionTransferReady").setBoolean(true);
-}
-};
-gdjs.TrainingSceneCode.userFunc0xaa4890 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xab8378 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -4736,7 +4873,6 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   runtimeScene.__lockLootL047Training = { revision: trainingI18n.revision };
   trainingSet("TxtCode_richtig", trainingI18n.t("training.code_correct"));
   trainingSet("TxtCode_falsch", trainingI18n.t("training.code_wrong"));
-  trainingSet("SolutionTestLabel", trainingI18n.t("training.solution_test"));
   const backend = runtimeScene.__lockLootTrainingBackend;
   if (backend && backend.hintState && Array.isArray(backend.hintState.revealedHints)) {
     const hints = backend.hintState.revealedHints.map(hint => hint.textByLanguage && hint.textByLanguage[trainingI18n.language] || hint.text);
@@ -4748,11 +4884,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xaa4968 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xab8450 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xaa0558 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb35f90 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -4834,12 +4970,12 @@ if (!runtimeScene.getObjects("ResourceHudCookieFrame").length) {
 }
 resourceHud.render(runtimeScene);
 };
-gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
+gdjs.TrainingSceneCode.eventsList21 = function(runtimeScene) {
 
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaa03d0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xab3fe8(runtimeScene);
 
 }
 
@@ -4847,7 +4983,7 @@ gdjs.TrainingSceneCode.userFunc0xaa03d0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xda9048(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xab4140(runtimeScene);
 
 }
 
@@ -4855,7 +4991,7 @@ gdjs.TrainingSceneCode.userFunc0xda9048(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc256c0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xdb20f8(runtimeScene);
 
 }
 
@@ -4863,7 +4999,7 @@ gdjs.TrainingSceneCode.userFunc0xc256c0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xdaae20(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xdb0a68(runtimeScene);
 
 }
 
@@ -4871,7 +5007,7 @@ gdjs.TrainingSceneCode.userFunc0xdaae20(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xda82d8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xda9c88(runtimeScene);
 
 }
 
@@ -5795,12 +5931,46 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 }
 }
 if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(13).setString(gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(0).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(1).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(2).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(4).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(5).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(6).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(7).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(8).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(9).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(10).getAsNumber()));
+}
+
+{ //Subevents
+gdjs.TrainingSceneCode.eventsList12(runtimeScene);} //End of subevents
+}
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("Lock_Sprite"), gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1);
+
+let isConditionTrue_0 = false;
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects, runtimeScene, true, false);
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(11).getAsNumber() >= 1);
+}
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
+}
+}
+}
+}
+if (isConditionTrue_0) {
+{runtimeScene.getScene().getVariables().getFromIndex(11).sub(1);
+}
 {runtimeScene.getScene().getVariables().getFromIndex(13).setString(gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(0).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(1).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(2).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(4).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(5).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(6).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(7).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(8).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(9).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(10).getAsNumber()));
 }
 
@@ -5823,45 +5993,11 @@ isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(11).getAsNumber() >= 1);
-}
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
-}
-}
-}
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(11).sub(1);
-}
-{runtimeScene.getScene().getVariables().getFromIndex(13).setString(gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(0).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(1).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(2).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(3).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(4).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(5).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(6).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(7).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(8).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(9).getAsNumber()) + gdjs.evtTools.common.toString(runtimeScene.getScene().getVariables().getFromIndex(10).getAsNumber()));
-}
-
-{ //Subevents
-gdjs.TrainingSceneCode.eventsList14(runtimeScene);} //End of subevents
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("Lock_Sprite"), gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
 {isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(11).getAsNumber() < 1);
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 }
@@ -5897,7 +6033,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 }
@@ -5924,7 +6060,7 @@ if (isConditionTrue_0) {
 }
 
 { //Subevents
-gdjs.TrainingSceneCode.eventsList15(runtimeScene);} //End of subevents
+gdjs.TrainingSceneCode.eventsList14(runtimeScene);} //End of subevents
 }
 
 }
@@ -5986,7 +6122,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 if (isConditionTrue_0) {
@@ -6191,13 +6327,13 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 if (isConditionTrue_0) {
 
 { //Subevents
-gdjs.TrainingSceneCode.eventsList16(runtimeScene);} //End of subevents
+gdjs.TrainingSceneCode.eventsList15(runtimeScene);} //End of subevents
 }
 
 }
@@ -6212,13 +6348,13 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 if (isConditionTrue_0) {
 
 { //Subevents
-gdjs.TrainingSceneCode.eventsList18(runtimeScene);} //End of subevents
+gdjs.TrainingSceneCode.eventsList17(runtimeScene);} //End of subevents
 }
 
 }
@@ -6237,7 +6373,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 }
@@ -6254,7 +6390,7 @@ if (isConditionTrue_0) {
 }
 
 { //Subevents
-gdjs.TrainingSceneCode.eventsList19(runtimeScene);} //End of subevents
+gdjs.TrainingSceneCode.eventsList18(runtimeScene);} //End of subevents
 }
 
 }
@@ -6273,14 +6409,14 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 }
 if (isConditionTrue_0) {
 
 { //Subevents
-gdjs.TrainingSceneCode.eventsList20(runtimeScene);} //End of subevents
+gdjs.TrainingSceneCode.eventsList19(runtimeScene);} //End of subevents
 }
 
 }
@@ -6298,12 +6434,12 @@ isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(50).setString("hint");
+{runtimeScene.getScene().getVariables().getFromIndex(48).setString("hint");
 }
 }
 
@@ -6322,12 +6458,12 @@ isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
-{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 }
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(50).setString("attempt");
+{runtimeScene.getScene().getVariables().getFromIndex(48).setString("attempt");
 }
 }
 
@@ -6337,7 +6473,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaff750(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xaf9530(runtimeScene);
 
 }
 
@@ -6347,10 +6483,10 @@ gdjs.TrainingSceneCode.userFunc0xaff750(runtimeScene);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(52).getAsBoolean();
+{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(50).getAsBoolean();
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(52).setBoolean(false);
+{runtimeScene.getScene().getVariables().getFromIndex(50).setBoolean(false);
 }
 {gdjs.evtTools.runtimeScene.resetTimer(runtimeScene, "feedTimer");
 }
@@ -6358,7 +6494,7 @@ if (isConditionTrue_0) {
 }
 
 { //Subevents
-gdjs.TrainingSceneCode.eventsList21(runtimeScene);} //End of subevents
+gdjs.TrainingSceneCode.eventsList20(runtimeScene);} //End of subevents
 }
 
 }
@@ -6369,7 +6505,7 @@ gdjs.TrainingSceneCode.eventsList21(runtimeScene);} //End of subevents
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(48).getAsBoolean();
+{isConditionTrue_0 = !runtimeScene.getScene().getVariables().getFromIndex(46).getAsBoolean();
 }
 if (isConditionTrue_0) {
 gdjs.copyArray(runtimeScene.getObjects("Debug_CorrectCode"), gdjs.TrainingSceneCode.GDDebug_9595CorrectCodeObjects1);
@@ -6411,19 +6547,8 @@ if (isConditionTrue_0) {
 
 {
 
-gdjs.copyArray(runtimeScene.getObjects("SolutionTestButton"), gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1);
 
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSolutionTestButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(46).setBoolean(true);
-}
-}
+gdjs.TrainingSceneCode.userFunc0xab8378(runtimeScene);
 
 }
 
@@ -6431,7 +6556,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xaa8c38(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xab8450(runtimeScene);
 
 }
 
@@ -6439,40 +6564,7 @@ gdjs.TrainingSceneCode.userFunc0xaa8c38(runtimeScene);
 {
 
 
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(47).getAsBoolean();
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(47).setBoolean(false);
-}
-{gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "SolutionScene", true);
-}
-}
-
-}
-
-
-{
-
-
-gdjs.TrainingSceneCode.userFunc0xaa4890(runtimeScene);
-
-}
-
-
-{
-
-
-gdjs.TrainingSceneCode.userFunc0xaa4968(runtimeScene);
-
-}
-
-
-{
-
-
-gdjs.TrainingSceneCode.userFunc0xaa0558(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb35f90(runtimeScene);
 
 }
 
@@ -6638,12 +6730,6 @@ gdjs.TrainingSceneCode.GDTrainingDetailStoneGoldObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects3.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects2.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3.length = 0;
@@ -6669,7 +6755,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3.length = 0;
 
-gdjs.TrainingSceneCode.eventsList22(runtimeScene);
+gdjs.TrainingSceneCode.eventsList21(runtimeScene);
 gdjs.TrainingSceneCode.GDTrainingSkyObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSkyObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSkyObjects3.length = 0;
@@ -6826,12 +6912,6 @@ gdjs.TrainingSceneCode.GDTrainingDetailStoneGoldObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTrainingDetailStoneDarkObjects3.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects1.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects2.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestButtonObjects3.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects1.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects2.length = 0;
-gdjs.TrainingSceneCode.GDSolutionTestLabelObjects3.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects1.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects2.length = 0;
 gdjs.TrainingSceneCode.GDTrainingSandFrontObjects3.length = 0;

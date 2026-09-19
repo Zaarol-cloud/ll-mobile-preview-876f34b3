@@ -35,6 +35,8 @@ gdjs.MainMenuCode.GDMainMenuDetailStoneGrayObjects1= [];
 gdjs.MainMenuCode.GDMainMenuDetailStoneGoldObjects1= [];
 gdjs.MainMenuCode.GDMainMenuDetailStoneDarkObjects1= [];
 gdjs.MainMenuCode.GDMainMenuPlayButtonObjects1= [];
+gdjs.MainMenuCode.GDMainMenuLastSolutionButtonObjects1= [];
+gdjs.MainMenuCode.GDMainMenuLastSolutionTextObjects1= [];
 gdjs.MainMenuCode.GDMainMenuShopButtonObjects1= [];
 gdjs.MainMenuCode.GDMainMenuMusicButtonObjects1= [];
 gdjs.MainMenuCode.GDMainMenuLanguageButtonObjects1= [];
@@ -59,9 +61,9 @@ gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1= [];
 gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1= [];
 
 
-gdjs.MainMenuCode.userFunc0xdac648 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xdaf840 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-051: Zentrale, fail-closed Backendumgebung fuer local und staging.
+// L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
 if (!backendGame.__lockLootBackendRuntime) {
   const backendVariables = backendGame.getVariables();
@@ -181,6 +183,7 @@ if (!backendGame.__lockLootBackendRuntime) {
       }
       try {
         const sdk = await ensureStagingSdk();
+        if (typeof sdk.auth.authStateReady === "function") await sdk.auth.authStateReady();
         const user = sdk.auth.currentUser || (await sdk.authModule.signInAnonymously(sdk.auth)).user;
         if (forceRefresh) await user.getIdToken(true);
         currentUid = user.uid;
@@ -213,6 +216,211 @@ if (!backendGame.__lockLootBackendRuntime) {
     backendGame.__lockLootBackendRuntime = runtime;
   }
 }
+// L&L-059: Einziger clientseitiger Zugang zu einer serverautoritativen letzten Lösung.
+// Der Zustand ist UID-/Rotations-gebunden, tief eingefroren und wird vor jeder Mutation vollständig geprüft.
+if (!backendGame.__lockLootLastSolution) {
+  const globals = backendGame.getVariables();
+  const idPattern = /^[A-Za-z0-9_-]{1,128}$/;
+  const codePattern = /^\d{11}$/;
+  const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort());
+  const contractError = message => Object.assign(new Error(message), {status: "INVALID_RESPONSE"});
+  const requireId = (value, field) => {
+    if (typeof value !== "string" || !idPattern.test(value)) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requirePositiveInteger = (value, field) => {
+    if (!Number.isSafeInteger(value) || value < 1) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requireNonNegativeInteger = (value, field) => {
+    if (!Number.isSafeInteger(value) || value < 0) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const deepFreeze = value => {
+    if (!value || typeof value !== "object" || Object.isFrozen(value)) return value;
+    for (const child of Object.values(value)) deepFreeze(child);
+    return Object.freeze(value);
+  };
+  const forbiddenFields = new Set([
+    "solution" + "Code", "assignmentSalt", "assignmentSeedHash", "assignedHints",
+    "generatorSeedOverride", "t504Fairness", "signature", "truthValue",
+    "mathematicalRule", "internalPositions", "details", "specialRule",
+    "independentValidation", "codewideDerivations", "intentionallyFalse",
+    "fairnessValidated"
+  ]);
+  const containsForbiddenField = value => {
+    if (!value || typeof value !== "object") return false;
+    return Object.entries(value).some(([key, child]) => forbiddenFields.has(key) || containsForbiddenField(child));
+  };
+  const requireShortString = (value, field, maximum = 512) => {
+    if (typeof value !== "string" || !value.trim() || value.length > maximum) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requireJsonScalarTree = (value, depth = 0) => {
+    if (depth > 4) throw contractError("Erklärmetadaten sind zu tief verschachtelt.");
+    if (value === null || typeof value === "boolean") return;
+    if (typeof value === "string") { if (value.length > 256) throw contractError("Erklärtext ist zu lang."); return; }
+    if (typeof value === "number") { if (!Number.isSafeInteger(value) || Math.abs(value) > 1000000) throw contractError("Erklärzahl ist ungültig."); return; }
+    if (Array.isArray(value)) {
+      if (value.length > 16) throw contractError("Erklärliste ist zu lang.");
+      for (const child of value) requireJsonScalarTree(child, depth + 1);
+      return;
+    }
+    if (value && typeof value === "object") {
+      const keys = Object.keys(value);
+      if (keys.length > 12) throw contractError("Zu viele Erklärfelder.");
+      for (const child of Object.values(value)) requireJsonScalarTree(child, depth + 1);
+      return;
+    }
+    throw contractError("Erklärmetadaten sind ungültig.");
+  };
+  const validateHint = (hint, index) => {
+    const keys = ["index", "id", "tier", "text", "textByLanguage", "visiblePositions", "positionRoles", "lengthClass", "packageNumber", "packagePosition", "explanationType", "explanationData"];
+    if (!exactKeys(hint, keys) || containsForbiddenField(hint)) throw contractError("Hinweisvertrag enthält unerwartete Felder.");
+    if (hint.index !== index + 1 || hint.packageNumber !== Math.floor(index / 2) + 1 || hint.packagePosition !== index % 2 + 1) throw contractError("Hinweisreihenfolge ist ungültig.");
+    requireId(hint.id, "hint.id");
+    if (!Number.isSafeInteger(hint.tier) || hint.tier < 1 || hint.tier > 5) throw contractError("hint.tier ist ungültig.");
+    requireShortString(hint.text, "hint.text");
+    if (!exactKeys(hint.textByLanguage, ["de", "en"]) || hint.textByLanguage.de !== hint.text) throw contractError("Hintlokalisierung ist ungültig.");
+    requireShortString(hint.textByLanguage.de, "hint.textByLanguage.de");
+    requireShortString(hint.textByLanguage.en, "hint.textByLanguage.en");
+    if (!Array.isArray(hint.visiblePositions) || hint.visiblePositions.length > 11 || hint.visiblePositions.some(position => !Number.isSafeInteger(position) || position < 1 || position > 11)) throw contractError("Hintpositionen sind ungültig.");
+    if (!Array.isArray(hint.positionRoles) || hint.positionRoles.length !== hint.visiblePositions.length || hint.positionRoles.some(role => typeof role !== "string" || !role.trim() || role.length > 128)) throw contractError("Hintrollen sind ungültig.");
+    if (!["kurz", "mittel", "lang"].includes(hint.lengthClass)) throw contractError("Hintlängenklasse ist ungültig.");
+    requireShortString(hint.explanationType, "hint.explanationType", 64);
+    const explanationKeys = ["hintId", "visiblePositions", "positionRoles", "propertyKey", "derivationKeys", "variant", "result", "operation", "divisor", "comparison"];
+    if (!hint.explanationData || typeof hint.explanationData !== "object" || Array.isArray(hint.explanationData) || Object.keys(hint.explanationData).some(key => !explanationKeys.includes(key))) throw contractError("Erklärvertrag enthält unerwartete Felder.");
+    if (hint.explanationData.hintId !== hint.id || JSON.stringify(hint.explanationData.visiblePositions) !== JSON.stringify(hint.visiblePositions) || JSON.stringify(hint.explanationData.positionRoles) !== JSON.stringify(hint.positionRoles)) throw contractError("Erklärvertrag passt nicht zum Hinweis.");
+    requireJsonScalarTree(hint.explanationData);
+    return {
+      index: hint.index, id: hint.id, tier: hint.tier, text: hint.text,
+      textByLanguage: {de: hint.textByLanguage.de, en: hint.textByLanguage.en},
+      visiblePositions: [...hint.visiblePositions], positionRoles: [...hint.positionRoles],
+      lengthClass: hint.lengthClass, packageNumber: hint.packageNumber,
+      packagePosition: hint.packagePosition, explanationType: hint.explanationType,
+      explanationData: clone(hint.explanationData)
+    };
+  };
+  const normalizeContract = (value, context) => {
+    if (!context || typeof context !== "object") throw contractError("Lösungskontext fehlt.");
+    const generation = requirePositiveInteger(context.generation, "generation");
+    const uid = requireId(context.uid, "uid");
+    const activeChestId = requireId(context.activeChestId, "activeChestId");
+    const rotation = requireNonNegativeInteger(context.rotation, "rotation");
+    const activeContentVersion = requirePositiveInteger(context.activeContentVersion, "activeContentVersion");
+    const contractKeys = ["schemaVersion", "rotation", "activeChestId", "available", "reason", "previousChestId", "snapshot"];
+    if (!exactKeys(value, contractKeys) || value.schemaVersion !== 1 || value.rotation !== rotation || value.activeChestId !== activeChestId || typeof value.available !== "boolean") throw contractError("Letzte-Lösung-Vertrag ist ungültig.");
+    const previousChestId = value.previousChestId === "" ? "" : requireId(value.previousChestId, "previousChestId");
+    if (previousChestId === activeChestId) throw contractError("Aktive Kiste darf nie letzte Lösung sein.");
+    if (!value.available) {
+      if (!["NO_HISTORY", "NO_HINT_PURCHASE", "INVALID_SNAPSHOT"].includes(value.reason) || value.snapshot !== null) throw contractError("Deaktivierter Lösungsvertrag ist ungültig.");
+      if (value.reason === "NO_HISTORY" && previousChestId !== "") throw contractError("NO_HISTORY enthält eine Kiste.");
+      if (value.reason === "NO_HINT_PURCHASE" && previousChestId === "") throw contractError("NO_HINT_PURCHASE enthält keine Kiste.");
+      const contract = {schemaVersion: 1, rotation, activeChestId, available: false, reason: value.reason, previousChestId, snapshot: null};
+      return deepFreeze({uid, generation, rotation, activeChestId, activeContentVersion, contract, digest: JSON.stringify({activeContentVersion, contract})});
+    }
+    if (value.reason !== "ELIGIBLE" || !previousChestId) throw contractError("Berechtigter Lösungsvertrag ist ungültig.");
+    const snapshotKeys = ["schemaVersion", "chestId", "closedCode", "purchasedPackageCount", "revealedHintCount", "revealedHints", "contentVersion", "hintGeneratorVersion", "playerChestRevision", "rotation"];
+    const snapshot = value.snapshot;
+    if (!exactKeys(snapshot, snapshotKeys) || snapshot.schemaVersion !== 1 || snapshot.chestId !== previousChestId || snapshot.rotation !== rotation || typeof snapshot.closedCode !== "string" || !codePattern.test(snapshot.closedCode)) throw contractError("Lösungssnapshot ist ungültig.");
+    if (!Number.isSafeInteger(snapshot.purchasedPackageCount) || snapshot.purchasedPackageCount < 1 || snapshot.purchasedPackageCount > 5 || snapshot.revealedHintCount !== snapshot.purchasedPackageCount * 2 || !Array.isArray(snapshot.revealedHints) || snapshot.revealedHints.length !== snapshot.revealedHintCount) throw contractError("Gekaufte Hinweise stimmen nicht mit dem Snapshot überein.");
+    const contentVersion = requirePositiveInteger(snapshot.contentVersion, "snapshot.contentVersion");
+    if (contentVersion + 1 !== activeContentVersion) throw contractError("Lösungssnapshot gehört nicht zur vorherigen Kiste.");
+    const normalizedSnapshot = {
+      schemaVersion: 1, chestId: previousChestId, closedCode: snapshot.closedCode,
+      purchasedPackageCount: snapshot.purchasedPackageCount,
+      revealedHintCount: snapshot.revealedHintCount,
+      revealedHints: snapshot.revealedHints.map(validateHint),
+      contentVersion,
+      hintGeneratorVersion: requirePositiveInteger(snapshot.hintGeneratorVersion, "snapshot.hintGeneratorVersion"),
+      playerChestRevision: requireNonNegativeInteger(snapshot.playerChestRevision, "snapshot.playerChestRevision"),
+      rotation
+    };
+    if (containsForbiddenField(normalizedSnapshot)) throw contractError("Interne Felder im Lösungssnapshot.");
+    const contract = {schemaVersion: 1, rotation, activeChestId, available: true, reason: "ELIGIBLE", previousChestId, snapshot: normalizedSnapshot};
+    return deepFreeze({uid, generation, rotation, activeChestId, activeContentVersion, contract, digest: JSON.stringify({activeContentVersion, contract})});
+  };
+  const clearGlobals = () => {
+    globals.get("previousSolutionAvailable").setBoolean(false);
+    globals.get("previousSolutionCode").fromJSObject([]);
+    globals.get("previousSolutionHints").fromJSObject([]);
+    globals.get("previousSolutionMetadata").fromJSObject([]);
+    globals.get("previousSolutionHintCount").setNumber(0);
+    globals.get("previousSolutionSourceMode").setString("");
+  };
+  const applyGlobals = snapshot => {
+    clearGlobals();
+    const metadata = clone(snapshot.revealedHints);
+    globals.get("previousSolutionCode").fromJSObject(snapshot.closedCode.split("").map(Number));
+    globals.get("previousSolutionHints").fromJSObject(metadata.map(hint => hint.textByLanguage.de));
+    globals.get("previousSolutionMetadata").fromJSObject(metadata);
+    globals.get("previousSolutionHintCount").setNumber(metadata.length);
+    globals.get("previousSolutionSourceMode").setString("Server-L059");
+    globals.get("previousSolutionAvailable").setBoolean(true);
+  };
+  const state = {uid: "", generation: 0, highestRotation: -1, highestContentVersion: -1, digest: "", activeChestId: "", available: false, reason: "UNINITIALIZED", snapshot: null};
+  const markUnavailable = reason => {
+    state.available = false;
+    state.reason = typeof reason === "string" && reason ? reason : "UNAVAILABLE";
+    state.snapshot = null;
+    clearGlobals();
+  };
+  const begin = uid => {
+    const validatedUid = requireId(uid, "uid");
+    state.generation += 1;
+    if (state.uid !== validatedUid) {
+      state.uid = validatedUid;
+      state.highestRotation = -1;
+      state.highestContentVersion = -1;
+      state.digest = "";
+      state.activeChestId = "";
+    }
+    markUnavailable("LOADING");
+    return Object.freeze({uid: state.uid, generation: state.generation});
+  };
+  const invalidate = reason => {
+    state.generation += 1;
+    markUnavailable(reason || "LOADING");
+  };
+  const isCurrent = token => !!(token && token.uid === state.uid && token.generation === state.generation);
+  const commit = candidate => {
+    if (!candidate || typeof candidate !== "object" || !Object.isFrozen(candidate)) throw contractError("Ungeprüfter Lösungskandidat.");
+    if (state.uid !== candidate.uid || state.generation !== candidate.generation) return false;
+    if (candidate.rotation < state.highestRotation || candidate.activeContentVersion < state.highestContentVersion) {
+      markUnavailable("STALE_RESPONSE");
+      return false;
+    }
+    if (state.highestRotation >= 0 && ((candidate.rotation > state.highestRotation && candidate.activeContentVersion <= state.highestContentVersion) || (candidate.rotation === state.highestRotation && candidate.activeContentVersion !== state.highestContentVersion))) {
+      markUnavailable("INVALID_SNAPSHOT");
+      return false;
+    }
+    if (candidate.rotation === state.highestRotation && state.digest && candidate.digest !== state.digest) {
+      markUnavailable("INVALID_SNAPSHOT");
+      return false;
+    }
+    state.highestRotation = candidate.rotation;
+    state.highestContentVersion = candidate.activeContentVersion;
+    state.digest = candidate.digest;
+    state.activeChestId = candidate.activeChestId;
+    state.available = candidate.contract.available;
+    state.reason = candidate.contract.reason;
+    state.snapshot = candidate.contract.available ? candidate.contract.snapshot : null;
+    if (state.snapshot) applyGlobals(state.snapshot); else clearGlobals();
+    return true;
+  };
+  const currentSnapshot = () => state.available && state.snapshot ? state.snapshot : null;
+  const openSnapshot = () => {
+    const snapshot = currentSnapshot();
+    if (!snapshot) return false;
+    applyGlobals(snapshot);
+    return true;
+  };
+  backendGame.__lockLootLastSolution = Object.freeze({
+    validate: normalizeContract, commit, begin, invalidate, isCurrent, markUnavailable, currentSnapshot, openSnapshot,
+    getState: () => Object.freeze({uid: state.uid, generation: state.generation, highestRotation: state.highestRotation, highestContentVersion: state.highestContentVersion, activeChestId: state.activeChestId, available: state.available, reason: state.reason, snapshot: state.snapshot})
+  });
+}
 const backendRuntime = backendGame.__lockLootBackendRuntime;
 for (const badge of runtimeScene.getObjects("StagingBadge")) {
   const badgeI18n = backendGame.__lockLootI18n;
@@ -220,7 +428,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.MainMenuCode.userFunc0xc1eb30 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xdb0e38 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -405,7 +613,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.MainMenuCode.userFunc0xda9048 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xdaf558 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -444,11 +652,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.MainMenuCode.userFunc0xda8ed0 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xdb1600 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.MainMenuCode.userFunc0xdb4a88 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xdab458 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-024: Rein visuelle Steuerung des modularen Hauptmenüs.
 // Die bestehende modulare Welt und alle anderen Szenen bleiben unverändert.
@@ -517,32 +725,145 @@ for (let index = 0; index < sparkles.length; index += 1) {
 
 
 };
-gdjs.MainMenuCode.userFunc0xc275a8 = function GDJSInlineCode(runtimeScene) {
+gdjs.MainMenuCode.userFunc0xdb18b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-046/L&L-047/L&L-052: Aufgeräumte Hauptnavigation, zentrale persistente Musiksteuerung und lokale Sprachwahl.
+// L&L-046/L&L-047/L&L-052/L&L-059: Hauptnavigation, persistente Musik, Sprachwahl und serverautoritative letzte Lösung.
 const menuGame = runtimeScene.getGame();
 const menuI18n = menuGame.__lockLootI18n;
 const menuController = menuGame.__lockLootMusicController;
+const menuBackend = menuGame.__lockLootBackendRuntime;
+const menuLastSolution = menuGame.__lockLootLastSolution;
 if (!runtimeScene.__lockLootL046Menu) {
-  runtimeScene.__lockLootL046Menu = { musicEnabled: menuController ? menuController.state.musicEnabled : true, languagePanelOpen: false, hoverName: "" };
+  menuGame.__lockLootMainMenuGeneration = Number.isSafeInteger(menuGame.__lockLootMainMenuGeneration) ? menuGame.__lockLootMainMenuGeneration + 1 : 1;
+  runtimeScene.__lockLootL046Menu = {
+    musicEnabled: menuController ? menuController.state.musicEnabled : true,
+    languagePanelOpen: false, hoverName: "", loadingLastSolution: false,
+    lastSolutionReady: false, uid: "", requestSerial: 0, retryAt: 0,
+    pendingLastSolutionOpen: null,
+    sceneGeneration: menuGame.__lockLootMainMenuGeneration
+  };
+  if (menuLastSolution) menuLastSolution.invalidate("LOADING");
 }
 const menuState = runtimeScene.__lockLootL046Menu;
 if (menuController) menuState.musicEnabled = menuController.state.musicEnabled;
 const menuCursorX = gdjs.evtTools.input.getCursorX(runtimeScene, "UI", 0);
 const menuCursorY = gdjs.evtTools.input.getCursorY(runtimeScene, "UI", 0);
 const firstMenuObject = name => runtimeScene.getObjects(name)[0] || null;
-const cursorOnMenuObject = object => object && menuCursorX >= object.getX() && menuCursorX <= object.getX() + object.getWidth() && menuCursorY >= object.getY() && menuCursorY <= object.getY() + object.getHeight();
+const cursorOnMenuObject = object => object && typeof object.isHidden === "function" && !object.isHidden() && menuCursorX >= object.getX() && menuCursorX <= object.getX() + object.getWidth() && menuCursorY >= object.getY() && menuCursorY <= object.getY() + object.getHeight();
 const setMenuText = (name, value) => { const object = firstMenuObject(name); if (object) object.setString(value); };
 const showMenuObject = (name, visible) => { for (const object of runtimeScene.getObjects(name)) object.hide(!visible); };
+const networkError = error => error && (error.name === "AbortError" || error instanceof TypeError || error.status === "BACKEND_UNREACHABLE");
+const menuSceneIsCurrent = sceneGeneration => runtimeScene.__lockLootL046Menu === menuState && menuState.sceneGeneration === sceneGeneration && menuGame.__lockLootMainMenuGeneration === sceneGeneration && menuGame.getSceneStack().getCurrentScene() === runtimeScene;
+const loadLastSolution = async (openAfterValidation = false) => {
+  if (menuState.loadingLastSolution || !menuBackend || !menuBackend.enabled || !menuLastSolution) return;
+  menuState.loadingLastSolution = true;
+  menuState.lastSolutionReady = false;
+  menuState.pendingLastSolutionOpen = null;
+  if (openAfterValidation) menuLastSolution.invalidate("CLICK_REVALIDATION");
+  const serial = ++menuState.requestSerial;
+  const sceneGeneration = menuState.sceneGeneration;
+  let requestToken = null;
+  const requestIsCurrent = () => serial === menuState.requestSerial && menuSceneIsCurrent(sceneGeneration) && (!requestToken || menuLastSolution.isCurrent(requestToken));
+  try {
+    let session = await menuBackend.authenticate(false);
+    if (!requestIsCurrent()) return;
+    if (!session || typeof session.uid !== "string") throw Object.assign(new Error("Anmeldung fehlt."), {status: "INVALID_RESPONSE"});
+    menuState.uid = session.uid;
+    requestToken = menuLastSolution.begin(session.uid);
+    await menuBackend.prepare("L&L-041");
+    if (!requestIsCurrent()) return;
+    let response;
+    try {
+      response = await menuBackend.callCallable(menuBackend.endpoints.bootstrap, {integration: "L&L-041"}, session.idToken);
+      if (!requestIsCurrent()) return;
+    } catch (error) {
+      if (!requestIsCurrent()) return;
+      const authRejected = error && ["UNAUTHENTICATED", "HTTP_401", "AUTH_FAILED"].includes(error.status);
+      if (!authRejected) throw error;
+      session = await menuBackend.refresh();
+      if (!requestIsCurrent()) return;
+      menuState.uid = session.uid;
+      requestToken = menuLastSolution.begin(session.uid);
+      response = await menuBackend.callCallable(menuBackend.endpoints.bootstrap, {integration: "L&L-041"}, session.idToken);
+      if (!requestIsCurrent()) return;
+    }
+    const confirmedSession = await menuBackend.authenticate(false);
+    if (!requestIsCurrent()) return;
+    if (!confirmedSession || confirmedSession.uid !== session.uid) {
+      menuState.loadingLastSolution = false;
+      menuLastSolution.invalidate("AUTH_CHANGED");
+      return;
+    }
+    if (!requestIsCurrent()) return;
+    if (!response || response.uid !== session.uid || !response.currentChest || response.currentChest.status !== "active" || response.currentChest.schemaVersion !== 1 || !Number.isSafeInteger(response.currentChest.contentVersion) || response.currentChest.contentVersion < 1 || !response.economy || response.economy.activeChestId !== response.currentChest.chestId || !Number.isSafeInteger(response.economy.rotation) || response.economy.rotation < 0) throw Object.assign(new Error("Menübootstrap ist ungültig."), {status: "INVALID_RESPONSE"});
+    if (JSON.stringify(response).includes('"' + ("solution" + "Code") + '"') || Object.prototype.hasOwnProperty.call(response, "solutionSnapshot")) throw Object.assign(new Error("Aktive oder alte private Lösung außerhalb des Vertrags."), {status: "INVALID_RESPONSE"});
+    const candidate = menuLastSolution.validate(response.lastSolution, {
+      uid: session.uid,
+      generation: requestToken.generation,
+      activeChestId: response.currentChest.chestId,
+      activeContentVersion: response.currentChest.contentVersion,
+      rotation: response.economy.rotation
+    });
+    if (!menuLastSolution.commit(candidate)) throw Object.assign(new Error("Veraltete oder widersprüchliche Lösungsantwort."), {status: "INVALID_RESPONSE"});
+    menuState.lastSolutionReady = true;
+    menuState.retryAt = 0;
+    if (openAfterValidation) {
+      const freshState = menuLastSolution.getState();
+      if (serial !== menuState.requestSerial || !menuSceneIsCurrent(sceneGeneration) || !menuLastSolution.isCurrent(requestToken) || !freshState.available || freshState.uid !== session.uid || freshState.generation !== requestToken.generation || freshState.highestRotation !== response.economy.rotation || freshState.activeChestId !== response.currentChest.chestId || freshState.highestContentVersion !== response.currentChest.contentVersion || !freshState.snapshot || freshState.snapshot.chestId !== response.lastSolution.previousChestId) {
+        menuLastSolution.markUnavailable("INVALID_SNAPSHOT");
+        menuState.lastSolutionReady = false;
+        return;
+      }
+      menuState.lastSolutionReady = false;
+      menuState.pendingLastSolutionOpen = Object.freeze({
+        serial, sceneGeneration, uid: session.uid,
+        requestGeneration: requestToken.generation,
+        rotation: response.economy.rotation,
+        activeChestId: response.currentChest.chestId,
+        contentVersion: response.currentChest.contentVersion,
+        previousChestId: response.lastSolution.previousChestId
+      });
+    }
+  } catch (error) {
+    if (!requestIsCurrent()) return;
+    menuLastSolution.markUnavailable(networkError(error) ? "BACKEND_UNREACHABLE" : "INVALID_SNAPSHOT");
+    menuState.retryAt = networkError(error) ? Date.now() + 12000 : Number.POSITIVE_INFINITY;
+  } finally {
+    if (requestIsCurrent()) menuState.loadingLastSolution = false;
+  }
+};
+let lastSolutionOpenRequested = false;
+if (menuState.pendingLastSolutionOpen) {
+  const pending = menuState.pendingLastSolutionOpen;
+  menuState.pendingLastSolutionOpen = null;
+  const freshState = menuLastSolution ? menuLastSolution.getState() : null;
+  const pendingIsCurrent = pending.serial === menuState.requestSerial && pending.sceneGeneration === menuState.sceneGeneration && menuSceneIsCurrent(pending.sceneGeneration);
+  const pendingMatches = !!(pendingIsCurrent && freshState && freshState.available && freshState.uid === pending.uid && freshState.generation === pending.requestGeneration && freshState.highestRotation === pending.rotation && freshState.activeChestId === pending.activeChestId && freshState.highestContentVersion === pending.contentVersion && freshState.snapshot && freshState.snapshot.chestId === pending.previousChestId);
+  if (pendingMatches && menuLastSolution.openSnapshot()) {
+    lastSolutionOpenRequested = true;
+    menuState.requestSerial += 1;
+    menuState.lastSolutionReady = false;
+    gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "SolutionScene", false);
+  } else {
+    if (pendingIsCurrent && menuLastSolution) menuLastSolution.markUnavailable("INVALID_SNAPSHOT");
+    menuState.lastSolutionReady = false;
+    menuState.retryAt = Number.POSITIVE_INFINITY;
+  }
+}
+if (!lastSolutionOpenRequested && !menuState.pendingLastSolutionOpen && !menuState.loadingLastSolution && !menuState.lastSolutionReady && Date.now() >= menuState.retryAt) void loadLastSolution(false);
 const playButton = firstMenuObject("MainMenuPlayButton");
+const lastSolutionButton = firstMenuObject("MainMenuLastSolutionButton");
 const shopButton = firstMenuObject("MainMenuShopButton");
 const musicButton = firstMenuObject("MainMenuMusicButton");
 const languageButton = firstMenuObject("MainMenuLanguageButton");
 const deButton = firstMenuObject("MainMenuLanguageDeButton");
 const enButton = firstMenuObject("MainMenuLanguageEnButton");
+const solutionState = menuLastSolution ? menuLastSolution.getState() : null;
+const lastSolutionEnabled = !!(menuState.lastSolutionReady && solutionState && solutionState.available && solutionState.uid === menuState.uid && solutionState.activeChestId && solutionState.snapshot && solutionState.snapshot.chestId !== solutionState.activeChestId);
 const panelObjects = ["MainMenuLanguagePanel", "MainMenuLanguagePanelTitle", "MainMenuLanguageDeButton", "MainMenuLanguageEnButton", "MainMenuLanguageDeText", "MainMenuLanguageEnText"];
 for (const name of panelObjects) showMenuObject(name, menuState.languagePanelOpen);
 setMenuText("MainMenuPlayText", menuI18n.t("menu.play"));
+setMenuText("MainMenuLastSolutionText", menuI18n.t("menu.last_solution"));
 setMenuText("MainMenuShopText", menuI18n.t("menu.shop"));
 setMenuText("MainMenuMusicStateText", menuI18n.t(menuState.musicEnabled ? "menu.music_on" : "menu.music_off"));
 setMenuText("MainMenuLanguageStateText", menuI18n.t("menu.language"));
@@ -550,16 +871,18 @@ setMenuText("MainMenuLanguagePanelTitle", menuI18n.t("menu.language_panel_title"
 setMenuText("MainMenuLanguageDeText", menuI18n.t("menu.language_de"));
 setMenuText("MainMenuLanguageEnText", menuI18n.t("menu.language_en"));
 setMenuText("MainMenuUtilityHintText", "");
-const buttonEntries = [["play", playButton], ["shop", shopButton], ["music", musicButton], ["language", languageButton], ["de", deButton], ["en", enButton]];
+const lastSolutionText = firstMenuObject("MainMenuLastSolutionText");
+if (lastSolutionText) lastSolutionText.setColor(lastSolutionEnabled ? "255;244;206" : "165;165;165");
+const buttonEntries = [["play", playButton], ["lastSolution", lastSolutionButton], ["shop", shopButton], ["music", musicButton], ["language", languageButton], ["de", deButton], ["en", enButton]];
 menuState.hoverName = "";
 for (const [name, button] of buttonEntries) {
-  const available = !["de", "en"].includes(name) || menuState.languagePanelOpen;
+  const available = (!['de', 'en'].includes(name) || menuState.languagePanelOpen) && (name !== "lastSolution" || lastSolutionEnabled);
   const hovered = available && cursorOnMenuObject(button);
   if (hovered) menuState.hoverName = name;
   if (button) {
     const selectedLanguage = menuState.languagePanelOpen && ((name === "de" && menuI18n.language === "de") || (name === "en" && menuI18n.language === "en"));
-    button.setOpacity(hovered || selectedLanguage ? 255 : 238);
-    button.setColor(hovered ? "255;239;184" : selectedLanguage ? "255;223;142" : "255;255;255");
+    button.setOpacity(name === "lastSolution" && !lastSolutionEnabled ? 132 : hovered || selectedLanguage ? 255 : 238);
+    button.setColor(name === "lastSolution" && !lastSolutionEnabled ? "118;118;118" : hovered ? "255;239;184" : selectedLanguage ? "255;223;142" : "255;255;255");
   }
 }
 if (gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left")) {
@@ -567,6 +890,7 @@ if (gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left")) {
   else if (menuState.languagePanelOpen && cursorOnMenuObject(enButton)) { menuI18n.setLanguage("en"); menuState.languagePanelOpen = false; }
   else if (cursorOnMenuObject(languageButton)) menuState.languagePanelOpen = !menuState.languagePanelOpen;
   else if (!menuState.languagePanelOpen && cursorOnMenuObject(playButton)) gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TrainingScene", false);
+  else if (!menuState.languagePanelOpen && lastSolutionEnabled && cursorOnMenuObject(lastSolutionButton)) void loadLastSolution(true);
   else if (!menuState.languagePanelOpen && cursorOnMenuObject(shopButton)) gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TreasureCalendarScene", false);
   else if (!menuState.languagePanelOpen && cursorOnMenuObject(musicButton)) {
     if (menuController) menuController.setEnabled(runtimeScene, !menuController.state.musicEnabled);
@@ -579,7 +903,7 @@ gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.MainMenuCode.userFunc0xdac648(runtimeScene);
+gdjs.MainMenuCode.userFunc0xdaf840(runtimeScene);
 
 }
 
@@ -587,7 +911,7 @@ gdjs.MainMenuCode.userFunc0xdac648(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xc1eb30(runtimeScene);
+gdjs.MainMenuCode.userFunc0xdb0e38(runtimeScene);
 
 }
 
@@ -595,7 +919,7 @@ gdjs.MainMenuCode.userFunc0xc1eb30(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xda9048(runtimeScene);
+gdjs.MainMenuCode.userFunc0xdaf558(runtimeScene);
 
 }
 
@@ -603,7 +927,7 @@ gdjs.MainMenuCode.userFunc0xda9048(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xda8ed0(runtimeScene);
+gdjs.MainMenuCode.userFunc0xdb1600(runtimeScene);
 
 }
 
@@ -611,7 +935,7 @@ gdjs.MainMenuCode.userFunc0xda8ed0(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xdb4a88(runtimeScene);
+gdjs.MainMenuCode.userFunc0xdab458(runtimeScene);
 
 }
 
@@ -619,7 +943,7 @@ gdjs.MainMenuCode.userFunc0xdb4a88(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xc275a8(runtimeScene);
+gdjs.MainMenuCode.userFunc0xdb18b0(runtimeScene);
 
 }
 
@@ -663,6 +987,8 @@ gdjs.MainMenuCode.GDMainMenuDetailStoneGrayObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuDetailStoneGoldObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuDetailStoneDarkObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuPlayButtonObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLastSolutionButtonObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLastSolutionTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuShopButtonObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuMusicButtonObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageButtonObjects1.length = 0;
@@ -721,6 +1047,8 @@ gdjs.MainMenuCode.GDMainMenuDetailStoneGrayObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuDetailStoneGoldObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuDetailStoneDarkObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuPlayButtonObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLastSolutionButtonObjects1.length = 0;
+gdjs.MainMenuCode.GDMainMenuLastSolutionTextObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuShopButtonObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuMusicButtonObjects1.length = 0;
 gdjs.MainMenuCode.GDMainMenuLanguageButtonObjects1.length = 0;
