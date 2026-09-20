@@ -175,6 +175,9 @@ gdjs.TrainingSceneCode.GDChestEndOpenLidObjects3= [];
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects1= [];
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects2= [];
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects3= [];
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects1= [];
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects2= [];
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects3= [];
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects1= [];
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects2= [];
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects3= [];
@@ -241,6 +244,15 @@ gdjs.TrainingSceneCode.GDChestEndSkipLabelObjects3= [];
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects1= [];
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects2= [];
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects3= [];
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects1= [];
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects2= [];
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects3= [];
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects1= [];
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects2= [];
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects3= [];
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects1= [];
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects2= [];
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects3= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3= [];
@@ -261,7 +273,33 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xb084d8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc9efa8 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-060: Lokale Desktop- und Dateivorschau bleibt durchgehend proportional im 720x1280-Handyformat.
+const trainingPortraitGame = runtimeScene.getGame();
+const trainingPortraitLocation = typeof location !== 'undefined' ? location : null;
+const trainingPortraitLocal = !!trainingPortraitLocation && (trainingPortraitLocation.protocol === 'file:' || ['127.0.0.1','localhost'].includes(trainingPortraitLocation.hostname));
+const trainingPortraitEvidence = !!trainingPortraitLocation && new URLSearchParams(trainingPortraitLocation.search).has('l060Evidence');
+const trainingPortraitEnabled = trainingPortraitLocal && !trainingPortraitEvidence;
+const trainingPortraitRemember = (element, properties) => Object.fromEntries(properties.map(property => [property, { value: element?.style.getPropertyValue(property) || '', priority: element?.style.getPropertyPriority(property) || '' }]));
+const trainingPortraitRestore = (element, saved) => { if (!element || !saved) return; for (const [property, entry] of Object.entries(saved)) { if (entry.value) element.style.setProperty(property, entry.value, entry.priority); else element.style.removeProperty(property); } };
+if (trainingPortraitEnabled) {
+  if (!runtimeScene.__lockLootTrainingPortraitStage) {
+    const canvas = trainingPortraitGame.getRenderer?.().getCanvas?.() || null;
+    const stage = { scene: runtimeScene, canvas, previousResolution: { adapt: trainingPortraitGame.getAdaptGameResolutionAtRuntime(), width: trainingPortraitGame.getGameResolutionWidth(), height: trainingPortraitGame.getGameResolutionHeight() }, previousCanvasStyle: trainingPortraitRemember(canvas, ['width','height','left','top','position']), previousPageStyle: typeof document === 'undefined' ? null : { html: trainingPortraitRemember(document.documentElement, ['background','background-color']), body: trainingPortraitRemember(document.body, ['background','background-color']) }, restored: false };
+    stage.restore = () => { if (stage.restored) return; stage.restored = true; trainingPortraitRestore(stage.canvas, stage.previousCanvasStyle); if (typeof document !== 'undefined' && stage.previousPageStyle) { trainingPortraitRestore(document.documentElement, stage.previousPageStyle.html); trainingPortraitRestore(document.body, stage.previousPageStyle.body); } trainingPortraitGame.setGameResolutionSize(stage.previousResolution.width, stage.previousResolution.height); trainingPortraitGame.setAdaptGameResolutionAtRuntime(stage.previousResolution.adapt); };
+    runtimeScene.__lockLootTrainingPortraitStage = stage;
+    trainingPortraitGame.__lockLootTrainingPortraitStage = stage;
+    if (!trainingPortraitGame.__lockLootTrainingPortraitCleanupRegistered) { gdjs.registerRuntimeSceneUnloadingCallback(scene => { const current = trainingPortraitGame.__lockLootTrainingPortraitStage; if (current?.scene === scene) { const presentation = scene.__lockLootChestEndPresentation; if (presentation && typeof presentation.restoreResolution === 'function') presentation.restoreResolution(); current.restore(); delete scene.__lockLootTrainingPortraitStage; trainingPortraitGame.__lockLootTrainingPortraitStage = null; } }); trainingPortraitGame.__lockLootTrainingPortraitCleanupRegistered = true; }
+  }
+  trainingPortraitGame.setAdaptGameResolutionAtRuntime(false);
+  if (trainingPortraitGame.getGameResolutionWidth() !== 720 || trainingPortraitGame.getGameResolutionHeight() !== 1280) trainingPortraitGame.setGameResolutionSize(720, 1280);
+  const stage = runtimeScene.__lockLootTrainingPortraitStage;
+  if (stage?.canvas && typeof window !== 'undefined') { const scale = Math.min(window.innerWidth / 720, window.innerHeight / 1280); const width = Math.max(1, Math.floor(720 * scale)); const height = Math.max(1, Math.floor(1280 * scale)); const desired = { position: 'fixed', left: Math.floor((window.innerWidth - width) / 2) + 'px', top: Math.floor((window.innerHeight - height) / 2) + 'px', width: width + 'px', height: height + 'px' }; for (const [property, value] of Object.entries(desired)) stage.canvas.style.setProperty(property, value, 'important'); }
+  if (typeof document !== 'undefined') { for (const element of [document.documentElement, document.body]) { element.style.setProperty('background', '#123f50', 'important'); element.style.setProperty('background-color', '#123f50', 'important'); } }
+}
+};
+gdjs.TrainingSceneCode.userFunc0xb51780 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -628,7 +666,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TrainingSceneCode.userFunc0xa18440 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc9f020 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -764,11 +802,12 @@ if (!musicGame[musicControllerKey]) {
     if (state.victoryActive && state.victoryState?.scene === scene) return false;
     stopCurrentTrack(scene);
     state.victoryActive = true;
-    state.victoryState = { scene, started: false, completed: false };
+    state.victoryState = { scene, started: false, completed: false, lastStartAttempt: Date.now(), attempts: 0 };
     state.currentTrack = { name: 'music_victory_sequence', style: 'Victory', category: 'victory' };
     state.currentCategory = 'victory';
     if (!state.musicEnabled) return false;
     gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    state.victoryState.attempts += 1;
     gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
     return true;
   };
@@ -791,6 +830,11 @@ if (!musicGame[musicControllerKey]) {
     const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
     if (playing) state.victoryState.started = true;
     else if (state.victoryState.started) state.victoryState.completed = true;
+    else if (!state.victoryState.completed && Date.now() - state.victoryState.lastStartAttempt >= 1500) {
+      state.victoryState.lastStartAttempt = Date.now();
+      state.victoryState.attempts += 1;
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
+    }
   };
   const updateRotation = scene => {
     if (!state.musicEnabled || !state.currentTrack || state.error) return;
@@ -849,7 +893,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xa1d950 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc9f1c8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -888,11 +932,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xa1d5b8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa23bf0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xc61ad8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa22620 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1088,7 +1132,7 @@ for (let index = 0; index < waves.length; index += 1) {
 const chestEndOwnsLid = runtimeScene.__lockLootTrainingBackend?.endLocked === true;
 if (!chestEndOwnsLid) {
   for (const lid of runtimeScene.getObjects("Chest_Lid")) {
-    lid.setPosition(360, 819);
+    lid.setPosition(360, 759);
     lid.setWidth(640);
     lid.setHeight(250);
     lid.setAngle(0);
@@ -1513,7 +1557,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xc63bd8 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xc76f10 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-058: Genau eine Trefferdimension wird exakt, die andere nur als serverbestätigtes Band dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -1546,7 +1590,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc63bd8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc76f10(runtimeScene);
 
 }
 
@@ -1555,13 +1599,16 @@ gdjs.TrainingSceneCode.userFunc0xc63bd8(runtimeScene);
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDHintNextButtonObjects1Objects = Hashtable.newFrom({"HintNextButton": gdjs.TrainingSceneCode.GDHintNextButtonObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
-gdjs.TrainingSceneCode.userFunc0xc8f700 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe02160 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-060: Während des bestätigten Kistenendes ist nur WEITER Navigation.
+// L&L-060: Während der Animation bleibt die Navigation gesperrt; im Ergebnis nutzt sie den vorhandenen Zurück-Button.
 const chestEndNavigationLocked = runtimeScene.__lockLootTrainingBackend?.endLocked === true;
+const chestEndPresentationState = runtimeScene.__lockLootChestEndPresentation?.flow?.publicState?.() || null;
+const chestEndSummaryReady = ['winnerCelebration','winnerReward','otherWinnerSummary'].includes(chestEndPresentationState?.phase);
+const chestEndBackLandscape = runtimeScene.getGame().getGameResolutionWidth() > runtimeScene.getGame().getGameResolutionHeight();
 for (const back of runtimeScene.getObjects('bt_Back')) {
-  if (chestEndNavigationLocked) { back.setPosition(-1000, -1000); back.hide(); }
-  else { back.setPosition(604, 1164); back.hide(false); }
+  if ((chestEndNavigationLocked || chestEndPresentationState) && !chestEndSummaryReady) { back.setPosition(-1000, -1000); back.hide(); }
+  else { back.setPosition(chestEndBackLandscape ? 1168 : 604, chestEndBackLandscape ? 472 : 1164); back.setWidth(chestEndBackLandscape ? 88 : 92); back.setHeight(chestEndBackLandscape ? 88 : 92); back.hide(false); }
 }
 };
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDbt_95959595BackObjects1Objects = Hashtable.newFrom({"bt_Back": gdjs.TrainingSceneCode.GDbt_9595BackObjects1});
@@ -2097,7 +2144,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xcd2eb0 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xcec2b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -4556,14 +4603,14 @@ gdjs.TrainingSceneCode.eventsList19 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcd2eb0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcec2b0(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0x8aea70 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb4add0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: Vertrag muss vor dem Backendadapter verfügbar sein.
 const chestEndRuntimeGame = runtimeScene.getGame();
@@ -4590,7 +4637,7 @@ if (!chestEndRuntimeGame.__lockLootChestEndRuntime) {
     state.phase = "locking";
     return publicState();
   };
-  const advance = (now = 0) => {
+  const advance = (now = 0, victoryStatus = null) => {
     if (state.phase === "active" || state.phase === "complete") return publicState();
     state.elapsed = Math.max(0, (Number(now) || 0) - state.startedAt);
     if (terminalPhases.has(state.phase)) return publicState();
@@ -4599,23 +4646,18 @@ if (!chestEndRuntimeGame.__lockLootChestEndRuntime) {
         state.elapsed < 1.8 ? "otherWinnerLocked" : "otherWinnerSummary";
       return publicState();
     }
+    const victoryStarted = victoryStatus?.started === true;
+    const victoryCompleted = victoryStatus?.completed === true;
+    const fallbackCompleted = !victoryStarted && state.elapsed >= 53.64;
+    const watchdogCompleted = state.elapsed >= 65;
     state.phase = state.elapsed < 1 ? "locking" :
       state.elapsed < 2.5 ? "winnerIntro" :
       state.elapsed < 6 ? "winnerChestOpen" :
-      state.elapsed < 52 ? "winnerCelebration" :
-      state.elapsed < 57 ? "winnerOops" : "winnerReward";
+      !victoryCompleted && !fallbackCompleted && !watchdogCompleted ? "winnerCelebration" : "winnerReward";
     return publicState();
   };
-  const canSkip = () => state.snapshot?.outcome === "self" &&
-    state.elapsed >= 1.2 && !terminalPhases.has(state.phase);
-  const skip = (now = 0) => {
-    advance(now);
-    if (!canSkip()) return false;
-    state.phase = "winnerReward";
-    state.skipped = true;
-    state.musicStopRequested = true;
-    return true;
-  };
+  const canSkip = () => false;
+  const skip = () => false;
   const complete = () => {
     if (!["winnerReward", "otherWinnerSummary"].includes(state.phase)) return false;
     state.phase = "complete";
@@ -4702,7 +4744,7 @@ const validateChestEndSnapshot = function validateChestEndSnapshot(value, contex
   chestEndRuntimeGame.__lockLootChestEndRuntime = { create: createChestEndFlow, identity: chestEndSnapshotIdentity, validate: validateChestEndSnapshot };
 }
 };
-gdjs.TrainingSceneCode.userFunc0xbbae50 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xce2b30 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -5157,7 +5199,7 @@ if (trainingVariables.get('backendInitState').getAsString() === 'offline' && !tr
   void trainingBackend.connect();
 }
 };
-gdjs.TrainingSceneCode.userFunc0xbbad78 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb4af10 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: hochwertige Kistenendebühne; reine Präsentation, keine Rewardbuchung.
 const chestEndGame = runtimeScene.getGame();
@@ -5170,6 +5212,52 @@ const chestEndAll = name => runtimeScene.getObjects(name);
 const chestEndHide = (name, hidden = true) => { for (const object of chestEndAll(name)) object.hide(hidden); };
 const chestEndText = (name, value) => { const object = chestEndOne(name); if (object) object.setString(value); };
 const chestEndPlace = (name, x, y, width, height) => { for (const object of chestEndAll(name)) { object.setPosition(x, y); object.setWidth(width); object.setHeight(height); } };
+const chestEndReleaseTreasureMask = target => {
+  if (!target) return;
+  const mask = target.treasureMask;
+  const renderer = target.treasureMaskRenderer;
+  if (renderer && mask && renderer.mask === mask) renderer.mask = target.previousTreasureMask || null;
+  if (mask?.parent) mask.parent.removeChild(mask);
+  if (mask && !mask.destroyed && typeof mask.destroy === 'function') mask.destroy();
+  target.treasureMask = null;
+  target.treasureMaskRenderer = null;
+  target.previousTreasureMask = null;
+  target.treasureMaskBounds = null;
+};
+const chestEndApplyTreasureMask = (target, treasure, base) => {
+  const renderer = treasure?.getRendererObject?.();
+  const parent = renderer?.parent;
+  if (!target || !renderer || !parent || typeof PIXI === 'undefined' || typeof PIXI.Graphics !== 'function') return false;
+  if (target.treasureMaskRenderer && target.treasureMaskRenderer !== renderer) chestEndReleaseTreasureMask(target);
+  let mask = target.treasureMask;
+  if (!mask || mask.destroyed) {
+    mask = new PIXI.Graphics();
+    mask.name = 'LockLootL060TreasureMask';
+    target.previousTreasureMask = renderer.mask || null;
+    target.treasureMask = mask;
+    target.treasureMaskRenderer = renderer;
+    parent.addChild(mask);
+    renderer.mask = mask;
+  } else if (mask.parent !== parent) {
+    if (mask.parent) mask.parent.removeChild(mask);
+    parent.addChild(mask);
+  }
+  const baseX = base.getX(), baseY = base.getY(), baseWidth = base.getWidth(), baseHeight = base.getHeight();
+  const maskTop = baseY - baseHeight / 4;
+  const points = [
+    baseX + baseWidth * 225 / 1383, maskTop,
+    baseX + baseWidth * 1158 / 1383, maskTop,
+    baseX + baseWidth * 1163 / 1383, baseY + baseHeight * 154 / 678,
+    baseX + baseWidth * 220 / 1383, baseY + baseHeight * 154 / 678,
+  ];
+  mask.clear(); mask.beginFill(0xffffff, 1); mask.drawPolygon(points); mask.endFill();
+  renderer.mask = mask;
+  target.treasureMaskBounds = {
+    left: Math.min(points[0], points[6]), top: points[1],
+    right: Math.max(points[2], points[4]), bottom: points[5],
+  };
+  return true;
+};
 const chestEndRestoreGeometry = target => {
   if (!Array.isArray(target?.previousGeometry)) return;
   for (const item of target.previousGeometry) {
@@ -5177,6 +5265,8 @@ const chestEndRestoreGeometry = target => {
     if (!object) continue;
     object.setLayer(item.layer); object.setZOrder(item.zOrder); object.setPosition(item.x, item.y);
     object.setWidth(item.width); object.setHeight(item.height); object.setAngle(item.angle); object.hide(item.hidden);
+    if (typeof item.color === 'string' && typeof object.setColor === 'function') object.setColor(item.color);
+    if (Number.isFinite(item.opacity) && typeof object.setOpacity === 'function') object.setOpacity(item.opacity);
   }
 };
 const chestEndRestoreCanvasStyle = target => {
@@ -5200,29 +5290,33 @@ const chestEndRestorePageStyle = target => {
 };
 const chestEndApplyPageStyle = target => {
   if (!target || typeof document === 'undefined') return;
-  const background = target.landscape ? '#174f63' : 'linear-gradient(180deg, #69bdd7 0%, #69bdd7 50%, #d3a35b 50%, #a96f39 100%)';
+  const background = target.fixedPortrait ? '#123f50' : (target.landscape ? '#174f63' : 'linear-gradient(180deg, #69bdd7 0%, #69bdd7 50%, #d3a35b 50%, #a96f39 100%)');
   for (const element of [document.documentElement, document.body]) {
     if (!element) continue;
     element.style.setProperty('background', background, 'important');
-    element.style.setProperty('background-color', target.landscape ? '#174f63' : '#69bdd7', 'important');
+    element.style.setProperty('background-color', target.fixedPortrait ? '#123f50' : (target.landscape ? '#174f63' : '#69bdd7'), 'important');
   }
 };
 const chestEndApplyCanvasStyle = target => {
-  if (!target?.canvas || !target.landscape || typeof window === 'undefined') return;
-  const desired = { position: 'fixed', left: '0px', top: '0px', width: window.innerWidth + 'px', height: window.innerHeight + 'px' };
+  if (!target?.canvas || typeof window === 'undefined' || (!target.fixedPortrait && !target.landscape)) return;
+  const scale = target.fixedPortrait ? Math.min(window.innerWidth / 720, window.innerHeight / 1280) : 1;
+  const width = target.fixedPortrait ? Math.max(1, Math.floor(720 * scale)) : window.innerWidth;
+  const height = target.fixedPortrait ? Math.max(1, Math.floor(1280 * scale)) : window.innerHeight;
+  const desired = { position: 'fixed', left: (target.fixedPortrait ? Math.floor((window.innerWidth - width) / 2) : 0) + 'px', top: (target.fixedPortrait ? Math.floor((window.innerHeight - height) / 2) : 0) + 'px', width: width + 'px', height: height + 'px' };
   for (const [property, value] of Object.entries(desired)) {
     if (target.canvas.style.getPropertyValue(property) !== value || target.canvas.style.getPropertyPriority(property) !== 'important') {
       target.canvas.style.setProperty(property, value, 'important');
     }
   }
 };
-const chestEndUiNames = ['ChestEndTitlePlate','ChestEndStatsBar','ChestEndTitle','ChestEndSubtitle','ChestEndStatsHeading','ChestEndRewardCookieIcon','ChestEndRewardLockpickIcon','ChestEndRewardCookies','ChestEndRewardLockpicks','ChestEndSpentHeading','ChestEndSpentCookieIcon','ChestEndSpentLockpickIcon','ChestEndSpentCookies','ChestEndSpentLockpicks','ChestEndRank','ChestEndXp','ChestEndSkipButton','ChestEndSkipLabel','ChestEndContinueButton','ChestEndContinueLabel','ChestEndStageLock','ChestEndStageLoot','ChestEndPirate','ChestEndOpenLid'];
+const chestEndUiNames = ['ChestEndTitlePlate','ChestEndHintPlate','ChestEndStatsBar','ChestEndTitle','ChestEndSubtitle','ChestEndStatsHeading','ChestEndRewardCookieIcon','ChestEndRewardLockpickIcon','ChestEndBoosterIcon','ChestEndRewardCookies','ChestEndRewardLockpicks','ChestEndRewardBooster','ChestEndSpentHeading','ChestEndSpentCookieIcon','ChestEndSpentLockpickIcon','ChestEndSpentCookies','ChestEndSpentLockpicks','ChestEndSpentBooster','ChestEndRank','ChestEndXp','ChestEndSkipButton','ChestEndSkipLabel','ChestEndContinueButton','ChestEndContinueLabel','ChestEndStageLock','ChestEndStageLoot','ChestEndPirate','ChestEndOpenLid'];
 for (const name of chestEndUiNames) chestEndHide(name);
 for (const name of ['ChestEndStageLeft','ChestEndStageRight']) chestEndHide(name);
 const chestEndRestoreResolution = target => {
   if (!target || !target.resolutionLocked || !target.previousResolution) return;
   target.resolutionLocked = false;
   if (target.canvasStyleObserver) { target.canvasStyleObserver.disconnect(); target.canvasStyleObserver = null; }
+  chestEndReleaseTreasureMask(target);
   chestEndRestoreGeometry(target);
   chestEndRestoreCanvasStyle(target);
   chestEndRestorePageStyle(target);
@@ -5232,7 +5326,7 @@ const chestEndRestoreResolution = target => {
 };
 if (!chestEndGame.__lockLootChestEndResolutionCleanupRegistered) {
   gdjs.registerRuntimeSceneUnloadingCallback(scene => {
-    if (scene && scene.getGame() === chestEndGame) { const target = scene.__lockLootChestEndPresentation; if (target && typeof target.restoreResolution === 'function') target.restoreResolution(); }
+    if (scene && scene.getGame() === chestEndGame) { const target = scene.__lockLootChestEndPresentation; if (target && typeof target.restoreResolution === 'function') target.restoreResolution(); const unloadingMusic = chestEndGame.__lockLootMusicController; if (unloadingMusic?.state?.victoryState?.scene === scene) unloadingMusic.stopVictory(scene); }
   });
   chestEndGame.__lockLootChestEndResolutionCleanupRegistered = true;
 }
@@ -5244,27 +5338,30 @@ if (chestEndBackend && chestEndBackend.chestEnd) {
     const flow = chestEndGame.__lockLootChestEndRuntime.create();
     const startedAt = Date.now() / 1000;
     flow.confirm(chestEndBackend.chestEnd, startedAt);
-    runtimeScene.__lockLootChestEndPresentation = { identity: snapshotIdentity, snapshot: chestEndBackend.chestEnd, flow, startedAt, musicStarted: false, otherSilenced: false };
+    runtimeScene.__lockLootChestEndPresentation = { identity: snapshotIdentity, snapshot: chestEndBackend.chestEnd, flow, startedAt, musicStarted: false, otherMusicPreserved: false };
   }
 }
 // Ausschließlich localhost darf für echte GDevelop-Rendernachweise einen bestätigten Präsentationszustand einspeisen.
 if (!runtimeScene.__lockLootChestEndPresentation && chestEndBackend && chestEndBackend.endpoints && typeof location !== 'undefined' && ['127.0.0.1','localhost'].includes(location.hostname)) {
-  const evidence = new URLSearchParams(location.search).get('l060Evidence');
-  const allowed = ['locking','winnerChestOpen','winnerCelebration','winnerOops','winnerReward','otherWinnerSummary'];
+  const evidenceQuery = new URLSearchParams(location.search);
+  const evidence = evidenceQuery.get('l060Evidence');
+  const allowed = ['locking','winnerChestOpen','winnerCelebration','winnerReward','otherWinnerSummary'];
   if (allowed.includes(evidence)) {
     const outcome = evidence === 'otherWinnerSummary' ? 'other' : 'self';
     const currentChest = chestEndBackend.currentChest || { chestId: 'evidence-active' };
     const rotation = chestEndBackend.economy && Number.isSafeInteger(chestEndBackend.economy.rotation) ? chestEndBackend.economy.rotation : 1;
-    const fixture = chestEndGame.__lockLootChestEndRuntime.validate({ schemaVersion: 1, closedChestId: 'evidence-closed', activeChestId: currentChest.chestId, rotation, closedContentVersion: 1, outcome, winner: { displayName: null, rank: null, xpEarned: null }, reward: outcome === 'self' ? { cookies: 12, lockpicks: 5, strategy: 'L041_TEST_EQUAL_NOMINAL_SPLIT_FLOOR' } : null, consumption: { cookies: 2, lockpicks: 3 } }, { activeChestId: currentChest.chestId, rotation });
-    const elapsedByState = { locking: 0.999, winnerChestOpen: 3.5, winnerCelebration: 12, winnerOops: 54.8, winnerReward: 57.2, otherWinnerSummary: 2 };
-    const requestedElapsedRaw = new URLSearchParams(location.search).get('l060Elapsed');
+    const evidenceDisplayNameValue = evidenceQuery.get('l060EvidenceDisplayName');
+    const evidenceDisplayName = outcome === 'other' && evidenceDisplayNameValue === 'L060-TEST-123456789012' ? evidenceDisplayNameValue : null;
+    const fixture = chestEndGame.__lockLootChestEndRuntime.validate({ schemaVersion: 1, closedChestId: 'evidence-closed', activeChestId: currentChest.chestId, rotation, closedContentVersion: 1, outcome, winner: { displayName: evidenceDisplayName, rank: null, xpEarned: null }, reward: outcome === 'self' ? { cookies: 12, lockpicks: 5, strategy: 'L041_TEST_EQUAL_NOMINAL_SPLIT_FLOOR' } : null, consumption: { cookies: 2, lockpicks: 3 } }, { activeChestId: currentChest.chestId, rotation });
+    const elapsedByState = { locking: 0.999, winnerChestOpen: 3.5, winnerCelebration: 12, winnerReward: 53.64, otherWinnerSummary: 2 };
+    const requestedElapsedRaw = evidenceQuery.get('l060Elapsed');
     const requestedElapsed = requestedElapsedRaw === null ? NaN : Number(requestedElapsedRaw);
     const evidenceElapsed = Number.isFinite(requestedElapsed) && requestedElapsed >= 0 ? requestedElapsed : elapsedByState[evidence];
     const flow = chestEndGame.__lockLootChestEndRuntime.create();
     const startedAt = Date.now() / 1000 - evidenceElapsed;
     flow.confirm(fixture, startedAt); flow.advance(Date.now() / 1000);
     chestEndBackend.chestEnd = fixture; chestEndBackend.endLocked = true;
-    runtimeScene.__lockLootChestEndPresentation = { identity: chestEndGame.__lockLootChestEndRuntime.identity(fixture), snapshot: fixture, flow, startedAt, musicStarted: true, otherSilenced: true, evidence, evidenceElapsed };
+    runtimeScene.__lockLootChestEndPresentation = { identity: chestEndGame.__lockLootChestEndRuntime.identity(fixture), snapshot: fixture, flow, startedAt, musicStarted: true, otherMusicPreserved: true, evidence, evidenceElapsed };
   }
 }
 let presentation = runtimeScene.__lockLootChestEndPresentation;
@@ -5282,9 +5379,13 @@ if (presentation?.abortedByError) {
 }
 if (presentation && !presentation.resolutionLocked) {
   presentation.previousResolution = { adapt: chestEndGame.getAdaptGameResolutionAtRuntime(), width: chestEndGame.getGameResolutionWidth(), height: chestEndGame.getGameResolutionHeight() };
-  const geometryNames = ['TrainingSky','TrainingSea','TrainingBeach','TrainingPalm','Chest_Base','Chest_Lid','TrainingTreasure','ChestEndOpenLid','ChestEndPirate','parrot','ChestEndTitlePlate','ChestEndStatsBar','ChestEndTitle','ChestEndSubtitle','ChestEndStatsHeading','ChestEndRewardCookieIcon','ChestEndRewardLockpickIcon','ChestEndRewardCookies','ChestEndRewardLockpicks','ChestEndSpentHeading','ChestEndSpentCookieIcon','ChestEndSpentLockpickIcon','ChestEndSpentCookies','ChestEndSpentLockpicks','ChestEndRank','ChestEndXp','ChestEndSkipButton','ChestEndSkipLabel','ChestEndContinueButton','ChestEndContinueLabel','ChestEndStageLeft','ChestEndStageRight','ChestEndStageLock','ChestEndStageLoot'];
-  presentation.previousGeometry = geometryNames.flatMap(name => chestEndAll(name).map((object, index) => ({ name, index, layer: object.getLayer(), zOrder: object.getZOrder(), x: object.getX(), y: object.getY(), width: object.getWidth(), height: object.getHeight(), angle: object.getAngle(), hidden: object.isHidden() })));
-  presentation.landscape = typeof window !== 'undefined' && window.innerWidth > window.innerHeight;
+  const geometryNames = ['TrainingSky','TrainingSea','TrainingBeach','TrainingPalm','TrainingSandFront','TrainingDetailPlant','TrainingDetailDriftwood','TrainingDetailShellPink','TrainingDetailShellConch','TrainingDetailShellBroken','TrainingDetailStarfish','TrainingDetailStoneGray','TrainingDetailStoneGold','TrainingDetailStoneDark','Chest_Base','Chest_Lid','TrainingTreasure','ChestEndOpenLid','ChestEndPirate','parrot','bt_Back','ChestEndTitlePlate','ChestEndHintPlate','ChestEndStatsBar','ChestEndTitle','ChestEndSubtitle','ChestEndStatsHeading','ChestEndRewardCookieIcon','ChestEndRewardLockpickIcon','ChestEndBoosterIcon','ChestEndRewardCookies','ChestEndRewardLockpicks','ChestEndRewardBooster','ChestEndSpentHeading','ChestEndSpentCookieIcon','ChestEndSpentLockpickIcon','ChestEndSpentCookies','ChestEndSpentLockpicks','ChestEndSpentBooster','ChestEndRank','ChestEndXp','ChestEndSkipButton','ChestEndSkipLabel','ChestEndContinueButton','ChestEndContinueLabel','ChestEndStageLeft','ChestEndStageRight','ChestEndStageLock','ChestEndStageLoot'];
+  presentation.previousGeometry = geometryNames.flatMap(name => chestEndAll(name).map((object, index) => ({ name, index, layer: object.getLayer(), zOrder: object.getZOrder(), x: object.getX(), y: object.getY(), width: object.getWidth(), height: object.getHeight(), angle: object.getAngle(), hidden: object.isHidden(), color: typeof object.getColor === 'function' ? object.getColor() : null, opacity: typeof object.getOpacity === 'function' ? object.getOpacity() : null })));
+  const chestEndLocation = typeof location !== 'undefined' ? location : null;
+  const chestEndLocalPreview = !!chestEndLocation && (chestEndLocation.protocol === 'file:' || ['127.0.0.1','localhost'].includes(chestEndLocation.hostname));
+  const chestEndEvidencePreview = !!chestEndLocation && new URLSearchParams(chestEndLocation.search).has('l060Evidence');
+  presentation.fixedPortrait = chestEndLocalPreview && !chestEndEvidencePreview;
+  presentation.landscape = !presentation.fixedPortrait && typeof window !== 'undefined' && window.innerWidth > window.innerHeight;
   presentation.canvas = chestEndGame.getRenderer?.().getCanvas?.() || null;
   if (presentation.canvas) {
     presentation.previousCanvasStyle = Object.fromEntries(['width','height','left','top','position'].map(property => [property, { value: presentation.canvas.style.getPropertyValue(property), priority: presentation.canvas.style.getPropertyPriority(property) }]));
@@ -5305,18 +5406,21 @@ if (presentation && !presentation.resolutionLocked) {
   if (typeof window !== 'undefined') { window.addEventListener('error', presentation.resolutionErrorHandler); window.addEventListener('unhandledrejection', presentation.resolutionErrorHandler); }
 }
 if (presentation) {
-  const landscape = typeof window !== 'undefined' && window.innerWidth > window.innerHeight;
+  const landscape = !presentation.fixedPortrait && typeof window !== 'undefined' && window.innerWidth > window.innerHeight;
   if (presentation.landscape !== landscape) {
+    chestEndReleaseTreasureMask(presentation);
     chestEndRestoreGeometry(presentation);
     if (!landscape) chestEndRestoreCanvasStyle(presentation);
     presentation.landscape = landscape;
     chestEndGame.setGameResolutionSize(landscape ? 1280 : 720, landscape ? 576 : 1280);
   }
   chestEndApplyPageStyle(presentation);
-  if (landscape) chestEndApplyCanvasStyle(presentation);
+  if (landscape || presentation.fixedPortrait) chestEndApplyCanvasStyle(presentation);
   else chestEndRestoreCanvasStyle(presentation);
   const now = Date.now() / 1000;
-  const flowState = presentation.flow.advance(presentation.evidence ? presentation.startedAt + presentation.evidenceElapsed : now);
+  const music = chestEndGame.__lockLootMusicController;
+  const victoryStatus = music?.state?.victoryState?.scene === runtimeScene ? music.state.victoryState : null;
+  const flowState = presentation.flow.advance(presentation.evidence ? presentation.startedAt + presentation.evidenceElapsed : now, victoryStatus);
   const phase = flowState.phase;
   const snapshot = presentation.snapshot;
   const baseUiNames = ['ResourceHudCookieFrame','ResourceHudLockpickFrame','ResourceHudCookieIcon','ResourceHudLockpickIcon','ResourceHudCookiesText','ResourceHudLockpicksText','SpeechBubble','txtHint','txtHintCounter','HintPrevButton','HintNextButton','TxtStatus','TxtCode_richtig','TxtCode_falsch','StagingBadge'];
@@ -5331,185 +5435,204 @@ if (presentation) {
     if (palms[0]) { palms[0].setPosition(0, 125); palms[0].setWidth(145); palms[0].setHeight(252); }
     if (palms[1]) { palms[1].setPosition(1135, 145); palms[1].setWidth(140); palms[1].setHeight(242); }
     chestEndPlace('Chest_Base', 430, 270, 420, 210);
+  } else {
+    // Die Ergebnisbühne übernimmt ohne Sprung exakt die bestätigte normale Kistenhöhe.
+    chestEndPlace('Chest_Base', 40, 660, 640, 320);
   }
   if (snapshot.outcome === 'other' || phase !== 'locking') {
     chestEndHide('DigitSlot'); chestEndHide('Lock_Sprite');
     for (let index = 0; index <= 10; index += 1) chestEndHide('digit' + index);
   }
-  const music = chestEndGame.__lockLootMusicController;
   if (snapshot.outcome === 'self' && !presentation.musicStarted) { if (music) music.startVictory(runtimeScene); presentation.musicStarted = true; }
-  if (snapshot.outcome === 'other' && !presentation.otherSilenced) { if (music) music.silenceForChestEnd(runtimeScene); presentation.otherSilenced = true; }
+  if (snapshot.outcome === 'other' && !presentation.otherMusicPreserved) presentation.otherMusicPreserved = true;
 
   const closing = Math.max(0, Math.min(1, flowState.elapsed));
-  const openingDuration = 1.5;
-  const opening = snapshot.outcome === 'self' ? Math.max(0, Math.min(1, (flowState.elapsed - 1) / openingDuration)) : 0;
-  const shutterVisible = snapshot.outcome === 'other' || flowState.elapsed < 1 + openingDuration;
+  const shutterVisible = true;
+  const shutterLayer = snapshot.outcome === 'self' ? 'World' : 'ChestEndOverlay';
+  const shutterZ = snapshot.outcome === 'self' ? 20 : 70;
+  const shutterLabelZ = snapshot.outcome === 'self' ? 21 : 71;
+  const shutterColor = snapshot.outcome === 'self' ? '84;118;132' : '255;255;255';
   const stageWidth = landscape ? 1280 : 720;
   const shutterWidth = landscape ? 640 : 360;
   const shutterHeight = landscape ? 2272 : 1280;
   const shutterY = landscape ? -848 : 0;
-  const leftX = -shutterWidth + shutterWidth * closing - shutterWidth * opening;
-  const rightX = stageWidth - shutterWidth * closing + shutterWidth * opening;
-  for (const object of chestEndAll('ChestEndStageLeft')) { object.setPosition(leftX, shutterY); object.setWidth(shutterWidth); object.setHeight(shutterHeight); object.hide(!shutterVisible); }
-  for (const object of chestEndAll('ChestEndStageRight')) { object.setPosition(rightX, shutterY); object.setWidth(shutterWidth); object.setHeight(shutterHeight); object.hide(!shutterVisible); }
+  const leftX = -shutterWidth + shutterWidth * closing;
+  const rightX = stageWidth - shutterWidth * closing;
+  for (const object of chestEndAll('ChestEndStageLeft')) { object.setLayer(shutterLayer); object.setZOrder(shutterZ); object.setColor(shutterColor); object.setPosition(leftX, shutterY); object.setWidth(shutterWidth); object.setHeight(shutterHeight); object.hide(!shutterVisible); }
+  for (const object of chestEndAll('ChestEndStageRight')) { object.setLayer(shutterLayer); object.setZOrder(shutterZ); object.setColor(shutterColor); object.setPosition(rightX, shutterY); object.setWidth(shutterWidth); object.setHeight(shutterHeight); object.hide(!shutterVisible); }
+  const sandFront = chestEndOne('TrainingSandFront');
+  if (sandFront && !landscape) { sandFront.setPosition(20, 922); sandFront.setWidth(680); sandFront.setHeight(83); }
+  if (sandFront && snapshot.outcome === 'self' && !landscape) { sandFront.setLayer('World'); sandFront.setZOrder(21); sandFront.hide(false); }
+  const ownBeachDetailNames = ['TrainingDetailPlant','TrainingDetailDriftwood','TrainingDetailShellPink','TrainingDetailShellConch','TrainingDetailShellBroken','TrainingDetailStarfish','TrainingDetailStoneGray','TrainingDetailStoneGold','TrainingDetailStoneDark'];
+  if (snapshot.outcome === 'self' && !landscape) for (const name of ownBeachDetailNames) chestEndHide(name);
   const lockLabel = chestEndOne('ChestEndStageLock');
   const lootLabel = chestEndOne('ChestEndStageLoot');
-  const shutterWordsVisible = shutterVisible && phase !== 'otherWinnerSummary';
-  if (lockLabel) { lockLabel.setPosition(leftX + (landscape ? 225 : 5), landscape ? 238 : 560); lockLabel.setString(chestEndT('chest_end.lock')); lockLabel.hide(!shutterWordsVisible); }
-  if (lootLabel) { lootLabel.setPosition(rightX + (landscape ? 165 : 105), landscape ? 238 : 560); lootLabel.setString(chestEndT('chest_end.loot')); lootLabel.hide(!shutterWordsVisible); }
+  const shutterWordsVisible = false;
+  if (lockLabel) { lockLabel.setLayer(shutterLayer); lockLabel.setZOrder(shutterLabelZ); lockLabel.setPosition(leftX + (landscape ? 225 : 5), landscape ? 238 : 560); lockLabel.setString(chestEndT('chest_end.lock')); lockLabel.hide(!shutterWordsVisible); }
+  if (lootLabel) { lootLabel.setLayer(shutterLayer); lootLabel.setZOrder(shutterLabelZ); lootLabel.setPosition(rightX + (landscape ? 165 : 105), landscape ? 238 : 560); lootLabel.setString(chestEndT('chest_end.loot')); lootLabel.hide(!shutterWordsVisible); }
 
-  const openPhase = ['winnerChestOpen','winnerCelebration'].includes(phase);
-  const oopsPhase = phase === 'winnerOops';
+  const openPhase = ['winnerChestOpen','winnerCelebration','winnerReward'].includes(phase);
   let lidProgress = openPhase ? 1 : 0;
   if (phase === 'winnerChestOpen') lidProgress = Math.min(1, Math.max(0, (flowState.elapsed - 2.5) / 1.5));
-  if (oopsPhase) {
-    const closeTime = Math.max(0, Math.min(1, (flowState.elapsed - 52.1) / 1.3));
-    lidProgress = 1 - closeTime * closeTime * (3 - 2 * closeTime);
-  }
   const hingedProgress = lidProgress * lidProgress * (3 - 2 * lidProgress);
-  for (const base of chestEndAll('Chest_Base')) { base.setLayer('World'); base.setZOrder(24); }
-  const hingeTheta = hingedProgress * 105 * Math.PI / 180;
-  const hingeProjection = Math.cos(hingeTheta) - 0.8 * Math.sin(hingeTheta);
-  const openProjection = Math.cos(105 * Math.PI / 180) - 0.8 * Math.sin(105 * Math.PI / 180);
-  const rearHingeY = landscape ? 279.91 : 735.10;
-  const closedAnchorY = landscape ? 335 : 819;
+  for (const base of chestEndAll('Chest_Base')) { base.setLayer('World'); base.setZOrder(22); }
+  const closedAnchorY = landscape ? 335 : 759;
   const closedHeight = landscape ? 164 : 250;
-  const exteriorOriginRatio = 550 / 601;
-  const rearRatio = (rearHingeY - (closedAnchorY - exteriorOriginRatio * closedHeight)) / closedHeight;
-  const edgeWidth = landscape ? 341 : 520;
   for (const lid of chestEndAll('Chest_Lid')) {
     lid.setLayer('World');
-    const projectedHeight = Math.max(4, closedHeight * Math.max(0, hingeProjection));
-    const exteriorProgress = 1 - Math.max(0, hingeProjection);
-    lid.setPosition(landscape ? 640 : 360, rearHingeY + (exteriorOriginRatio - rearRatio) * projectedHeight);
-    lid.setWidth((landscape ? 420 : 640) + (edgeWidth - (landscape ? 420 : 640)) * exteriorProgress);
-    lid.setHeight(projectedHeight);
+    lid.setPosition(landscape ? 640 : 360, closedAnchorY - (landscape ? 79 : 120) * hingedProgress);
+    lid.setWidth(landscape ? 420 : 640);
+    lid.setHeight(closedHeight);
     lid.setOpacity(255);
-    lid.hide(hingeProjection < 0);
-    lid.setAngle(0); lid.setZOrder(30);
+    lid.hide(false);
+    lid.setAngle(-5 * hingedProgress); lid.setZOrder(30);
   }
-  for (const openLid of chestEndAll('ChestEndOpenLid')) {
-    const projectedHeight = Math.max(4, (landscape ? 152 : 230) * Math.min(1, Math.max(0, hingeProjection / openProjection)));
-    openLid.setLayer('World'); openLid.setZOrder(22);
-    openLid.setPosition(landscape ? 640 : 360, rearHingeY + (44 / 764) * projectedHeight);
-    openLid.setWidth(edgeWidth);
-    openLid.setHeight(projectedHeight);
-    openLid.setOpacity(255);
-    openLid.hide(hingeProjection >= 0);
-  }
+  chestEndHide('ChestEndOpenLid');
+  const chestBase = chestEndOne('Chest_Base');
   for (const treasure of chestEndAll('TrainingTreasure')) {
     treasure.setLayer('World'); treasure.setZOrder(23);
-    treasure.setPosition(landscape ? 490 : 100, landscape ? 224 : 650);
+    treasure.setPosition(landscape ? 490 : 100, landscape ? 260 : 630);
     treasure.setWidth(landscape ? 300 : 520); treasure.setHeight(landscape ? 104 : 181);
     treasure.setOpacity(255);
-    treasure.hide(hingeProjection >= 0);
+    const treasureHidden = lidProgress < 0.55;
+    treasure.hide(treasureHidden);
+    if (treasureHidden) chestEndReleaseTreasureMask(presentation);
+    else if (!chestBase || !chestEndApplyTreasureMask(presentation, treasure, chestBase)) throw new Error('L&L-060 B3 Schatzmaske konnte nicht aufgebaut werden.');
   }
   const pirate = chestEndOne('ChestEndPirate');
-  if (pirate && ['winnerChestOpen','winnerCelebration','winnerOops','winnerReward'].includes(phase)) {
+  if (pirate && ['winnerChestOpen','winnerCelebration','winnerReward'].includes(phase)) {
     const entry = Math.min(1, Math.max(0, (flowState.elapsed - 2.5) / 2.5));
-    const dance = Math.sin(flowState.elapsed * 4.2);
-    let pirateX = landscape ? 300 + entry * 120 + (phase === 'winnerCelebration' ? dance * 10 : 0) : 20 + entry * 150 + (phase === 'winnerCelebration' ? dance * 16 : 0);
-    let pirateY = landscape ? 292 + Math.abs(dance) * -6 : 555 + Math.abs(dance) * -8;
-    let pirateAngle = dance * 2.5;
-    let pirateFrame = Math.floor(flowState.elapsed * 5) % 12;
-    if (phase === 'winnerOops') {
-      const impact = Math.max(0, Math.min(1, (flowState.elapsed - 52) / 0.2));
-      const recoil = Math.max(0, Math.min(1, (flowState.elapsed - 52.2) / 0.55));
-      const startled = Math.max(0, Math.min(1, (flowState.elapsed - 52.75) / 0.2));
-      pirateX = (landscape ? 420 : 170) + impact * (landscape ? 58 : 54) - recoil * (landscape ? 105 : 92);
-      pirateY = (landscape ? 292 : 555) - impact * (landscape ? 8 : 14) + recoil * (landscape ? 18 : 28);
-      pirateAngle = -10 * impact + 22 * recoil - 8 * startled;
-      pirateFrame = impact < 1 ? 9 : recoil < 1 ? 10 : 11;
-    }
-    if (phase === 'winnerReward') { pirateX = landscape ? 373 : 132; pirateY = landscape ? 302 : 569; pirateAngle = -10; pirateFrame = 12; }
+    const pirateBaseX = landscape ? 70 : -30;
+    const pirateBaseY = landscape ? 142 : 432;
+    let pirateX = (landscape ? -405 : -535) + entry * (pirateBaseX - (landscape ? -405 : -535));
+    const pirateY = pirateBaseY;
+    const pirateAngle = 0;
+    let pirateFrame = Math.floor(Math.max(0, flowState.elapsed - 2.5) / 0.12) % 12;
+    if (phase === 'winnerReward') { pirateX = pirateBaseX; pirateFrame = 0; }
     pirate.setPosition(pirateX, pirateY); pirate.setAngle(pirateAngle);
-    pirate.setAnimationFrame(pirateFrame);
-    if (landscape) { pirate.setWidth(200); pirate.setHeight(218); }
-    else { pirate.setWidth(330); pirate.setHeight(360); }
+    pirate.pauseAnimation(); pirate.setAnimationFrame(pirateFrame);
+    if (landscape) { pirate.setWidth(402.22); pirate.setHeight(451.86); }
+    else { pirate.setWidth(532.35); pirate.setHeight(598.05); }
     pirate.hide(false);
   }
   const parrot = chestEndOne('parrot');
   if (parrot && snapshot.outcome === 'self') {
     let x = landscape ? 815 : 500, y = landscape ? 250 : 322, angle = 0;
-    if (['winnerChestOpen','winnerCelebration'].includes(phase)) {
+    if (['winnerChestOpen','winnerCelebration','winnerReward'].includes(phase)) {
       const t = Math.min(1, Math.max(0, (flowState.elapsed - 2.5) / 3));
       const startX = landscape ? 815 : 500, controlX = landscape ? 600 : 330, endX = landscape ? -110 : -190;
       const startY = landscape ? 250 : 322, controlY = landscape ? 22 : 70, endY = landscape ? 145 : 210;
       x = (1-t)*(1-t)*startX + 2*(1-t)*t*controlX + t*t*endX;
       y = (1-t)*(1-t)*startY + 2*(1-t)*t*controlY + t*t*endY + Math.sin(t * Math.PI * 5) * (landscape ? 9 : 14);
       angle = -18 * t + Math.sin(t * Math.PI * 4) * 5;
-    } else if (phase === 'winnerOops') {
-      const t = Math.min(1, Math.max(0, (flowState.elapsed - 54) / 2.4));
-      const startX = landscape ? -110 : -190, controlX = landscape ? 600 : 300, endX = landscape ? 815 : 500;
-      const startY = landscape ? 145 : 210, controlY = landscape ? 24 : 40, endY = landscape ? 250 : 505;
-      x = (1-t)*(1-t)*startX + 2*(1-t)*t*controlX + t*t*endX;
-      y = (1-t)*(1-t)*startY + 2*(1-t)*t*controlY + t*t*endY + Math.sin(t * Math.PI * 4) * (landscape ? 8 : 12);
-      angle = -18 * (1-t);
     }
-    if (phase === 'winnerReward') { x = landscape ? 815 : 500; y = landscape ? 250 : 505; angle = 2; }
     parrot.setWidth(landscape ? 100 : 170); parrot.setHeight(landscape ? 155 : 264);
-    parrot.setPosition(x, y); parrot.setAngle(angle); parrot.hide(false);
-    parrot.setAnimationFrame(Math.floor(flowState.elapsed * 10) % 6);
+    parrot.setPosition(x, y); parrot.setAngle(angle); parrot.hide(['winnerChestOpen','winnerCelebration','winnerReward'].includes(phase) && flowState.elapsed >= 5.45);
+    const flightActive = ['winnerChestOpen','winnerCelebration','winnerReward'].includes(phase) && flowState.elapsed < 5.45;
+    const flightFrame = Math.floor(Math.max(0, flowState.elapsed - 2.5) * 8) % 2 === 0 ? 4 : 0;
+    parrot.setAnimationFrame(flightActive ? flightFrame : Math.floor(flowState.elapsed * 10) % 6);
   }
   if (parrot && snapshot.outcome === 'other' && phase === 'otherWinnerSummary') parrot.hide();
 
-  const showSummary = ['winnerReward','otherWinnerSummary'].includes(phase);
+  const showSummary = snapshot.outcome === 'self' ? ['winnerCelebration','winnerReward'].includes(phase) : phase === 'otherWinnerSummary';
   if (showSummary) {
-    for (const name of ['ChestEndTitlePlate','ChestEndStatsBar','ChestEndTitle','ChestEndStatsHeading','ChestEndSpentHeading','ChestEndSpentCookieIcon','ChestEndSpentLockpickIcon','ChestEndSpentCookies','ChestEndSpentLockpicks','ChestEndContinueButton','ChestEndContinueLabel']) chestEndHide(name, false);
-    const continueButton = chestEndOne('ChestEndContinueButton'); if (continueButton) continueButton.setZOrder(200);
-    const continueText = chestEndOne('ChestEndContinueLabel'); if (continueText) continueText.setZOrder(201);
+    for (const name of ['ChestEndTitlePlate','ChestEndStatsBar','ChestEndTitle','ChestEndStatsHeading','ChestEndBoosterIcon','ChestEndSpentHeading','ChestEndSpentCookieIcon','ChestEndSpentLockpickIcon','ChestEndSpentCookies','ChestEndSpentLockpicks','ChestEndSpentBooster']) chestEndHide(name, false);
+    const backButton = chestEndOne('bt_Back'); if (backButton) { backButton.setLayer('ChestEndOverlay'); backButton.setPosition(landscape ? 1168 : 604, landscape ? 472 : 1164); backButton.setWidth(landscape ? 88 : 92); backButton.setHeight(landscape ? 88 : 92); backButton.setZOrder(200); backButton.hide(false); }
     const selfWinner = snapshot.outcome === 'self';
+    chestEndHide('ChestEndHintPlate', selfWinner);
     if (landscape) {
-      chestEndPlace('ChestEndTitlePlate', 25, 20, selfWinner ? 510 : 565, 105);
-      chestEndPlace('ChestEndTitle', 45, selfWinner ? 38 : 49, selfWinner ? 470 : 525, 44);
-      chestEndPlace('ChestEndSubtitle', 65, 82, 430, 28);
-      chestEndPlace('ChestEndStatsBar', selfWinner ? 745 : 690, 20, selfWinner ? 510 : 565, 185);
-      chestEndPlace('ChestEndStatsHeading', selfWinner ? 785 : 735, 42, selfWinner ? 430 : 475, 34);
-      chestEndPlace('ChestEndContinueButton', 500, 482, 280, 72);
-      chestEndPlace('ChestEndContinueLabel', 515, 518, 250, 44);
+      chestEndPlace('ChestEndTitlePlate', 25, 12, selfWinner ? 510 : 565, selfWinner ? 165 : 183);
+      if (!selfWinner) chestEndPlace('ChestEndHintPlate', 25, 205, 565, 203);
+      chestEndPlace('ChestEndTitle', selfWinner ? 70 : 75, selfWinner ? 52 : 48, selfWinner ? 420 : 465, selfWinner ? 46 : 100);
+      chestEndPlace('ChestEndSubtitle', selfWinner ? 90 : 80, selfWinner ? 106 : 244, selfWinner ? 380 : 455, selfWinner ? 32 : 120);
+      chestEndPlace('ChestEndStatsBar', selfWinner ? 655 : 690, selfWinner ? 12 : 20, selfWinner ? 600 : 565, selfWinner ? 227 : 190);
+      chestEndPlace('ChestEndStatsHeading', selfWinner ? 690 : 730, selfWinner ? 102 : 35, selfWinner ? 120 : 485, 36);
+    } else {
+      chestEndPlace('ChestEndTitlePlate', selfWinner ? 60 : 80, 0, selfWinner ? 600 : 560, selfWinner ? 194 : 181);
+      if (!selfWinner) chestEndPlace('ChestEndHintPlate', 40, 824, 640, 230);
+      chestEndPlace('ChestEndStatsBar', 40, selfWinner ? 165 : 190, 640, selfWinner ? 242 : 190);
+      chestEndPlace('ChestEndTitle', selfWinner ? 90 : 100, selfWinner ? 42 : 24, selfWinner ? 540 : 520, selfWinner ? 58 : 105);
+      chestEndPlace('ChestEndSubtitle', 100, selfWinner ? 112 : 870, 520, selfWinner ? 38 : 130);
+      chestEndPlace('ChestEndStatsHeading', selfWinner ? 70 : 90, selfWinner ? 272 : 213, selfWinner ? 130 : 540, 42);
     }
     const rawName = typeof snapshot.winner.displayName === 'string' ? snapshot.winner.displayName.trim() : '';
     const safeName = rawName.length > 0 && rawName.length <= 22 && !/[\u0000-\u001f]/.test(rawName) ? rawName : '';
-    chestEndText('ChestEndTitle', selfWinner ? chestEndT('chest_end.winner_title') : safeName ? chestEndT('chest_end.other_named', { player: safeName }) : chestEndT('chest_end.other_fallback'));
+    const otherTitle = safeName ? chestEndT('chest_end.other_named', { player: safeName }) : chestEndT('chest_end.other_fallback').replace(' SPIELER HAT ', ' SPIELER\nHAT ').replace(' PLAYER OPENED ', ' PLAYER\nOPENED ');
+    chestEndText('ChestEndTitle', selfWinner ? chestEndT('chest_end.winner_title') : otherTitle);
     const title = chestEndOne('ChestEndTitle');
-    if (title) title.setCharacterSize(landscape ? selfWinner ? 30 : 24 : selfWinner ? 36 : 27);
-    const statsHeading = chestEndOne('ChestEndStatsHeading'); if (statsHeading) statsHeading.setCharacterSize(landscape ? 22 : 26);
-    const continueLabel = chestEndOne('ChestEndContinueLabel'); if (continueLabel) continueLabel.setCharacterSize(landscape ? 21 : 24);
-    chestEndHide('ChestEndSubtitle', !selfWinner);
-    if (selfWinner) { chestEndHide('ChestEndSubtitle', false); chestEndText('ChestEndSubtitle', chestEndT('chest_end.winner_subtitle')); }
-    chestEndText('ChestEndStatsHeading', selfWinner ? chestEndT('chest_end.loot_heading') : chestEndT('chest_end.your_spent_heading'));
+    if (title) { title.setWrapping(!selfWinner); if (!selfWinner) title.setWrappingWidth(landscape ? 429 : 554); title.setCharacterSize(landscape ? selfWinner ? 30 : 22 : selfWinner ? 36 : 26); title.setLineHeight(selfWinner ? 43 : landscape ? 26 : 31); }
+    const statsHeading = chestEndOne('ChestEndStatsHeading'); if (statsHeading) statsHeading.setCharacterSize(selfWinner ? (landscape ? 20 : 22) : (landscape ? 22 : 26));
+    chestEndHide('ChestEndSubtitle', false);
+    const subtitle = chestEndOne('ChestEndSubtitle');
+    if (selfWinner) {
+      chestEndText('ChestEndSubtitle', chestEndT('chest_end.winner_subtitle'));
+      if (subtitle) { subtitle.setWrapping(false); subtitle.setCharacterSize(landscape ? 22 : 22); subtitle.setLineHeight(26); }
+    } else {
+      chestEndText('ChestEndSubtitle', chestEndT('chest_end.other_solution_hint'));
+      if (subtitle) { subtitle.setWrapping(true); subtitle.setWrappingWidth(landscape ? 439 : 504); subtitle.setCharacterSize(landscape ? 19 : 24); subtitle.setLineHeight(landscape ? 22 : 28); }
+    }
+    chestEndText('ChestEndStatsHeading', selfWinner ? chestEndT('chest_end.spent_heading') : chestEndT('chest_end.your_spent_heading'));
+    const titlePlate = chestEndOne('ChestEndTitlePlate'), hintPlate = chestEndOne('ChestEndHintPlate'), statsBar = chestEndOne('ChestEndStatsBar');
+    if (selfWinner) {
+      if (title && titlePlate) title.setCenterPositionInScene(titlePlate.getCenterXInScene(), titlePlate.getY() + titlePlate.getHeight() * 0.38);
+      if (subtitle && titlePlate) subtitle.setCenterPositionInScene(titlePlate.getCenterXInScene(), titlePlate.getY() + titlePlate.getHeight() * 0.69);
+    } else {
+      if (title && titlePlate) title.setCenterPositionInScene(titlePlate.getCenterXInScene(), titlePlate.getCenterYInScene());
+      if (subtitle && hintPlate) subtitle.setCenterPositionInScene(hintPlate.getCenterXInScene(), hintPlate.getCenterYInScene());
+      if (statsHeading && statsBar) statsHeading.setCenterPositionInScene(statsBar.getCenterXInScene(), landscape ? 48 : 234);
+    }
     if (selfWinner && snapshot.reward) {
-      for (const name of ['ChestEndRewardCookieIcon','ChestEndRewardLockpickIcon','ChestEndRewardCookies','ChestEndRewardLockpicks']) chestEndHide(name, false);
-      for (const icon of chestEndAll('ChestEndRewardCookieIcon')) { icon.setPosition(landscape ? 800 : 135, landscape ? 76 : 274); icon.setWidth(landscape ? 50 : 70); icon.setHeight(landscape ? 50 : 70); }
-      for (const icon of chestEndAll('ChestEndRewardLockpickIcon')) { icon.setPosition(landscape ? 990 : 375, landscape ? 60 : 256); icon.setWidth(landscape ? 82 : 88); icon.setHeight(landscape ? 82 : 88); icon.setAngle(0); }
-      const rewardCookies = chestEndOne('ChestEndRewardCookies'); if (rewardCookies) { rewardCookies.setPosition(landscape ? 855 : 205, landscape ? 80 : 283); rewardCookies.setCharacterSize(landscape ? 28 : 32); }
-      const rewardLockpicks = chestEndOne('ChestEndRewardLockpicks'); if (rewardLockpicks) { rewardLockpicks.setPosition(landscape ? 1075 : 455, landscape ? 80 : 283); rewardLockpicks.setCharacterSize(landscape ? 28 : 32); }
-      for (const icon of chestEndAll('ChestEndSpentCookieIcon')) { icon.setPosition(landscape ? 890 : 270, landscape ? 139 : 340); icon.setWidth(landscape ? 34 : 44); icon.setHeight(landscape ? 34 : 44); }
-      for (const icon of chestEndAll('ChestEndSpentLockpickIcon')) { icon.setPosition(landscape ? 1018 : 400, landscape ? 126 : 327); icon.setWidth(landscape ? 58 : 64); icon.setHeight(landscape ? 58 : 64); icon.setAngle(0); }
-      const spentHeading = chestEndOne('ChestEndSpentHeading'); if (spentHeading) { spentHeading.setPosition(landscape ? 780 : 88, landscape ? 145 : 348); spentHeading.setCharacterSize(landscape ? 15 : 18); }
-      const spentCookies = chestEndOne('ChestEndSpentCookies'); if (spentCookies) { spentCookies.setPosition(landscape ? 928 : 315, landscape ? 137 : 342); spentCookies.setCharacterSize(landscape ? 19 : 22); }
-      const spentLockpicks = chestEndOne('ChestEndSpentLockpicks'); if (spentLockpicks) { spentLockpicks.setPosition(landscape ? 1080 : 468, landscape ? 137 : 342); spentLockpicks.setCharacterSize(landscape ? 19 : 22); }
+      for (const name of ['ChestEndRewardCookieIcon','ChestEndRewardLockpickIcon','ChestEndRewardCookies','ChestEndRewardLockpicks','ChestEndRewardBooster']) chestEndHide(name, false);
+      chestEndHide('ChestEndSpentCookieIcon'); chestEndHide('ChestEndSpentLockpickIcon');
+      for (const icon of chestEndAll('ChestEndRewardCookieIcon')) { icon.setPosition(landscape ? 826 : 236, landscape ? 43 : 210); icon.setWidth(48); icon.setHeight(48); }
+      for (const icon of chestEndAll('ChestEndRewardLockpickIcon')) { icon.setPosition(landscape ? 948 : 328, landscape ? 34 : 202); icon.setWidth(64); icon.setHeight(64); icon.setAngle(0); }
+      chestEndPlace('ChestEndBoosterIcon', landscape ? 1108 : 488, landscape ? 35 : 203, 64, 64);
+      chestEndPlace('ChestEndRewardCookies', landscape ? 795 : 195, landscape ? 158 : 337, 90, 44);
+      chestEndPlace('ChestEndRewardLockpicks', landscape ? 935 : 315, landscape ? 158 : 337, 90, 44);
+      chestEndPlace('ChestEndRewardBooster', landscape ? 1095 : 475, landscape ? 158 : 337, 90, 44);
+      chestEndPlace('ChestEndSpentHeading', landscape ? 690 : 70, landscape ? 160 : 337, landscape ? 120 : 130, 38);
+      chestEndPlace('ChestEndSpentCookies', landscape ? 803 : 215, landscape ? 103 : 275, 90, 40);
+      chestEndPlace('ChestEndSpentLockpicks', landscape ? 943 : 325, landscape ? 103 : 275, 90, 40);
+      chestEndPlace('ChestEndSpentBooster', landscape ? 1103 : 485, landscape ? 103 : 275, 90, 40);
+      for (const name of ['ChestEndRewardCookies','ChestEndRewardLockpicks','ChestEndRewardBooster']) { const value = chestEndOne(name); if (value) value.setCharacterSize(landscape ? 26 : 30); }
+      for (const name of ['ChestEndSpentCookies','ChestEndSpentLockpicks','ChestEndSpentBooster']) { const value = chestEndOne(name); if (value) value.setCharacterSize(landscape ? 20 : 22); }
+      const spentHeading = chestEndOne('ChestEndSpentHeading'); if (spentHeading) spentHeading.setCharacterSize(landscape ? 26 : 30);
       chestEndText('ChestEndRewardCookies', '+' + snapshot.reward.cookies);
       chestEndText('ChestEndRewardLockpicks', '+' + snapshot.reward.lockpicks);
-      chestEndText('ChestEndSpentHeading', chestEndT('chest_end.spent_heading'));
+      chestEndText('ChestEndRewardBooster', '—');
+      chestEndText('ChestEndSpentHeading', chestEndT('chest_end.loot_heading'));
     } else {
-      for (const name of ['ChestEndRewardCookieIcon','ChestEndRewardLockpickIcon','ChestEndRewardCookies','ChestEndRewardLockpicks']) chestEndHide(name);
+      for (const name of ['ChestEndRewardCookieIcon','ChestEndRewardLockpickIcon','ChestEndRewardCookies','ChestEndRewardLockpicks','ChestEndRewardBooster']) chestEndHide(name);
       chestEndText('ChestEndSpentHeading', '');
-      for (const icon of chestEndAll('ChestEndSpentCookieIcon')) { icon.setPosition(landscape ? 820 : 165, landscape ? 92 : 288); icon.setWidth(landscape ? 56 : 70); icon.setHeight(landscape ? 56 : 70); }
-      for (const icon of chestEndAll('ChestEndSpentLockpickIcon')) { icon.setPosition(landscape ? 1012 : 400, landscape ? 84 : 278); icon.setWidth(landscape ? 72 : 72); icon.setHeight(landscape ? 72 : 72); icon.setAngle(0); }
-      const spentCookies = chestEndOne('ChestEndSpentCookies'); if (spentCookies) { spentCookies.setPosition(landscape ? 882 : 235, landscape ? 100 : 296); spentCookies.setCharacterSize(landscape ? 24 : 22); }
-      const spentLockpicks = chestEndOne('ChestEndSpentLockpicks'); if (spentLockpicks) { spentLockpicks.setPosition(landscape ? 1090 : 480, landscape ? 100 : 296); spentLockpicks.setCharacterSize(landscape ? 24 : 22); }
+      for (const icon of chestEndAll('ChestEndSpentCookieIcon')) { icon.setPosition(landscape ? 807 : 212, landscape ? 82 : 256); icon.setWidth(56); icon.setHeight(56); }
+      for (const icon of chestEndAll('ChestEndSpentLockpickIcon')) { icon.setPosition(landscape ? 949 : 324, landscape ? 72 : 246); icon.setWidth(72); icon.setHeight(72); icon.setAngle(0); }
+      chestEndPlace('ChestEndBoosterIcon', landscape ? 1103 : 488, landscape ? 73 : 247, 64, 64);
+      chestEndPlace('ChestEndSpentCookies', landscape ? 790 : 195, landscape ? 148 : 330, 90, 44);
+      chestEndPlace('ChestEndSpentLockpicks', landscape ? 940 : 315, landscape ? 148 : 330, 90, 44);
+      chestEndPlace('ChestEndSpentBooster', landscape ? 1090 : 475, landscape ? 148 : 330, 90, 44);
+      for (const name of ['ChestEndSpentCookies','ChestEndSpentLockpicks','ChestEndSpentBooster']) { const value = chestEndOne(name); if (value) value.setCharacterSize(landscape ? 24 : 24); }
     }
     chestEndText('ChestEndSpentCookies', String(snapshot.consumption.cookies));
     chestEndText('ChestEndSpentLockpicks', String(snapshot.consumption.lockpicks));
+    chestEndText('ChestEndSpentBooster', '—');
+    if (selfWinner && snapshot.reward) {
+      const alignRightGlyphEdge = (upperName, lowerName) => {
+        const upper = chestEndOne(upperName), lower = chestEndOne(lowerName);
+        const upperBounds = upper?.getRendererObject?.()?.getBounds?.(), lowerBounds = lower?.getRendererObject?.()?.getBounds?.();
+        if (!upper || !upperBounds || !lowerBounds) return;
+        const delta = lowerBounds.x + lowerBounds.width - upperBounds.x - upperBounds.width;
+        if (Number.isFinite(delta)) upper.setX(upper.getX() + delta);
+      };
+      alignRightGlyphEdge('ChestEndSpentCookies', 'ChestEndRewardCookies');
+      alignRightGlyphEdge('ChestEndSpentLockpicks', 'ChestEndRewardLockpicks');
+    }
     const rankVisible = typeof snapshot.winner.rank === 'string' && snapshot.winner.rank.trim().length > 0;
     const xpVisible = selfWinner && Number.isSafeInteger(snapshot.winner.xpEarned) && snapshot.winner.xpEarned >= 0;
     chestEndHide('ChestEndRank', !rankVisible); chestEndHide('ChestEndXp', !xpVisible);
     if (rankVisible) chestEndText('ChestEndRank', chestEndT('chest_end.rank', { rank: snapshot.winner.rank.trim() }));
     if (xpVisible) chestEndText('ChestEndXp', chestEndT('chest_end.xp', { xp: snapshot.winner.xpEarned }));
-    chestEndText('ChestEndContinueLabel', chestEndT('chest_end.continue'));
   }
-  const skipVisible = presentation.flow.canSkip();
+  const skipVisible = false;
   if (landscape) {
     chestEndPlace('ChestEndSkipButton', 25, 478, 300, 72);
   } else {
@@ -5528,14 +5651,7 @@ if (presentation) {
   }
   const released = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, 'Left');
   const cursorOn = object => object && object.cursorOnObject();
-  if (skipVisible && released && cursorOn(chestEndOne('ChestEndSkipButton'))) {
-    if (presentation.flow.skip(now) && music) music.stopVictory(runtimeScene);
-  }
-  if (showSummary && released && cursorOn(chestEndOne('ChestEndContinueButton')) && presentation.flow.complete()) {
-    if (music) music.stopVictory(runtimeScene);
-    presentation.restoreResolution();
-    gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, 'MainMenu', false);
-  }
+  if (showSummary) { chestEndHide('ChestEndContinueButton'); chestEndHide('ChestEndContinueLabel'); }
 }
 };
 gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
@@ -5559,7 +5675,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
-gdjs.TrainingSceneCode.userFunc0xb39d70 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb5d548 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -5580,11 +5696,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xb081b8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb51460 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xb03ef8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xb4b068 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -5671,7 +5787,7 @@ gdjs.TrainingSceneCode.eventsList21 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb084d8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc9efa8(runtimeScene);
 
 }
 
@@ -5679,7 +5795,7 @@ gdjs.TrainingSceneCode.userFunc0xb084d8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa18440(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb51780(runtimeScene);
 
 }
 
@@ -5687,7 +5803,7 @@ gdjs.TrainingSceneCode.userFunc0xa18440(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa1d950(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc9f020(runtimeScene);
 
 }
 
@@ -5695,7 +5811,7 @@ gdjs.TrainingSceneCode.userFunc0xa1d950(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa1d5b8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc9f1c8(runtimeScene);
 
 }
 
@@ -5703,7 +5819,15 @@ gdjs.TrainingSceneCode.userFunc0xa1d5b8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc61ad8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa23bf0(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.TrainingSceneCode.userFunc0xa22620(runtimeScene);
 
 }
 
@@ -6595,7 +6719,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc8f700(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe02160(runtimeScene);
 
 }
 
@@ -7177,7 +7301,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0x8aea70(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb4add0(runtimeScene);
 
 }
 
@@ -7185,7 +7309,7 @@ gdjs.TrainingSceneCode.userFunc0x8aea70(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbbae50(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xce2b30(runtimeScene);
 
 }
 
@@ -7193,7 +7317,7 @@ gdjs.TrainingSceneCode.userFunc0xbbae50(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xbbad78(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb4af10(runtimeScene);
 
 }
 
@@ -7268,7 +7392,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb39d70(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb5d548(runtimeScene);
 
 }
 
@@ -7276,7 +7400,7 @@ gdjs.TrainingSceneCode.userFunc0xb39d70(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb081b8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb51460(runtimeScene);
 
 }
 
@@ -7284,7 +7408,7 @@ gdjs.TrainingSceneCode.userFunc0xb081b8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb03ef8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xb4b068(runtimeScene);
 
 }
 
@@ -7468,6 +7592,9 @@ gdjs.TrainingSceneCode.GDChestEndOpenLidObjects3.length = 0;
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects1.length = 0;
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects2.length = 0;
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects3.length = 0;
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects1.length = 0;
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects2.length = 0;
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects3.length = 0;
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects1.length = 0;
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects2.length = 0;
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects3.length = 0;
@@ -7534,6 +7661,15 @@ gdjs.TrainingSceneCode.GDChestEndSkipLabelObjects3.length = 0;
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects1.length = 0;
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects2.length = 0;
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects3.length = 0;
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects1.length = 0;
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects2.length = 0;
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects3.length = 0;
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects1.length = 0;
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects2.length = 0;
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects3.length = 0;
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects1.length = 0;
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects2.length = 0;
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects3.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3.length = 0;
@@ -7728,6 +7864,9 @@ gdjs.TrainingSceneCode.GDChestEndOpenLidObjects3.length = 0;
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects1.length = 0;
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects2.length = 0;
 gdjs.TrainingSceneCode.GDChestEndTitlePlateObjects3.length = 0;
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects1.length = 0;
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects2.length = 0;
+gdjs.TrainingSceneCode.GDChestEndHintPlateObjects3.length = 0;
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects1.length = 0;
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects2.length = 0;
 gdjs.TrainingSceneCode.GDChestEndStatsBarObjects3.length = 0;
@@ -7794,6 +7933,15 @@ gdjs.TrainingSceneCode.GDChestEndSkipLabelObjects3.length = 0;
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects1.length = 0;
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects2.length = 0;
 gdjs.TrainingSceneCode.GDChestEndContinueLabelObjects3.length = 0;
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects1.length = 0;
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects2.length = 0;
+gdjs.TrainingSceneCode.GDChestEndRewardBoosterObjects3.length = 0;
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects1.length = 0;
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects2.length = 0;
+gdjs.TrainingSceneCode.GDChestEndSpentBoosterObjects3.length = 0;
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects1.length = 0;
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects2.length = 0;
+gdjs.TrainingSceneCode.GDChestEndBoosterIconObjects3.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects2.length = 0;
 gdjs.TrainingSceneCode.GDResourceHudCookieFrameObjects3.length = 0;

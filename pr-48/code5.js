@@ -63,7 +63,7 @@ gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.ShopSzeneCode.userFunc0xb084c0 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xdb1550 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -430,7 +430,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.ShopSzeneCode.userFunc0xcef8c8 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xf44b88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -566,11 +566,12 @@ if (!musicGame[musicControllerKey]) {
     if (state.victoryActive && state.victoryState?.scene === scene) return false;
     stopCurrentTrack(scene);
     state.victoryActive = true;
-    state.victoryState = { scene, started: false, completed: false };
+    state.victoryState = { scene, started: false, completed: false, lastStartAttempt: Date.now(), attempts: 0 };
     state.currentTrack = { name: 'music_victory_sequence', style: 'Victory', category: 'victory' };
     state.currentCategory = 'victory';
     if (!state.musicEnabled) return false;
     gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    state.victoryState.attempts += 1;
     gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
     return true;
   };
@@ -593,6 +594,11 @@ if (!musicGame[musicControllerKey]) {
     const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
     if (playing) state.victoryState.started = true;
     else if (state.victoryState.started) state.victoryState.completed = true;
+    else if (!state.victoryState.completed && Date.now() - state.victoryState.lastStartAttempt >= 1500) {
+      state.victoryState.lastStartAttempt = Date.now();
+      state.victoryState.attempts += 1;
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
+    }
   };
   const updateRotation = scene => {
     if (!state.musicEnabled || !state.currentTrack || state.error) return;
@@ -651,7 +657,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.ShopSzeneCode.userFunc0xf31508 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xce5d00 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -694,7 +700,7 @@ gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Obj
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
-gdjs.ShopSzeneCode.userFunc0xb4d518 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xdb0c30 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
 const shopVariables = runtimeScene.getVariables();
@@ -861,7 +867,7 @@ if (shopState && shopAction) {
 };
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
-gdjs.ShopSzeneCode.userFunc0xc8f380 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xdb1338 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Shop-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -874,7 +880,7 @@ if (!runtimeScene.__lockLootL047Shop || runtimeScene.__lockLootL047Shop !== i18n
   const state = runtimeScene.__lockLootShopScene; if (state && typeof shopRender === "function") shopRender(state);
 }
 };
-gdjs.ShopSzeneCode.userFunc0xcc9628 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xcf59d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -961,7 +967,7 @@ gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xb084c0(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xdb1550(runtimeScene);
 
 }
 
@@ -969,7 +975,7 @@ gdjs.ShopSzeneCode.userFunc0xb084c0(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xcef8c8(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xf44b88(runtimeScene);
 
 }
 
@@ -977,7 +983,7 @@ gdjs.ShopSzeneCode.userFunc0xcef8c8(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xf31508(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xce5d00(runtimeScene);
 
 }
 
@@ -1061,7 +1067,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xb4d518(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xdb0c30(runtimeScene);
 
 }
 
@@ -1107,7 +1113,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xc8f380(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xdb1338(runtimeScene);
 
 }
 
@@ -1115,7 +1121,7 @@ gdjs.ShopSzeneCode.userFunc0xc8f380(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xcc9628(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xcf59d0(runtimeScene);
 
 }
 
