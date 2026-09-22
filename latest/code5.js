@@ -63,7 +63,7 @@ gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.ShopSzeneCode.userFunc0xce0d00 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xdb1550 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -430,7 +430,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.ShopSzeneCode.userFunc0x9fcb68 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xf44b88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -477,6 +477,8 @@ if (!musicGame[musicControllerKey]) {
     lastStartAttempt: 0,
     activeScene: null,
     solutionState: null,
+    victoryState: null,
+    victoryActive: false,
     error: ''
   };
   const persistEnabled = () => {
@@ -560,6 +562,44 @@ if (!musicGame[musicControllerKey]) {
       gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
     }
   };
+  const startVictory = scene => {
+    if (state.victoryActive && state.victoryState?.scene === scene) return false;
+    stopCurrentTrack(scene);
+    state.victoryActive = true;
+    state.victoryState = { scene, started: false, completed: false, lastStartAttempt: Date.now(), attempts: 0 };
+    state.currentTrack = { name: 'music_victory_sequence', style: 'Victory', category: 'victory' };
+    state.currentCategory = 'victory';
+    if (!state.musicEnabled) return false;
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    state.victoryState.attempts += 1;
+    gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
+    return true;
+  };
+  const stopVictory = scene => {
+    if (state.victoryActive || state.currentCategory === 'victory') {
+      gdjs.evtTools.sound.stopMusicOnChannel(scene, musicChannel);
+      state.currentTrack = null;
+      state.currentCategory = '';
+    }
+    state.victoryActive = false;
+    state.victoryState = null;
+  };
+  const silenceForChestEnd = scene => {
+    stopCurrentTrack(scene);
+    state.victoryActive = false;
+    state.victoryState = null;
+  };
+  const updateVictory = scene => {
+    if (!state.victoryActive || !state.victoryState || state.victoryState.scene !== scene || !state.musicEnabled) return;
+    const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (playing) state.victoryState.started = true;
+    else if (state.victoryState.started) state.victoryState.completed = true;
+    else if (!state.victoryState.completed && Date.now() - state.victoryState.lastStartAttempt >= 1500) {
+      state.victoryState.lastStartAttempt = Date.now();
+      state.victoryState.attempts += 1;
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
+    }
+  };
   const updateRotation = scene => {
     if (!state.musicEnabled || !state.currentTrack || state.error) return;
     const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
@@ -572,6 +612,7 @@ if (!musicGame[musicControllerKey]) {
   };
   const updateForScene = scene => {
     const sceneName = scene.getName();
+    if (state.victoryActive && state.victoryState?.scene !== scene) stopVictory(scene);
     if (state.activeScene !== scene) {
       state.activeScene = scene;
       if (!state.sessionStarted) {
@@ -588,7 +629,8 @@ if (!musicGame[musicControllerKey]) {
     }
     gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, state.musicEnabled ? (sceneName === 'SolutionScene' ? 75 : 70) : 0);
     if (!state.musicEnabled) return;
-    if (sceneName === 'SolutionScene') updateSolution(scene);
+    if (state.victoryActive) updateVictory(scene);
+    else if (sceneName === 'SolutionScene') updateSolution(scene);
     else updateRotation(scene);
   };
   const setEnabled = (scene, enabled) => {
@@ -611,11 +653,11 @@ if (!musicGame[musicControllerKey]) {
     else if (sceneName === 'SolutionScene') enterSolution(scene);
     return true;
   };
-  musicGame[musicControllerKey] = { state, setEnabled, updateForScene };
+  musicGame[musicControllerKey] = { state, setEnabled, updateForScene, startVictory, stopVictory, silenceForChestEnd };
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.ShopSzeneCode.userFunc0xcd1c88 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xce5d00 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -658,7 +700,7 @@ gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Obj
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
-gdjs.ShopSzeneCode.userFunc0xc17c20 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xdb0c30 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
 const shopVariables = runtimeScene.getVariables();
@@ -825,7 +867,7 @@ if (shopState && shopAction) {
 };
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
 gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
-gdjs.ShopSzeneCode.userFunc0xc9fcf8 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xdb1338 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Shop-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -838,7 +880,7 @@ if (!runtimeScene.__lockLootL047Shop || runtimeScene.__lockLootL047Shop !== i18n
   const state = runtimeScene.__lockLootShopScene; if (state && typeof shopRender === "function") shopRender(state);
 }
 };
-gdjs.ShopSzeneCode.userFunc0x9fcc58 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xcf59d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -925,7 +967,7 @@ gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xce0d00(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xdb1550(runtimeScene);
 
 }
 
@@ -933,7 +975,7 @@ gdjs.ShopSzeneCode.userFunc0xce0d00(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0x9fcb68(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xf44b88(runtimeScene);
 
 }
 
@@ -941,7 +983,7 @@ gdjs.ShopSzeneCode.userFunc0x9fcb68(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xcd1c88(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xce5d00(runtimeScene);
 
 }
 
@@ -1025,7 +1067,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xc17c20(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xdb0c30(runtimeScene);
 
 }
 
@@ -1071,7 +1113,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.ShopSzeneCode.userFunc0xc9fcf8(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xdb1338(runtimeScene);
 
 }
 
@@ -1079,7 +1121,7 @@ gdjs.ShopSzeneCode.userFunc0xc9fcf8(runtimeScene);
 {
 
 
-gdjs.ShopSzeneCode.userFunc0x9fcc58(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xcf59d0(runtimeScene);
 
 }
 

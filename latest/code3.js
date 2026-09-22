@@ -101,7 +101,7 @@ gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xdb9e50 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xde0b78 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -468,7 +468,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xe53310 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xf44b88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -515,6 +515,8 @@ if (!musicGame[musicControllerKey]) {
     lastStartAttempt: 0,
     activeScene: null,
     solutionState: null,
+    victoryState: null,
+    victoryActive: false,
     error: ''
   };
   const persistEnabled = () => {
@@ -598,6 +600,44 @@ if (!musicGame[musicControllerKey]) {
       gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
     }
   };
+  const startVictory = scene => {
+    if (state.victoryActive && state.victoryState?.scene === scene) return false;
+    stopCurrentTrack(scene);
+    state.victoryActive = true;
+    state.victoryState = { scene, started: false, completed: false, lastStartAttempt: Date.now(), attempts: 0 };
+    state.currentTrack = { name: 'music_victory_sequence', style: 'Victory', category: 'victory' };
+    state.currentCategory = 'victory';
+    if (!state.musicEnabled) return false;
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    state.victoryState.attempts += 1;
+    gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
+    return true;
+  };
+  const stopVictory = scene => {
+    if (state.victoryActive || state.currentCategory === 'victory') {
+      gdjs.evtTools.sound.stopMusicOnChannel(scene, musicChannel);
+      state.currentTrack = null;
+      state.currentCategory = '';
+    }
+    state.victoryActive = false;
+    state.victoryState = null;
+  };
+  const silenceForChestEnd = scene => {
+    stopCurrentTrack(scene);
+    state.victoryActive = false;
+    state.victoryState = null;
+  };
+  const updateVictory = scene => {
+    if (!state.victoryActive || !state.victoryState || state.victoryState.scene !== scene || !state.musicEnabled) return;
+    const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (playing) state.victoryState.started = true;
+    else if (state.victoryState.started) state.victoryState.completed = true;
+    else if (!state.victoryState.completed && Date.now() - state.victoryState.lastStartAttempt >= 1500) {
+      state.victoryState.lastStartAttempt = Date.now();
+      state.victoryState.attempts += 1;
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
+    }
+  };
   const updateRotation = scene => {
     if (!state.musicEnabled || !state.currentTrack || state.error) return;
     const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
@@ -610,6 +650,7 @@ if (!musicGame[musicControllerKey]) {
   };
   const updateForScene = scene => {
     const sceneName = scene.getName();
+    if (state.victoryActive && state.victoryState?.scene !== scene) stopVictory(scene);
     if (state.activeScene !== scene) {
       state.activeScene = scene;
       if (!state.sessionStarted) {
@@ -626,7 +667,8 @@ if (!musicGame[musicControllerKey]) {
     }
     gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, state.musicEnabled ? (sceneName === 'SolutionScene' ? 75 : 70) : 0);
     if (!state.musicEnabled) return;
-    if (sceneName === 'SolutionScene') updateSolution(scene);
+    if (state.victoryActive) updateVictory(scene);
+    else if (sceneName === 'SolutionScene') updateSolution(scene);
     else updateRotation(scene);
   };
   const setEnabled = (scene, enabled) => {
@@ -649,11 +691,11 @@ if (!musicGame[musicControllerKey]) {
     else if (sceneName === 'SolutionScene') enterSolution(scene);
     return true;
   };
-  musicGame[musicControllerKey] = { state, setEnabled, updateForScene };
+  musicGame[musicControllerKey] = { state, setEnabled, updateForScene, startVictory, stopVictory, silenceForChestEnd };
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xcd1c88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xcf59d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -698,7 +740,7 @@ gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDC
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarBackButtonObjects1Objects = Hashtable.newFrom({"CalendarBackButton": gdjs.TreasureCalendarSceneCode.GDCalendarBackButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarParrotObjects1Objects = Hashtable.newFrom({"CalendarParrot": gdjs.TreasureCalendarSceneCode.GDCalendarParrotObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarShopButtonObjects1Objects = Hashtable.newFrom({"CalendarShopButton": gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1});
-gdjs.TreasureCalendarSceneCode.userFunc0xcd03a0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xcac468 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-043: Kalenderbootstrap, clientsichere Konfigurationsanzeige und serverautoritiver Claim.
 // Ausschließlich lokale Firebase-Emulatoren; keine Zahlung, kein Shop und keine lokale Gutschrift.
@@ -1071,7 +1113,7 @@ if (calendarState && calendarAction) {
   }
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xc454a0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xe19948 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-045 · professioneller Schatzkarten-Renderer: sechs Seiten mit je fünf Loginstufen.
 // Rein visuelle Projektion clientsicherer Serverdaten; Claim und Wallet bleiben in L&L-045 Phase A serverautoritativ.
@@ -1328,7 +1370,7 @@ placeSprite(first("CalendarShopButton"), 262, 1060, 88, 88, 255, "255;230;175");
 placeCenteredText(first("CalendarShopButtonText"), mapBookT("calendar.shop"), 306, 1113, 76, 32, 18, "255;252;214");
 placeSprite(first("CalendarBackButton"), 370, 1060, 88, 88);
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xb47f18 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xc73878 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Kalender-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -1342,7 +1384,7 @@ if (!runtimeScene.__lockLootL047Calendar || runtimeScene.__lockLootL047Calendar 
   const state = runtimeScene.__lockLootCalendarScene; if (state && state.calendar && state.wallet && typeof calendarRender === "function") calendarRender(state);
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xc17c20 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xcf8f78 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -1429,7 +1471,7 @@ gdjs.TreasureCalendarSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xdb9e50(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xde0b78(runtimeScene);
 
 }
 
@@ -1437,7 +1479,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xdb9e50(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xe53310(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xf44b88(runtimeScene);
 
 }
 
@@ -1445,7 +1487,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xe53310(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xcd1c88(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xcf59d0(runtimeScene);
 
 }
 
@@ -1567,7 +1609,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xcd03a0(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xcac468(runtimeScene);
 
 }
 
@@ -1575,7 +1617,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xcd03a0(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xc454a0(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xe19948(runtimeScene);
 
 }
 
@@ -1583,7 +1625,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xc454a0(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xb47f18(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xc73878(runtimeScene);
 
 }
 
@@ -1591,7 +1633,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xb47f18(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xc17c20(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xcf8f78(runtimeScene);
 
 }
 
