@@ -273,7 +273,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xc9efa8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xcdd4b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: Lokale Desktop- und Dateivorschau bleibt durchgehend proportional im 720x1280-Handyformat.
 const trainingPortraitGame = runtimeScene.getGame();
@@ -299,7 +299,7 @@ if (trainingPortraitEnabled) {
   if (typeof document !== 'undefined') { for (const element of [document.documentElement, document.body]) { element.style.setProperty('background', '#123f50', 'important'); element.style.setProperty('background-color', '#123f50', 'important'); } }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xb51780 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xff1000 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -666,7 +666,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.TrainingSceneCode.userFunc0xc9f020 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe53e00 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -893,7 +893,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xc9f1c8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe53318 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -932,11 +932,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xa23bf0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe573d8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xa22620 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe94980 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1557,7 +1557,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xc76f10 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xe88160 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-058: Genau eine Trefferdimension wird exakt, die andere nur als serverbestätigtes Band dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -1590,7 +1590,7 @@ gdjs.TrainingSceneCode.eventsList11 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc76f10(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe88160(runtimeScene);
 
 }
 
@@ -1599,7 +1599,7 @@ gdjs.TrainingSceneCode.userFunc0xc76f10(runtimeScene);
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDHintNextButtonObjects1Objects = Hashtable.newFrom({"HintNextButton": gdjs.TrainingSceneCode.GDHintNextButtonObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
-gdjs.TrainingSceneCode.userFunc0xe02160 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe73170 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: Während der Animation bleibt die Navigation gesperrt; im Ergebnis nutzt sie den vorhandenen Zurück-Button.
 const chestEndNavigationLocked = runtimeScene.__lockLootTrainingBackend?.endLocked === true;
@@ -2144,7 +2144,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xcec2b0 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xdb9768 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -4603,14 +4603,14 @@ gdjs.TrainingSceneCode.eventsList19 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xcec2b0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xdb9768(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xb4add0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe553d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: Vertrag muss vor dem Backendadapter verfügbar sein.
 const chestEndRuntimeGame = runtimeScene.getGame();
@@ -4744,7 +4744,7 @@ const validateChestEndSnapshot = function validateChestEndSnapshot(value, contex
   chestEndRuntimeGame.__lockLootChestEndRuntime = { create: createChestEndFlow, identity: chestEndSnapshotIdentity, validate: validateChestEndSnapshot };
 }
 };
-gdjs.TrainingSceneCode.userFunc0xce2b30 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xc51210 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-041: Ausschließlich lokaler Adapter für 127.0.0.1 und demo-lock-loot-local.
 // Serverwallet und Backendantworten sind die Wahrheit; Szenenvariablen sind nur Anzeige-Cache.
@@ -5199,7 +5199,7 @@ if (trainingVariables.get('backendInitState').getAsString() === 'offline' && !tr
   void trainingBackend.connect();
 }
 };
-gdjs.TrainingSceneCode.userFunc0xb4af10 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xff1248 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: hochwertige Kistenendebühne; reine Präsentation, keine Rewardbuchung.
 const chestEndGame = runtimeScene.getGame();
@@ -5675,7 +5675,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
-gdjs.TrainingSceneCode.userFunc0xb5d548 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0x107cf78 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -5696,11 +5696,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xb51460 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0x107d050 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xb4b068 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xff13a0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -5787,7 +5787,7 @@ gdjs.TrainingSceneCode.eventsList21 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc9efa8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xcdd4b0(runtimeScene);
 
 }
 
@@ -5795,7 +5795,7 @@ gdjs.TrainingSceneCode.userFunc0xc9efa8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb51780(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xff1000(runtimeScene);
 
 }
 
@@ -5803,7 +5803,7 @@ gdjs.TrainingSceneCode.userFunc0xb51780(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc9f020(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe53e00(runtimeScene);
 
 }
 
@@ -5811,7 +5811,7 @@ gdjs.TrainingSceneCode.userFunc0xc9f020(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xc9f1c8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe53318(runtimeScene);
 
 }
 
@@ -5819,7 +5819,7 @@ gdjs.TrainingSceneCode.userFunc0xc9f1c8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa23bf0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe573d8(runtimeScene);
 
 }
 
@@ -5827,7 +5827,7 @@ gdjs.TrainingSceneCode.userFunc0xa23bf0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa22620(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe94980(runtimeScene);
 
 }
 
@@ -6719,7 +6719,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xe02160(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe73170(runtimeScene);
 
 }
 
@@ -7301,7 +7301,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb4add0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe553d0(runtimeScene);
 
 }
 
@@ -7309,7 +7309,7 @@ gdjs.TrainingSceneCode.userFunc0xb4add0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xce2b30(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xc51210(runtimeScene);
 
 }
 
@@ -7317,7 +7317,7 @@ gdjs.TrainingSceneCode.userFunc0xce2b30(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb4af10(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xff1248(runtimeScene);
 
 }
 
@@ -7392,7 +7392,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb5d548(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x107cf78(runtimeScene);
 
 }
 
@@ -7400,7 +7400,7 @@ gdjs.TrainingSceneCode.userFunc0xb5d548(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb51460(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x107d050(runtimeScene);
 
 }
 
@@ -7408,7 +7408,7 @@ gdjs.TrainingSceneCode.userFunc0xb51460(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb4b068(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xff13a0(runtimeScene);
 
 }
 

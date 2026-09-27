@@ -1,78 +1,57 @@
-gdjs.MainMenuCode = {};
-gdjs.MainMenuCode.localVariables = [];
-gdjs.MainMenuCode.idToCallbackMap = new Map();
-gdjs.MainMenuCode.GDMainMenuTitleObjects1= [];
-gdjs.MainMenuCode.GDMainMenuSkyObjects1= [];
-gdjs.MainMenuCode.GDMainMenuSeaObjects1= [];
-gdjs.MainMenuCode.GDMainMenuCloudObjects1= [];
-gdjs.MainMenuCode.GDMainMenuFarIslandsObjects1= [];
-gdjs.MainMenuCode.GDMainMenuPalmObjects1= [];
-gdjs.MainMenuCode.GDMainMenuVegetationObjects1= [];
-gdjs.MainMenuCode.GDMainMenuBeachObjects1= [];
-gdjs.MainMenuCode.GDMainMenuWaveObjects1= [];
-gdjs.MainMenuCode.GDMainMenuChestLidObjects1= [];
-gdjs.MainMenuCode.GDMainMenuChestBaseObjects1= [];
-gdjs.MainMenuCode.GDMainMenuTreasureObjects1= [];
-gdjs.MainMenuCode.GDMainMenuParrotObjects1= [];
-gdjs.MainMenuCode.GDMainMenuPirateObjects1= [];
-gdjs.MainMenuCode.GDMainMenuSparkleObjects1= [];
-gdjs.MainMenuCode.GDMainMenuSandMoundObjects1= [];
-gdjs.MainMenuCode.GDMainMenuBackSandPileObjects1= [];
-gdjs.MainMenuCode.GDMainMenuForegroundObjects1= [];
-gdjs.MainMenuCode.GDMainMenuButtonObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLogoObjects1= [];
-gdjs.MainMenuCode.GDBackgroundObjects1= [];
-gdjs.MainMenuCode.GDMainMenuCoveObjects1= [];
-gdjs.MainMenuCode.GDMainMenuPirateShipObjects1= [];
-gdjs.MainMenuCode.GDMainMenuRowboatObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailPlantObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailDriftwoodObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailShellPinkObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailShellConchObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailShellBrokenObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailStarfishObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailStoneGrayObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailStoneGoldObjects1= [];
-gdjs.MainMenuCode.GDMainMenuDetailStoneDarkObjects1= [];
-gdjs.MainMenuCode.GDMainMenuPlayButtonObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLastSolutionButtonObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLastSolutionTextObjects1= [];
-gdjs.MainMenuCode.GDMainMenuShopButtonObjects1= [];
-gdjs.MainMenuCode.GDMainMenuMusicButtonObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLanguageButtonObjects1= [];
-gdjs.MainMenuCode.GDMainMenuChestCrestObjects1= [];
-gdjs.MainMenuCode.GDMainMenuPlayTextObjects1= [];
-gdjs.MainMenuCode.GDMainMenuShopTextObjects1= [];
-gdjs.MainMenuCode.GDMainMenuMusicStateTextObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLanguageStateTextObjects1= [];
-gdjs.MainMenuCode.GDMainMenuUtilityHintTextObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLanguagePanelObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLanguagePanelTitleObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1= [];
-gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1= [];
-gdjs.MainMenuCode.GDStagingBadgeObjects1= [];
-gdjs.MainMenuCode.GDMenuBookPaperObjects1= [];
-gdjs.MainMenuCode.GDMenuBookPlaceObjects1= [];
-gdjs.MainMenuCode.GDMenuBookNameObjects1= [];
-gdjs.MainMenuCode.GDMenuBookChestsLabelObjects1= [];
-gdjs.MainMenuCode.GDMenuBookChestsCountObjects1= [];
-gdjs.MainMenuCode.GDMenuBookConsumedLabelObjects1= [];
-gdjs.MainMenuCode.GDMenuBookCookieIconObjects1= [];
-gdjs.MainMenuCode.GDMenuBookCookieCountObjects1= [];
-gdjs.MainMenuCode.GDMenuBookLockpickIconObjects1= [];
-gdjs.MainMenuCode.GDMenuBookLockpickCountObjects1= [];
-gdjs.MainMenuCode.GDMenuBookStatusObjects1= [];
-gdjs.MainMenuCode.GDResourceHudCookieFrameObjects1= [];
-gdjs.MainMenuCode.GDResourceHudLockpickFrameObjects1= [];
-gdjs.MainMenuCode.GDResourceHudCookieIconObjects1= [];
-gdjs.MainMenuCode.GDResourceHudLockpickIconObjects1= [];
-gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1= [];
-gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1= [];
+gdjs.JournalSceneCode = {};
+gdjs.JournalSceneCode.localVariables = [];
+gdjs.JournalSceneCode.idToCallbackMap = new Map();
+gdjs.JournalSceneCode.GDJournalPageObjects1= [];
+gdjs.JournalSceneCode.GDJournalTitleObjects1= [];
+gdjs.JournalSceneCode.GDJournalSubtitleObjects1= [];
+gdjs.JournalSceneCode.GDJournalProfileHeadingObjects1= [];
+gdjs.JournalSceneCode.GDJournalNameObjects1= [];
+gdjs.JournalSceneCode.GDJournalTagObjects1= [];
+gdjs.JournalSceneCode.GDJournalRankObjects1= [];
+gdjs.JournalSceneCode.GDJournalOwnStatsObjects1= [];
+gdjs.JournalSceneCode.GDJournalEditObjects1= [];
+gdjs.JournalSceneCode.GDJournalListHeadingObjects1= [];
+gdjs.JournalSceneCode.GDJournalHeadLegendObjects1= [];
+gdjs.JournalSceneCode.GDJournalRowPlace1Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowName1Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowRank1Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowTag1Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowStats1Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowPlace2Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowName2Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowRank2Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowTag2Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowStats2Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowPlace3Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowName3Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowRank3Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowTag3Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowStats3Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowPlace4Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowName4Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowRank4Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowTag4Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowStats4Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowPlace5Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowName5Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowRank5Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowTag5Objects1= [];
+gdjs.JournalSceneCode.GDJournalRowStats5Objects1= [];
+gdjs.JournalSceneCode.GDJournalStatusObjects1= [];
+gdjs.JournalSceneCode.GDJournalPreviousObjects1= [];
+gdjs.JournalSceneCode.GDJournalPageNumberObjects1= [];
+gdjs.JournalSceneCode.GDJournalNextObjects1= [];
+gdjs.JournalSceneCode.GDJournalBackButtonObjects1= [];
+gdjs.JournalSceneCode.GDJournalBackObjects1= [];
+gdjs.JournalSceneCode.GDResourceHudCookieFrameObjects1= [];
+gdjs.JournalSceneCode.GDResourceHudLockpickFrameObjects1= [];
+gdjs.JournalSceneCode.GDResourceHudCookieIconObjects1= [];
+gdjs.JournalSceneCode.GDResourceHudLockpickIconObjects1= [];
+gdjs.JournalSceneCode.GDResourceHudCookiesTextObjects1= [];
+gdjs.JournalSceneCode.GDResourceHudLockpicksTextObjects1= [];
 
 
-gdjs.MainMenuCode.userFunc0xe94888 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xe52718 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -439,7 +418,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.MainMenuCode.userFunc0xcdd4b0 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xe52668 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -666,99 +645,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.MainMenuCode.userFunc0xe53e00 = function GDJSInlineCode(runtimeScene) {
-"use strict";
-// L&L-061: Das bestehende Hauptmenü bleibt im lokalen und mobilen Hochformat vollständig sichtbar.
-const journalMenuGame = runtimeScene.getGame();
-const journalMenuRemember = (element, properties) => Object.fromEntries(properties.map(property =>
-  [property, {value: element?.style.getPropertyValue(property) || "",
-    priority: element?.style.getPropertyPriority(property) || ""}]));
-const journalMenuRestoreStyle = (element, saved) => {
-  if (!element || !saved) return;
-  for (const [property, entry] of Object.entries(saved)) {
-    if (entry.value) element.style.setProperty(property, entry.value, entry.priority);
-    else element.style.removeProperty(property);
-  }
-};
-if (!runtimeScene.__lockLootL061MenuPortrait) {
-  const canvas = journalMenuGame.getRenderer?.().getCanvas?.() || null;
-  const stage = {scene: runtimeScene, canvas, restored: false,
-    previousResolution: {adapt: journalMenuGame.getAdaptGameResolutionAtRuntime(),
-      width: journalMenuGame.getGameResolutionWidth(), height: journalMenuGame.getGameResolutionHeight()},
-    previousCanvasStyle: journalMenuRemember(canvas, ["width", "height", "left", "top", "position"]),
-    previousPageStyle: typeof document === "undefined" ? null : {
-      html: journalMenuRemember(document.documentElement, ["background", "background-color"]),
-      body: journalMenuRemember(document.body, ["background", "background-color"])}};
-  stage.restore = () => {
-    if (stage.restored) return;
-    stage.restored = true;
-    stage.orientationNotice?.remove();
-    journalMenuRestoreStyle(stage.canvas, stage.previousCanvasStyle);
-    if (typeof document !== "undefined" && stage.previousPageStyle) {
-      journalMenuRestoreStyle(document.documentElement, stage.previousPageStyle.html);
-      journalMenuRestoreStyle(document.body, stage.previousPageStyle.body);
-    }
-    journalMenuGame.setGameResolutionSize(stage.previousResolution.width, stage.previousResolution.height);
-    journalMenuGame.setAdaptGameResolutionAtRuntime(stage.previousResolution.adapt);
-  };
-  runtimeScene.__lockLootL061MenuPortrait = stage;
-  journalMenuGame.__lockLootL061MenuPortrait = stage;
-  if (!journalMenuGame.__lockLootL061MenuPortraitCleanupRegistered) {
-    gdjs.registerRuntimeSceneUnloadingCallback(scene => {
-      const current = journalMenuGame.__lockLootL061MenuPortrait;
-      if (current?.scene === scene) {
-        current.restore();
-        delete scene.__lockLootL061MenuPortrait;
-        journalMenuGame.__lockLootL061MenuPortrait = null;
-      }
-    });
-    journalMenuGame.__lockLootL061MenuPortraitCleanupRegistered = true;
-  }
-}
-journalMenuGame.setAdaptGameResolutionAtRuntime(false);
-if (journalMenuGame.getGameResolutionWidth() !== 720 || journalMenuGame.getGameResolutionHeight() !== 1280) {
-  journalMenuGame.setGameResolutionSize(720, 1280);
-}
-const journalMenuStage = runtimeScene.__lockLootL061MenuPortrait;
-const journalMenuLandscapeWidth = typeof window === "undefined" ? 720 :
-  720 * Math.min(window.innerWidth / 720, window.innerHeight / 1280);
-if (typeof document !== "undefined" && journalMenuStage) {
-  const needsPortrait = window.innerWidth > window.innerHeight && journalMenuLandscapeWidth < 320;
-  if (needsPortrait && !journalMenuStage.orientationNotice) {
-    const overlay = document.createElement("div");
-    overlay.setAttribute("role", "status");
-    overlay.style.cssText = "position:fixed;inset:0;z-index:200000;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;background:#102f36;color:#fff4dc;font:600 18px Arial,sans-serif;text-align:center;overflow:auto";
-    const card = document.createElement("div");
-    card.style.cssText = "max-width:420px;max-height:100%;overflow:auto;padding:22px;border:3px solid #bc914f;border-radius:18px;background:#174b53;box-shadow:0 10px 30px #061c22;box-sizing:border-box";
-    overlay.append(card);
-    document.body.append(overlay);
-    journalMenuStage.orientationNotice = overlay;
-  }
-  if (journalMenuStage.orientationNotice) {
-    journalMenuStage.orientationNotice.style.display = needsPortrait ? "flex" : "none";
-    const en = journalMenuGame.__lockLootI18n?.language === "en";
-    journalMenuStage.orientationNotice.firstChild.textContent = en ?
-      "↻ Rotate to portrait to use the menu. On a computer, make the window taller." :
-      "↻ Drehe das Gerät ins Hochformat, um das Menü zu nutzen. Am Computer das Fenster höher ziehen.";
-  }
-}
-if (journalMenuStage?.canvas && typeof window !== "undefined") {
-  const scale = Math.min(window.innerWidth / 720, window.innerHeight / 1280);
-  const width = Math.max(1, Math.floor(720 * scale));
-  const height = Math.max(1, Math.floor(1280 * scale));
-  const desired = {position: "fixed", left: Math.floor((window.innerWidth - width) / 2) + "px",
-    top: Math.floor((window.innerHeight - height) / 2) + "px",
-    width: width + "px", height: height + "px"};
-  for (const [property, value] of Object.entries(desired)) {
-    journalMenuStage.canvas.style.setProperty(property, value, "important");
-  }
-}
-if (typeof document !== "undefined") for (const element of [document.documentElement, document.body]) {
-  element.style.setProperty("background", "#102f36", "important");
-  element.style.setProperty("background-color", "#102f36", "important");
-}
-};
-gdjs.MainMenuCode.userFunc0xe553d0 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xcdd4b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -797,260 +684,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.MainMenuCode.userFunc0xe52668 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xe53e00 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
-};
-gdjs.MainMenuCode.userFunc0xe94910 = function GDJSInlineCode(runtimeScene) {
-"use strict";
-// L&L-024: Rein visuelle Steuerung des modularen Hauptmenüs.
-// Die bestehende modulare Welt und alle anderen Szenen bleiben unverändert.
-if (!runtimeScene.__lockLootMainMenuVisualState) {
-  runtimeScene.__lockLootMainMenuVisualState = { time: 0 };
-}
-
-const visualState = runtimeScene.__lockLootMainMenuVisualState;
-const elapsedSeconds = Math.min(runtimeScene.getElapsedTime() / 1000, 0.05);
-visualState.time += elapsedSeconds;
-
-const clouds = runtimeScene.getObjects("MainMenuCloud");
-for (let index = 0; index < clouds.length; index += 1) {
-  const cloud = clouds[index];
-  const speed = index === 0 ? 4 : 6;
-  cloud.setX(cloud.getX() + speed * elapsedSeconds);
-  if (cloud.getX() > 720) cloud.setX(-cloud.getWidth() - 24);
-}
-
-const waves = runtimeScene.getObjects("MainMenuWave");
-for (let index = 0; index < waves.length; index += 1) {
-  const wave = waves[index];
-  const baseX = index === 0 ? -1 : 319;
-  const baseY = index === 0 ? 465 : 475;
-  wave.setPosition(
-    baseX + Math.sin(visualState.time * 0.75 + index * 1.7) * 10,
-    baseY + Math.sin(visualState.time * 1.1 + index) * 3
-  );
-  wave.setOpacity(180 + Math.sin(visualState.time + index) * 28);
-}
-
-const pirateFrameDurations = [0.18, 0.12, 0.14, 0.14, 0.15, 0.14, 0.10, 0.12, 0.10, 0.12, 0.16, 0.12, 0.18];
-const pirateCycleDuration = pirateFrameDurations.reduce((sum, duration) => sum + duration, 0);
-let pirateTime = visualState.time % pirateCycleDuration;
-let pirateFrame = 0;
-for (let index = 0; index < pirateFrameDurations.length; index += 1) {
-  if (pirateTime < pirateFrameDurations[index]) {
-    pirateFrame = index;
-    break;
-  }
-  pirateTime -= pirateFrameDurations[index];
-}
-for (const pirate of runtimeScene.getObjects("MainMenuPirate")) {
-  pirate.setPosition(-75, 245);
-  pirate.setAnimationFrame(pirateFrame);
-}
-
-const parrotTime = visualState.time % 6.2;
-let parrotFrame = 0;
-if (parrotTime >= 2.2 && parrotTime < 2.5) parrotFrame = 1;
-if (parrotTime >= 2.5 && parrotTime < 2.78) parrotFrame = 2;
-if (parrotTime >= 2.78 && parrotTime < 3.12) parrotFrame = 3;
-if (parrotTime >= 3.12 && parrotTime < 3.48) parrotFrame = 4;
-if (parrotTime >= 3.48 && parrotTime < 3.72) parrotFrame = 5;
-for (const parrot of runtimeScene.getObjects("MainMenuParrot")) {
-  parrot.setPosition(420, 326);
-  parrot.setAnimationFrame(parrotFrame);
-}
-
-const sparkles = runtimeScene.getObjects("MainMenuSparkle");
-for (let index = 0; index < sparkles.length; index += 1) {
-  const sparkle = sparkles[index];
-  sparkle.setOpacity(105 + (Math.sin(visualState.time * 2 + index * 2.1) + 1) * 62);
-  sparkle.setAngle(Math.sin(visualState.time * 0.8 + index) * 4);
-}
-
-
-};
-gdjs.MainMenuCode.userFunc0xe51c68 = function GDJSInlineCode(runtimeScene) {
-"use strict";
-// L&L-046/L&L-047/L&L-052/L&L-059: Hauptnavigation, persistente Musik, Sprachwahl und serverautoritative letzte Lösung.
-const menuGame = runtimeScene.getGame();
-const menuI18n = menuGame.__lockLootI18n;
-const menuController = menuGame.__lockLootMusicController;
-const menuBackend = menuGame.__lockLootBackendRuntime;
-const menuLastSolution = menuGame.__lockLootLastSolution;
-if (!runtimeScene.__lockLootL046Menu) {
-  menuGame.__lockLootMainMenuGeneration = Number.isSafeInteger(menuGame.__lockLootMainMenuGeneration) ? menuGame.__lockLootMainMenuGeneration + 1 : 1;
-  runtimeScene.__lockLootL046Menu = {
-    musicEnabled: menuController ? menuController.state.musicEnabled : true,
-    languagePanelOpen: false, hoverName: "", loadingLastSolution: false,
-    lastSolutionReady: false, uid: "", requestSerial: 0, retryAt: 0,
-    pendingLastSolutionOpen: null,
-    sceneGeneration: menuGame.__lockLootMainMenuGeneration
-  };
-  if (menuLastSolution) menuLastSolution.invalidate("LOADING");
-}
-const menuState = runtimeScene.__lockLootL046Menu;
-if (menuController) menuState.musicEnabled = menuController.state.musicEnabled;
-const menuCursorX = gdjs.evtTools.input.getCursorX(runtimeScene, "UI", 0);
-const menuCursorY = gdjs.evtTools.input.getCursorY(runtimeScene, "UI", 0);
-const firstMenuObject = name => runtimeScene.getObjects(name)[0] || null;
-const cursorOnMenuObject = object => object && typeof object.isHidden === "function" && !object.isHidden() && menuCursorX >= object.getX() && menuCursorX <= object.getX() + object.getWidth() && menuCursorY >= object.getY() && menuCursorY <= object.getY() + object.getHeight();
-const setMenuText = (name, value) => { const object = firstMenuObject(name); if (object) object.setString(value); };
-const showMenuObject = (name, visible) => { for (const object of runtimeScene.getObjects(name)) object.hide(!visible); };
-const networkError = error => error && (error.name === "AbortError" || error instanceof TypeError || error.status === "BACKEND_UNREACHABLE");
-const menuSceneIsCurrent = sceneGeneration => runtimeScene.__lockLootL046Menu === menuState && menuState.sceneGeneration === sceneGeneration && menuGame.__lockLootMainMenuGeneration === sceneGeneration && menuGame.getSceneStack().getCurrentScene() === runtimeScene;
-const loadLastSolution = async (openAfterValidation = false) => {
-  if (menuState.loadingLastSolution || !menuBackend || !menuBackend.enabled || !menuLastSolution) return;
-  menuState.loadingLastSolution = true;
-  menuState.lastSolutionReady = false;
-  menuState.pendingLastSolutionOpen = null;
-  if (openAfterValidation) menuLastSolution.invalidate("CLICK_REVALIDATION");
-  const serial = ++menuState.requestSerial;
-  const sceneGeneration = menuState.sceneGeneration;
-  let requestToken = null;
-  const requestIsCurrent = () => serial === menuState.requestSerial && menuSceneIsCurrent(sceneGeneration) && (!requestToken || menuLastSolution.isCurrent(requestToken));
-  try {
-    let session = await menuBackend.authenticate(false);
-    if (!requestIsCurrent()) return;
-    if (!session || typeof session.uid !== "string") throw Object.assign(new Error("Anmeldung fehlt."), {status: "INVALID_RESPONSE"});
-    menuState.uid = session.uid;
-    requestToken = menuLastSolution.begin(session.uid);
-    await menuBackend.prepare("L&L-041");
-    if (!requestIsCurrent()) return;
-    let response;
-    try {
-      response = await menuBackend.callCallable(menuBackend.endpoints.bootstrap, {integration: "L&L-041"}, session.idToken);
-      if (!requestIsCurrent()) return;
-    } catch (error) {
-      if (!requestIsCurrent()) return;
-      const authRejected = error && ["UNAUTHENTICATED", "HTTP_401", "AUTH_FAILED"].includes(error.status);
-      if (!authRejected) throw error;
-      session = await menuBackend.refresh();
-      if (!requestIsCurrent()) return;
-      menuState.uid = session.uid;
-      requestToken = menuLastSolution.begin(session.uid);
-      response = await menuBackend.callCallable(menuBackend.endpoints.bootstrap, {integration: "L&L-041"}, session.idToken);
-      if (!requestIsCurrent()) return;
-    }
-    const confirmedSession = await menuBackend.authenticate(false);
-    if (!requestIsCurrent()) return;
-    if (!confirmedSession || confirmedSession.uid !== session.uid) {
-      menuState.loadingLastSolution = false;
-      menuLastSolution.invalidate("AUTH_CHANGED");
-      return;
-    }
-    if (!requestIsCurrent()) return;
-    if (!response || response.uid !== session.uid || !response.currentChest || response.currentChest.status !== "active" || response.currentChest.schemaVersion !== 1 || !Number.isSafeInteger(response.currentChest.contentVersion) || response.currentChest.contentVersion < 1 || !response.economy || response.economy.activeChestId !== response.currentChest.chestId || !Number.isSafeInteger(response.economy.rotation) || response.economy.rotation < 0) throw Object.assign(new Error("Menübootstrap ist ungültig."), {status: "INVALID_RESPONSE"});
-    if (JSON.stringify(response).includes('"' + ("solution" + "Code") + '"') || Object.prototype.hasOwnProperty.call(response, "solutionSnapshot")) throw Object.assign(new Error("Aktive oder alte private Lösung außerhalb des Vertrags."), {status: "INVALID_RESPONSE"});
-    const candidate = menuLastSolution.validate(response.lastSolution, {
-      uid: session.uid,
-      generation: requestToken.generation,
-      activeChestId: response.currentChest.chestId,
-      activeContentVersion: response.currentChest.contentVersion,
-      rotation: response.economy.rotation
-    });
-    if (!menuLastSolution.commit(candidate)) throw Object.assign(new Error("Veraltete oder widersprüchliche Lösungsantwort."), {status: "INVALID_RESPONSE"});
-    menuState.lastSolutionReady = true;
-    menuState.retryAt = 0;
-    if (openAfterValidation) {
-      const freshState = menuLastSolution.getState();
-      if (serial !== menuState.requestSerial || !menuSceneIsCurrent(sceneGeneration) || !menuLastSolution.isCurrent(requestToken) || !freshState.available || freshState.uid !== session.uid || freshState.generation !== requestToken.generation || freshState.highestRotation !== response.economy.rotation || freshState.activeChestId !== response.currentChest.chestId || freshState.highestContentVersion !== response.currentChest.contentVersion || !freshState.snapshot || freshState.snapshot.chestId !== response.lastSolution.previousChestId) {
-        menuLastSolution.markUnavailable("INVALID_SNAPSHOT");
-        menuState.lastSolutionReady = false;
-        return;
-      }
-      menuState.lastSolutionReady = false;
-      menuState.pendingLastSolutionOpen = Object.freeze({
-        serial, sceneGeneration, uid: session.uid,
-        requestGeneration: requestToken.generation,
-        rotation: response.economy.rotation,
-        activeChestId: response.currentChest.chestId,
-        contentVersion: response.currentChest.contentVersion,
-        previousChestId: response.lastSolution.previousChestId
-      });
-    }
-  } catch (error) {
-    if (!requestIsCurrent()) return;
-    menuLastSolution.markUnavailable(networkError(error) ? "BACKEND_UNREACHABLE" : "INVALID_SNAPSHOT");
-    menuState.retryAt = networkError(error) ? Date.now() + 12000 : Number.POSITIVE_INFINITY;
-  } finally {
-    if (requestIsCurrent()) menuState.loadingLastSolution = false;
-  }
-};
-let lastSolutionOpenRequested = false;
-if (menuState.pendingLastSolutionOpen) {
-  const pending = menuState.pendingLastSolutionOpen;
-  menuState.pendingLastSolutionOpen = null;
-  const freshState = menuLastSolution ? menuLastSolution.getState() : null;
-  const pendingIsCurrent = pending.serial === menuState.requestSerial && pending.sceneGeneration === menuState.sceneGeneration && menuSceneIsCurrent(pending.sceneGeneration);
-  const pendingMatches = !!(pendingIsCurrent && freshState && freshState.available && freshState.uid === pending.uid && freshState.generation === pending.requestGeneration && freshState.highestRotation === pending.rotation && freshState.activeChestId === pending.activeChestId && freshState.highestContentVersion === pending.contentVersion && freshState.snapshot && freshState.snapshot.chestId === pending.previousChestId);
-  if (pendingMatches && menuLastSolution.openSnapshot()) {
-    lastSolutionOpenRequested = true;
-    menuState.requestSerial += 1;
-    menuState.lastSolutionReady = false;
-    gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "SolutionScene", false);
-  } else {
-    if (pendingIsCurrent && menuLastSolution) menuLastSolution.markUnavailable("INVALID_SNAPSHOT");
-    menuState.lastSolutionReady = false;
-    menuState.retryAt = Number.POSITIVE_INFINITY;
-  }
-}
-if (!lastSolutionOpenRequested && !menuState.pendingLastSolutionOpen && !menuState.loadingLastSolution && !menuState.lastSolutionReady && Date.now() >= menuState.retryAt) void loadLastSolution(false);
-const playButton = firstMenuObject("MainMenuPlayButton");
-const lastSolutionButton = firstMenuObject("MainMenuLastSolutionButton");
-const shopButton = firstMenuObject("MainMenuShopButton");
-const musicButton = firstMenuObject("MainMenuMusicButton");
-const languageButton = firstMenuObject("MainMenuLanguageButton");
-const deButton = firstMenuObject("MainMenuLanguageDeButton");
-const enButton = firstMenuObject("MainMenuLanguageEnButton");
-const solutionState = menuLastSolution ? menuLastSolution.getState() : null;
-const lastSolutionEnabled = !!(menuState.lastSolutionReady && solutionState && solutionState.available && solutionState.uid === menuState.uid && solutionState.activeChestId && solutionState.snapshot && solutionState.snapshot.chestId !== solutionState.activeChestId);
-const panelObjects = ["MainMenuLanguagePanel", "MainMenuLanguagePanelTitle", "MainMenuLanguageDeButton", "MainMenuLanguageEnButton", "MainMenuLanguageDeText", "MainMenuLanguageEnText"];
-for (const name of panelObjects) showMenuObject(name, menuState.languagePanelOpen);
-setMenuText("MainMenuPlayText", menuI18n.t("menu.play"));
-setMenuText("MainMenuLastSolutionText", menuI18n.t("menu.last_solution"));
-setMenuText("MainMenuShopText", menuI18n.t("menu.shop"));
-setMenuText("MainMenuMusicStateText", menuI18n.t(menuState.musicEnabled ? "menu.music_on" : "menu.music_off"));
-setMenuText("MainMenuLanguageStateText", menuI18n.t("menu.language"));
-setMenuText("MainMenuLanguagePanelTitle", menuI18n.t("menu.language_panel_title"));
-setMenuText("MainMenuLanguageDeText", menuI18n.t("menu.language_de"));
-setMenuText("MainMenuLanguageEnText", menuI18n.t("menu.language_en"));
-setMenuText("MainMenuUtilityHintText", "");
-const lastSolutionText = firstMenuObject("MainMenuLastSolutionText");
-if (lastSolutionText) lastSolutionText.setColor(lastSolutionEnabled ? "255;244;206" : "165;165;165");
-const buttonEntries = [["play", playButton], ["lastSolution", lastSolutionButton], ["shop", shopButton], ["music", musicButton], ["language", languageButton], ["de", deButton], ["en", enButton]];
-menuState.hoverName = "";
-for (const [name, button] of buttonEntries) {
-  const available = (!['de', 'en'].includes(name) || menuState.languagePanelOpen) && (name !== "lastSolution" || lastSolutionEnabled);
-  const hovered = available && cursorOnMenuObject(button);
-  if (hovered) menuState.hoverName = name;
-  if (button) {
-    const selectedLanguage = menuState.languagePanelOpen && ((name === "de" && menuI18n.language === "de") || (name === "en" && menuI18n.language === "en"));
-    button.setOpacity(name === "lastSolution" && !lastSolutionEnabled ? 132 : hovered || selectedLanguage ? 255 : 238);
-    button.setColor(name === "lastSolution" && !lastSolutionEnabled ? "118;118;118" : hovered ? "255;239;184" : selectedLanguage ? "255;223;142" : "255;255;255");
-  }
-}
-const menuPortraitNoticeVisible = menuGame.__lockLootL061MenuPortrait?.orientationNotice?.style.display === "flex";
-menuState.languagePanelWasOpenOnRelease = false;
-if (!menuPortraitNoticeVisible && gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left")) {
-  menuState.languagePanelWasOpenOnRelease = menuState.languagePanelOpen;
-  if (menuState.languagePanelOpen && cursorOnMenuObject(deButton)) { menuI18n.setLanguage("de"); menuState.languagePanelOpen = false; }
-  else if (menuState.languagePanelOpen && cursorOnMenuObject(enButton)) { menuI18n.setLanguage("en"); menuState.languagePanelOpen = false; }
-  else if (cursorOnMenuObject(languageButton)) menuState.languagePanelOpen = !menuState.languagePanelOpen;
-  else if (!menuState.languagePanelOpen && cursorOnMenuObject(playButton)) gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TrainingScene", false);
-  else if (!menuState.languagePanelOpen && lastSolutionEnabled && cursorOnMenuObject(lastSolutionButton)) void loadLastSolution(true);
-  else if (!menuState.languagePanelOpen && cursorOnMenuObject(shopButton)) gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TreasureCalendarScene", false);
-  else if (!menuState.languagePanelOpen && cursorOnMenuObject(musicButton)) {
-    if (menuController) menuController.setEnabled(runtimeScene, !menuController.state.musicEnabled);
-    menuState.musicEnabled = menuController ? menuController.state.musicEnabled : false;
-  } else if (menuState.languagePanelOpen) menuState.languagePanelOpen = false;
-}
-};
-gdjs.MainMenuCode.userFunc0xe54a90 = function GDJSInlineCode(runtimeScene) {
-"use strict";
-// L&L-061 MENU-BOOK CORE: exakt derselbe geprüfte Journal-Controller.
-const menuBookCoreGame = runtimeScene.getGame();
-if (!menuBookCoreGame.__lockLootJournalCore) {
+// L&L-061: Gemeinsame geprüfte Journal-Controllerquelle.
+const journalCoreGame = runtimeScene.getGame();
+if (!journalCoreGame.__lockLootJournalCore) {
   const module = {exports: {}};
   (function(module) {
 "use strict";
@@ -1381,116 +1019,146 @@ module.exports = Object.freeze({URLS, createLocalJournalTransport, createJournal
   normalizeName, pageResult, nameResult});
 
   })(module);
-  menuBookCoreGame.__lockLootJournalCore = module.exports;
+  journalCoreGame.__lockLootJournalCore = module.exports;
 }
 };
-gdjs.MainMenuCode.userFunc0xe57da8 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xe53318 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-061 MENU-BOOK VIEW
-// L&L-061: Kompaktes Hauptmenübuch mit verifiziertem Platz 1.
-const menuBookGame = runtimeScene.getGame();
-const menuBookI18n = menuBookGame.__lockLootI18n;
-const menuBookBackend = menuBookGame.__lockLootBackendRuntime;
-const menuBookCore = menuBookGame.__lockLootJournalCore;
-const menuBookObject = name => runtimeScene.getObjects(name)[0] || null;
-const menuBookText = (name, value) => {
-  const object = menuBookObject(name);
-  if (object) object.setString(String(value));
+// L&L-061: Lokales Tagebuch. Der eingebettete Controller prüft alle Serverantworten.
+const journalGame = runtimeScene.getGame();
+const journalRemember = (element, properties) => Object.fromEntries(properties.map(property =>
+  [property, {value: element?.style.getPropertyValue(property) || "",
+    priority: element?.style.getPropertyPriority(property) || ""}]));
+const journalRestoreStyle = (element, saved) => {
+  if (!element || !saved) return;
+  for (const [property, entry] of Object.entries(saved)) {
+    if (entry.value) element.style.setProperty(property, entry.value, entry.priority);
+    else element.style.removeProperty(property);
+  }
 };
-const menuBookT = (key, params = {}) => menuBookI18n ? menuBookI18n.t(key, params) : key;
-const menuBookCurrent = () => menuBookGame.getSceneStack().getCurrentScene() === runtimeScene;
-const menuBookCount = value => {
-  if (!Number.isSafeInteger(value) || value < 0) return "";
-  const locale = menuBookI18n?.language === "en" ? "en-US" : "de-DE";
-  const exact = value.toLocaleString(locale);
-  const context = typeof document === "undefined" ? null :
-    document.createElement("canvas").getContext("2d");
-  if (!context) return exact;
-  context.font = "bold 22px Arial";
-  if (context.measureText(exact).width <= 108) return exact;
-  const short = "≈" + value.toExponential(1).replace("e+", "e");
-  return context.measureText(short).width <= 108 ? short :
-    "≈" + value.toExponential(0).replace("e+", "e");
-};
-const menuBookName = value => {
-  const object = menuBookObject("MenuBookName");
+if (!runtimeScene.__lockLootJournalPortraitStage) {
+  const canvas = journalGame.getRenderer?.().getCanvas?.() || null;
+  const stage = {scene: runtimeScene, canvas, restored: false,
+    previousResolution: {adapt: journalGame.getAdaptGameResolutionAtRuntime(),
+      width: journalGame.getGameResolutionWidth(), height: journalGame.getGameResolutionHeight()},
+    previousCanvasStyle: journalRemember(canvas, ["width", "height", "left", "top", "position"]),
+    previousPageStyle: typeof document === "undefined" ? null : {
+      html: journalRemember(document.documentElement, ["background", "background-color"]),
+      body: journalRemember(document.body, ["background", "background-color"])}};
+  stage.restore = () => {
+    if (stage.restored) return;
+    stage.restored = true;
+    stage.orientationNotice?.remove();
+    journalRestoreStyle(stage.canvas, stage.previousCanvasStyle);
+    if (typeof document !== "undefined" && stage.previousPageStyle) {
+      journalRestoreStyle(document.documentElement, stage.previousPageStyle.html);
+      journalRestoreStyle(document.body, stage.previousPageStyle.body);
+    }
+    journalGame.setGameResolutionSize(stage.previousResolution.width, stage.previousResolution.height);
+    journalGame.setAdaptGameResolutionAtRuntime(stage.previousResolution.adapt);
+  };
+  runtimeScene.__lockLootJournalPortraitStage = stage;
+  journalGame.__lockLootJournalPortraitStage = stage;
+  if (!journalGame.__lockLootJournalPortraitCleanupRegistered) {
+    gdjs.registerRuntimeSceneUnloadingCallback(scene => {
+      const current = journalGame.__lockLootJournalPortraitStage;
+      if (current?.scene === scene) {
+        current.restore();
+        delete scene.__lockLootJournalPortraitStage;
+        journalGame.__lockLootJournalPortraitStage = null;
+      }
+    });
+    journalGame.__lockLootJournalPortraitCleanupRegistered = true;
+  }
+}
+journalGame.setAdaptGameResolutionAtRuntime(false);
+if (journalGame.getGameResolutionWidth() !== 720 || journalGame.getGameResolutionHeight() !== 1280) {
+  journalGame.setGameResolutionSize(720, 1280);
+}
+const journalStage = runtimeScene.__lockLootJournalPortraitStage;
+const journalLandscapeWidth = typeof window === "undefined" ? 720 :
+  720 * Math.min(window.innerWidth / 720, window.innerHeight / 1280);
+if (typeof document !== "undefined" && journalStage) {
+  const needsPortrait = !runtimeScene.__lockLootL061Journal?.dialog &&
+    window.innerWidth > window.innerHeight && journalLandscapeWidth < 320;
+  if (needsPortrait && !journalStage.orientationNotice) {
+    const overlay = document.createElement("div");
+    overlay.setAttribute("role", "status");
+    overlay.style.cssText = "position:fixed;inset:0;z-index:200000;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;background:#102f36;color:#fff4dc;font:600 18px Arial,sans-serif;text-align:center;overflow:auto";
+    const card = document.createElement("div");
+    card.style.cssText = "max-width:420px;max-height:100%;overflow:auto;padding:22px;border:3px solid #bc914f;border-radius:18px;background:#174b53;box-shadow:0 10px 30px #061c22;box-sizing:border-box";
+    overlay.append(card);
+    document.body.append(overlay);
+    journalStage.orientationNotice = overlay;
+  }
+  if (journalStage.orientationNotice) {
+    journalStage.orientationNotice.style.display = needsPortrait ? "flex" : "none";
+    const en = journalGame.__lockLootI18n?.language === "en";
+    journalStage.orientationNotice.firstChild.textContent = en ?
+      "↻ Rotate to portrait to read the journal. On a computer, make the window taller." :
+      "↻ Drehe das Gerät ins Hochformat, um das Tagebuch zu lesen. Am Computer das Fenster höher ziehen.";
+  }
+}
+if (journalStage?.canvas && typeof window !== "undefined") {
+  const scale = Math.min(window.innerWidth / 720, window.innerHeight / 1280);
+  const width = Math.max(1, Math.floor(720 * scale));
+  const height = Math.max(1, Math.floor(1280 * scale));
+  const desired = {position: "fixed", left: Math.floor((window.innerWidth - width) / 2) + "px",
+    top: Math.floor((window.innerHeight - height) / 2) + "px",
+    width: width + "px", height: height + "px"};
+  for (const [property, value] of Object.entries(desired)) {
+    journalStage.canvas.style.setProperty(property, value, "important");
+  }
+}
+if (typeof document !== "undefined") for (const element of [document.documentElement, document.body]) {
+  element.style.setProperty("background", "#102f36", "important");
+  element.style.setProperty("background-color", "#102f36", "important");
+}
+const journalI18n = journalGame.__lockLootI18n;
+const journalBackend = journalGame.__lockLootBackendRuntime;
+const journalCore = journalGame.__lockLootJournalCore;
+const journalObject = name => runtimeScene.getObjects(name)[0] || null;
+const journalText = (name, value) => { const object = journalObject(name); if (object) object.setString(String(value)); };
+const journalName = (name, value, size, maxWidth) => {
+  const object = journalObject(name);
   if (!object) return;
-  const chars = [...String(value || "").trim()];
-  const context = typeof document === "undefined" ? null :
-    document.createElement("canvas").getContext("2d");
-  let display = chars.join("");
-  if (context && chars.length) {
-    context.font = "bold 20px Arial";
-    const fits = text => context.measureText(text).width <= 116;
-    if (!fits(display)) {
-      let split = null;
-      for (let index = 1; index < chars.length; index++) {
-        const first = chars.slice(0, index).join("").trimEnd();
-        const second = chars.slice(index).join("").trimStart();
-        if (fits(first) && fits(second) &&
-            (split === null || Math.abs(index - chars.length / 2) <
-              Math.abs(split - chars.length / 2))) split = index;
-      }
-      if (split !== null) {
-        display = chars.slice(0, split).join("").trimEnd() + "\n" +
-          chars.slice(split).join("").trimStart();
-      } else {
-        let first = "";
-        let cursor = 0;
-        while (cursor < chars.length && fits(first + chars[cursor])) {
-          first += chars[cursor++];
-        }
-        let second = "";
-        while (cursor < chars.length && fits(second + chars[cursor] + "…")) {
-          second += chars[cursor++];
-        }
-        display = first.trimEnd() + "\n" + second.trimEnd() +
-          (cursor < chars.length ? "…" : "");
-      }
-    }
-  }
   object.setWrapping(false);
-  object.setCharacterSize(20);
-  object.setLineHeight(22);
-  object.setString(display);
-};
-if (!runtimeScene.__lockLootL061MenuBook) {
-  menuBookGame.__lockLootL061MenuBookSerial =
-    (menuBookGame.__lockLootL061MenuBookSerial || 0) + 1;
-  const state = {sceneId: `menu-book-${menuBookGame.__lockLootL061MenuBookSerial}`,
-    active: true, authGeneration: 0, session: null, busy: false,
-    notice: "", authRejected: false, started: false,
-    recoveryPending: false,
-    waitStartedAt: Date.now()};
-  runtimeScene.__lockLootL061MenuBook = state;
-  // Zwei Linien liegen auf derselben gedrehten Buchfläche, mit freiem Falz.
-  const segments = [[420, 957, 512, 957], [559, 957, 651, 957]];
-  if (typeof PIXI !== "undefined" && runtimeScene.getLayer) {
-    const drawing = new PIXI.Graphics();
-    drawing.lineStyle(1.5, 0x956e32, 0.75);
-    const angle = -5 * Math.PI / 180;
-    const rotate = (x, y) => {
-      const dx = x - 536;
-      const dy = y - 951.5;
-      return [536 + dx * Math.cos(angle) - dy * Math.sin(angle),
-        951.5 + dx * Math.sin(angle) + dy * Math.cos(angle)];
-    };
-    for (const [x1, y1, x2, y2] of segments) {
-      const start = rotate(x1, y1);
-      const end = rotate(x2, y2);
-      drawing.moveTo(...start);
-      drawing.lineTo(...end);
-    }
-    runtimeScene.getLayer("UI").getRenderer().addRendererObject(drawing, 22);
-    state.dividerDrawing = drawing;
+  object.setString(String(value));
+  for (let candidate = size; candidate >= 24; candidate--) {
+    object.setCharacterSize(candidate);
+    if (object.getWidth() <= maxWidth) break;
   }
-  const rawTransport = menuBookCore.createLocalJournalTransport();
-  const context = () => ({environment: state.active && menuBookCurrent() ?
-    menuBookBackend?.environment : "blocked", sceneId: state.sceneId,
+};
+const journalShow = (name, visible) => { const object = journalObject(name); if (object) object.hide(!visible); };
+const journalT = (key, params = {}) => journalI18n ? journalI18n.t(key, params) : key;
+const journalSceneCurrent = () => journalGame.getSceneStack().getCurrentScene() === runtimeScene;
+const journalSafeNumber = value => {
+  if (!Number.isSafeInteger(value) || value < 0) return "—";
+  if (value >= 1000000000000) return "≈" +
+    value.toExponential(0).replace("e+", "e");
+  const locale = journalI18n?.language === "en" ? "en-US" : "de-DE";
+  return value >= 1000000 ? "≈" + new Intl.NumberFormat(locale,
+    {notation: "compact", maximumSignificantDigits: 4}).format(value) :
+    value.toLocaleString(locale);
+};
+
+if (!runtimeScene.__lockLootL061Journal) {
+  journalGame.__lockLootJournalSceneSerial = (journalGame.__lockLootJournalSceneSerial || 0) + 1;
+  const state = {sceneId: `journal-${journalGame.__lockLootJournalSceneSerial}`,
+    authGeneration: 0, session: null, active: true, dialog: null,
+    lastLanguage: "", notice: "", authRejected: false, loading: false};
+  runtimeScene.__lockLootL061Journal = state;
+  const rawTransport = journalCore.createLocalJournalTransport();
+  const context = () => ({environment: state.active && journalSceneCurrent() ?
+    journalBackend?.environment : "blocked", sceneId: state.sceneId,
   authGeneration: state.authGeneration, uid: state.session?.uid || "",
   idToken: state.session?.idToken || ""});
-  state.controller = menuBookCore.createJournalController({context, visibleRows: 2,
-    requestId: () => "menu-book-read-only",
+  state.controller = journalCore.createJournalController({context,
+    requestId: () => {
+      const bytes = new Uint8Array(16);
+      globalThis.crypto.getRandomValues(bytes);
+      return "journal-" + [...bytes].map(value => value.toString(16).padStart(2, "0")).join("");
+    },
     transport: async (url, data, token) => {
       try { return await rawTransport(url, data, token); }
       catch (error) {
@@ -1499,160 +1167,213 @@ if (!runtimeScene.__lockLootL061MenuBook) {
       }
     }});
   state.ensureSession = async force => {
-    if (!menuBookBackend?.enabled || !menuBookBackend.isLocal) return false;
-    const current = await (force ? menuBookBackend.refresh() :
-      menuBookBackend.authenticate(false));
-    if (!state.active || !menuBookCurrent() || !current ||
-        typeof current.uid !== "string" ||
-        typeof current.idToken !== "string") return false;
+    if (!journalBackend || !journalBackend.enabled || !journalBackend.isLocal) return false;
+    const current = await (force ? journalBackend.refresh() : journalBackend.authenticate(false));
+    if (!state.active || !journalSceneCurrent() || !current ||
+        typeof current.uid !== "string" || typeof current.idToken !== "string") return false;
     if (state.session?.uid !== current.uid || state.session?.idToken !== current.idToken) {
       state.authGeneration++;
       state.session = current;
     }
     return true;
   };
-  state.navigate = async action => {
-    if (!state.active || state.busy) return;
-    state.busy = true;
+  state.load = async (page = 0, half = 0) => {
+    if (!state.active) return;
+    if (state.loading) { state.queuedLoad = {page, half}; return; }
+    state.loading = true;
     state.notice = "";
     try {
       if (!await state.ensureSession(false)) {
-        state.session = null;
-        await state.controller.load(0);
+        await state.controller.load(page);
         return;
       }
       state.authRejected = false;
-      let result = await (action === "next" ? state.controller.next() :
-        action === "previous" ? state.controller.previous() :
-          state.controller.load(0));
-      if (state.authRejected && state.active && menuBookCurrent() &&
+      let view = await state.controller.load(page);
+      if (state.authRejected && state.active && journalSceneCurrent() &&
           await state.ensureSession(true)) {
         state.authRejected = false;
-        result = await state.controller.load(result.page);
+        view = await state.controller.load(page);
       }
-      return result;
-    } catch {
+      if (half && view.page === page && view.phase !== "loading") await state.controller.next();
+      if (state.pendingNotice && ["ready", "empty"].includes(state.controller.view().phase)) {
+        state.notice = state.pendingNotice;
+      }
+      state.pendingNotice = "";
+    } catch (error) {
+      state.pendingNotice = "";
       if (state.active) state.notice = "journal.connection_error";
-    } finally { state.busy = false; }
-  };
-  if (!menuBookBackend?.isLocal) {
-    state.started = true;
-    void state.controller.load(0);
-  }
-  if (!menuBookGame.__lockLootL061MenuBookCleanupRegistered) {
-    gdjs.registerRuntimeSceneUnloadingCallback(scene => {
-      const old = scene.__lockLootL061MenuBook;
-      if (old) {
-        old.active = false;
-        old.controller.reset();
-        old.dividerDrawing?.destroy();
-        delete scene.__lockLootL061MenuBook;
+    } finally {
+      state.loading = false;
+      if (state.queuedLoad && state.active) {
+        const queued = state.queuedLoad;
+        state.queuedLoad = null;
+        void state.load(queued.page, queued.half);
       }
-    });
-    menuBookGame.__lockLootL061MenuBookCleanupRegistered = true;
-  }
+    }
+  };
+  if (!journalBackend?.isLocal) void state.controller.load(0);
+  else void state.load(0);
 }
-const menuBookState = runtimeScene.__lockLootL061MenuBook;
-if (menuBookBackend?.isLocal && menuBookState.active) {
-  const menuAuth = runtimeScene.__lockLootL046Menu;
-  const waited = Date.now() - menuBookState.waitStartedAt;
-  const initialUidReady = !!menuAuth?.uid &&
-    menuBookBackend.getUid() === menuAuth.uid;
-  if (!menuBookState.started && !menuAuth?.loadingLastSolution &&
-      (initialUidReady || menuAuth?.retryAt > 0 || waited > 30000)) {
-    menuBookState.started = true;
-    menuBookState.recoveryPending = menuAuth?.retryAt > 0;
-    void menuBookState.navigate("load");
-  } else if (!menuBookState.started && waited > 30000) {
-    menuBookState.notice = "journal.connection_error";
-  } else if (menuBookState.recoveryPending && !menuBookState.busy &&
-      !menuAuth?.loadingLastSolution && menuAuth?.lastSolutionReady &&
-      menuAuth.retryAt === 0 && initialUidReady) {
-    menuBookState.recoveryPending = false;
-    void menuBookState.navigate("load");
-  }
-}
-const menuBookView = menuBookState.controller.view();
-const menuBookVerified = ["ready", "empty"].includes(menuBookView.phase);
-const leader = menuBookVerified && menuBookView.page === 0 &&
-  menuBookView.half === 0 && menuBookView.rows[0]?.place === 1 ?
-  menuBookView.rows[0] : null;
-menuBookText("MenuBookPlace", leader ? "1." : "");
-menuBookName(leader?.displayName || "");
-menuBookText("MenuBookChestsLabel", leader ? menuBookT("journal.menu_chests_opened") : "");
-const chestsLabel = menuBookObject("MenuBookChestsLabel");
-if (chestsLabel) chestsLabel.setLineHeight(20);
-menuBookText("MenuBookChestsCount", leader ? menuBookCount(leader.firstSolveCount) : "");
-menuBookText("MenuBookConsumedLabel", leader ? menuBookT("journal.menu_consumed") : "");
-for (const [iconName, countName, value] of [
-    ["MenuBookCookieIcon", "MenuBookCookieCount", leader?.cookiesConsumed],
-    ["MenuBookLockpickIcon", "MenuBookLockpickCount", leader?.lockpicksConsumed]]) {
-  const icon = menuBookObject(iconName);
-  if (icon) icon.setOpacity(leader ? 255 : 0);
-  menuBookText(countName, leader ? menuBookCount(value) : "");
-}
-const menuBookStatusKey = menuBookState.notice ? "journal.menu_unavailable" :
-  leader ? "" : ["loading", "idle"].includes(menuBookView.phase) ?
-    "journal.menu_loading" : menuBookView.phase === "empty" ?
-      "journal.menu_empty" : "journal.menu_unavailable";
-menuBookText("MenuBookStatus", menuBookStatusKey ? menuBookT(menuBookStatusKey) : "");
-const menuBookStatus = menuBookObject("MenuBookStatus");
-if (menuBookStatus) {
-  menuBookStatus.setWrapping(true);
-  menuBookStatus.setWrappingWidth(116);
-  menuBookStatus.setLineHeight(21);
-}
-// GDevelop/Pixi verankert Text in der gerenderten Textmitte. Darum wird
-// jede Textmitte nach dem dynamischen setString auf die gedrehte Buchzelle
-// gesetzt; damit folgen auch zwei Namenszeilen und Zahlen dem Papierfalz.
-const menuBookCells = {
-  MenuBookPlace: [411, 883, 113, 42],
-  MenuBookName: [547, 881, 119, 46],
-  MenuBookChestsLabel: [405, 925, 121, 36],
-  MenuBookChestsCount: [548, 930, 115, 26],
-  MenuBookConsumedLabel: [408, 962, 115, 24],
-  MenuBookCookieCount: [548, 985, 115, 25],
-  MenuBookLockpickCount: [548, 1010, 115, 25],
-  MenuBookStatus: [546, 891, 120, 96]
-};
-const menuBookRadians = -5 * Math.PI / 180;
-for (const [name, [left, top, width, height]] of Object.entries(menuBookCells)) {
-  const object = menuBookObject(name);
-  if (!object) continue;
-  const dx = left + width / 2 - 536;
-  const dy = top + height / 2 - 951.5;
-  const pivotX = 536 + dx * Math.cos(menuBookRadians) - dy * Math.sin(menuBookRadians);
-  const pivotY = 951.5 + dx * Math.sin(menuBookRadians) + dy * Math.cos(menuBookRadians);
-  object.setPosition(pivotX - object.getWidth() / 2, pivotY);
-  object.setAngle(-5);
-}
-const menuBookPanelOpen = runtimeScene.__lockLootL046Menu?.languagePanelOpen ||
-  runtimeScene.__lockLootL046Menu?.languagePanelWasOpenOnRelease;
-const menuBookPortraitBlocked =
-  runtimeScene.__lockLootL061MenuPortrait?.orientationNotice?.style.display === "flex";
-if (menuBookState.active && menuBookCurrent() && !menuBookPanelOpen &&
-    !menuBookPortraitBlocked &&
-    gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left")) {
+const journalState = runtimeScene.__lockLootL061Journal;
+const journalView = journalState.controller.view();
+const journalRank = id => journalT("journal.rank." + id);
+const journalButton = name => {
+  const object = journalObject(name);
+  if (!object || object.isHidden()) return false;
   const x = gdjs.evtTools.input.getCursorX(runtimeScene, "UI", 0);
   const y = gdjs.evtTools.input.getCursorY(runtimeScene, "UI", 0);
-  const radians = -5 * Math.PI / 180;
-  const dx = x - 536;
-  const dy = y - 951.5;
-  const localX = 536 + dx * Math.cos(radians) + dy * Math.sin(radians);
-  const localY = 951.5 - dx * Math.sin(radians) + dy * Math.cos(radians);
-  if (localX >= 388 && localX <= 684 && localY >= 855 && localY <= 1048) {
-    menuBookState.active = false;
-    menuBookState.controller.reset();
-    gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "JournalScene", false);
+  const touchBounds = {JournalEdit: [408, 266, 230, 90],
+    JournalPrevious: [107, 932, 175, 88], JournalNext: [465, 932, 175, 88],
+    JournalBack: [214, 1021, 292, 88]};
+  const bounds = touchBounds[name] || [object.getX(), object.getY(),
+    object.getWidth(), object.getHeight()];
+  return x >= bounds[0] && x <= bounds[0] + bounds[2] &&
+    y >= bounds[1] && y <= bounds[1] + bounds[3];
+};
+const journalCloseDialog = () => {
+  if (journalState.dialog) journalState.dialog.remove();
+  journalState.dialog = null;
+};
+const journalOpenDialog = () => {
+  if (journalState.dialog || !journalView.ownProfile || journalView.phase === "loading") return;
+  const overlay = document.createElement("div");
+  overlay.style.cssText = "position:fixed;inset:0;z-index:100000;display:flex;align-items:flex-start;justify-content:center;background:rgba(4,20,24,.72);padding:12px;box-sizing:border-box;overflow:auto";
+  const form = document.createElement("form");
+  form.style.cssText = "width:min(440px,100%);max-height:calc(100dvh - 24px);overflow:auto;margin:auto;background:#fff4dc;color:#173f47;border:4px solid #b78338;border-radius:18px;padding:20px;box-shadow:0 18px 48px #071b24;font:600 18px Arial,sans-serif;box-sizing:border-box";
+  const title = document.createElement("label");
+  title.textContent = journalT("journal.name_dialog");
+  title.style.cssText = "display:block;margin-bottom:12px;font-size:24px";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.maxLength = 32;
+  input.autocomplete = "nickname";
+  input.value = journalView.ownProfile.displayName;
+  input.setAttribute("aria-label", journalT("journal.name_dialog"));
+  input.style.cssText = "width:100%;height:52px;box-sizing:border-box;border:2px solid #36717a;border-radius:8px;padding:8px 12px;font:22px Arial,sans-serif;background:#fffefa;color:#183d43";
+  const error = document.createElement("p");
+  error.setAttribute("role", "alert");
+  error.style.cssText = "min-height:24px;color:#963820;font-size:15px;margin:8px 0 12px";
+  const actions = document.createElement("div");
+  actions.style.cssText = "display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;position:sticky;bottom:0;background:#fff4dc;padding-top:6px";
+  const makeButton = (text, type) => {
+    const button = document.createElement("button");
+    button.type = type;
+    button.textContent = text;
+    button.style.cssText = "min-width:110px;min-height:48px;border:0;border-radius:9px;background:#17616b;color:#fff5d8;font:700 17px Arial,sans-serif;padding:8px 14px";
+    return button;
+  };
+  const cancel = makeButton(journalT("journal.cancel"), "button");
+  const save = makeButton(journalT("journal.save"), "submit");
+  cancel.addEventListener("click", () => { if (!save.disabled) journalCloseDialog(); });
+  actions.append(cancel, save);
+  form.append(title, input, error, actions);
+  overlay.append(form);
+  document.body.append(overlay);
+  journalState.dialog = overlay;
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (save.disabled || !journalState.active || !journalSceneCurrent()) return;
+    save.disabled = true;
+    cancel.disabled = true;
+    error.textContent = "";
+    try {
+      const outcome = await journalState.controller.saveName(input.value);
+      if (!journalState.active || !journalSceneCurrent() || journalState.dialog !== overlay) return;
+      if (outcome.ok || outcome.reason === "conflict" || outcome.reason === "superseded") {
+        const page = journalState.controller.view().page;
+        const half = journalState.controller.view().half;
+        journalCloseDialog();
+        journalState.pendingNotice = outcome.ok ? "" : "journal.name_changed_elsewhere";
+        void journalState.load(page, half);
+      } else {
+        error.textContent = journalT("journal.name_save_error");
+        if (journalState.authRejected) void journalState.load(journalState.controller.view().page);
+      }
+    } catch (caught) {
+      error.textContent = journalT("journal.name_invalid");
+    } finally { save.disabled = false; cancel.disabled = false; }
+  });
+  input.focus();
+  input.select();
+};
+
+journalText("JournalTitle", journalT("journal.title"));
+journalText("JournalSubtitle", journalT("journal.subtitle"));
+journalText("JournalProfileHeading", journalT("journal.my_profile"));
+journalName("JournalName", journalView.ownProfile?.displayName || "—", 27, 510);
+journalText("JournalTag", journalView.ownProfile ? "#" + journalView.ownProfile.tag : "");
+journalText("JournalRank", journalView.own ? journalRank(journalView.own.rankId) : "—");
+journalText("JournalOwnStats", journalView.own ? journalT("journal.own_stats", {
+  wins: journalSafeNumber(journalView.own.firstSolveCount),
+  cookies: journalSafeNumber(journalView.own.cookiesConsumed),
+  lockpicks: journalSafeNumber(journalView.own.lockpicksConsumed)}) : "");
+journalText("JournalEdit", journalT("journal.edit_name"));
+journalText("JournalListHeading", journalT("journal.leaderboard"));
+journalText("JournalHeadLegend", journalT("journal.stats_legend"));
+for (let index = 0; index < 5; index++) {
+  const entry = journalView.rows[index];
+  const suffix = String(index + 1);
+  journalText("JournalRowPlace" + suffix, entry ? entry.place ?? "—" : "");
+  journalName("JournalRowName" + suffix, entry ? entry.displayName : "", 28, 465);
+  journalText("JournalRowRank" + suffix, entry ? journalT("journal.rank_label",
+    {rank: journalRank(entry.rankId)}) : "");
+  journalText("JournalRowTag" + suffix, entry ? "#" + entry.tag : "");
+  journalText("JournalRowStats" + suffix, entry ? journalT("journal.row_stats", {
+    wins: journalSafeNumber(entry.firstSolveCount),
+    cookies: journalSafeNumber(entry.cookiesConsumed),
+    lockpicks: journalSafeNumber(entry.lockpicksConsumed)}) : "");
+}
+const statusKey = ({loading: "journal.loading", offline: "journal.offline",
+  unavailable: "journal.unavailable", partial: "journal.partial",
+  empty: "journal.empty", invalid: "journal.invalid", error: "journal.error",
+  idle: "journal.loading"})[journalView.phase];
+journalText("JournalStatus", journalState.notice && ["ready", "empty", "idle"].includes(journalView.phase) ?
+  journalT(journalState.notice) : statusKey ? journalT(statusKey) : "");
+const journalStatusObject = journalObject("JournalStatus");
+if (journalStatusObject) {
+  const roomy = journalView.rows.length === 0;
+  journalStatusObject.setPosition(115, roomy ? 675 : 948);
+  journalStatusObject.setCharacterSize(roomy ? 26 : 22);
+  journalStatusObject.setWrapping(true);
+  journalStatusObject.setWrappingWidth(520);
+  journalStatusObject.setLineHeight(32);
+}
+journalText("JournalPageNumber", journalT("journal.page", {page: journalView.page * 2 + journalView.half + 1}));
+journalText("JournalPrevious", journalT("journal.previous"));
+journalText("JournalNext", journalT("journal.next"));
+journalText("JournalBack", journalT("journal.back"));
+const prevAvailable = journalView.phase !== "loading" && (journalView.page > 0 || journalView.half > 0);
+const nextAvailable = journalView.phase !== "loading" &&
+  (journalView.hasMoreInPage || journalView.hasNextPage);
+for (const [name, available] of [["JournalPrevious", prevAvailable], ["JournalNext", nextAvailable],
+  ["JournalEdit", !!journalView.ownProfile]]) {
+  const object = journalObject(name);
+  if (object) object.setOpacity(available ? 255 : 100);
+}
+if (!journalState.dialog && journalStage?.orientationNotice?.style.display !== "flex" &&
+    gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left")) {
+  if (journalButton("JournalBack")) {
+    journalState.active = false;
+    journalState.controller.reset();
+    journalCloseDialog();
+    journalStage?.restore();
+    gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "MainMenu", false);
+  } else if (journalButton("JournalEdit") && journalView.ownProfile) journalOpenDialog();
+  else if (journalButton("JournalPrevious") && prevAvailable) {
+    if (journalView.half) void journalState.controller.previous();
+    else void journalState.load(journalView.page - 1, 1);
+  } else if (journalButton("JournalNext") && nextAvailable) {
+    if (journalView.hasMoreInPage) void journalState.controller.next();
+    else void journalState.load(journalView.page + 1, 0);
   }
 }
 };
-gdjs.MainMenuCode.eventsList0 = function(runtimeScene) {
+gdjs.JournalSceneCode.eventsList0 = function(runtimeScene) {
 
 {
 
 
-gdjs.MainMenuCode.userFunc0xe94888(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xe52718(runtimeScene);
 
 }
 
@@ -1660,7 +1381,7 @@ gdjs.MainMenuCode.userFunc0xe94888(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xcdd4b0(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xe52668(runtimeScene);
 
 }
 
@@ -1668,7 +1389,7 @@ gdjs.MainMenuCode.userFunc0xcdd4b0(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xe53e00(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xcdd4b0(runtimeScene);
 
 }
 
@@ -1676,7 +1397,7 @@ gdjs.MainMenuCode.userFunc0xe53e00(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xe553d0(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xe53e00(runtimeScene);
 
 }
 
@@ -1684,192 +1405,118 @@ gdjs.MainMenuCode.userFunc0xe553d0(runtimeScene);
 {
 
 
-gdjs.MainMenuCode.userFunc0xe52668(runtimeScene);
-
-}
-
-
-{
-
-
-gdjs.MainMenuCode.userFunc0xe94910(runtimeScene);
-
-}
-
-
-{
-
-
-gdjs.MainMenuCode.userFunc0xe51c68(runtimeScene);
-
-}
-
-
-{
-
-
-gdjs.MainMenuCode.userFunc0xe54a90(runtimeScene);
-
-}
-
-
-{
-
-
-gdjs.MainMenuCode.userFunc0xe57da8(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xe53318(runtimeScene);
 
 }
 
 
 };
 
-gdjs.MainMenuCode.func = function(runtimeScene) {
+gdjs.JournalSceneCode.func = function(runtimeScene) {
 runtimeScene.getOnceTriggers().startNewFrame();
 
-gdjs.MainMenuCode.GDMainMenuTitleObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuSkyObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuSeaObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuCloudObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuFarIslandsObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPalmObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuVegetationObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuBeachObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuWaveObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuChestLidObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuChestBaseObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuTreasureObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuParrotObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPirateObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuSparkleObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuSandMoundObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuBackSandPileObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuForegroundObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLogoObjects1.length = 0;
-gdjs.MainMenuCode.GDBackgroundObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuCoveObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPirateShipObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuRowboatObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailPlantObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailDriftwoodObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailShellPinkObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailShellConchObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailShellBrokenObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailStarfishObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailStoneGrayObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailStoneGoldObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailStoneDarkObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPlayButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLastSolutionButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLastSolutionTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuShopButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuMusicButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuChestCrestObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPlayTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuShopTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuMusicStateTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageStateTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuUtilityHintTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguagePanelObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguagePanelTitleObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1.length = 0;
-gdjs.MainMenuCode.GDStagingBadgeObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookPaperObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookPlaceObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookNameObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookChestsLabelObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookChestsCountObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookConsumedLabelObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookCookieIconObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookCookieCountObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookLockpickIconObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookLockpickCountObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookStatusObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudCookieFrameObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudLockpickFrameObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudCookieIconObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudLockpickIconObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalPageObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalTitleObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalSubtitleObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalProfileHeadingObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalNameObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalTagObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRankObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalOwnStatsObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalEditObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalListHeadingObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalHeadLegendObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalStatusObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalPreviousObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalPageNumberObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalNextObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalBackButtonObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalBackObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
 
-gdjs.MainMenuCode.eventsList0(runtimeScene);
-gdjs.MainMenuCode.GDMainMenuTitleObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuSkyObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuSeaObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuCloudObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuFarIslandsObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPalmObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuVegetationObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuBeachObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuWaveObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuChestLidObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuChestBaseObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuTreasureObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuParrotObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPirateObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuSparkleObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuSandMoundObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuBackSandPileObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuForegroundObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLogoObjects1.length = 0;
-gdjs.MainMenuCode.GDBackgroundObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuCoveObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPirateShipObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuRowboatObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailPlantObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailDriftwoodObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailShellPinkObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailShellConchObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailShellBrokenObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailStarfishObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailStoneGrayObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailStoneGoldObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuDetailStoneDarkObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPlayButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLastSolutionButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLastSolutionTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuShopButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuMusicButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuChestCrestObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuPlayTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuShopTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuMusicStateTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageStateTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuUtilityHintTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguagePanelObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguagePanelTitleObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageDeButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageEnButtonObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageDeTextObjects1.length = 0;
-gdjs.MainMenuCode.GDMainMenuLanguageEnTextObjects1.length = 0;
-gdjs.MainMenuCode.GDStagingBadgeObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookPaperObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookPlaceObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookNameObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookChestsLabelObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookChestsCountObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookConsumedLabelObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookCookieIconObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookCookieCountObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookLockpickIconObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookLockpickCountObjects1.length = 0;
-gdjs.MainMenuCode.GDMenuBookStatusObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudCookieFrameObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudLockpickFrameObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudCookieIconObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudLockpickIconObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudCookiesTextObjects1.length = 0;
-gdjs.MainMenuCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.JournalSceneCode.eventsList0(runtimeScene);
+gdjs.JournalSceneCode.GDJournalPageObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalTitleObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalSubtitleObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalProfileHeadingObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalNameObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalTagObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRankObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalOwnStatsObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalEditObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalListHeadingObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalHeadLegendObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats1Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats2Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats3Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats4Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowPlace5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowName5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowRank5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowTag5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalRowStats5Objects1.length = 0;
+gdjs.JournalSceneCode.GDJournalStatusObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalPreviousObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalPageNumberObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalNextObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalBackButtonObjects1.length = 0;
+gdjs.JournalSceneCode.GDJournalBackObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.JournalSceneCode.GDResourceHudLockpicksTextObjects1.length = 0;
 
 
 return;
 
 }
 
-gdjs['MainMenuCode'] = gdjs.MainMenuCode;
+gdjs['JournalSceneCode'] = gdjs.JournalSceneCode;
