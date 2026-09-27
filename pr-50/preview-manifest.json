@@ -1,0 +1,19 @@
+{
+  "source_repository": "Zaarol-cloud/lock-and-loot",
+  "pr_number": 50,
+  "source_commit": "233271902221d25f3ecbb863d5b4de9e7e6268f4",
+  "built_at": "2026-09-27T15:44:42Z",
+  "gdevelop_version": "5.6.277",
+  "mobile_layout": {
+    "strategy": "contain",
+    "game_width": 720,
+    "game_height": 1280,
+    "portrait_rotation_prompt": false,
+    "viewports": [
+      "360x800",
+      "412x915",
+      "800x360",
+      "915x412"
+    ]
+  }
+}
