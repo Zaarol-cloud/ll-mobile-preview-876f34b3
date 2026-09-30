@@ -1,0 +1,12 @@
+{
+  "name": "Lock & Loot - Arbeitsversion Automatisierung",
+  "short_name": "Lock & Loot - Arbeitsversion Automatisierung",
+  "id": "com.example.gamename",
+  "description": "",
+  "orientation": "portrait",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "black",
+  "categories": ["games", "entertainment"],
+  "icons": []
+}
