@@ -280,7 +280,7 @@ const trainingPortraitGame = runtimeScene.getGame();
 const trainingPortraitLocation = typeof location !== 'undefined' ? location : null;
 const trainingPortraitLocal = !!trainingPortraitLocation && (trainingPortraitLocation.protocol === 'file:' || ['127.0.0.1','localhost'].includes(trainingPortraitLocation.hostname));
 const trainingPortraitEvidence = !!trainingPortraitLocation && new URLSearchParams(trainingPortraitLocation.search).has('l060Evidence');
-const trainingPortraitEnabled = trainingPortraitLocal && !trainingPortraitEvidence;
+const trainingPortraitEnabled = !trainingPortraitLocal || !trainingPortraitEvidence;
 const trainingPortraitRemember = (element, properties) => Object.fromEntries(properties.map(property => [property, { value: element?.style.getPropertyValue(property) || '', priority: element?.style.getPropertyPriority(property) || '' }]));
 const trainingPortraitRestore = (element, saved) => { if (!element || !saved) return; for (const [property, entry] of Object.entries(saved)) { if (entry.value) element.style.setProperty(property, entry.value, entry.priority); else element.style.removeProperty(property); } };
 if (trainingPortraitEnabled) {
@@ -5764,7 +5764,7 @@ if (presentation && !presentation.resolutionLocked) {
   const chestEndLocation = typeof location !== 'undefined' ? location : null;
   const chestEndLocalPreview = !!chestEndLocation && (chestEndLocation.protocol === 'file:' || ['127.0.0.1','localhost'].includes(chestEndLocation.hostname));
   const chestEndEvidencePreview = !!chestEndLocation && new URLSearchParams(chestEndLocation.search).has('l060Evidence');
-  presentation.fixedPortrait = chestEndLocalPreview && !chestEndEvidencePreview;
+  presentation.fixedPortrait = !chestEndLocalPreview || !chestEndEvidencePreview;
   presentation.landscape = !presentation.fixedPortrait && typeof window !== 'undefined' && window.innerWidth > window.innerHeight;
   presentation.canvas = chestEndGame.getRenderer?.().getCanvas?.() || null;
   if (presentation.canvas) {
