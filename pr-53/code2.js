@@ -227,7 +227,7 @@ gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.SolutionSceneCode.userFunc0xe61548 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xe522b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -1057,7 +1057,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
   badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
 }
 };
-gdjs.SolutionSceneCode.userFunc0xcbcc88 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xcb88a8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -1284,7 +1284,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.SolutionSceneCode.userFunc0xcf0040 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xce1038 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -1323,11 +1323,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.SolutionSceneCode.userFunc0xe54460 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xe4f8f0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Einmalige Auflösungsmusik und AUS-Schutz erfolgen zentral über MusicController_Events.
 };
-gdjs.SolutionSceneCode.userFunc0xbd2fd0 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xce6c80 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025/L&L-056A: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
 // Datenquelle ist ausschließlich der tief eingefrorene, serverautoritativ geprüfte L&L-059-Snapshot.
@@ -1412,6 +1412,19 @@ function createSolutionExplanationEngine({t, cleanPlayerText = (value) => String
   const asNumbers = (values) => Array.isArray(values) ? values.map(Number) : [];
   const validPosition = (value) => Number.isInteger(value) && value >= 1 && value <= 11;
   const normalizeText = (value) => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const t2Code04Extremum = (hintText) => {
+    const normalized = normalizeText(hintText).replace(/\s+/g, " ").trim();
+    const minimum = normalized.includes("kleinsten zahl des codes") || normalized.includes("globalen minimum") || normalized.includes("smallest digit in the code");
+    const maximum = normalized.includes("großten zahl des codes") || normalized.includes("globalen maximum") || normalized.includes("largest digit in the code");
+    const mentionsMinimum = normalized.includes("kleinsten") || normalized.includes("minimum") || normalized.includes("smallest");
+    const mentionsMaximum = normalized.includes("großten") || normalized.includes("maximum") || normalized.includes("largest");
+    if (mentionsMinimum === mentionsMaximum) return "";
+    return minimum && !mentionsMaximum ? "minimum" : maximum && !mentionsMinimum ? "maximum" : "";
+  };
+  const t2Code04ExtremumValue = (hintText, code) => {
+    const extremum = t2Code04Extremum(hintText);
+    return extremum === "minimum" ? Math.min(...code) : extremum === "maximum" ? Math.max(...code) : NaN;
+  };
   const unique = (values) => [...new Set(values)];
   const isPrime = (value) => Number.isInteger(value) && value >= 2 && Array.from({length: Math.max(0, value - 2)}, (_, index) => index + 2).every((divisor) => value % divisor !== 0);
   const isSquare = (value) => Number.isInteger(value) && value >= 0 && Number.isInteger(Math.sqrt(value));
@@ -1540,6 +1553,10 @@ function createSolutionExplanationEngine({t, cleanPlayerText = (value) => String
       if ((normalizedHint.includes("kleinste gerade") || normalizedHint.includes("smallest even")) && evensIn(code).length === 0) return false;
       if ((normalizedHint.includes("großte ungerade") || normalizedHint.includes("largest odd")) && oddsIn(code).length === 0) return false;
       if ((normalizedHint.includes("primzahl") || normalizedHint.includes("prime")) && primesIn(code).length === 0) return false;
+    }
+    if (id === "T2-CODE-04") {
+      const extremum = t2Code04ExtremumValue(hintText, code);
+      return values.length === 2 && Number.isInteger(extremum) && Math.abs(values[0] - extremum) > 0 && Math.abs(values[0] - extremum) < Math.abs(values[1] - extremum);
     }
     if (id === "T2-08") return values.length === 2 && Math.abs(values[0] - values[1]) === 1;
     if (id === "T2-09") return values.length === 2 && values[0] !== values[1] && (values[0] === 2 * values[1] || values[1] === 2 * values[0]);
@@ -1693,7 +1710,7 @@ function createSolutionExplanationEngine({t, cleanPlayerText = (value) => String
       const largestPrime = Math.max(...primesIn(code));
       return parts(rule("solution.explain.rule.codewide_prime_pair"), `${assignments(positions, values)}   |   ${t("solution.calc.largest_prime", {value: largestPrime})}`, confirmed(`${Math.min(a, b)} ${relationSymbol(Math.min(a, b), largestPrime)} ${largestPrime} ${relationSymbol(largestPrime, Math.max(a, b))} ${Math.max(a, b)}`));
     }
-    const extremum = normalized.includes("kleinsten") || normalized.includes("smallest") ? Math.min(...code) : Math.max(...code);
+    const extremum = t2Code04ExtremumValue(hintText, code);
     const firstDistance = Math.abs(a - extremum); const secondDistance = Math.abs(b - extremum);
     return parts(rule("solution.rule.t2_code_04"), `|${a} − ${extremum}| = ${firstDistance}   |   |${b} − ${extremum}| = ${secondDistance}`, confirmed(`${firstDistance} < ${secondDistance}`));
   };
@@ -2170,7 +2187,7 @@ function createSolutionExplanationEngine({t, cleanPlayerText = (value) => String
       });
     }
     if (id === "T2-CODE-04") {
-      const normalizedHint = normalizeText(context.hintText); const extremum = normalizedHint.includes("kleinsten") || normalizedHint.includes("smallest") ? Math.min(...code) : Math.max(...code);
+      const extremum = t2Code04ExtremumValue(context.hintText, code);
       const [first, second] = values; const firstDistance = Math.abs(first - extremum); const secondDistance = Math.abs(second - extremum);
       return [
         makePlanStep("extrema", {inputPositions: code.map((unused, index) => index + 1), intermediatePositions: code.map((value, index) => value === extremum ? index + 1 : 0).filter(Boolean), calculation: t("solution.calc.minimum_maximum", {minimum: Math.min(...code), maximum: Math.max(...code)}), intermediate: intermediateText([extremum]), intermediateValues: [extremum], outputRole: "intermediate"}),
@@ -2812,7 +2829,7 @@ gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionBackObjec
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
-gdjs.SolutionSceneCode.userFunc0xf38e68 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xe4a868 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische SolutionScene-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -2832,7 +2849,7 @@ gdjs.SolutionSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xe61548(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xe522b8(runtimeScene);
 
 }
 
@@ -2840,7 +2857,7 @@ gdjs.SolutionSceneCode.userFunc0xe61548(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xcbcc88(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xcb88a8(runtimeScene);
 
 }
 
@@ -2848,7 +2865,7 @@ gdjs.SolutionSceneCode.userFunc0xcbcc88(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xcf0040(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xce1038(runtimeScene);
 
 }
 
@@ -2856,7 +2873,7 @@ gdjs.SolutionSceneCode.userFunc0xcf0040(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xe54460(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xe4f8f0(runtimeScene);
 
 }
 
@@ -2864,7 +2881,7 @@ gdjs.SolutionSceneCode.userFunc0xe54460(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xbd2fd0(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xce6c80(runtimeScene);
 
 }
 
@@ -3327,7 +3344,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xf38e68(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xe4a868(runtimeScene);
 
 }
 
