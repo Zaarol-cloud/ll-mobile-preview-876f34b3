@@ -100,7 +100,7 @@ gdjs.PersonalSelectionSceneCode.GDResourceHudCookiesTextObjects1= [];
 gdjs.PersonalSelectionSceneCode.GDResourceHudLockpicksTextObjects1= [];
 
 
-gdjs.PersonalSelectionSceneCode.userFunc0xa64c18 = function GDJSInlineCode(runtimeScene) {
+gdjs.PersonalSelectionSceneCode.userFunc0xa54480 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: Lokale Desktop- und Dateivorschau bleibt durchgehend proportional im 720x1280-Handyformat.
 const trainingPortraitGame = runtimeScene.getGame();
@@ -126,7 +126,7 @@ if (trainingPortraitEnabled) {
   if (typeof document !== 'undefined') { for (const element of [document.documentElement, document.body]) { element.style.setProperty('background', '#123f50', 'important'); element.style.setProperty('background-color', '#123f50', 'important'); } }
 }
 };
-gdjs.PersonalSelectionSceneCode.userFunc0xa661b8 = function GDJSInlineCode(runtimeScene) {
+gdjs.PersonalSelectionSceneCode.userFunc0xa66278 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -522,7 +522,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
 }
 // Unmarked environments retain their existing independent runtime.
 };
-gdjs.PersonalSelectionSceneCode.userFunc0xa64cc8 = function GDJSInlineCode(runtimeScene) {
+gdjs.PersonalSelectionSceneCode.userFunc0xa64eb8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -749,7 +749,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.PersonalSelectionSceneCode.userFunc0xa66268 = function GDJSInlineCode(runtimeScene) {
+gdjs.PersonalSelectionSceneCode.userFunc0xa65958 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -788,7 +788,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.PersonalSelectionSceneCode.userFunc0xa67800 = function GDJSInlineCode(runtimeScene) {
+gdjs.PersonalSelectionSceneCode.userFunc0xa64ca8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const personal = runtimeScene.getGame().__lockLootPersonalRuntime;
 if (personal?.phase === 'ready') personal.bridge.tickSelection(runtimeScene);
@@ -799,7 +799,7 @@ gdjs.PersonalSelectionSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.PersonalSelectionSceneCode.userFunc0xa64c18(runtimeScene);
+gdjs.PersonalSelectionSceneCode.userFunc0xa54480(runtimeScene);
 
 }
 
@@ -807,7 +807,7 @@ gdjs.PersonalSelectionSceneCode.userFunc0xa64c18(runtimeScene);
 {
 
 
-gdjs.PersonalSelectionSceneCode.userFunc0xa661b8(runtimeScene);
+gdjs.PersonalSelectionSceneCode.userFunc0xa66278(runtimeScene);
 
 }
 
@@ -815,7 +815,7 @@ gdjs.PersonalSelectionSceneCode.userFunc0xa661b8(runtimeScene);
 {
 
 
-gdjs.PersonalSelectionSceneCode.userFunc0xa64cc8(runtimeScene);
+gdjs.PersonalSelectionSceneCode.userFunc0xa64eb8(runtimeScene);
 
 }
 
@@ -823,7 +823,7 @@ gdjs.PersonalSelectionSceneCode.userFunc0xa64cc8(runtimeScene);
 {
 
 
-gdjs.PersonalSelectionSceneCode.userFunc0xa66268(runtimeScene);
+gdjs.PersonalSelectionSceneCode.userFunc0xa65958(runtimeScene);
 
 }
 
@@ -831,7 +831,7 @@ gdjs.PersonalSelectionSceneCode.userFunc0xa66268(runtimeScene);
 {
 
 
-gdjs.PersonalSelectionSceneCode.userFunc0xa67800(runtimeScene);
+gdjs.PersonalSelectionSceneCode.userFunc0xa64ca8(runtimeScene);
 
 }
 

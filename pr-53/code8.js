@@ -51,7 +51,7 @@ gdjs.JournalSceneCode.GDResourceHudCookiesTextObjects1= [];
 gdjs.JournalSceneCode.GDResourceHudLockpicksTextObjects1= [];
 
 
-gdjs.JournalSceneCode.userFunc0xa66268 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xfbfbb8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -447,7 +447,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
 }
 // Unmarked environments retain their existing independent runtime.
 };
-gdjs.JournalSceneCode.userFunc0xa64c18 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xa66278 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -674,7 +674,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.JournalSceneCode.userFunc0xa64cc8 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xa64ca8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -713,7 +713,7 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.JournalSceneCode.userFunc0xa67800 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xfe29b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-061: Gemeinsame geprüfte Journal-Controllerquelle.
 const journalCoreGame = runtimeScene.getGame();
@@ -1051,7 +1051,7 @@ module.exports = Object.freeze({URLS, createLocalJournalTransport, createJournal
   journalCoreGame.__lockLootJournalCore = module.exports;
 }
 };
-gdjs.JournalSceneCode.userFunc0xe1cf40 = function GDJSInlineCode(runtimeScene) {
+gdjs.JournalSceneCode.userFunc0xe26e40 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-061: Lokales Tagebuch. Der eingebettete Controller prüft alle Serverantworten.
 const journalGame = runtimeScene.getGame();
@@ -1469,7 +1469,7 @@ gdjs.JournalSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.JournalSceneCode.userFunc0xa66268(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xfbfbb8(runtimeScene);
 
 }
 
@@ -1477,7 +1477,7 @@ gdjs.JournalSceneCode.userFunc0xa66268(runtimeScene);
 {
 
 
-gdjs.JournalSceneCode.userFunc0xa64c18(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xa66278(runtimeScene);
 
 }
 
@@ -1485,7 +1485,7 @@ gdjs.JournalSceneCode.userFunc0xa64c18(runtimeScene);
 {
 
 
-gdjs.JournalSceneCode.userFunc0xa64cc8(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xa64ca8(runtimeScene);
 
 }
 
@@ -1493,7 +1493,7 @@ gdjs.JournalSceneCode.userFunc0xa64cc8(runtimeScene);
 {
 
 
-gdjs.JournalSceneCode.userFunc0xa67800(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xfe29b8(runtimeScene);
 
 }
 
@@ -1501,7 +1501,7 @@ gdjs.JournalSceneCode.userFunc0xa67800(runtimeScene);
 {
 
 
-gdjs.JournalSceneCode.userFunc0xe1cf40(runtimeScene);
+gdjs.JournalSceneCode.userFunc0xe26e40(runtimeScene);
 
 }
 

@@ -112,7 +112,7 @@ export function createGDevelopBridge() {
     const panel=document.createElement('section'),frame=art('mainmenu_language_panel_l049.png'),buttonArt=art('chest_end_l060_ui_panel.png');
     panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label',t('crew_title'));
     Object.assign(panel.style,{width:'min(100%,420px)',maxHeight:'calc(100dvh - 32px)',overflowY:'auto',boxSizing:'border-box',padding:'12px 12px 10px',borderStyle:'solid',borderColor:'transparent',borderWidth:'48px 20px 24px',borderImageSource:'url("'+frame+'")',borderImageSlice:'220 110 100 110 fill',borderImageWidth:'48px 20px 24px',backgroundColor:'#efd49b',backgroundClip:'padding-box',color:'#3d2514',fontFamily:'Arial,sans-serif',filter:'drop-shadow(0 12px 22px #0009)'});root.append(panel);
-    const labels=[];const label=(tag,key)=>{const node=document.createElement(tag);labels.push([node,key]);panel.append(node);return node;};const title=label('h2','crew_title');Object.assign(title.style,{fontFamily:'Georgia,serif',fontSize:'clamp(22px,6vw,27px)',textAlign:'center',color:'#173c45',margin:'0 0 12px',lineHeight:'1.15',textShadow:'0 1px #fff3cb'});const body=label('p',kind==='code'?'crew_code_help':'crew_help');Object.assign(body.style,{fontSize:'16px',lineHeight:'1.4',textAlign:'center',margin:'0 0 18px',color:'#3d2a19'});
+    const labels=[];const label=(tag,key)=>{const node=document.createElement(tag);labels.push([node,key]);panel.append(node);return node;};const title=label('h2','crew_title');Object.assign(title.style,{fontFamily:'Georgia,serif',fontSize:'clamp(22px,6vw,27px)',textAlign:'center',color:'#173c45',margin:'0 0 12px',lineHeight:'1.15',textShadow:'0 1px #fff3cb'});const body=label('p',kind==='code'?'crew_code_help':'crew_help');Object.assign(body.style,{fontSize:'16px',lineHeight:'1.4',whiteSpace:'pre-line',textAlign:'center',margin:'0 0 12px',color:'#3d2a19'});
     const error=document.createElement('p');error.setAttribute('role','alert');Object.assign(error.style,{fontSize:'14px',lineHeight:'1.35',textAlign:'center',fontWeight:'bold',color:'#8b2420',minHeight:'20px',margin:'8px 0 0'});let errorKey=null,busy=false,field=null;const modalButtons=[];
     const valid=()=>current(scene)&&overlay?.root===root&&!control.signal.aborted;
     async function canChoose(){if(!valid())return false;if(state.phase!=='ready'){errorKey='error';return false;}const latest=await service.restore({signal:control.signal,isCurrent:valid});if(!valid())return false;if(state.phase!=='ready'){errorKey='error';return false;}state.active=latest?.snapshot.chest?latest.snapshot:null;state.needsFresh=false;state.nextRefresh=Date.now()+1000;if(state.active){state.selection=state.active.chest.selection;wallet=state.active.wallet;errorKey='crew_active_conflict';return false;}return true;}
@@ -136,11 +136,21 @@ export function createGDevelopBridge() {
       },'copy');panel.append(error);
     }else{
       button('crew_create',async()=>{if(!await canChoose())return;state.invitationCode=null;state.error=false;state.errorCode=null;state.scroll=0;resetStartRequest();closeOverlay();},'create');
-      const input=document.createElement('textarea');input.dataset.crewInput='invitation';input.maxLength=MAX_INPUT_LENGTH;input.rows=4;input.autocomplete='off';input.spellcheck=false;input.setAttribute('autocapitalize','characters');input.setAttribute('aria-label',t('crew_enter'));input.placeholder='LLC1-…';Object.assign(input.style,{boxSizing:'border-box',width:'100%',height:'112px',marginTop:'18px',padding:'12px',resize:'none',font:'17px/1.6 monospace',border:'2px solid #a7782e',borderRadius:'8px',background:'#fff5d8',boxShadow:'inset 0 2px 6px #80571830',color:'#153e4c',touchAction:'auto'});panel.append(input);
+      const inputLabel=label('label','crew_enter');inputLabel.htmlFor='lockloot-crew-invitation';Object.assign(inputLabel.style,{display:'block',margin:'16px 0 6px',fontSize:'16px',fontWeight:'bold',color:'#173c45'});
+      const input=document.createElement('textarea');input.id='lockloot-crew-invitation';input.dataset.crewInput='invitation';input.maxLength=MAX_INPUT_LENGTH;input.rows=4;input.autocomplete='off';input.spellcheck=false;input.setAttribute('autocapitalize','characters');input.setAttribute('aria-label',t('crew_enter'));input.placeholder='LLC1-…';Object.assign(input.style,{boxSizing:'border-box',width:'100%',height:'96px',marginTop:'0',padding:'12px',resize:'none',font:'17px/1.6 monospace',border:'2px solid #a7782e',borderRadius:'8px',background:'#fff5d8',boxShadow:'inset 0 2px 6px #80571830',color:'#153e4c',touchAction:'auto'});panel.append(input);
       field=input;button('crew_join',async()=>{let view;try{view=parseInvitation(input.value);}catch(e){errorKey=e.code==='INVITATION_TOO_LONG'?'crew_too_long':'crew_invalid';return;}if(!await canChoose())return;state.invitationCode=view.invitationCode;state.selection=view.selection;state.error=false;state.errorCode=null;state.scroll=0;resetStartRequest();closeOverlay();},'join');panel.append(error);
     }
     button('crew_close',closeOverlay,'close');for(const name of ['pointerdown','pointerup','mousedown','mouseup','click','touchstart','touchend'])root.addEventListener(name,e=>e.stopPropagation(),{signal:control.signal});root.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();closeOverlay();}},{signal:control.signal});
-    overlay={scene,root,control,render(){for(const [node,key]of labels)node.textContent=typeof key==='function'?key():t(key);for(const [node,id]of modalButtons)node.disabled=busy&&id!=='close';if(field)field.disabled=busy;error.textContent=errorKey?t(errorKey):busy?t(kind==='code'?'crew_copying':'restoring'):'';error.style.color=errorKey==='crew_copied'?'#205b32':'#8b2420';if(training)scene.getVariables().get('backendRequestPending').setBoolean(true);}};overlay.render();document.body.append(root);if(training)scene.getVariables().get('backendRequestPending').setBoolean(true);
+    // Keep both choices and the input visible on a small phone; preserve touch sizes.
+    const compactCrew=kind==='selection'&&(innerWidth<340||innerHeight<640);
+    if(compactCrew){
+      root.style.padding='10px';Object.assign(panel.style,{maxHeight:'calc(100dvh - 20px)',padding:'10px',borderWidth:'36px 12px 16px',borderImageWidth:'36px 12px 16px'});
+      Object.assign(title.style,{fontSize:'20px',margin:'0 0 6px'});Object.assign(body.style,{fontSize:'15px',lineHeight:'1.3',margin:'0 0 8px'});
+      for(const [node,id]of modalButtons)Object.assign(node.style,{fontSize:id==='close'?'16px':'18px',minHeight:id==='close'?'44px':'52px',padding:id==='close'?'8px 12px':'10px 8%',marginTop:id==='close'?'4px':'8px'});
+      const inputLabel=panel.querySelector('label');if(inputLabel)Object.assign(inputLabel.style,{fontSize:'15px',margin:'10px 0 4px'});
+      if(field)Object.assign(field.style,{height:'72px',padding:'8px',lineHeight:'1.4'});Object.assign(error.style,{minHeight:'0',margin:'4px 0 0'});
+    }
+    overlay={scene,root,control,render(){for(const [node,key]of labels)node.textContent=typeof key==='function'?key():t(key);for(const [node,id]of modalButtons)node.disabled=busy&&id!=='close';if(field)field.disabled=busy;error.textContent=errorKey?t(errorKey):busy?t(kind==='code'?'crew_copying':'restoring'):'';error.style.color=errorKey==='crew_copied'?'#205b32':'#8b2420';if(compactCrew)error.style.display=error.textContent?'block':'none';if(training)scene.getVariables().get('backendRequestPending').setBoolean(true);}};overlay.render();document.body.append(root);if(training)scene.getVariables().get('backendRequestPending').setBoolean(true);
   }
   let visibleScene=null;
   let solutionRefresh=null,solutionNext=0;
@@ -258,9 +268,13 @@ export function createGDevelopBridge() {
     button('PersonalCrewMode',state.selection.modeId==='CREW',t('crew'),1,473,193,196,256,27);
     const crew=state.selection.modeId==='CREW';
     const subtitleKey=crew?(state.active?'crew_code':state.invitationCode?'crew_fixed':'crew_selection_link'):state.active?'frozen':null;
-    if(subtitleKey&&decoration){decoration.lineStyle(1.5,0x95703d,1);decoration.beginFill(0xf0d39c,1);decoration.drawRoundedRect(46,151,628,42,10);decoration.endFill();}
-    caption('PersonalSubtitle',subtitleKey?t('mode')+' · '+t(subtitleKey):'',50,154,620,36,22,crew?'18;67;39':'89;65;40');
-    if(subtitleKey)one(scene,'PersonalModeHeading')?.setString('');
+    if(crew){
+      if(decoration){decoration.lineStyle(3,0xc99639,1);decoration.beginFill(0x123d49,1);decoration.drawRoundedRect(479,286,184,112,12);decoration.endFill();decoration.lineStyle(1,0xf6d67e,.8);decoration.drawRoundedRect(484,291,174,102,9);}
+      caption('PersonalSubtitle',t(state.active?'crew_show_action':'crew_settings_action'),485,286,172,112,26,'255;244;206');
+    }else{
+      if(subtitleKey&&decoration){decoration.lineStyle(1.5,0x95703d,1);decoration.beginFill(0xf0d39c,1);decoration.drawRoundedRect(46,151,628,42,10);decoration.endFill();}
+      caption('PersonalSubtitle',subtitleKey?t(subtitleKey):'',50,154,620,36,22,'89;65;40');if(subtitleKey)one(scene,'PersonalModeHeading')?.setString('');
+    }
     label('PersonalLengthHeading','length',464);
     [8,10,12].forEach((n,i)=>button('PersonalLength'+n,state.selection.codeLength===n,String(n),({8:1,10:2,12:4}[n]),50+i*211,501,203,80,30,490,100));
     label('PersonalProfileHeading','difficulty',594);
@@ -299,7 +313,7 @@ export function createGDevelopBridge() {
           }).catch(error=>{if(current(scene)){state.phase='ready';state.error=true;state.errorCode=error.code;}});
         }
       }else if(hit(one(scene,'PersonalHuntModePlate'),x,y)){ /* Planned mode: preserve the selected option and its explanation. */
-      }else if(crew&&x>=55&&x<=665&&y>=154&&y<=190&&state.phase==='ready'&&!state.needsFresh){showCrewDialog(scene,state.active?'code':'selection');
+      }else if(crew&&x>=479&&x<=663&&y>=286&&y<=398&&state.phase==='ready'&&!state.needsFresh){showCrewDialog(scene,state.active?'code':'selection');
       }else if(state.active&&state.selection.modeId==='CREW'&&hit(one(scene,'PersonalCrewModePlate'),x,y)){showCrewDialog(scene,'code');
       }else if(!state.active&&state.phase==='ready'&&!state.needsFresh){
         const chosen=buttons.find(b=>hit(b.plate,x,y));if(chosen){const input=selectionInput(state.selection);
@@ -309,7 +323,7 @@ export function createGDevelopBridge() {
           if(chosen.name.startsWith('PersonalLength')){input.codeLength=Number(chosen.name.slice(14));state.detail='length';}
           if(chosen.name.startsWith('PersonalProfile')){input.profileId=chosen.name.slice(15);state.detail='difficulty';}
           if(chosen.name.startsWith('PersonalPackage')){input.packageCount=Number(chosen.name.slice(15));state.detail='packages';}
-          state.selection=preview(input);if(chosen.name!=='PersonalCrewMode'){state.error=false;state.errorCode=null;}
+          state.selection=preview(input);if(chosen.name!=='PersonalCrewMode'){state.error=false;state.errorCode=null;}else{showCrewDialog(scene,'selection');}
         }
       }
     }
