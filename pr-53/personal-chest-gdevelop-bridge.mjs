@@ -155,7 +155,7 @@ export function createGDevelopBridge() {
   }
   const visibilityChanged=()=>{if(document.visibilityState==='visible')wakeVisibleScene();};
   window.addEventListener('focus',wakeVisibleScene);document.addEventListener('visibilitychange',visibilityChanged);
-  function abortPersonalPurchase(scene){calendarView?.leave(scene);journal?.leave(scene);if(overlay?.scene===scene)closeOverlay();scene.__lockLootPersonalTraining?.controller?.abort();scene.__lockLootPersonalTraining?.refreshController?.abort();scene.__lockLootPersonalSelection?.controller?.abort();solutionRefresh?.abort();solutionRefresh=null;solutionNext=0;const menu=menuRefresh.get(scene);menu?.controller?.abort();if(menu){menu.pending=false;menu.opening=false;menu.next=0;}solutionQuerySerial++;pendingSolutionScene=null;lastSolution=null;if(solutionHandoffScene===scene)solutionHandoffScene=null;else openedSolution=null;}
+  function abortPersonalPurchase(scene){const decoration=scene.__lockLootPersonalSelection?.decoration;if(decoration){decoration.parent?.removeChild(decoration);decoration.destroy();scene.__lockLootPersonalSelection.decoration=null;}calendarView?.leave(scene);journal?.leave(scene);if(overlay?.scene===scene)closeOverlay();scene.__lockLootPersonalTraining?.controller?.abort();scene.__lockLootPersonalTraining?.refreshController?.abort();scene.__lockLootPersonalSelection?.controller?.abort();solutionRefresh?.abort();solutionRefresh=null;solutionNext=0;const menu=menuRefresh.get(scene);menu?.controller?.abort();if(menu){menu.pending=false;menu.opening=false;menu.next=0;}solutionQuerySerial++;pendingSolutionScene=null;lastSolution=null;if(solutionHandoffScene===scene)solutionHandoffScene=null;else openedSolution=null;}
   gdjs.callbacksRuntimeSceneUnloading.push(abortPersonalPurchase);
   function clearStartupViews(){lifetime.abort();solutionRefresh?.abort();solutionRefresh=null;solutionNext=0;bridgePhase='SUSPENDED';wallet=null;lastSolution=null;openedSolution=null;pendingSolutionScene=null;closeOverlay();const scene=visibleScene?.getGame()?.getSceneStack()?.getCurrentScene?.()||visibleScene;if(scene){abortPersonalPurchase(scene);delete scene.__lockLootPersonalTraining;delete scene.__lockLootPersonalSelection;delete scene.__lockLootSolutionState;menuRefresh.delete(scene);if(scene.getName()==='SolutionScene'){
     for(let i=0;i<12;i++){text(scene,'SolutionDigit'+i,'—');text(scene,'SolutionPositionLabel'+i,'');}
@@ -228,57 +228,61 @@ export function createGDevelopBridge() {
     };
     place('PersonalBackground',0,0,720,1280);
     for(const name of ['PersonalBodyPlate','PersonalTitlePlate','PersonalFooterPlate','PersonalRewardPlate'])one(scene,name)?.hide(true);
-    caption('PersonalTitle',t('title'),138,58,450,110,38,'255;244;206');
+    const title=caption('PersonalTitle',t('title'),134,24,484,92,42,'255;244;206');
+    const titleRenderer=title?.getRendererObject?.();if(titleRenderer?.style)titleRenderer.style.fontFamily='Georgia';
     one(scene,'PersonalBack')?.hide(true);
-    const back=place('PersonalBackPlate',8,35,100,100);
-    const language=caption('PersonalLanguage',scene.getGame().__lockLootI18n.language.toUpperCase(),616,142,80,58,28,'255;244;206');
+    const back=place('PersonalBackPlate',16,18,96,100);back?.setOpacity(0);
+    const language=caption('PersonalLanguage',scene.getGame().__lockLootI18n.language.toUpperCase(),645,94,50,46,25,'255;244;206');
+    // The approved illustration contains the frames, pictures and empty badges.
+    // Native objects remain responsible for text and hit testing.
+    const backgroundRenderer=one(scene,'PersonalBackground')?.getRendererObject?.();
+    if(!state.decoration&&backgroundRenderer?.parent&&typeof PIXI!=='undefined'){
+      state.decoration=new PIXI.Graphics();state.decoration.name='PersonalSelectionHighlights';backgroundRenderer.parent.addChild(state.decoration);
+    }
+    const decoration=state.decoration;if(decoration){decoration.clear();const parent=backgroundRenderer?.parent;if(parent&&decoration.parent===parent)parent.setChildIndex(decoration,Math.min(parent.children.length-1,parent.getChildIndex(backgroundRenderer)+1));}
     const buttons=[];
     const label=(name,key,by,params={})=>caption(name,t(key,params),50,by,620,36,27);
-    const button=(name,value,labelText,factor,bx,by,w,h=100,size=30)=>{
-      const plate=place(name+'Plate',bx,by,w,h);
-      if(plate){plate.setAnimation(0);plate.setColor(value?'177;220;173':'255;255;255');plate.setOpacity(255);plate.setZOrder(10);}
-    const o=caption(name,(value?'• ':'')+labelText,bx+10,by+13,w-20,34,size,value?'18;67;39':'61;37;20');
-      if(o)o.setZOrder(20);
-      // Reward factors are separate treasure badges, never part of a count label.
-      const badgeWidth=w<120?80:108,badgeX=bx+(w-badgeWidth)/2,badgeY=by+(h===112?62:52);
-      place(name+'FactorPlate',badgeX,badgeY,badgeWidth,38);
-      caption(name+'Factor','×'+factor,badgeX+badgeWidth*.34,badgeY,badgeWidth*.59,38,25,'255;237;173');
+    const button=(name,value,labelText,factor,bx,by,w,h=80,size=29,hitY=by,hitHeight=h)=>{
+      const plate=place(name+'Plate',bx,hitY,w,hitHeight);plate?.setOpacity(0);
+      if(value&&decoration){decoration.lineStyle(3,0x267842,.95);if(h<150)decoration.beginFill(0x74ba60,.24);decoration.drawRoundedRect(bx+4,by+4,w-8,h-8,6);if(h<150)decoration.endFill();}
+      const o=caption(name,(value?'• ':'')+labelText,bx+7,by+(h>150?9:5),w-14,34,size,value?'18;67;39':'61;37;20');if(o)o.setZOrder(20);
+      const badgeWidth=h>150?126:w<120?84:108,badgeX=bx+(w-badgeWidth)/2,badgeY=by+(h>150?205:41),badgeHeight=h>150?38:31;
+      const badge=place(name+'FactorPlate',badgeX,badgeY,badgeWidth,badgeHeight);badge?.setOpacity(0);
+      caption(name+'Factor','×'+factor,badgeX+badgeWidth*.36,badgeY,badgeWidth*.59,badgeHeight,h>150?31:26,'255;237;173');
       buttons.push({name,plate,o});
     };
-    label('PersonalModeHeading','mode',225);
-    button('PersonalMode',state.selection.modeId==='PERSONAL',t('personal'),1,50,255,200,112,27);
-    button('PersonalHuntMode',false,t('hunt'),2,260,255,200,112,27);
-    one(scene,'PersonalHuntModePlate')?.setColor('190;190;190');
-    caption('PersonalHuntMode',t('hunt'),270,263,180,28,24,'90;80;66');
-    one(scene,'PersonalHuntModeFactorPlate')?.setColor('175;175;175');
-    one(scene,'PersonalHuntModeFactor')?.setColor('225;225;215');
-    caption('PersonalHuntPlanned',t('planned'),270,293,180,22,18,'90;80;66');
-    button('PersonalCrewMode',state.selection.modeId==='CREW',t('crew'),1,470,255,200,112,27);
+    label('PersonalModeHeading','mode',154);
+    button('PersonalMode',state.selection.modeId==='PERSONAL',t('personal'),1,52,193,205,256,27);
+    button('PersonalHuntMode',false,t('hunt'),2,269,193,190,256,23);
+    caption('PersonalHuntPlanned',t('planned'),277,229,174,25,22,'90;80;66');
+    button('PersonalCrewMode',state.selection.modeId==='CREW',t('crew'),1,473,193,196,256,27);
     const crew=state.selection.modeId==='CREW';
     const subtitleKey=crew?(state.active?'crew_code':state.invitationCode?'crew_fixed':'crew_selection_link'):state.active?'frozen':null;
-    caption('PersonalSubtitle',subtitleKey?t(subtitleKey):'',55,370,610,28,24,crew?'18;67;39':'89;65;40');
-    label('PersonalLengthHeading','length',400);
-    [8,10,12].forEach((n,i)=>button('PersonalLength'+n,state.selection.codeLength===n,String(n),({8:1,10:2,12:4}[n]),50+i*210,435,200,100,30));
-    label('PersonalProfileHeading','difficulty',536);
-    profiles.forEach((p,i)=>button('PersonalProfile'+p,state.selection.profileId===p,t('profile_'+p),2**i,i<3?50+i*210:155+(i-3)*210,i<3?570:675,200,100,28));
-    label('PersonalPackageHeading','packages',778,{count:state.selection.hintCount});
-    [10,9,8,7,6,5].forEach((n,i)=>button('PersonalPackage'+n,state.selection.packageCount===n,String(n),11-n,45+i*106,814,100,100,30));
+    if(subtitleKey&&decoration){decoration.lineStyle(1.5,0x95703d,1);decoration.beginFill(0xf0d39c,1);decoration.drawRoundedRect(46,151,628,42,10);decoration.endFill();}
+    caption('PersonalSubtitle',subtitleKey?t('mode')+' · '+t(subtitleKey):'',50,154,620,36,22,crew?'18;67;39':'89;65;40');
+    if(subtitleKey)one(scene,'PersonalModeHeading')?.setString('');
+    label('PersonalLengthHeading','length',464);
+    [8,10,12].forEach((n,i)=>button('PersonalLength'+n,state.selection.codeLength===n,String(n),({8:1,10:2,12:4}[n]),50+i*211,501,203,80,30,490,100));
+    label('PersonalProfileHeading','difficulty',594);
+    profiles.forEach((p,i)=>button('PersonalProfile'+p,state.selection.profileId===p,t('profile_'+p),2**i,i<3?50+i*211:153+(i-3)*213,i<3?631:715,203,76,27,i<3?611:711,100));
+    label('PersonalPackageHeading','packages',800,{count:state.selection.hintCount});
+    [10,9,8,7,6,5].forEach((n,i)=>button('PersonalPackage'+n,state.selection.packageCount===n,String(n),11-n,49+i*107.4,838,100,76,30,830,100));
     const detail=state.detail||'mode';
     const descriptionKey=detail==='mode'?'explain_'+state.selection.modeId:detail==='difficulty'?'explain_'+state.selection.profileId:'explain_'+detail;
     const descriptionParams=detail==='length'?{length:state.selection.codeLength}:detail==='packages'?{packages:state.selection.packageCount,hints:state.selection.hintCount}:{};
     const closedInvitation=!state.active&&state.errorCode==='INVITATION_ALREADY_CLOSED';
     const statusKey=state.phase==='starting'?'starting':state.phase==='restoring'||state.needsFresh?'restoring':closedInvitation?'crew_closed':state.errorCode==='ACTIVE_CHEST_CONFLICT'?'crew_active_conflict':state.error?'error':null;
-    caption('PersonalDescription',statusKey?t(statusKey):t(descriptionKey,descriptionParams),60,921,600,66,27,statusKey?'120;40;20':'61;37;20');
-    caption('PersonalRewardHeading',t('total_label'),58,990,375,60,28,'18;67;39');
-    place('PersonalTotalFactorPlate',454,990,198,62);
-    caption('PersonalTotalFactor','×'+state.selection.factors.total,523,990,112,62,40,'255;237;173');
-    caption('PersonalReward',t(state.selection.preview.points===1?'compact_reward_one':'compact_reward',state.selection.preview),55,1058,610,60,26);
+    caption('PersonalDescription',statusKey?t(statusKey):t(descriptionKey,descriptionParams),55,927,610,56,26,statusKey?'120;40;20':'61;37;20');
+    caption('PersonalRewardHeading',t('total_label'),60,990,360,65,29,'18;67;39');
+    place('PersonalTotalFactorPlate',434,989,198,56)?.setOpacity(0);
+    caption('PersonalTotalFactor','×'+state.selection.factors.total,504,989,116,56,40,'255;237;173');
+    caption('PersonalReward',t(state.selection.preview.points===1?'compact_reward_one':'compact_reward',state.selection.preview),50,1055,620,61,28);
     caption('PersonalStatus','',48,1108,624,40,25);
     // The new background contains the green start plaque; this transparent
     // sprite retains the original native hit target and operation guards.
-    const startButton=place('PersonalStartPlate',82,1150,556,100);
+    const startButton=place('PersonalStartPlate',70,1146,580,99);
     if(startButton)startButton.setOpacity(0);
-    const startText=caption('PersonalStart',t(closedInvitation?'crew_closed_action':state.phase==='starting'?'starting':state.active?'continue':'start'),95,1150,530,100,36,'255;244;206');
+    const startText=caption('PersonalStart',t(closedInvitation?'crew_closed_action':state.phase==='starting'?'starting':state.active?'continue':'start'),90,1146,540,99,38,'255;244;206');
     if(startText)startText.setColor(closedInvitation?'185;185;185':'255;244;206');
     // Hide the choices while deciding whether this is a new or existing chest.
     if(state.phase==='restoring'){for(const object of scene.getAdhocListOfAllInstances())if(object.getName().startsWith('Personal')&&!['PersonalBackground','PersonalBackPlate'].includes(object.getName()))object.hide(true);}
@@ -295,7 +299,7 @@ export function createGDevelopBridge() {
           }).catch(error=>{if(current(scene)){state.phase='ready';state.error=true;state.errorCode=error.code;}});
         }
       }else if(hit(one(scene,'PersonalHuntModePlate'),x,y)){ /* Planned mode: preserve the selected option and its explanation. */
-      }else if(crew&&x>=55&&x<=665&&y>=370&&y<=400&&state.phase==='ready'&&!state.needsFresh){showCrewDialog(scene,state.active?'code':'selection');
+      }else if(crew&&x>=55&&x<=665&&y>=154&&y<=190&&state.phase==='ready'&&!state.needsFresh){showCrewDialog(scene,state.active?'code':'selection');
       }else if(state.active&&state.selection.modeId==='CREW'&&hit(one(scene,'PersonalCrewModePlate'),x,y)){showCrewDialog(scene,'code');
       }else if(!state.active&&state.phase==='ready'&&!state.needsFresh){
         const chosen=buttons.find(b=>hit(b.plate,x,y));if(chosen){const input=selectionInput(state.selection);

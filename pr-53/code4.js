@@ -101,7 +101,7 @@ gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.TreasureCalendarSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xa4c520 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xfb7a88 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -497,7 +497,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
 }
 // Unmarked environments retain their existing independent runtime.
 };
-gdjs.TreasureCalendarSceneCode.userFunc0x109b8a8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xfbcca0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -724,7 +724,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xa75d88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xa64c18 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -769,7 +769,7 @@ gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDC
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarBackButtonObjects1Objects = Hashtable.newFrom({"CalendarBackButton": gdjs.TreasureCalendarSceneCode.GDCalendarBackButtonObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarParrotObjects1Objects = Hashtable.newFrom({"CalendarParrot": gdjs.TreasureCalendarSceneCode.GDCalendarParrotObjects1});
 gdjs.TreasureCalendarSceneCode.mapOfGDgdjs_9546TreasureCalendarSceneCode_9546GDCalendarShopButtonObjects1Objects = Hashtable.newFrom({"CalendarShopButton": gdjs.TreasureCalendarSceneCode.GDCalendarShopButtonObjects1});
-gdjs.TreasureCalendarSceneCode.userFunc0x1088db8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xfad698 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-043: Kalenderbootstrap, clientsichere Konfigurationsanzeige und serverautoritiver Claim.
 // Ausschließlich lokale Firebase-Emulatoren; keine Zahlung, kein Shop und keine lokale Gutschrift.
@@ -1152,7 +1152,7 @@ if (calendarState && calendarAction) {
   }
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xa54a38 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xfa82f8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-045 · professioneller Schatzkarten-Renderer: sechs Seiten mit je fünf Loginstufen.
 // Rein visuelle Projektion clientsicherer Serverdaten; Claim und Wallet bleiben in L&L-045 Phase A serverautoritativ.
@@ -1436,7 +1436,7 @@ if (mapBookRuntime && mapBookRuntime.freeOnly) {
   placeCenteredText(statusObject, mapBookRuntime.statusMessage+(hasBooster?"\n"+mapBookT("calendar.local_boosters"):""),360,966,484,128,24,"255;244;206");
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xfabd58 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xe14930 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische Kalender-Spielertexte aus dem zentralen Katalog.
 if (runtimeScene.getGame().__lockLootPersonalRuntime) return;
@@ -1451,7 +1451,7 @@ if (!runtimeScene.__lockLootL047Calendar || runtimeScene.__lockLootL047Calendar 
   const state = runtimeScene.__lockLootCalendarScene; if (state && state.calendar && state.wallet && typeof calendarRender === "function") calendarRender(state);
 }
 };
-gdjs.TreasureCalendarSceneCode.userFunc0x109bc08 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xa4cc00 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -1533,7 +1533,7 @@ if (!runtimeScene.getObjects("ResourceHudCookieFrame").length) {
 }
 resourceHud.render(runtimeScene);
 };
-gdjs.TreasureCalendarSceneCode.userFunc0xa51f88 = function GDJSInlineCode(runtimeScene) {
+gdjs.TreasureCalendarSceneCode.userFunc0xfdf870 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // Confirmed local wallet must follow the historical shared HUD projection.
 const personal = runtimeScene.getGame().__lockLootPersonalRuntime;
@@ -1544,7 +1544,7 @@ gdjs.TreasureCalendarSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xa4c520(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xfb7a88(runtimeScene);
 
 }
 
@@ -1552,7 +1552,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xa4c520(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0x109b8a8(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xfbcca0(runtimeScene);
 
 }
 
@@ -1560,7 +1560,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0x109b8a8(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xa75d88(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xa64c18(runtimeScene);
 
 }
 
@@ -1682,7 +1682,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0x1088db8(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xfad698(runtimeScene);
 
 }
 
@@ -1690,7 +1690,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0x1088db8(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xa54a38(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xfa82f8(runtimeScene);
 
 }
 
@@ -1698,7 +1698,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xa54a38(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xfabd58(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xe14930(runtimeScene);
 
 }
 
@@ -1706,7 +1706,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0xfabd58(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0x109bc08(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xa4cc00(runtimeScene);
 
 }
 
@@ -1714,7 +1714,7 @@ gdjs.TreasureCalendarSceneCode.userFunc0x109bc08(runtimeScene);
 {
 
 
-gdjs.TreasureCalendarSceneCode.userFunc0xa51f88(runtimeScene);
+gdjs.TreasureCalendarSceneCode.userFunc0xfdf870(runtimeScene);
 
 }
 

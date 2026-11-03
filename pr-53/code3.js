@@ -241,7 +241,7 @@ gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects1= [];
 gdjs.SolutionSceneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.SolutionSceneCode.userFunc0x10f4178 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa7f198 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -637,7 +637,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
 }
 // Unmarked environments retain their existing independent runtime.
 };
-gdjs.SolutionSceneCode.userFunc0x10f42a0 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xe29618 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -864,7 +864,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.SolutionSceneCode.userFunc0xa75d88 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa64c18 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -903,11 +903,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.SolutionSceneCode.userFunc0xa72ce8 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa67800 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Einmalige Auflösungsmusik und AUS-Schutz erfolgen zentral über MusicController_Events.
 };
-gdjs.SolutionSceneCode.userFunc0xe29f18 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xa71d90 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-025/L&L-056A: Rein darstellende Lernansicht. Es gibt bewusst keine Schlossversuche.
 // Datenquelle ist ausschließlich der tief eingefrorene, serverautoritativ geprüfte L&L-059-Snapshot.
@@ -2472,7 +2472,7 @@ gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionBackObjec
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogSecondaryObjects1Objects = Hashtable.newFrom({"SolutionDialogSecondary": gdjs.SolutionSceneCode.GDSolutionDialogSecondaryObjects1});
 gdjs.SolutionSceneCode.mapOfGDgdjs_9546SolutionSceneCode_9546GDSolutionDialogPrimaryObjects1Objects = Hashtable.newFrom({"SolutionDialogPrimary": gdjs.SolutionSceneCode.GDSolutionDialogPrimaryObjects1});
-gdjs.SolutionSceneCode.userFunc0xf989b8 = function GDJSInlineCode(runtimeScene) {
+gdjs.SolutionSceneCode.userFunc0xfe6928 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Statische SolutionScene-Spielertexte aus dem zentralen Katalog.
 const i18n = runtimeScene.getGame().__lockLootI18n;
@@ -2492,7 +2492,7 @@ gdjs.SolutionSceneCode.eventsList0 = function(runtimeScene) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0x10f4178(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa7f198(runtimeScene);
 
 }
 
@@ -2500,7 +2500,7 @@ gdjs.SolutionSceneCode.userFunc0x10f4178(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0x10f42a0(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xe29618(runtimeScene);
 
 }
 
@@ -2508,7 +2508,7 @@ gdjs.SolutionSceneCode.userFunc0x10f42a0(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xa75d88(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa64c18(runtimeScene);
 
 }
 
@@ -2516,7 +2516,7 @@ gdjs.SolutionSceneCode.userFunc0xa75d88(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xa72ce8(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa67800(runtimeScene);
 
 }
 
@@ -2524,7 +2524,7 @@ gdjs.SolutionSceneCode.userFunc0xa72ce8(runtimeScene);
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xe29f18(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xa71d90(runtimeScene);
 
 }
 
@@ -2987,7 +2987,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.SolutionSceneCode.userFunc0xf989b8(runtimeScene);
+gdjs.SolutionSceneCode.userFunc0xfe6928(runtimeScene);
 
 }
 
