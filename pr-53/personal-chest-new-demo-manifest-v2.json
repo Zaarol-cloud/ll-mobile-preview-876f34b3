@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "kind": "isolated-new-demo-generator-v2",
+  "baselinePath": "prototypes/firebase-lock-attempt/tests/new-demo-browser-source-baseline-20261103.json",
+  "baselineHash": "b5e589db01f51637f157dd17aa3f3a45c8a5ced3c838d985dbd8a52c0bb2ab5b",
+  "moduleCount": 26,
+  "entry": "prototypes/firebase-lock-attempt/functions/src/hints/personal-hint-assignment.cjs",
+  "sourceHashes": {
+    "prototypes/firebase-lock-attempt/functions/src/code-length-contract.cjs": "2d73a3a0d420c4a091a5641fbe8f440002343d1227013de52bd5a5dace5604ff",
+    "prototypes/firebase-lock-attempt/functions/src/hints/beginner-information.cjs": "e214eb93f58ee1d161a19187d436615a5ae16fb653fba874fe0774c3c1a2615b",
+    "prototypes/firebase-lock-attempt/functions/src/hints/extended-hint-generator.cjs": "68ad831974f84240fd6cbe672680cfa3b00480811f358f73bc5a11a82e8f373f",
+    "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v2.cjs": "21318d42f4dee0c678e353525f3d71c3ff8353d3dfa123a8e88ec6a48f9bfb21",
+    "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v3.cjs": "aeb3229bbf96fe81eb81c928a9d5e9c43016390207b8a953beadd7f03663d1ec",
+    "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core.cjs": "74127d3684f2d0918ee9a916fcf327a3d7c8a33b88cd262a6cb3803d2834ecc4",
+    "prototypes/firebase-lock-attempt/functions/src/hints/hint-distinctness.cjs": "970a45ebb2e799b6881585d4697f125ad68c0efc0c73e88bef5691c78494f60e",
+    "prototypes/firebase-lock-attempt/functions/src/hints/hint-localization.cjs": "2539575d731a73c1b1b580fde6dde48461e9ac16825a2c0c0918b7ddb86d4a8c",
+    "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-core-pair-memo.cjs": "9929344e50eeec2af85e5b66d0a01d8795fd3df5fcb504c3423a20555e297d3a",
+    "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-local-pair-cache.cjs": "aa5e759d01c611a97e9390b5e2193eae9d24508575411ba8b9724bf27769c315",
+    "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-precise-wording.cjs": "0e994fcbec008ee8f856f15e38a7ca7675646c2455fbcced3a744cb6e905ac56",
+    "prototypes/firebase-lock-attempt/functions/src/hints/package-count-policy.cjs": "3b7aa92796644b9af956dd541760b1a40652f0b99fe6c4daab034a0a977fcb31",
+    "prototypes/firebase-lock-attempt/functions/src/hints/personal-hint-assignment.cjs": "2f1b1c1935a7e812f3088732dd2488f308e53f5e9e3321382b96b40918903272",
+    "prototypes/firebase-lock-attempt/functions/src/hints/rank-tier-policy.cjs": "cc43f8342c781d9b60e2588c5cc708f61ca8e3e54d27dea6931c0c039f02eb54",
+    "prototypes/firebase-lock-attempt/functions/src/hints/ranked-hint-generator.cjs": "ab973cade20a79c9ad26d32b2e0ef305be56c7f23caced67e53922efca26285d",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-coverage-truth.cjs": "f5e153e10457e6f2052cc32d6c3658659ef9f06e0f1b3d13b285f41979368184",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-joint-pair-selection.cjs": "232ccfc31e06c5620ca2b45ba69e075c3d37d8f54c361b7e05ca4768b4637fff",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-logical-witness.cjs": "cd5f797aae4802d81904821ec7271389ebcb234dd25ad81aa842c2b6ccb6a884",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-own-continuation.cjs": "c6769b95a5f40e30f3e6f978b47c4c257be1b840b4d843c99d396e639f0e20df",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-package-information.cjs": "c21030bd8a21381eb333294b77fbe51ce1ac8742760dbc900f655d7693349ac5",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-package-repair.cjs": "cb7b518cd4aa32f1fed4f118f163f5a8e22aec49e82cc7c531a765f688dfac07",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-prefix-bridge.cjs": "a4b9fafa9f513f013776f21c07db201b9a2141a71121f9af5be537c56b23550a",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-repair-runtime.cjs": "8e00139ddb1459218c78b73a9597466dc7a0a7be2a911663e05ff728bd7c07b1",
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-suffix-witness-guide.cjs": "8d8ab44146f8bf04dc9ba4a2d9c647129e291e726d7647a77a5a5ea1b9268f75",
+    "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs": "52768405f2170e5f19afd95f1068d48c0e22c9a599bb18aea54ab3edef818df6",
+    "prototypes/firebase-lock-attempt/functions/src/statistics/player-statistics.cjs": "04096f80af98714ac94da32701a511d15698115ed395c819904d1a3e83134c42"
+  },
+  "requireMap": {
+    "prototypes/firebase-lock-attempt/functions/src/code-length-contract.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/hints/beginner-information.cjs": {
+      "./visible-hint-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/extended-hint-generator.cjs": {
+      "node:crypto": "node:crypto",
+      "./gdevelop-generator-core-v3.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v3.cjs",
+      "./beginner-information.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/beginner-information.cjs",
+      "./hint-distinctness.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/hint-distinctness.cjs",
+      "./hint-localization.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/hint-localization.cjs",
+      "./new-demo-precise-wording.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-precise-wording.cjs",
+      "./package-count-policy.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/package-count-policy.cjs",
+      "./ranked-hint-generator.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/ranked-hint-generator.cjs",
+      "./v4-package-information.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-package-information.cjs",
+      "./v4-package-repair.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-package-repair.cjs",
+      "./v4-coverage-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-coverage-truth.cjs",
+      "./v4-repair-runtime.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-repair-runtime.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v2.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v3.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/hints/hint-distinctness.cjs": {
+      "./visible-hint-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/hint-localization.cjs": {
+      "./new-demo-precise-wording.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-precise-wording.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-core-pair-memo.cjs": {
+      "./hint-distinctness.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/hint-distinctness.cjs",
+      "./new-demo-local-pair-cache.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-local-pair-cache.cjs",
+      "./visible-hint-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-local-pair-cache.cjs": {
+      "./visible-hint-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-precise-wording.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/hints/package-count-policy.cjs": {
+      "node:crypto": "node:crypto"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/personal-hint-assignment.cjs": {
+      "node:crypto": "node:crypto",
+      "./gdevelop-generator-core.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core.cjs",
+      "./gdevelop-generator-core-v2.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v2.cjs",
+      "./gdevelop-generator-core-v3.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v3.cjs",
+      "./extended-hint-generator.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/extended-hint-generator.cjs",
+      "./package-count-policy.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/package-count-policy.cjs",
+      "../code-length-contract.cjs": "prototypes/firebase-lock-attempt/functions/src/code-length-contract.cjs",
+      "./hint-localization.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/hint-localization.cjs",
+      "./ranked-hint-generator.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/ranked-hint-generator.cjs",
+      "./rank-tier-policy.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/rank-tier-policy.cjs",
+      "../statistics/player-statistics.cjs": "prototypes/firebase-lock-attempt/functions/src/statistics/player-statistics.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/rank-tier-policy.cjs": {
+      "node:crypto": "node:crypto",
+      "../statistics/player-statistics.cjs": "prototypes/firebase-lock-attempt/functions/src/statistics/player-statistics.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/ranked-hint-generator.cjs": {
+      "node:crypto": "node:crypto",
+      "./gdevelop-generator-core.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core.cjs",
+      "./gdevelop-generator-core-v2.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v2.cjs",
+      "./gdevelop-generator-core-v3.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/gdevelop-generator-core-v3.cjs",
+      "./hint-localization.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/hint-localization.cjs",
+      "./beginner-information.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/beginner-information.cjs",
+      "./hint-distinctness.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/hint-distinctness.cjs",
+      "./new-demo-core-pair-memo.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/new-demo-core-pair-memo.cjs",
+      "./rank-tier-policy.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/rank-tier-policy.cjs",
+      "../statistics/player-statistics.cjs": "prototypes/firebase-lock-attempt/functions/src/statistics/player-statistics.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-coverage-truth.cjs": {
+      "./visible-hint-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-joint-pair-selection.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-logical-witness.cjs": {
+      "./v4-coverage-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-coverage-truth.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-own-continuation.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-package-information.cjs": {
+      "./v4-coverage-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-coverage-truth.cjs",
+      "./visible-hint-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-package-repair.cjs": {
+      "node:assert/strict": "node:assert/strict",
+      "./v4-logical-witness.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-logical-witness.cjs",
+      "./v4-coverage-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-coverage-truth.cjs",
+      "./visible-hint-truth.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs",
+      "./hint-distinctness.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/hint-distinctness.cjs",
+      "./v4-repair-runtime.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-repair-runtime.cjs",
+      "./v4-suffix-witness-guide.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-suffix-witness-guide.cjs",
+      "./v4-prefix-bridge.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-prefix-bridge.cjs",
+      "./v4-own-continuation.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-own-continuation.cjs",
+      "./v4-joint-pair-selection.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/v4-joint-pair-selection.cjs",
+      "./beginner-information.cjs": "prototypes/firebase-lock-attempt/functions/src/hints/beginner-information.cjs"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-prefix-bridge.cjs": {
+      "node:assert/strict": "node:assert/strict"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-repair-runtime.cjs": {
+      "node:assert/strict": "node:assert/strict"
+    },
+    "prototypes/firebase-lock-attempt/functions/src/hints/v4-suffix-witness-guide.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/hints/visible-hint-truth.cjs": {},
+    "prototypes/firebase-lock-attempt/functions/src/statistics/player-statistics.cjs": {}
+  },
+  "dependencyHashes": {
+    "prototypes/firebase-lock-attempt/browser/personal-chest-new-demo-dependencies.mjs": "1b8f7e85a5f936637c200fd41a119f28d51da9964a0b6dcaf93ea5550b4b0db3",
+    "prototypes/firebase-lock-attempt/browser/personal-chest-browser-dependencies.mjs": "3ab3afaa572b6b0b43211fc52cc0a3cf5541858f03fb23e68e968afddda70d28",
+    "prototypes/firebase-lock-attempt/browser/personal-chest-storage-contract.mjs": "861979812b8e27d990e948a2b4c3b6219bab2de710956f54ebd898bc638f402e"
+  },
+  "bundleSha256": "8d2ae979b90f949200d465ee88bea2a60c1d6a34c9a94adc411d451acd84e29a",
+  "scope": "Versioned generator artifact. Activation is controlled by the calling bridge; native generator coverage is verified; browser integration and release acceptance remain open."
+}

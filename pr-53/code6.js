@@ -1,441 +1,1037 @@
-gdjs.BackendTestScene_95L035Code = {};
-gdjs.BackendTestScene_95L035Code.localVariables = [];
-gdjs.BackendTestScene_95L035Code.idToCallbackMap = new Map();
-gdjs.BackendTestScene_95L035Code.GDBackendTestTitleObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendTestTitleObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendTestInfoObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendTestInfoObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendWrongButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendWrongButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendCorrectButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendCorrectButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendRepeatButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendRepeatButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendAuthButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendAuthButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendSharedChestStatusObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendSharedChestStatusObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendChestReloadButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendChestReloadButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendStaleChestButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendStaleChestButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendWalletStatusObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendWalletStatusObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendWalletReloadButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendWalletReloadButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendTestStatusObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendTestStatusObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendHintStatusObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendHintStatusObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects2= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects1= [];
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects2= [];
+gdjs.ShopSzeneCode = {};
+gdjs.ShopSzeneCode.localVariables = [];
+gdjs.ShopSzeneCode.idToCallbackMap = new Map();
+gdjs.ShopSzeneCode.GDShopBackgroundObjects1= [];
+gdjs.ShopSzeneCode.GDShopBackgroundObjects2= [];
+gdjs.ShopSzeneCode.GDShopTabCookiesObjects1= [];
+gdjs.ShopSzeneCode.GDShopTabCookiesObjects2= [];
+gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1= [];
+gdjs.ShopSzeneCode.GDShopTabLockpicksObjects2= [];
+gdjs.ShopSzeneCode.GDShopCardFrameObjects1= [];
+gdjs.ShopSzeneCode.GDShopCardFrameObjects2= [];
+gdjs.ShopSzeneCode.GDShopCardIconObjects1= [];
+gdjs.ShopSzeneCode.GDShopCardIconObjects2= [];
+gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1= [];
+gdjs.ShopSzeneCode.GDShopPremiumPanelObjects2= [];
+gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects1= [];
+gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects2= [];
+gdjs.ShopSzeneCode.GDShopBackButtonObjects1= [];
+gdjs.ShopSzeneCode.GDShopBackButtonObjects2= [];
+gdjs.ShopSzeneCode.GDShopTitleTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopTitleTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopTabCookiesTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopTabCookiesTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopTabLockpicksTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopTabLockpicksTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopCardTitleTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopCardTitleTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopCardQuantityTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopCardQuantityTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopCardPriceTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopCardPriceTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopCardBonusTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopCardBonusTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopPremiumTitleTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopPremiumTitleTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopPremiumBodyTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopPremiumBodyTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopPremiumPriceTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopPremiumPriceTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopStatusTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopStatusTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1= [];
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects2= [];
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2= [];
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1= [];
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2= [];
+gdjs.ShopSzeneCode.GDStagingBadgeObjects1= [];
+gdjs.ShopSzeneCode.GDStagingBadgeObjects2= [];
+gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects1= [];
+gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects2= [];
+gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects1= [];
+gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects2= [];
+gdjs.ShopSzeneCode.GDResourceHudCookieIconObjects1= [];
+gdjs.ShopSzeneCode.GDResourceHudCookieIconObjects2= [];
+gdjs.ShopSzeneCode.GDResourceHudLockpickIconObjects1= [];
+gdjs.ShopSzeneCode.GDResourceHudLockpickIconObjects2= [];
+gdjs.ShopSzeneCode.GDResourceHudCookiesTextObjects1= [];
+gdjs.ShopSzeneCode.GDResourceHudCookiesTextObjects2= [];
+gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1= [];
+gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2= [];
 
 
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintBuyButtonObjects1Objects = Hashtable.newFrom({"BackendHintBuyButton": gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCalendarClaimButtonObjects1Objects = Hashtable.newFrom({"BackendCalendarClaimButton": gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintRepeatButtonObjects1Objects = Hashtable.newFrom({"BackendHintRepeatButton": gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintReloadButtonObjects1Objects = Hashtable.newFrom({"BackendHintReloadButton": gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1});
-gdjs.BackendTestScene_95L035Code.userFunc0xe474f8 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0x10ea768 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-035 bis L&L-042: Lokale Firebase-Emulator-Verbindung über offizielle REST-/Callable-Protokolle.
-// Keine Firebase-Projektkonfiguration, kein externes SDK und niemals eine Produktionsverbindung.
-if (runtimeScene.getTimeManager().isFirstFrame()) {
-  const sceneVariables = runtimeScene.getVariables();
-  const statusObjects = runtimeScene.getObjects("BackendTestStatus");
-  const walletObjects = runtimeScene.getObjects("BackendWalletStatus");
-  const chestObjects = runtimeScene.getObjects("BackendSharedChestStatus");
-  const hintObjects = runtimeScene.getObjects("BackendHintStatus");
-  const calendarObjects = runtimeScene.getObjects("BackendCalendarClaimButton");
-  const setStatus = (text) => { if (statusObjects.length) statusObjects[0].setString(text); };
-  const setWalletStatus = (text) => { if (walletObjects.length) walletObjects[0].setString(text); };
-  const setChestStatus = (text) => { if (chestObjects.length) chestObjects[0].setString(text); };
-  const setHintStatus = (text) => { if (hintObjects.length) hintObjects[0].setString(text); };
-  const setCalendarStatus = (text) => { if (calendarObjects.length) calendarObjects[0].setString(text); };
-  const endpoints = Object.freeze({
-    auth: "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=local-emulator-only",
-    prepare: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/prepareGDevelopTest",
-    attempt: "http://127.0.0.1:5001/demo-lock-loot-local/europe-west1/attemptChest",
-    wallet: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/bootstrapPlayerState",
-    consumeCookie: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/consumeTestCookie",
-    grantBooster5: "http://127.0.0.1:5001/demo-lock-loot-local/us-central1/grantTestBooster5",
-    buyHintPackage: "http://127.0.0.1:5001/demo-lock-loot-local/europe-west1/buyNextHintPackage",
-    claimCalendar: "http://127.0.0.1:5001/demo-lock-loot-local/europe-west1/claimDailyCalendarReward"
-  });
-  const assertLocalEndpoint = (endpoint) => {
-    const parsed = new URL(endpoint);
-    if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["9099", "5001"].includes(parsed.port)) throw new Error("Lokale Demo-Grenze verletzt.");
-  };
-  const requestJson = async (endpoint, body, idToken = "") => {
-    assertLocalEndpoint(endpoint);
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-      const headers = { "Content-Type": "application/json" };
-      if (idToken) headers.Authorization = "Bearer " + idToken;
-      const response = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify(body), signal: controller.signal });
-      const responseText = await response.text();
-      let payload = null;
-      try { payload = responseText ? JSON.parse(responseText) : null; } catch (error) { throw Object.assign(new Error("Ungültige lokale JSON-Antwort."), { status: "INVALID_RESPONSE" }); }
-      if (!response.ok || (payload && payload.error)) {
-        const callableStatus = payload && payload.error && typeof payload.error.status === "string" ? payload.error.status : "";
-        const details = payload && payload.error && payload.error.details && typeof payload.error.details === "object" ? payload.error.details : {};
-        throw Object.assign(new Error("Lokale Anfrage abgelehnt."), { status: callableStatus || "HTTP_" + response.status, details, reason: typeof details.reason === "string" ? details.reason : "" });
-      }
-      return payload;
-    } finally {
-      clearTimeout(timeout);
-    }
-  };
-  const callCallable = async (endpoint, data, idToken = "") => {
-    const payload = await requestJson(endpoint, { data }, idToken);
-    const result = payload && payload.result !== undefined ? payload.result : payload && payload.data;
-    if (result === undefined) throw Object.assign(new Error("Callable-Ergebnis fehlt."), { status: "INVALID_RESPONSE" });
-    return result;
-  };
-  const formatWallet = (wallet) => {
-    const fields = ["cookies", "lockpicks", "booster5", "booster10", "booster25", "totalBoost", "revision", "schemaVersion"];
-    if (!wallet || fields.some((field) => !Number.isSafeInteger(wallet[field]) || wallet[field] < 0) || wallet.schemaVersion !== 1) throw Object.assign(new Error("Ungültige Wallet-Antwort."), { status: "INVALID_RESPONSE" });
-    return "SERVER-WALLET · L&L-036-TESTDATEN" +
-      "\nKekse: " + wallet.cookies + "    Dietriche: " + wallet.lockpicks +
-      "\nBooster 5 %: " + wallet.booster5 + "    10 %: " + wallet.booster10 + "    25 %: " + wallet.booster25 +
-      "\nGesamtboost: " + wallet.totalBoost + " %" +
-      "\nRevision: " + wallet.revision + "    Schema: " + wallet.schemaVersion;
-  };
-  const formatChest = (chest) => {
-    if (!chest || typeof chest.chestId !== "string" || !chest.chestId || chest.status !== "active" || chest.schemaVersion !== 1 || !Number.isSafeInteger(chest.contentVersion) || chest.contentVersion < 1 || !Number.isSafeInteger(chest.hintGeneratorVersion) || chest.hintGeneratorVersion < 1) throw Object.assign(new Error("Ungültige Kisten-Antwort."), { status: "INVALID_RESPONSE" });
-    return "GEMEINSAME TESTKISTE · L&L-037" +
-      "\nAktuelle chestId: " + chest.chestId + "    Status: " + chest.status +
-      "\nSchema: " + chest.schemaVersion + "    Inhalt: " + chest.contentVersion + "    Hinweise: " + chest.hintGeneratorVersion;
-  };
-  const formatHintState = (hintState, wallet) => {
-    if (!hintState || typeof hintState.chestId !== "string" || !hintState.chestId || !Number.isSafeInteger(hintState.purchasedPackageCount) || hintState.purchasedPackageCount < 0 || hintState.purchasedPackageCount > 5 || !Number.isSafeInteger(hintState.revealedHintCount) || hintState.revealedHintCount !== hintState.purchasedPackageCount * 2 || !Array.isArray(hintState.revealedHints) || hintState.revealedHints.length !== hintState.revealedHintCount) throw Object.assign(new Error("Ungültiger persönlicher Hintzustand."), { status: "INVALID_RESPONSE" });
-    const forbidden = ["solutionCode", "assignmentSalt", "assignmentSeedHash", "assignedHints", "truthValue", "internalPositions", "mathematicalRule", "signature"];
-    const serialized = JSON.stringify(hintState);
-    if (forbidden.some((field) => serialized.includes(field))) throw Object.assign(new Error("Interne Hintdaten in Clientantwort."), { status: "INVALID_RESPONSE" });
-    const lines = hintState.revealedHints.map((hint) => {
-      if (!hint || !Number.isSafeInteger(hint.index) || !Number.isSafeInteger(hint.packageNumber) || !Number.isSafeInteger(hint.tier) || typeof hint.id !== "string" || typeof hint.text !== "string") throw Object.assign(new Error("Ungültiger clientsicherer Hinweis."), { status: "INVALID_RESPONSE" });
-      return hint.index + " · P" + hint.packageNumber + " · T" + hint.tier + " · " + hint.id + " · " + hint.text;
+// L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
+const backendGame = runtimeScene.getGame();
+// D205C1: choose the isolated personal path before any historical runtime.
+if (!globalThis.__lockLootD2PersonalExport) Object.defineProperty(globalThis,'__lockLootD2PersonalExport',{value:Object.freeze({bridgeVersion:3,startupVersion:1,sourceOrigin:'https://zaarol-cloud.github.io',deliveryProfile:'TEACHER_DEMO_V2_PR53'}),writable:false,configurable:false});
+if (globalThis.__lockLootD2PersonalExport?.bridgeVersion === 3) {
+  const localAllowed = typeof location !== 'undefined' && location.origin === 'https://zaarol-cloud.github.io' && ['/ll-mobile-preview-876f34b3/pr-53/','/ll-mobile-preview-876f34b3/pr-53/index.html'].includes(location.pathname);
+  if (!backendGame.__lockLootPersonalRuntime) {
+    const personal = {bridgeVersion:3,phase:localAllowed?'loading':'error',bridge:null,retryRequested:true,moduleAttempt:0};
+    backendGame.__lockLootPersonalRuntime = personal;
+    const blocked = () => { throw Object.assign(new Error('Historical writer disabled in personal mode.'), {code:'PERSONAL_LEGACY_BLOCKED'}); };
+    backendGame.__lockLootBackendRuntime = Object.freeze({environment:'personal',enabled:false,isLocal:false,sessionStorageKey:'',endpoints:Object.freeze({}),getUid:()=>'',readSession:()=>null,saveSession:blocked,authenticate:blocked,refresh:blocked,prepare:blocked,callCallable:blocked});
+  }
+  const personal = backendGame.__lockLootPersonalRuntime;
+  if(localAllowed&&personal.retryRequested&&!personal.bridge){personal.retryRequested=false;personal.phase='loading';const entry=new URL('./personal-chest-gdevelop-bridge.mjs',location.href);entry.searchParams.set('startupAttempt',String(++personal.moduleAttempt));void import(entry.href).then(async module=>{personal.bridge=module.createGDevelopBridge();await personal.bridge.ready;personal.phase='ready';}).catch(()=>{personal.phase='error';});}
+  if (personal.bridge) {personal.bridge.observeScene(runtimeScene);const state=personal.bridge.startupState();personal.phase=state.phase==='READY'?'ready':['ERROR','CLOSED'].includes(state.phase)?'error':'loading';}
+  if (runtimeScene.getName()==='TrainingScene') {runtimeScene.getVariables().get('backendModeActive').setBoolean(true);if(personal.phase!=='ready')runtimeScene.getVariables().get('backendAction').setString('');}
+  for (const badge of runtimeScene.getObjects('StagingBadge')) badge.hide(true);
+  return;
+}
+if (!backendGame.__lockLootBackendRuntime) {
+  const backendVariables = backendGame.getVariables();
+  const environment = backendVariables.get("backendEnvironment").getAsString();
+  let catalog = null;
+  try { catalog = JSON.parse(backendVariables.get("backendConfigJson").getAsString()); } catch (error) {}
+  const makeError = (message, status, details = {}) => Object.assign(new Error(message), { status, details, reason: typeof details.reason === "string" ? details.reason : "" });
+  const allowedEnvironments = new Set(["local", "staging", "production"]);
+  if (!catalog || catalog.schemaVersion !== 1 || !allowedEnvironments.has(environment)) {
+    backendGame.__lockLootBackendRuntime = Object.freeze({
+      environment: "blocked", enabled: false, sessionStorageKey: "", endpoints: Object.freeze({}),
+      getUid: () => "", readSession: () => null, saveSession: () => {},
+      authenticate: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      refresh: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      prepare: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); },
+      callCallable: async () => { throw makeError("Backendkonfiguration fehlt.", "ENVIRONMENT_BLOCKED"); }
     });
-    return "PERSÖNLICHE HINWEISE · L&L-039" +
-      "\nKiste: " + hintState.chestId + "    Kekse: " + wallet.cookies +
-      "    Pakete: " + hintState.purchasedPackageCount + " / 5    Hinweise: " + hintState.revealedHintCount + " / 10" +
-      (lines.length ? "\n" + lines.join("\n") : "\nNoch keine Hinweise gekauft.");
+  } else {
+    const config = catalog[environment];
+    const enabled = environment !== "production" && config && config.enabled === true;
+    const isLocal = environment === "local";
+    const endpointNames = ["bootstrap", "buyHintPackage", "attemptChest", "claim"];
+    const endpoints = enabled ? Object.freeze(isLocal ? {...config.endpoints} : {...config.functionNames}) : Object.freeze({});
+    const sessionStorageKey = enabled && typeof config.sessionStorageKey === "string" ? config.sessionStorageKey : "";
+    let sdkPromise = null;
+    let currentUid = "";
+    const assertLocalEndpoint = endpoint => {
+      const parsed = new URL(endpoint);
+      if (parsed.protocol !== "http:" || parsed.hostname !== "127.0.0.1" || !["9099", "5001"].includes(parsed.port)) throw makeError("Lokale Backendgrenze verletzt.", "LOCAL_BOUNDARY");
+    };
+    const readSession = () => {
+      if (!enabled || !isLocal) return null;
+      try {
+        const raw = globalThis.localStorage ? globalThis.localStorage.getItem(sessionStorageKey) : "";
+        const value = raw ? JSON.parse(raw) : null;
+        return value && typeof value.idToken === "string" && typeof value.uid === "string" ? value : null;
+      } catch (error) { return null; }
+    };
+    const saveSession = session => {
+      if (!enabled || !isLocal) return;
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(sessionStorageKey, JSON.stringify(session)); } catch (error) {}
+    };
+    const requestJson = async (endpoint, body, idToken = "", formEncoded = false) => {
+      assertLocalEndpoint(endpoint);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        const headers = {"Content-Type": formEncoded ? "application/x-www-form-urlencoded" : "application/json"};
+        if (idToken) headers.Authorization = "Bearer " + idToken;
+        const response = await fetch(endpoint, {method: "POST", headers, body: formEncoded ? body : JSON.stringify(body), signal: controller.signal});
+        const responseText = await response.text();
+        let payload = null;
+        try { payload = responseText ? JSON.parse(responseText) : null; } catch (error) { throw makeError("Ungueltige Backendantwort.", "INVALID_RESPONSE"); }
+        if (!response.ok || payload && payload.error) {
+          const status = payload && payload.error && typeof payload.error.status === "string" ? payload.error.status : "HTTP_" + response.status;
+          const details = payload && payload.error && payload.error.details && typeof payload.error.details === "object" ? payload.error.details : {};
+          throw makeError("Backendanfrage abgelehnt.", status, details);
+        }
+        return payload;
+      } finally { clearTimeout(timeout); }
+    };
+    const validateStagingConfig = () => {
+      if (!enabled || environment !== "staging" || config.projectId !== "lock-loot-staging" || config.region !== "europe-west1" || config.allowedOrigin !== "https://zaarol-cloud.github.io") throw makeError("Staginggrenze verletzt.", "STAGING_BOUNDARY");
+      const web = config.firebaseWebConfig;
+      const values = [web && web.apiKey, web && web.authDomain, web && web.projectId, web && web.appId, config.appCheckSiteKey];
+      if (values.some(value => typeof value !== "string" || !value || value.startsWith("__LOCK_LOOT_")) || web.projectId !== "lock-loot-staging") throw makeError("Stagingkonfiguration ist noch nicht gesetzt.", "STAGING_CONFIG_MISSING");
+      for (const name of endpointNames) if (typeof endpoints[name] !== "string" || !endpoints[name]) throw makeError("Staging-Callable fehlt.", "STAGING_CONFIG_MISSING");
+    };
+    const normalizeSdkError = error => {
+      const rawCode = error && typeof error.code === "string" ? error.code.split("/").pop() : "";
+      if (["network-request-failed", "unavailable", "deadline-exceeded"].includes(rawCode)) return Object.assign(new TypeError("Backend nicht erreichbar."), {status: "BACKEND_UNREACHABLE"});
+      const status = rawCode ? rawCode.replace(/-/g, "_").toUpperCase() : "BACKEND_REJECTED";
+      const details = error && error.details && typeof error.details === "object" ? error.details : {};
+      return makeError("Backendanfrage abgelehnt.", status, details);
+    };
+    const ensureStagingSdk = async () => {
+      validateStagingConfig();
+      if (!sdkPromise) sdkPromise = (async () => {
+        const version = catalog.sdkVersion;
+        if (version !== "12.17.1") throw makeError("Firebase-SDK-Version nicht freigegeben.", "SDK_VERSION_BLOCKED");
+        const base = "https://www.gstatic.com/firebasejs/" + version + "/";
+        const [appModule, authModule, functionsModule, appCheckModule] = await Promise.all([
+          import(base + "firebase-app.js"), import(base + "firebase-auth.js"),
+          import(base + "firebase-functions.js"), import(base + "firebase-app-check.js")
+        ]);
+        const existing = appModule.getApps().find(app => app.name === "lock-loot-staging-client");
+        const app = existing || appModule.initializeApp(config.firebaseWebConfig, "lock-loot-staging-client");
+        const auth = authModule.getAuth(app);
+        await authModule.setPersistence(auth, authModule.browserLocalPersistence);
+        const appCheck = appCheckModule.initializeAppCheck(app, {
+          provider: new appCheckModule.ReCaptchaEnterpriseProvider(config.appCheckSiteKey),
+          isTokenAutoRefreshEnabled: true
+        });
+        const functions = functionsModule.getFunctions(app, config.region);
+        return {authModule, functionsModule, auth, appCheck, functions};
+      })();
+      return sdkPromise;
+    };
+    const authenticate = async forceRefresh => {
+      if (!enabled) throw makeError("Backendumgebung ist deaktiviert.", "ENVIRONMENT_BLOCKED");
+      if (isLocal) {
+        if (forceRefresh) {
+          const session = readSession();
+          if (!session || !session.refreshToken) throw makeError("Lokales Refresh-Token fehlt.", "AUTH_FAILED");
+          const body = "grant_type=refresh_token&refresh_token=" + encodeURIComponent(session.refreshToken);
+          const payload = await requestJson(config.endpoints.refresh, body, "", true);
+          if (!payload || typeof payload.id_token !== "string" || typeof payload.user_id !== "string" || typeof payload.refresh_token !== "string") throw makeError("Lokale Token-Erneuerung ungueltig.", "AUTH_FAILED");
+          const refreshed = {idToken: payload.id_token, uid: payload.user_id, refreshToken: payload.refresh_token};
+          currentUid = refreshed.uid; saveSession(refreshed); return refreshed;
+        }
+        const existing = readSession();
+        if (existing) { currentUid = existing.uid; return existing; }
+        const payload = await requestJson(config.endpoints.auth, {returnSecureToken: true});
+        if (!payload || typeof payload.idToken !== "string" || typeof payload.localId !== "string" || typeof payload.refreshToken !== "string") throw makeError("Anonyme Emulatorauthentifizierung ungueltig.", "AUTH_FAILED");
+        const created = {idToken: payload.idToken, uid: payload.localId, refreshToken: payload.refreshToken};
+        currentUid = created.uid; saveSession(created); return created;
+      }
+      try {
+        const sdk = await ensureStagingSdk();
+        if (typeof sdk.auth.authStateReady === "function") await sdk.auth.authStateReady();
+        const user = sdk.auth.currentUser || (await sdk.authModule.signInAnonymously(sdk.auth)).user;
+        if (forceRefresh) await user.getIdToken(true);
+        currentUid = user.uid;
+        return {idToken: "sdk-managed", uid: user.uid, refreshToken: "sdk-managed"};
+      } catch (error) { throw normalizeSdkError(error); }
+    };
+    const callCallable = async (endpoint, data, idToken = "") => {
+      if (!enabled) throw makeError("Backendumgebung ist deaktiviert.", "ENVIRONMENT_BLOCKED");
+      if (isLocal) {
+        const payload = await requestJson(endpoint, {data}, idToken);
+        const result = payload && payload.result !== undefined ? payload.result : payload && payload.data;
+        if (result === undefined) throw makeError("Callable-Ergebnis fehlt.", "INVALID_RESPONSE");
+        return result;
+      }
+      try {
+        const sdk = await ensureStagingSdk();
+        if (!sdk.auth.currentUser) await authenticate(false);
+        const normalized = {...data, integration: "L&L-051"};
+        const callable = sdk.functionsModule.httpsCallable(sdk.functions, endpoint);
+        const response = await callable(normalized);
+        return response.data;
+      } catch (error) { throw normalizeSdkError(error); }
+    };
+    const runtime = Object.freeze({
+      environment, enabled, isLocal, config: Object.freeze({...config}), endpoints,
+      sessionStorageKey, readSession, saveSession, getUid: () => currentUid,
+      authenticate, refresh: async () => authenticate(true), callCallable,
+      prepare: async integration => isLocal ? callCallable(config.endpoints.prepare, {integration}, (readSession() || {}).idToken || "") : null
+    });
+    backendGame.__lockLootBackendRuntime = runtime;
+  }
+}
+// L&L-059: Einziger clientseitiger Zugang zu einer serverautoritativen letzten Lösung.
+// Der Zustand ist UID-/Rotations-gebunden, tief eingefroren und wird vor jeder Mutation vollständig geprüft.
+if (!backendGame.__lockLootLastSolution) {
+  const globals = backendGame.getVariables();
+  const idPattern = /^[A-Za-z0-9_-]{1,128}$/;
+  const codePattern = /^\d+$/;
+  const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort());
+  const contractError = message => Object.assign(new Error(message), {status: "INVALID_RESPONSE"});
+  const requireCodeLength = (version, length) => {
+    if ([1, 2].includes(version) && length === undefined) return 11;
+    if ([3, 4].includes(version) && [8, 10, 12].includes(length)) return length;
+    throw contractError("Lösungslänge oder Generatorversion ist ungültig.");
   };
-  const formatCalendarReward = (reward) => '+' + reward.cookies + ' K / +' + reward.lockpicks + ' D · B ' + reward.booster5 + '/' + reward.booster10 + '/' + reward.booster25;
-  const formatCalendar = (calendar) => {
-    if (!calendar || calendar.levelCount !== 30 || !Number.isSafeInteger(calendar.calendarVersion) || !Number.isSafeInteger(calendar.progress) || calendar.progress < 0 || calendar.progress > 30 || typeof calendar.todayClaimed !== 'boolean' || typeof calendar.cycleCompleted !== 'boolean' || typeof calendar.premiumEntitled !== 'boolean' || !Array.isArray(calendar.rewardOverview) || calendar.rewardOverview.length !== 30) throw Object.assign(new Error('Ungültiger clientsicherer Kalenderzustand.'), { status: 'INVALID_RESPONSE' });
-    const available = !calendar.todayClaimed && !calendar.cycleCompleted;
-    const entry = calendar.nextLevel === null ? null : calendar.rewardOverview[calendar.nextLevel - 1];
-    const nextText = entry ? 'F ' + formatCalendarReward(entry.free) + ' | P ' + formatCalendarReward(entry.premium) : 'Zyklus abgeschlossen';
-    return 'SCHATZKALENDER · L&L-042 · ' + calendar.progress + '/30 · HEUTE ' + (available ? 'JA' : 'NEIN') + ' · PREMIUM ' + (calendar.premiumEntitled ? 'JA' : 'NEIN') + '\nNÄCHSTE TESTBELOHNUNG: ' + nextText + '\nKALENDERBELOHNUNG BEANSPRUCHEN';
+  const requireId = (value, field) => {
+    if (typeof value !== "string" || !idPattern.test(value)) throw contractError(field + " ist ungültig.");
+    return value;
   };
-  const state = { runtimeScene, endpoints, requestJson, callCallable, formatWallet, formatChest, formatHintState, formatCalendar, setWalletStatus, setChestStatus, setHintStatus, setCalendarStatus, idToken: "", uid: "", lastRequest: null, lastWalletRequest: null, lastHintRequest: null, lastHintResult: null, wallet: null, hintState: null, calendar: null, currentChest: null, previousChestId: "" };
-  globalThis.__lockLootL035 = state;
-  const applyBootstrap = (snapshot, trackPrevious = true) => {
-    if (!snapshot || snapshot.uid !== state.uid) throw Object.assign(new Error("Bootstrap-UID stimmt nicht."), { status: "INVALID_RESPONSE" });
-    formatWallet(snapshot);
-    formatChest(snapshot.currentChest);
-    if (trackPrevious && state.currentChest && state.currentChest.chestId !== snapshot.currentChest.chestId) state.previousChestId = state.currentChest.chestId;
-    state.wallet = snapshot;
-    state.hintState = snapshot.hintState;
-    if (snapshot.calendar) state.calendar = snapshot.calendar;
-    state.currentChest = snapshot.currentChest;
-    setWalletStatus(formatWallet(snapshot));
-    setChestStatus(formatChest(snapshot.currentChest));
-    setHintStatus(formatHintState(snapshot.hintState, snapshot));
-    if (snapshot.calendar) setCalendarStatus(formatCalendar(snapshot.calendar));
+  const requirePositiveInteger = (value, field) => {
+    if (!Number.isSafeInteger(value) || value < 1) throw contractError(field + " ist ungültig.");
+    return value;
   };
-  state.applyBootstrap = applyBootstrap;
-  const authenticateAndPrepare = async () => {
-    const authPayload = await requestJson(endpoints.auth, { returnSecureToken: true });
-    if (!authPayload || typeof authPayload.idToken !== "string" || !authPayload.idToken || typeof authPayload.localId !== "string" || !authPayload.localId) throw Object.assign(new Error("Anonyme Auth-Antwort ungültig."), { status: "AUTH_FAILED" });
-    state.idToken = authPayload.idToken;
-    state.uid = authPayload.localId;
-    state.lastRequest = null;
-    state.lastWalletRequest = null;
-    state.lastHintRequest = null;
-    state.lastHintResult = null;
-    state.previousChestId = "";
-    state.currentChest = null;
-    const prepared = await callCallable(endpoints.prepare, { integration: "L&L-042" }, state.idToken);
-    if (!prepared || prepared.calendarVersion !== 1) throw Object.assign(new Error('Kalender-Testdaten fehlen.'), { status: 'INVALID_RESPONSE' });
-    if (!prepared || typeof prepared.chestId !== "string" || !prepared.chestId || prepared.lockpicksRemaining !== 10) throw Object.assign(new Error("Testdaten-Antwort ungültig."), { status: "INVALID_RESPONSE" });
-    const bootstrap = await callCallable(endpoints.wallet, { integration: "L&L-042" }, state.idToken);
-    applyBootstrap(bootstrap, false);
-    if (prepared.chestId !== state.currentChest.chestId) throw Object.assign(new Error("Vorbereitung und aktuelle Kiste weichen ab."), { status: "INVALID_RESPONSE" });
-    return prepared;
+  const requireNonNegativeInteger = (value, field) => {
+    if (!Number.isSafeInteger(value) || value < 0) throw contractError(field + " ist ungültig.");
+    return value;
   };
-  state.authenticateAndPrepare = authenticateAndPrepare;
-  sceneVariables.get("backendInitState").setString("authenticating");
-  sceneVariables.get("backendRequestPending").setBoolean(true);
-  setStatus("Entwicklungsstatus: Lokale Emulatorverbindung wird geprüft.\nAnonyme Testauthentifizierung läuft …\nKeine Produktionsverbindung.");
-  void authenticateAndPrepare().then(() => {
-    if (globalThis.__lockLootL035 !== state) return;
-    sceneVariables.get("backendInitState").setString("ready");
-    setStatus("Verbindung erfolgreich.\nLokale Test-UID: " + state.uid + "\nGemeinsame aktuelle Kiste: " + state.currentChest.chestId + "\nTestdaten bereit: 10 Test-Dietriche.");
-  }).catch((error) => {
-    if (globalThis.__lockLootL035 !== state) return;
-    const networkError = error && (error.name === "AbortError" || error instanceof TypeError);
-    sceneVariables.get("backendInitState").setString(networkError ? "emulator-unreachable" : "auth-error");
-    setStatus(networkError ? "Emulator nicht erreichbar.\nPrüfe 127.0.0.1:9099 und 127.0.0.1:5001.\nKein Preview-Absturz." : "Authentifizierung oder lokale Testvorbereitung fehlgeschlagen.\nEs wurde kein Schlossversuch gestartet.");
-  }).finally(() => {
-    if (globalThis.__lockLootL035 === state) sceneVariables.get("backendRequestPending").setBoolean(false);
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const deepFreeze = value => {
+    if (!value || typeof value !== "object" || Object.isFrozen(value)) return value;
+    for (const child of Object.values(value)) deepFreeze(child);
+    return Object.freeze(value);
+  };
+  const forbiddenFields = new Set([
+    "solution" + "Code", "assignmentSalt", "assignmentSeedHash", "assignedHints",
+    "generatorSeedOverride", "t504Fairness", "signature", "truthValue",
+    "mathematicalRule", "internalPositions", "details", "specialRule",
+    "independentValidation", "codewideDerivations", "intentionallyFalse",
+    "fairnessValidated"
+  ]);
+  const containsForbiddenField = value => {
+    if (!value || typeof value !== "object") return false;
+    return Object.entries(value).some(([key, child]) => forbiddenFields.has(key) || containsForbiddenField(child));
+  };
+  const requireShortString = (value, field, maximum = 512) => {
+    if (typeof value !== "string" || !value.trim() || value.length > maximum) throw contractError(field + " ist ungültig.");
+    return value;
+  };
+  const requireJsonScalarTree = (value, depth = 0, allowHalf = false) => {
+    if (depth > 4) throw contractError("Erklärmetadaten sind zu tief verschachtelt.");
+    if (value === null || typeof value === "boolean") return;
+    if (typeof value === "string") { if (value.length > 256) throw contractError("Erklärtext ist zu lang."); return; }
+    if (typeof value === "number") { if (!(Number.isSafeInteger(value) || allowHalf && Number.isSafeInteger(value * 2)) || Math.abs(value) > 1000000) throw contractError("Erklärzahl ist ungültig."); return; }
+    if (Array.isArray(value)) {
+      if (value.length > 16) throw contractError("Erklärliste ist zu lang.");
+      for (const child of value) requireJsonScalarTree(child, depth + 1, allowHalf);
+      return;
+    }
+    if (value && typeof value === "object") {
+      const keys = Object.keys(value);
+      if (keys.length > 12) throw contractError("Zu viele Erklärfelder.");
+      for (const child of Object.values(value)) requireJsonScalarTree(child, depth + 1, allowHalf);
+      return;
+    }
+    throw contractError("Erklärmetadaten sind ungültig.");
+  };
+  const validateHint = (hint, index, codeLength, version) => {
+    const keys = ["index", "id", "tier", "text", "textByLanguage", "visiblePositions", "positionRoles", "lengthClass", "packageNumber", "packagePosition", "explanationType", "explanationData"];
+    if (!exactKeys(hint, keys) || containsForbiddenField(hint)) throw contractError("Hinweisvertrag enthält unerwartete Felder.");
+    if (hint.index !== index + 1 || hint.packageNumber !== Math.floor(index / 2) + 1 || hint.packagePosition !== index % 2 + 1) throw contractError("Hinweisreihenfolge ist ungültig.");
+    requireId(hint.id, "hint.id");
+    if (!Number.isSafeInteger(hint.tier) || hint.tier < 1 || hint.tier > 5) throw contractError("hint.tier ist ungültig.");
+    requireShortString(hint.text, "hint.text");
+    if (!exactKeys(hint.textByLanguage, ["de", "en"]) || hint.textByLanguage.de !== hint.text) throw contractError("Hintlokalisierung ist ungültig.");
+    requireShortString(hint.textByLanguage.de, "hint.textByLanguage.de");
+    requireShortString(hint.textByLanguage.en, "hint.textByLanguage.en");
+    if (!Array.isArray(hint.visiblePositions) || hint.visiblePositions.length > codeLength || hint.visiblePositions.some(position => !Number.isSafeInteger(position) || position < 1 || position > codeLength)) throw contractError("Hintpositionen sind ungültig.");
+    if (!Array.isArray(hint.positionRoles) || hint.positionRoles.length !== hint.visiblePositions.length || hint.positionRoles.some(role => typeof role !== "string" || !role.trim() || role.length > 128)) throw contractError("Hintrollen sind ungültig.");
+    if (!["kurz", "mittel", "lang"].includes(hint.lengthClass)) throw contractError("Hintlängenklasse ist ungültig.");
+    requireShortString(hint.explanationType, "hint.explanationType", 64);
+    const explanationKeys = ["hintId", "visiblePositions", "positionRoles", "propertyKey", "derivationKeys", "variant", "result", "operation", "divisor", "comparison", ...([3, 4].includes(version) ? ["median"] : [])];
+    if (!hint.explanationData || typeof hint.explanationData !== "object" || Array.isArray(hint.explanationData) || Object.keys(hint.explanationData).some(key => !explanationKeys.includes(key))) throw contractError("Erklärvertrag enthält unerwartete Felder.");
+    if (hint.explanationData.hintId !== hint.id || JSON.stringify(hint.explanationData.visiblePositions) !== JSON.stringify(hint.visiblePositions) || JSON.stringify(hint.explanationData.positionRoles) !== JSON.stringify(hint.positionRoles)) throw contractError("Erklärvertrag passt nicht zum Hinweis.");
+    requireJsonScalarTree(hint.explanationData, 0, [3, 4].includes(version));
+    return {
+      index: hint.index, id: hint.id, tier: hint.tier, text: hint.text,
+      textByLanguage: {de: hint.textByLanguage.de, en: hint.textByLanguage.en},
+      visiblePositions: [...hint.visiblePositions], positionRoles: [...hint.positionRoles],
+      lengthClass: hint.lengthClass, packageNumber: hint.packageNumber,
+      packagePosition: hint.packagePosition, explanationType: hint.explanationType,
+      explanationData: clone(hint.explanationData)
+    };
+  };
+  const normalizeContract = (value, context) => {
+    if (!context || typeof context !== "object") throw contractError("Lösungskontext fehlt.");
+    const generation = requirePositiveInteger(context.generation, "generation");
+    const uid = requireId(context.uid, "uid");
+    const activeChestId = requireId(context.activeChestId, "activeChestId");
+    const rotation = requireNonNegativeInteger(context.rotation, "rotation");
+    const activeContentVersion = requirePositiveInteger(context.activeContentVersion, "activeContentVersion");
+    const contractKeys = ["schemaVersion", "rotation", "activeChestId", "available", "reason", "previousChestId", "snapshot"];
+    if (!exactKeys(value, contractKeys) || value.schemaVersion !== 1 || value.rotation !== rotation || value.activeChestId !== activeChestId || typeof value.available !== "boolean") throw contractError("Letzte-Lösung-Vertrag ist ungültig.");
+    const previousChestId = value.previousChestId === "" ? "" : requireId(value.previousChestId, "previousChestId");
+    if (previousChestId === activeChestId) throw contractError("Aktive Kiste darf nie letzte Lösung sein.");
+    if (!value.available) {
+      if (!["NO_HISTORY", "NO_HINT_PURCHASE", "INVALID_SNAPSHOT"].includes(value.reason) || value.snapshot !== null) throw contractError("Deaktivierter Lösungsvertrag ist ungültig.");
+      if (value.reason === "NO_HISTORY" && previousChestId !== "") throw contractError("NO_HISTORY enthält eine Kiste.");
+      if (value.reason === "NO_HINT_PURCHASE" && previousChestId === "") throw contractError("NO_HINT_PURCHASE enthält keine Kiste.");
+      const contract = {schemaVersion: 1, rotation, activeChestId, available: false, reason: value.reason, previousChestId, snapshot: null};
+      return deepFreeze({uid, generation, rotation, activeChestId, activeContentVersion, contract, digest: JSON.stringify({activeContentVersion, contract})});
+    }
+    if (value.reason !== "ELIGIBLE" || !previousChestId) throw contractError("Berechtigter Lösungsvertrag ist ungültig.");
+    const snapshot = value.snapshot;
+    const version = snapshot?.hintGeneratorVersion;
+    const codeLength = requireCodeLength(version, snapshot?.codeLength);
+    const snapshotKeys = ["schemaVersion", "chestId", "closedCode", "purchasedPackageCount", "revealedHintCount", "revealedHints", "contentVersion", "hintGeneratorVersion", "playerChestRevision", "rotation", ...([3, 4].includes(version) ? ["codeLength"] : []), ...(version === 4 ? ["packageCount"] : [])];
+    if (!exactKeys(snapshot, snapshotKeys) || snapshot.schemaVersion !== 1 || snapshot.chestId !== previousChestId || snapshot.rotation !== rotation || typeof snapshot.closedCode !== "string" || !codePattern.test(snapshot.closedCode) || snapshot.closedCode.length !== codeLength) throw contractError("Lösungssnapshot ist ungültig.");
+    const packageLimit = version === 4 ? snapshot.packageCount : 5;
+    if (version === 4 && (!Number.isSafeInteger(packageLimit) || packageLimit < 5 || packageLimit > 10)) throw contractError("Archivierte Paketkonfiguration ist ungültig.");
+    if (!Number.isSafeInteger(snapshot.purchasedPackageCount) || snapshot.purchasedPackageCount < 1 || snapshot.purchasedPackageCount > packageLimit || snapshot.revealedHintCount !== snapshot.purchasedPackageCount * 2 || !Array.isArray(snapshot.revealedHints) || snapshot.revealedHints.length !== snapshot.revealedHintCount) throw contractError("Gekaufte Hinweise stimmen nicht mit dem Snapshot überein.");
+    const contentVersion = requirePositiveInteger(snapshot.contentVersion, "snapshot.contentVersion");
+    if (contentVersion + 1 !== activeContentVersion) throw contractError("Lösungssnapshot gehört nicht zur vorherigen Kiste.");
+    const normalizedSnapshot = {
+      schemaVersion: 1, chestId: previousChestId, closedCode: snapshot.closedCode,
+      purchasedPackageCount: snapshot.purchasedPackageCount,
+      revealedHintCount: snapshot.revealedHintCount,
+      revealedHints: snapshot.revealedHints.map((hint, index) => validateHint(hint, index, codeLength, version)),
+      contentVersion,
+      hintGeneratorVersion: version,
+      ...([3, 4].includes(version) ? {codeLength} : {}),
+      ...(version === 4 ? {packageCount: snapshot.packageCount} : {}),
+      playerChestRevision: requireNonNegativeInteger(snapshot.playerChestRevision, "snapshot.playerChestRevision"),
+      rotation
+    };
+    if (containsForbiddenField(normalizedSnapshot)) throw contractError("Interne Felder im Lösungssnapshot.");
+    const contract = {schemaVersion: 1, rotation, activeChestId, available: true, reason: "ELIGIBLE", previousChestId, snapshot: normalizedSnapshot};
+    return deepFreeze({uid, generation, rotation, activeChestId, activeContentVersion, contract, digest: JSON.stringify({activeContentVersion, contract})});
+  };
+  const clearGlobals = () => {
+    globals.get("previousSolutionAvailable").setBoolean(false);
+    globals.get("previousSolutionCode").fromJSObject([]);
+    globals.get("previousSolutionHints").fromJSObject([]);
+    globals.get("previousSolutionMetadata").fromJSObject([]);
+    globals.get("previousSolutionHintCount").setNumber(0);
+    globals.get("previousSolutionSourceMode").setString("");
+  };
+  const applyGlobals = snapshot => {
+    clearGlobals();
+    const metadata = clone(snapshot.revealedHints);
+    globals.get("previousSolutionCode").fromJSObject(snapshot.closedCode.split("").map(Number));
+    globals.get("previousSolutionHints").fromJSObject(metadata.map(hint => hint.textByLanguage.de));
+    globals.get("previousSolutionMetadata").fromJSObject(metadata);
+    globals.get("previousSolutionHintCount").setNumber(metadata.length);
+    globals.get("previousSolutionSourceMode").setString("Server-L059");
+    globals.get("previousSolutionAvailable").setBoolean(true);
+  };
+  const state = {uid: "", generation: 0, highestRotation: -1, highestContentVersion: -1, digest: "", activeChestId: "", available: false, reason: "UNINITIALIZED", snapshot: null};
+  const markUnavailable = reason => {
+    state.available = false;
+    state.reason = typeof reason === "string" && reason ? reason : "UNAVAILABLE";
+    state.snapshot = null;
+    clearGlobals();
+  };
+  const begin = uid => {
+    const validatedUid = requireId(uid, "uid");
+    state.generation += 1;
+    if (state.uid !== validatedUid) {
+      state.uid = validatedUid;
+      state.highestRotation = -1;
+      state.highestContentVersion = -1;
+      state.digest = "";
+      state.activeChestId = "";
+    }
+    markUnavailable("LOADING");
+    return Object.freeze({uid: state.uid, generation: state.generation});
+  };
+  const invalidate = reason => {
+    state.generation += 1;
+    markUnavailable(reason || "LOADING");
+  };
+  const isCurrent = token => !!(token && token.uid === state.uid && token.generation === state.generation);
+  const commit = candidate => {
+    if (!candidate || typeof candidate !== "object" || !Object.isFrozen(candidate)) throw contractError("Ungeprüfter Lösungskandidat.");
+    if (state.uid !== candidate.uid || state.generation !== candidate.generation) return false;
+    if (candidate.rotation < state.highestRotation || candidate.activeContentVersion < state.highestContentVersion) {
+      markUnavailable("STALE_RESPONSE");
+      return false;
+    }
+    if (state.highestRotation >= 0 && ((candidate.rotation > state.highestRotation && candidate.activeContentVersion <= state.highestContentVersion) || (candidate.rotation === state.highestRotation && candidate.activeContentVersion !== state.highestContentVersion))) {
+      markUnavailable("INVALID_SNAPSHOT");
+      return false;
+    }
+    if (candidate.rotation === state.highestRotation && state.digest && candidate.digest !== state.digest) {
+      markUnavailable("INVALID_SNAPSHOT");
+      return false;
+    }
+    state.highestRotation = candidate.rotation;
+    state.highestContentVersion = candidate.activeContentVersion;
+    state.digest = candidate.digest;
+    state.activeChestId = candidate.activeChestId;
+    state.available = candidate.contract.available;
+    state.reason = candidate.contract.reason;
+    state.snapshot = candidate.contract.available ? candidate.contract.snapshot : null;
+    if (state.snapshot) applyGlobals(state.snapshot); else clearGlobals();
+    return true;
+  };
+  const currentSnapshot = () => state.available && state.snapshot ? state.snapshot : null;
+  const openSnapshot = () => {
+    const snapshot = currentSnapshot();
+    if (!snapshot) return false;
+    applyGlobals(snapshot);
+    return true;
+  };
+  backendGame.__lockLootLastSolution = Object.freeze({
+    validate: normalizeContract, validateRevealedHint: validateHint, commit, begin, invalidate, isCurrent, markUnavailable, currentSnapshot, openSnapshot,
+    getState: () => Object.freeze({uid: state.uid, generation: state.generation, highestRotation: state.highestRotation, highestContentVersion: state.highestContentVersion, activeChestId: state.activeChestId, available: state.available, reason: state.reason, snapshot: state.snapshot})
   });
 }
+const backendRuntime = backendGame.__lockLootBackendRuntime;
+for (const badge of runtimeScene.getObjects("StagingBadge")) {
+  const badgeI18n = backendGame.__lockLootI18n;
+  badge.setString(badgeI18n ? badgeI18n.t("common.staging") : "STAGING");
+  badge.hide(!backendRuntime || backendRuntime.environment !== "staging");
+}
+// Unmarked environments retain their existing independent runtime.
 };
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendWrongButtonObjects1Objects = Hashtable.newFrom({"BackendWrongButton": gdjs.BackendTestScene_95L035Code.GDBackendWrongButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCorrectButtonObjects1Objects = Hashtable.newFrom({"BackendCorrectButton": gdjs.BackendTestScene_95L035Code.GDBackendCorrectButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendRepeatButtonObjects1Objects = Hashtable.newFrom({"BackendRepeatButton": gdjs.BackendTestScene_95L035Code.GDBackendRepeatButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendAuthButtonObjects1Objects = Hashtable.newFrom({"BackendAuthButton": gdjs.BackendTestScene_95L035Code.GDBackendAuthButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendChestReloadButtonObjects1Objects = Hashtable.newFrom({"BackendChestReloadButton": gdjs.BackendTestScene_95L035Code.GDBackendChestReloadButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendStaleChestButtonObjects1Objects = Hashtable.newFrom({"BackendStaleChestButton": gdjs.BackendTestScene_95L035Code.GDBackendStaleChestButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendWalletReloadButtonObjects1Objects = Hashtable.newFrom({"BackendWalletReloadButton": gdjs.BackendTestScene_95L035Code.GDBackendWalletReloadButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCookieButtonObjects1Objects = Hashtable.newFrom({"BackendCookieButton": gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendWalletRepeatButtonObjects1Objects = Hashtable.newFrom({"BackendWalletRepeatButton": gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects1});
-gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendBoosterButtonObjects1Objects = Hashtable.newFrom({"BackendBoosterButton": gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects1});
-gdjs.BackendTestScene_95L035Code.userFunc0xe94f98 = function GDJSInlineCode(runtimeScene) {
+gdjs.ShopSzeneCode.userFunc0xfa7df0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
-// L&L-035 bis L&L-042: Aktiver lokaler REST-/Callable-Adapter; keine bestehende TrainingScene-Variable wird benutzt.
-const sceneVariables = runtimeScene.getVariables();
-const initState = sceneVariables.get("backendInitState");
-const actionVariable = sceneVariables.get("backendAction");
-const pendingVariable = sceneVariables.get("backendRequestPending");
-const statusObjects = runtimeScene.getObjects("BackendTestStatus");
-const clientState = globalThis.__lockLootL035;
-const sceneIsCurrent = () => globalThis.__lockLootL035 && globalThis.__lockLootL035.runtimeScene === runtimeScene;
-const setStatus = (text) => { if (sceneIsCurrent() && statusObjects.length) statusObjects[0].setString(text); };
-const requestedAction = actionVariable.getAsString();
-if (requestedAction && initState.getAsString() !== "ready") {
-  actionVariable.setString("");
-  setStatus("Der lokale Backend-Test ist noch nicht bereit.\nAktueller Entwicklungsstatus: " + initState.getAsString());
-}
-if (requestedAction && initState.getAsString() === "ready" && !pendingVariable.getAsBoolean() && clientState) {
-  actionVariable.setString("");
-  pendingVariable.setBoolean(true);
-  const makeRequestId = () => {
-    if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") return "gd-" + globalThis.crypto.randomUUID();
-    if (!globalThis.crypto || typeof globalThis.crypto.getRandomValues !== "function") throw new Error("Keine sichere requestId verfügbar.");
-    const bytes = new Uint8Array(16);
-    globalThis.crypto.getRandomValues(bytes);
-    return "gd-" + Array.from(bytes, (value) => value.toString(16).padStart(2, "0")).join("");
+// L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
+const musicGame = runtimeScene.getGame();
+const musicControllerKey = '__lockLootMusicController';
+if (!musicGame[musicControllerKey]) {
+  const musicChannel = 20;
+  const musicStorageKey = 'lockloot.music.enabled.v1';
+  const forcedMainTrack = { name: 'music_main_always', style: 'Neutral', category: 'main' };
+  const mainTracks = [
+    forcedMainTrack,
+    { name: 'music_main_accordion_1', style: 'Akkordeon', category: 'main' },
+    { name: 'music_main_accordion_2', style: 'Akkordeon', category: 'main' },
+    { name: 'music_main_marimba_1', style: 'Marimba', category: 'main' },
+    { name: 'music_main_marimba_2', style: 'Marimba', category: 'main' }
+  ];
+  const puzzleTracks = [
+    { name: 'music_puzzle_accordion_1', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_2', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_3', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_accordion_4', style: 'Akkordeon', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_1', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_2', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_3', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_acoustic_4', style: 'Akustik', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_1', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_2', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_3', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_4', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_5', style: 'Marimba', category: 'puzzle' },
+    { name: 'music_puzzle_marimba_6', style: 'Marimba', category: 'puzzle' }
+  ];
+  let storedMusicEnabled = '';
+  try { storedMusicEnabled = globalThis.localStorage ? String(globalThis.localStorage.getItem(musicStorageKey) || '') : ''; } catch (error) {}
+  const state = {
+    storageKey: musicStorageKey,
+    musicEnabled: storedMusicEnabled !== 'false',
+    sessionStarted: false,
+    currentTrack: null,
+    currentCategory: '',
+    recentTracks: [],
+    lastStyle: '',
+    puzzleTracksRemaining: 2,
+    wasPlaying: false,
+    lastStartAttempt: 0,
+    activeScene: null,
+    solutionState: null,
+    victoryState: null,
+    victoryActive: false,
+    error: ''
   };
-  const formatResult = (result, repeated) => {
-    if (!result || typeof result.success !== "boolean" || !Number.isSafeInteger(result.lockpicksRemaining)) throw Object.assign(new Error("Ungültige Backend-Antwort."), { status: "INVALID_RESPONSE" });
-    return "Verbindung erfolgreich.\nLokale Test-UID: " + clientState.uid +
-      "\nBackend-Antwort: " + (result.success ? "Erfolg" : "Fehlversuch") +
-      "\nErfolg: " + (result.success ? "ja" : "nein") +
-      "\nVerbleibende Test-Dietriche: " + result.lockpicksRemaining +
-      "\nrequestId: " + clientState.lastRequest.requestId +
-      (repeated ? "\nIdempotenz: dieselbe requestId wurde erneut gesendet." : "");
+  const persistEnabled = () => {
+    try { if (globalThis.localStorage) globalThis.localStorage.setItem(musicStorageKey, state.musicEnabled ? 'true' : 'false'); } catch (error) {}
   };
-  void (async () => {
-    if (requestedAction === 'calendar-claim') {
-      const before = { cookies: clientState.wallet.cookies, lockpicks: clientState.wallet.lockpicks, booster5: clientState.wallet.booster5, booster10: clientState.wallet.booster10, booster25: clientState.wallet.booster25 };
-      setStatus('Serverautoritiver Schatzkalender-Claim läuft …\nTagesgrenze: UTC · Testclock nur über lokale Adminhilfe.');
-      const result = await clientState.callCallable(clientState.endpoints.claimCalendar, { integration: 'L&L-042', requestId: makeRequestId() }, clientState.idToken);
-      if (!result || result.dayBoundary !== 'UTC' || !result.wallet || !result.calendar || !result.rewards || !result.rewards.free || !result.rewards.premium) throw Object.assign(new Error('Ungültige Kalenderclaim-Antwort.'), { status: 'INVALID_RESPONSE' });
-      clientState.wallet = result.wallet;
-      clientState.calendar = result.calendar;
-      clientState.setWalletStatus(clientState.formatWallet(result.wallet));
-      clientState.setHintStatus(clientState.formatHintState(clientState.hintState, result.wallet));
-      clientState.setCalendarStatus(clientState.formatCalendar(result.calendar));
-      const rewardText = (reward) => '+' + reward.cookies + ' K / +' + reward.lockpicks + ' D · Booster ' + reward.booster5 + '/' + reward.booster10 + '/' + reward.booster25;
-      setStatus('Schatzkalender-Stufe ' + result.progressLevel + ' atomar beansprucht.\nWallet vorher: ' + before.cookies + ' K / ' + before.lockpicks + ' D · danach: ' + result.wallet.cookies + ' K / ' + result.wallet.lockpicks + ' D.\nKostenlos: ' + rewardText(result.rewards.free) + '\nPremium Extra: ' + rewardText(result.rewards.premium) + '\nQualifizierter UTC-Testtag: ' + result.qualifiedDayKey);
-      return;
-    }
-    if (requestedAction === "chest-reload") {
-      const beforeChestId = clientState.currentChest.chestId;
-      const bootstrap = await clientState.callCallable(clientState.endpoints.wallet, { integration: "L&L-036" }, clientState.idToken);
-      clientState.applyBootstrap(bootstrap, true);
-      const changed = beforeChestId !== clientState.currentChest.chestId;
-      setStatus("Gemeinsame Kiste neu geladen.\nAktuell: " + clientState.currentChest.chestId + (changed ? "\nVorherige Kiste für STALE_CHEST-Test: " + clientState.previousChestId : "\nKeine Änderung seit dem letzten Laden."));
-      return;
-    }
-    if (requestedAction === "chest-stale") {
-      if (!clientState.previousChestId || clientState.previousChestId === clientState.currentChest.chestId) {
-        setStatus("STALE_CHEST-Test noch nicht möglich.\nVeröffentliche lokal Testkiste B und lade danach die aktuelle Kiste neu.");
-        return;
-      }
-      const beforeLockpicks = clientState.wallet.lockpicks;
-      const beforeRevision = clientState.wallet.revision;
-      let staleRejected = false;
-      try {
-        await clientState.callCallable(clientState.endpoints.attempt, { requestId: makeRequestId(), chestId: clientState.previousChestId, enteredCode: "00000000000", expectedFeedbackPolicyVersion: 1 }, clientState.idToken);
-      } catch (error) {
-        staleRejected = error && error.status === "FAILED_PRECONDITION" && error.reason === "STALE_CHEST";
-      }
-      if (!staleRejected) throw Object.assign(new Error("STALE_CHEST-Ablehnung fehlt."), { status: "STALE_TEST_FAILED" });
-      const bootstrap = await clientState.callCallable(clientState.endpoints.wallet, { integration: "L&L-036" }, clientState.idToken);
-      clientState.applyBootstrap(bootstrap, false);
-      if (clientState.wallet.lockpicks !== beforeLockpicks || clientState.wallet.revision !== beforeRevision) throw Object.assign(new Error("Veralteter Versuch hat Wallet verändert."), { status: "STALE_TEST_FAILED" });
-      setStatus("STALE_CHEST korrekt abgelehnt.\nVeraltete Kiste: " + clientState.previousChestId + "\nAktuelle Kiste: " + clientState.currentChest.chestId + "\nKein Dietrichverbrauch; Wallet-Revision unverändert.");
-      return;
-    }
-    if (["hint-buy", "hint-repeat", "hint-reload"].includes(requestedAction)) {
-      if (requestedAction === "hint-reload") {
-        const bootstrap = await clientState.callCallable(clientState.endpoints.wallet, { integration: "L&L-036" }, clientState.idToken);
-        clientState.applyBootstrap(bootstrap, true);
-        setStatus("Persönlicher Hintzustand neu geladen.\nDieselben bereits gekauften Hinweise wurden in derselben Reihenfolge wiederhergestellt.\nNicht gekaufte Hinweise bleiben verborgen.");
-        return;
-      }
-      const repeatedHintPurchase = requestedAction === "hint-repeat";
-      if (repeatedHintPurchase && !clientState.lastHintRequest) {
-        setStatus("Hint-Idempotenztest noch nicht möglich.\nKaufe zuerst ein Hinweispaket.");
-        return;
-      }
-      if (!repeatedHintPurchase) {
-        clientState.lastHintRequest = {
-          integration: "L&L-039",
-          requestId: makeRequestId(),
-          chestId: clientState.currentChest.chestId,
-          expectedContentVersion: clientState.currentChest.contentVersion,
-          expectedWalletRevision: clientState.wallet.revision
-        };
-      }
-      setStatus(repeatedHintPurchase ? "Gleiche Hintkauf-requestId wird erneut gesendet …" : "Serverautoritiver Hinweiskauf läuft …");
-      const result = await clientState.callCallable(clientState.endpoints.buyHintPackage, { ...clientState.lastHintRequest }, clientState.idToken);
-      if (!sceneIsCurrent()) return;
-      if (!result || result.chestId !== clientState.currentChest.chestId || !Number.isSafeInteger(result.packageNumber) || !Array.isArray(result.newlyRevealedHints) || result.newlyRevealedHints.length !== 2 || !result.wallet || !result.hintState) throw Object.assign(new Error("Ungültige Hintkauf-Antwort."), { status: "INVALID_RESPONSE" });
-      if (repeatedHintPurchase && clientState.lastHintResult && JSON.stringify(result) !== JSON.stringify(clientState.lastHintResult)) throw Object.assign(new Error("Hintkauf-Replay ist inkonsistent."), { status: "IDEMPOTENCY_TEST_FAILED" });
-      clientState.lastHintResult = result;
-      clientState.wallet = result.wallet;
-      clientState.hintState = result.hintState;
-      clientState.setWalletStatus(clientState.formatWallet(result.wallet));
-      clientState.setHintStatus(clientState.formatHintState(result.hintState, result.wallet));
-      const newTexts = result.newlyRevealedHints.map((hint) => "T" + hint.tier + " · " + hint.id + " · " + hint.text).join("\n");
-      setStatus((repeatedHintPurchase ? "Idempotenz bestätigt: kein weiterer Keks und kein weiteres Paket." : "Hinweispaket " + result.packageNumber + " serverseitig gekauft.") + "\nrequestId: " + clientState.lastHintRequest.requestId + "\n" + newTexts);
-      return;
-    }
-    if (["wallet-reload", "wallet-cookie", "wallet-repeat", "wallet-booster"].includes(requestedAction)) {
-      if (requestedAction === "wallet-reload") {
-        const bootstrap = await clientState.callCallable(clientState.endpoints.wallet, { integration: "L&L-036" }, clientState.idToken);
-        clientState.applyBootstrap(bootstrap, true);
-        setStatus("Server-Wallet neu geladen.\nKeine Buchung durchgeführt.\nRevision: " + clientState.wallet.revision);
-        return;
-      }
-      const repeatedWallet = requestedAction === "wallet-repeat";
-      if (repeatedWallet && !clientState.lastWalletRequest) {
-        setStatus("Wallet-Idempotenztest noch nicht möglich.\nVerbrauche zuerst einen Testkeks oder schreibe einen Testbooster gut.");
-        return;
-      }
-      if (!repeatedWallet) {
-        const kind = requestedAction === "wallet-cookie" ? "cookie" : "booster5";
-        clientState.lastWalletRequest = { kind, requestId: makeRequestId() };
-      }
-      const walletRequest = clientState.lastWalletRequest;
-      const endpoint = walletRequest.kind === "cookie" ? clientState.endpoints.consumeCookie : clientState.endpoints.grantBooster5;
-      setStatus(repeatedWallet ? "Gleiche Wallet-requestId wird erneut gesendet …" : "Serverautoritative Wallet-Testbuchung läuft …");
-      clientState.wallet = await clientState.callCallable(endpoint, { integration: "L&L-036", requestId: walletRequest.requestId }, clientState.idToken);
-      if (!sceneIsCurrent()) return;
-      clientState.setWalletStatus(clientState.formatWallet(clientState.wallet));
-      clientState.setHintStatus(clientState.formatHintState(clientState.hintState, clientState.wallet));
-      const actionText = walletRequest.kind === "cookie" ? "1 Testkeks serverseitig verbraucht." : "1 Test-5-%-Booster serverseitig als Entwicklungstest gutgeschrieben.";
-      setStatus(actionText + "\nRevision: " + clientState.wallet.revision + "\nrequestId: " + walletRequest.requestId + (repeatedWallet ? "\nIdempotenz: keine zweite Buchung." : ""));
-      return;
-    }
-    if (requestedAction === "auth-error") {
-      let rejectedAsExpected = false;
-      try {
-        await clientState.callCallable(clientState.endpoints.attempt, { requestId: makeRequestId(), chestId: clientState.currentChest.chestId, enteredCode: "00000000000", expectedFeedbackPolicyVersion: 1 });
-      } catch (error) {
-        rejectedAsExpected = error && error.status === "UNAUTHENTICATED";
-      }
-      if (!rejectedAsExpected) throw Object.assign(new Error("Auth-Ablehnung fehlt."), { status: "AUTH_TEST_FAILED" });
-      clientState.idToken = "";
-      clientState.uid = "";
-      await clientState.authenticateAndPrepare();
-      if (!sceneIsCurrent()) return;
-      setStatus("Auth-Fehlertest bestanden.\nNicht authentifizierter Versuch ohne Dietrichverbrauch abgelehnt.\nNeue lokale Test-UID: " + clientState.uid + "\nGemeinsame Kiste blieb: " + clientState.currentChest.chestId + "\nEigenes Startwallet: 10 Test-Dietriche.");
-      return;
-    }
-    const repeated = requestedAction === "repeat";
-    if (repeated && !clientState.lastRequest) {
-      setStatus("Idempotenztest noch nicht möglich.\nSende zuerst einen falschen oder richtigen Testversuch.");
-      return;
-    }
-    if (!repeated) {
-      const localCorrectCodes = { "test-chest-001": "58310472961", "test-chest-002": "17420583649" };
-      const enteredCode = requestedAction === "correct" ? localCorrectCodes[clientState.currentChest.chestId] : "00000000000";
-      if (requestedAction === "correct" && typeof enteredCode !== "string") throw Object.assign(new Error("Kein lokaler Testcode für diese Kiste."), { status: "INVALID_RESPONSE" });
-      clientState.lastRequest = { requestId: makeRequestId(), chestId: clientState.currentChest.chestId, enteredCode, expectedFeedbackPolicyVersion: 1 };
-    }
-    setStatus(repeated ? "Gleiche requestId wird erneut gesendet …" : "Backend-Testaufruf läuft …");
-    const result = await clientState.callCallable(clientState.endpoints.attempt, { ...clientState.lastRequest }, clientState.idToken);
-    if (!sceneIsCurrent()) return;
-    const bootstrap = await clientState.callCallable(clientState.endpoints.wallet, { integration: "L&L-036" }, clientState.idToken);
-    clientState.applyBootstrap(bootstrap, true);
-    setStatus(formatResult(result, repeated));
-  })().catch((error) => {
-    if (!sceneIsCurrent()) return;
-    const status = error && typeof error.status === "string" ? error.status : "";
-    const networkError = error && (error.name === "AbortError" || error instanceof TypeError);
-    if (error && error.name === "AbortError") {
-      setStatus("Emulator-Antwort unklar: Zeitüberschreitung.\nErgebnis unbekannt – dieselbe requestId mit Test 3 wiederholen.");
-    } else if (networkError) {
-      setStatus("Emulator nicht erreichbar.\nPrüfe 127.0.0.1:9099 und 127.0.0.1:5001.\nKein Preview-Absturz.");
-    } else if (status === "UNAUTHENTICATED") {
-      setStatus("Backend lehnt Versuch ab: keine lokale Anmeldung.\nKein Dietrichverbrauch.");
-    } else if (error && error.reason === 'CALENDAR_ALREADY_CLAIMED_TODAY') {
-      setStatus('Heute bereits beansprucht.\nKein Fortschritt, keine Ressource und keine Revision wurden erneut gebucht.');
-    } else if (error && error.reason === 'CALENDAR_CYCLE_COMPLETED') {
-      setStatus('Schatzkalender-Zyklus bei 30/30 abgeschlossen.\nEin 31. Claim ist im normalen Spielerpfad gesperrt.');
-    } else if (error && error.reason === "ALL_HINT_PACKAGES_PURCHASED") {
-      setStatus("Alle fünf Hinweispakete wurden bereits gekauft.\nDer sechste Kauf wurde ohne Keksverbrauch abgelehnt.");
-    } else if (error && error.reason === "NOT_ENOUGH_COOKIES") {
-      setStatus("Hinweiskauf abgelehnt: nicht genügend Kekse.\nKein Paket wurde freigegeben.");
-    } else if (["INVALID_ARGUMENT", "FAILED_PRECONDITION", "RESOURCE_EXHAUSTED", "ABORTED", "ALREADY_EXISTS"].includes(status)) {
-      setStatus("Backend lehnt Versuch fachlich ab.\nFehlerklasse: " + status.toLowerCase().replaceAll("_", "-") + "\nKeine technische Rohmeldung wurde angezeigt.");
-    } else if (status === "AUTH_FAILED" || status === "AUTH_TEST_FAILED") {
-      setStatus("Authentifizierung fehlgeschlagen.\nEs wurde kein Schlossversuch gestartet.");
-    } else if (status === "STALE_TEST_FAILED") {
-      setStatus("STALE_CHEST-Sicherheitstest fehlgeschlagen.\nPrüfe den lokalen Emulatorstand; keine Produktionsverbindung.");
+  const chooseTrack = pool => {
+    const eligible = pool.filter(track => track.style !== state.lastStyle && !state.recentTracks.includes(track.name));
+    if (eligible.length === 0) { state.error = 'Keine Musik erfüllt Stil- und Wiederholungsschutz.'; return null; }
+    return eligible[Math.floor(Math.random() * eligible.length)];
+  };
+  const rememberTrack = track => {
+    state.recentTracks.unshift(track.name);
+    state.recentTracks = state.recentTracks.slice(0, 5);
+    state.lastStyle = track.style;
+  };
+  const startTrack = (scene, track, remember) => {
+    if (!state.musicEnabled || !track) return false;
+    if (remember) rememberTrack(track);
+    state.currentTrack = track;
+    state.currentCategory = track.category;
+    state.wasPlaying = false;
+    state.lastStartAttempt = Date.now();
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 70);
+    gdjs.evtTools.sound.playMusicOnChannel(scene, track.name, musicChannel, false, 70, 1);
+    return true;
+  };
+  const startNextTrack = scene => {
+    let nextTrack = null;
+    if (state.puzzleTracksRemaining > 0) {
+      nextTrack = chooseTrack(puzzleTracks);
+      if (nextTrack) state.puzzleTracksRemaining -= 1;
     } else {
-      setStatus("Function-Aufruf fehlgeschlagen.\nPrüfe die lokalen Emulatoren.\nKeine technische Rohmeldung wurde angezeigt.");
+      nextTrack = chooseTrack(mainTracks);
+      if (nextTrack) state.puzzleTracksRemaining = 2;
     }
-  }).finally(() => {
-    if (sceneIsCurrent()) pendingVariable.setBoolean(false);
+    return startTrack(scene, nextTrack, true);
+  };
+  const startMainTrack = scene => {
+    state.error = '';
+    const nextTrack = chooseTrack(mainTracks);
+    if (nextTrack) state.puzzleTracksRemaining = 2;
+    return startTrack(scene, nextTrack, true);
+  };
+  const startApplication = scene => {
+    state.error = '';
+    state.puzzleTracksRemaining = 2;
+    return startTrack(scene, forcedMainTrack, true);
+  };
+  const stopCurrentTrack = scene => {
+    gdjs.evtTools.sound.stopMusicOnChannel(scene, musicChannel);
+    state.currentTrack = null;
+    state.currentCategory = '';
+    state.wasPlaying = false;
+    state.lastStartAttempt = 0;
+  };
+  const enterMainMenu = scene => {
+    if (!state.musicEnabled) return;
+    const currentTrack = state.currentTrack;
+    const mainTrackIsPlaying = currentTrack && currentTrack.category === 'main' && gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (mainTrackIsPlaying) return;
+    stopCurrentTrack(scene);
+    startMainTrack(scene);
+  };
+  const enterSolution = scene => {
+    stopCurrentTrack(scene);
+    state.currentCategory = 'solution';
+    state.solutionState = { scene, started: false, completed: false, lastStartAttempt: Date.now() };
+    if (!state.musicEnabled) return;
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
+  };
+  const updateSolution = scene => {
+    if (!state.musicEnabled || !state.solutionState || state.solutionState.scene !== scene) return;
+    const solutionPlaying = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (solutionPlaying) {
+      state.solutionState.started = true;
+    } else if (state.solutionState.started) {
+      state.solutionState.completed = true;
+    } else if (!state.solutionState.completed && Date.now() - state.solutionState.lastStartAttempt >= 1500) {
+      state.solutionState.lastStartAttempt = Date.now();
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_solution_once', musicChannel, false, 75, 1);
+    }
+  };
+  const startVictory = scene => {
+    if (state.victoryActive && state.victoryState?.scene === scene) return false;
+    stopCurrentTrack(scene);
+    state.victoryActive = true;
+    state.victoryState = { scene, started: false, completed: false, lastStartAttempt: Date.now(), attempts: 0 };
+    state.currentTrack = { name: 'music_victory_sequence', style: 'Victory', category: 'victory' };
+    state.currentCategory = 'victory';
+    if (!state.musicEnabled) return false;
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 75);
+    state.victoryState.attempts += 1;
+    gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
+    return true;
+  };
+  const stopVictory = scene => {
+    if (state.victoryActive || state.currentCategory === 'victory') {
+      gdjs.evtTools.sound.stopMusicOnChannel(scene, musicChannel);
+      state.currentTrack = null;
+      state.currentCategory = '';
+    }
+    state.victoryActive = false;
+    state.victoryState = null;
+  };
+  const silenceForChestEnd = scene => {
+    stopCurrentTrack(scene);
+    state.victoryActive = false;
+    state.victoryState = null;
+  };
+  const updateVictory = scene => {
+    if (!state.victoryActive || !state.victoryState || state.victoryState.scene !== scene || !state.musicEnabled) return;
+    const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (playing) state.victoryState.started = true;
+    else if (state.victoryState.started) state.victoryState.completed = true;
+    else if (!state.victoryState.completed && Date.now() - state.victoryState.lastStartAttempt >= 1500) {
+      state.victoryState.lastStartAttempt = Date.now();
+      state.victoryState.attempts += 1;
+      gdjs.evtTools.sound.playMusicOnChannel(scene, 'music_victory_sequence', musicChannel, false, 75, 1);
+    }
+  };
+  const updateRotation = scene => {
+    if (!state.musicEnabled || !state.currentTrack || state.error) return;
+    const playing = gdjs.evtTools.sound.isMusicOnChannelPlaying(scene, musicChannel);
+    if (playing) { state.wasPlaying = true; return; }
+    if (state.wasPlaying) { state.wasPlaying = false; startNextTrack(scene); return; }
+    if (Date.now() - state.lastStartAttempt >= 1500) {
+      state.lastStartAttempt = Date.now();
+      gdjs.evtTools.sound.playMusicOnChannel(scene, state.currentTrack.name, musicChannel, false, 70, 1);
+    }
+  };
+  const updateForScene = scene => {
+    const sceneName = scene.getName();
+    if (state.victoryActive && state.victoryState?.scene !== scene) stopVictory(scene);
+    if (state.activeScene !== scene) {
+      state.activeScene = scene;
+      if (!state.sessionStarted) {
+        state.sessionStarted = true;
+        if (sceneName === 'SolutionScene') enterSolution(scene);
+        else if (sceneName === 'MainMenu' || sceneName === 'TrainingScene') startApplication(scene);
+      } else if (sceneName === 'MainMenu') {
+        enterMainMenu(scene);
+      } else if (sceneName === 'SolutionScene') {
+        enterSolution(scene);
+      } else if (sceneName === 'TrainingScene' && state.musicEnabled && !state.currentTrack) {
+        startNextTrack(scene);
+      }
+    }
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, state.musicEnabled ? (sceneName === 'SolutionScene' ? 75 : 70) : 0);
+    if (!state.musicEnabled) return;
+    if (state.victoryActive) updateVictory(scene);
+    else if (sceneName === 'SolutionScene') updateSolution(scene);
+    else updateRotation(scene);
+  };
+  const setEnabled = (scene, enabled) => {
+    const nextEnabled = enabled === true;
+    const changed = state.musicEnabled !== nextEnabled;
+    state.musicEnabled = nextEnabled;
+    persistEnabled();
+    if (!state.musicEnabled) {
+      stopCurrentTrack(scene);
+      state.solutionState = null;
+      gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 0);
+      return false;
+    }
+    gdjs.evtTools.sound.setMusicOnChannelVolume(scene, musicChannel, 70);
+    if (!changed) return true;
+    state.error = '';
+    const sceneName = scene.getName();
+    if (sceneName === 'MainMenu') startMainTrack(scene);
+    else if (sceneName === 'TrainingScene') startNextTrack(scene);
+    else if (sceneName === 'SolutionScene') enterSolution(scene);
+    return true;
+  };
+  musicGame[musicControllerKey] = { state, setEnabled, updateForScene, startVictory, stopVictory, silenceForChestEnd };
+}
+musicGame[musicControllerKey].updateForScene(runtimeScene);
+};
+gdjs.ShopSzeneCode.userFunc0xa75d88 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
+const localizationGame = runtimeScene.getGame();
+if (!localizationGame.__lockLootI18n) {
+  const storageKey = "lockloot.language.v1";
+  const catalog = JSON.parse(localizationGame.getVariables().get("localizationCatalogJson").getAsString());
+  const languages = new Set(catalog.supportedLanguages.map(entry => entry.code));
+  let storedLanguage = "";
+  try { storedLanguage = globalThis.localStorage ? String(globalThis.localStorage.getItem(storageKey) || "") : ""; } catch (error) {}
+  const state = {
+    catalog,
+    storageKey,
+    language: languages.has(storedLanguage) ? storedLanguage : catalog.defaultLanguage,
+    revision: 1,
+    t(key, parameters = {}) {
+      const entry = catalog.strings[key];
+      if (!entry) return "[MISSING:" + key + "]";
+      const template = typeof entry[state.language] === "string" ? entry[state.language] : entry[catalog.defaultLanguage];
+      if (typeof template !== "string") return "[MISSING:" + key + "]";
+      const required = [...new Set([...template.matchAll(/\{([A-Za-z][A-Za-z0-9_]*)\}/g)].map(match => match[1]))].sort();
+      const supplied = Object.keys(parameters).sort();
+      if (JSON.stringify(required) !== JSON.stringify(supplied)) throw new Error("Invalid localization parameters for " + key + ": expected " + required.join(",") + "; received " + supplied.join(","));
+      return template.replace(/\{([A-Za-z][A-Za-z0-9_]*)\}/g, (match, name) => String(parameters[name]));
+    },
+    setLanguage(language) {
+      if (!languages.has(language)) return false;
+      if (state.language !== language) { state.language = language; state.revision += 1; }
+      localizationGame.getVariables().get("localizationLanguage").setString(state.language);
+      try { if (globalThis.localStorage) globalThis.localStorage.setItem(storageKey, state.language); } catch (error) {}
+      return true;
+    }
+  };
+  localizationGame.__lockLootI18n = state;
+  state.setLanguage(state.language);
+}
+const sceneLocalization = localizationGame.__lockLootI18n;
+localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
+};
+gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Objects = Hashtable.newFrom({"ShopTabCookies": gdjs.ShopSzeneCode.GDShopTabCookiesObjects1});
+gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects = Hashtable.newFrom({"ShopTabLockpicks": gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1});
+gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects = Hashtable.newFrom({"ShopCardFrame": gdjs.ShopSzeneCode.GDShopCardFrameObjects1});
+gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects = Hashtable.newFrom({"ShopPremiumPanel": gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1});
+gdjs.ShopSzeneCode.userFunc0xf9d470 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-044: Zentralen Shopkatalog laden, Wallet anzeigen und Käufe sicher deaktiviert lassen.
+const shopVariables = runtimeScene.getVariables();
+const shopI18n = runtimeScene.getGame().__lockLootI18n;
+const shopT = (key, parameters = {}) => shopI18n.t(key, parameters);
+const shopGame = runtimeScene.getGame();
+const shopFallbackCatalog = Object.freeze({"shopCatalogVersion":1,"currency":"EUR","priceMode":"PLANNED_DISPLAY_ONLY","products":[{"internalProductKey":"cookies_49","category":"cookies","resourceType":"cookies","quantity":49,"plannedPriceMinorUnits":99,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_119","category":"cookies","resourceType":"cookies","quantity":119,"plannedPriceMinorUnits":199,"bonusLabel":"+20 %","sortOrder":20,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_349","category":"cookies","resourceType":"cookies","quantity":349,"plannedPriceMinorUnits":499,"bonusLabel":"+40 %","sortOrder":30,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"cookies_999","category":"cookies","resourceType":"cookies","quantity":999,"plannedPriceMinorUnits":999,"bonusLabel":"+100 %","sortOrder":40,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_79","category":"lockpicks","resourceType":"lockpicks","quantity":79,"plannedPriceMinorUnits":99,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_191","category":"lockpicks","resourceType":"lockpicks","quantity":191,"plannedPriceMinorUnits":199,"bonusLabel":"+20 %","sortOrder":20,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_559","category":"lockpicks","resourceType":"lockpicks","quantity":559,"plannedPriceMinorUnits":499,"bonusLabel":"+40 %","sortOrder":30,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"lockpicks_1599","category":"lockpicks","resourceType":"lockpicks","quantity":1599,"plannedPriceMinorUnits":999,"bonusLabel":"+100 %","sortOrder":40,"enabled":true,"googlePlayProductId":null},{"internalProductKey":"premium_pass_30_logins","category":"premium","resourceType":"premium_pass","quantity":1,"plannedPriceMinorUnits":499,"bonusLabel":null,"sortOrder":10,"enabled":true,"googlePlayProductId":null}]});
+const shopSessionKey = "__lockLootShopSession";
+const shopBackendRuntime = shopGame.__lockLootPersonalRuntime ? null : shopGame.__lockLootBackendRuntime;
+const shopAuthStorageKey = shopBackendRuntime ? shopBackendRuntime.sessionStorageKey : "";
+const shopReadSession = () => {
+  try {
+    const parsed = shopBackendRuntime ? shopBackendRuntime.readSession() : null;
+
+    return parsed && typeof parsed.idToken === "string" && typeof parsed.uid === "string" ? parsed : null;
+  } catch (error) { return null; }
+};
+const shopSaveSession = (session) => {
+  try { if (shopBackendRuntime) shopBackendRuntime.saveSession(session); } catch (error) {}
+};
+if (!shopGame[shopSessionKey]) shopGame[shopSessionKey] = shopReadSession() || {idToken: "", uid: ""};
+const shopSession = shopGame[shopSessionKey];
+const shopObjects = (name) => runtimeScene.getObjects(name).slice().sort((left, right) => (left.getY() + left.getHeight() / 2) - (right.getY() + right.getHeight() / 2) || (left.getX() + left.getWidth() / 2) - (right.getX() + right.getWidth() / 2));
+const shopSetText = (name, value) => { const objects = shopObjects(name); if (objects[0] && typeof objects[0].setString === "function") objects[0].setString(value); };
+const shopSetColor = (object, value) => { if (object && typeof object.setColor === "function") object.setColor(value); };
+const shopSetOpacity = (object, value) => { if (object && typeof object.setOpacity === "function") object.setOpacity(value); };
+const shopFitText = (object, value, sizes, wrappingWidth = 0) => {
+  if (!object) return;
+  object.setString(value);
+  const selected = value.length > sizes[2][0] ? sizes[2][1] : value.length > sizes[1][0] ? sizes[1][1] : sizes[0][1];
+  if (typeof object.setCharacterSize === "function") object.setCharacterSize(selected);
+  if (wrappingWidth && typeof object.setWrapping === "function") { object.setWrapping(true); object.setWrappingWidth(wrappingWidth); }
+};
+const shopFormatPrice = (minorUnits) => shopT("shop.price", { amount: (minorUnits / 100).toFixed(2).replace(".", shopI18n.language === "de" ? "," : ".") });
+const shopValidateCatalog = (catalog) => {
+  const validProduct = (product) => product && typeof product.internalProductKey === "string" &&
+    ["cookies", "lockpicks", "premium"].includes(product.category) &&
+    Number.isSafeInteger(product.quantity) && product.quantity > 0 &&
+    Number.isSafeInteger(product.plannedPriceMinorUnits) && product.plannedPriceMinorUnits > 0 &&
+    Number.isSafeInteger(product.sortOrder) && typeof product.enabled === "boolean" &&
+    (product.bonusLabel === null || typeof product.bonusLabel === "string") &&
+    (product.googlePlayProductId === null || typeof product.googlePlayProductId === "string");
+  if (!catalog || catalog.shopCatalogVersion !== 1 || catalog.currency !== "EUR" ||
+      catalog.priceMode !== "PLANNED_DISPLAY_ONLY" || !Array.isArray(catalog.products) ||
+      !catalog.products.every(validProduct)) throw Object.assign(new Error("Ungültiger Shopkatalog."), {status: "INVALID_RESPONSE"});
+  return catalog;
+};
+const shopValidateWallet = (wallet) => {
+  if (!wallet || !Number.isSafeInteger(wallet.cookies) || wallet.cookies < 0 ||
+      !Number.isSafeInteger(wallet.lockpicks) || wallet.lockpicks < 0 ||
+      !Number.isSafeInteger(wallet.revision) || wallet.revision < 0) {
+    throw Object.assign(new Error("Ungültige Wallet-Antwort."), {status: "INVALID_RESPONSE"});
+  }
+  return {cookies: wallet.cookies, lockpicks: wallet.lockpicks, revision: wallet.revision};
+};
+const shopRender = (state) => {
+  const category = state.category;
+  const products = state.catalog.products.filter((entry) => entry.enabled && entry.category === category).sort((a, b) => a.sortOrder - b.sortOrder).slice(0, 4);
+  const cards = shopObjects("ShopCardFrame");
+  const icons = shopObjects("ShopCardIcon");
+  const titles = shopObjects("ShopCardTitleText");
+  const quantities = shopObjects("ShopCardQuantityText");
+  const prices = shopObjects("ShopCardPriceText");
+  const bonuses = shopObjects("ShopCardBonusText");
+  for (const cardText of [...titles, ...quantities, ...prices, ...bonuses]) {
+    if (typeof cardText.showShadow === "function") cardText.showShadow(false);
+    if (typeof cardText.setOutlineThickness === "function") cardText.setOutlineThickness(1);
+  }
+  for (let index = 0; index < 4; index += 1) {
+    const product = products[index];
+    const visible = Boolean(product);
+    for (const object of [cards[index], icons[index], titles[index], quantities[index], prices[index], bonuses[index]]) shopSetOpacity(object, visible ? 255 : 0);
+    if (!product) continue;
+    if (icons[index] && typeof icons[index].setAnimation === "function") icons[index].setAnimation((category === "cookies" ? 0 : 4) + index);
+    shopFitText(titles[index], shopT("shop.product." + product.internalProductKey), [[12, 15], [16, 13], [22, 12]], 180);
+    const quantitySizes = category === "cookies" ? [[13, 22], [18, 18], [24, 15]] : [[13, 18], [18, 17], [24, 15]];
+    shopFitText(quantities[index], shopT(category === "cookies" ? "shop.quantity_cookies" : "shop.quantity_lockpicks", { quantity: product.quantity }), quantitySizes);
+    shopFitText(prices[index], shopFormatPrice(product.plannedPriceMinorUnits), [[11, 19], [16, 15], [24, 13]]);
+    shopFitText(bonuses[index], product.bonusLabel ? shopT("shop.volume_bonus", { bonus: product.bonusLabel }) : shopT("shop.base_offer"), [[23, 15], [32, 14], [44, 12]], 180);
+    shopSetColor(bonuses[index], product.bonusLabel ? "146;57;18" : "91;74;51");
+  }
+  const cookieTabs = shopObjects("ShopTabCookies");
+  const lockpickTabs = shopObjects("ShopTabLockpicks");
+  const cookieTabTexts = shopObjects("ShopTabCookiesText");
+  const lockpickTabTexts = shopObjects("ShopTabLockpicksText");
+  shopSetColor(cookieTabs[0], category === "cookies" ? "255;228;144" : "165;148;128");
+  shopSetColor(lockpickTabs[0], category === "lockpicks" ? "225;242;248" : "165;148;128");
+  shopSetOpacity(cookieTabs[0], category === "cookies" ? 255 : 208);
+  shopSetOpacity(lockpickTabs[0], category === "lockpicks" ? 255 : 208);
+  shopSetColor(cookieTabTexts[0], category === "cookies" ? "70;35;15" : "128;109;90");
+  shopSetColor(lockpickTabTexts[0], category === "lockpicks" ? "55;64;70" : "128;109;90");
+  shopSetOpacity(cookieTabTexts[0], category === "cookies" ? 255 : 228);
+  shopSetOpacity(lockpickTabTexts[0], category === "lockpicks" ? 255 : 228);
+  shopVariables.get("ShopCategory").setString(category);
+  shopVariables.get("ShopCatalogVersion").setNumber(state.catalog.shopCatalogVersion);
+  shopVariables.get("ShopBackendAvailable").setBoolean(state.backendAvailable);
+  shopVariables.get("ShopPremiumEntitled").setBoolean(state.premiumEntitled);
+  // L&L-047-Kompatibilität: "shop.inventory" bleibt im Katalog; L&L-048 rendert hier keine Walletwörter.
+  const premiumPanels = shopObjects("ShopPremiumPanel"); const premiumBadges = shopObjects("ShopPremiumBadge"); const premiumStatuses = shopObjects("ShopPremiumStatusText");
+  for (const premiumBadge of premiumBadges) shopSetOpacity(premiumBadge, state.premiumEntitled ? 255 : 105);
+  shopSetColor(premiumPanels[0], state.premiumEntitled ? "255;255;255" : "170;160;170");
+  shopSetColor(premiumStatuses[0], state.premiumEntitled ? "255;225;116" : "200;184;210");
+  shopFitText(premiumStatuses[0], state.premiumEntitled ? shopT("shop.premium_active") : shopT("shop.premium_inactive"), [[32, 14], [42, 12], [54, 10]], 500);
+  shopFitText(shopObjects("ShopStatusText")[0], state.statusMessage, [[54, 15], [74, 12], [96, 10]], 600);
+};
+const shopSetStatus = (state, message) => { state.statusMessage = message; shopVariables.get("ShopStatusMessage").setString(message); shopSetText("ShopStatusText", message); };
+
+if (runtimeScene.getTimeManager().isFirstFrame()) {
+  if(shopGame.__lockLootPersonalRuntime){const state={catalog:shopValidateCatalog(shopFallbackCatalog),category:'cookies',wallet:null,premiumEntitled:false,backendAvailable:false,statusMessage:shopT('shop.catalog_planned')};runtimeScene.__lockLootShopScene=state;shopRender(state);}else{
+  const backendRuntime = shopGame.__lockLootBackendRuntime;
+  if (!backendRuntime || !backendRuntime.enabled) throw Object.assign(new Error('Backendumgebung ist deaktiviert.'), { status: 'ENVIRONMENT_BLOCKED' });
+  const endpoints = backendRuntime.endpoints;
+  const callCallable = (endpoint, data, idToken) => backendRuntime.callCallable(endpoint, data, idToken);
+  const state = {catalog: shopValidateCatalog(shopFallbackCatalog), category: "cookies", wallet: null, premiumEntitled: false, backendAvailable: false, statusMessage: shopT("shop.catalog_planned")};
+  runtimeScene.__lockLootShopScene = state;
+  shopRender(state);
+  const authenticate = async () => {
+    const auth = await backendRuntime.authenticate(false);
+    shopSession.idToken = auth.idToken; shopSession.uid = auth.uid; shopSession.refreshToken = auth.refreshToken || ''; shopSaveSession(shopSession);
+  };
+  const load = async (retry) => {
+    if (!shopSession.idToken) await authenticate();
+    try {
+      await backendRuntime.prepare("L&L-044");
+      const snapshot = await callCallable(endpoints.bootstrap, {integration: "L&L-044"}, shopSession.idToken);
+      if (!snapshot || snapshot.uid !== shopSession.uid) throw Object.assign(new Error("Bootstrap-UID stimmt nicht."), {status: "INVALID_RESPONSE"});
+      state.wallet = shopValidateWallet(snapshot);
+      const hud = shopGame.__lockLootResourceHud;
+      if (hud) hud.acceptConfirmed(state.wallet, shopSession.uid, runtimeScene);
+      state.catalog = shopValidateCatalog(snapshot.shopCatalog);
+      state.premiumEntitled = Boolean(snapshot.calendar && snapshot.calendar.premiumEntitled === true);
+      state.backendAvailable = true;
+      shopVariables.get("ShopWalletCookies").setNumber(state.wallet.cookies);
+      shopVariables.get("ShopWalletLockpicks").setNumber(state.wallet.lockpicks);
+      shopSetStatus(state, shopT("shop.server_loaded"));
+      shopRender(state);
+    } catch (error) {
+      if (retry && error?.status === "UNAUTHENTICATED") { shopSession.idToken = ""; shopSession.uid = ""; return load(false); }
+      throw error;
+    }
+  };
+  void load(true).catch(() => {
+    if (runtimeScene.__lockLootShopScene !== state) return;
+    state.backendAvailable = false; state.wallet = null; state.premiumEntitled = false;
+    shopSetStatus(state, shopT("shop.backend_offline"));
+    shopRender(state);
   });
+  }
+}
+
+const shopState = runtimeScene.__lockLootShopScene;
+const shopActionVariable = shopVariables.get("ShopAction");
+const shopAction = shopActionVariable.getAsString();
+if (shopState && shopAction) {
+  shopActionVariable.setString("");
+  if (shopAction === "category-cookies" || shopAction === "category-lockpicks") {
+    shopState.category = shopAction === "category-cookies" ? "cookies" : "lockpicks";
+    shopSetStatus(shopState, shopState.category === "cookies" ? shopT("shop.cookies_disabled") : shopT("shop.lockpicks_disabled"));
+    shopRender(shopState);
+  } else if (shopAction === "product" || shopAction === "premium") {
+    // L&L-044: Kein Kauf, keine Walletgutschrift und keine Premiumaktivierung.
+    shopSetStatus(shopState, shopT("shop.purchases_later"));
+    shopRender(shopState);
+  }
 }
 };
-gdjs.BackendTestScene_95L035Code.eventsList0 = function(runtimeScene) {
+gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects = Hashtable.newFrom({"ShopCalendarButton": gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1});
+gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects = Hashtable.newFrom({"ShopBackButton": gdjs.ShopSzeneCode.GDShopBackButtonObjects1});
+gdjs.ShopSzeneCode.userFunc0xfaa650 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-047: Statische Shop-Spielertexte aus dem zentralen Katalog.
+const i18n = runtimeScene.getGame().__lockLootI18n;
+if (!runtimeScene.__lockLootL047Shop || runtimeScene.__lockLootL047Shop !== i18n.revision) {
+  runtimeScene.__lockLootL047Shop = i18n.revision;
+  const set = (name, key) => { const object = runtimeScene.getObjects(name)[0]; if (object) object.setString(i18n.t(key)); };
+  set("ShopTitleText", "shop.title"); set("ShopTabCookiesText", "shop.cookies"); set("ShopTabLockpicksText", "shop.lockpicks");
+  set("ShopPremiumTitleText", "shop.premium_title"); set("ShopPremiumBodyText", "shop.premium_body"); set("ShopPremiumPriceText", "shop.premium_price");
+  set("ShopCalendarButtonText", "shop.calendar"); set("ShopBackButtonText", "shop.back");
+  const state = runtimeScene.__lockLootShopScene; if (state && typeof shopRender === "function") shopRender(state);
+}
+};
+gdjs.ShopSzeneCode.userFunc0xa4c4c8 = function GDJSInlineCode(runtimeScene) {
+"use strict";
+// L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
+const resourceHudGame = runtimeScene.getGame();
+if (!resourceHudGame.__lockLootResourceHud) {
+  const resourceHudConfig = JSON.parse(resourceHudGame.getVariables().get("resourceHudConfigJson").getAsString());
+  const resourceHudStorageKey = "lockloot.wallet-confirmed.v1";
+  const resourceHudAuthStorageKey = resourceHudGame.__lockLootBackendRuntime ? resourceHudGame.__lockLootBackendRuntime.sessionStorageKey : "__lockLootL040LocalAuth";
+  const normalizeWallet = (wallet) => {
+    if (!wallet || !Number.isSafeInteger(wallet.cookies) || wallet.cookies < 0 || !Number.isSafeInteger(wallet.lockpicks) || wallet.lockpicks < 0 || !Number.isSafeInteger(wallet.revision) || wallet.revision < 0) return null;
+    return {cookies: wallet.cookies, lockpicks: wallet.lockpicks, revision: wallet.revision};
+  };
+  const readAuthUid = () => {
+    try {
+      const backendUid = resourceHudGame.__lockLootBackendRuntime ? resourceHudGame.__lockLootBackendRuntime.getUid() : "";
+      if (backendUid) return backendUid;
+      const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudAuthStorageKey) : "";
+      const session = raw ? JSON.parse(raw) : null;
+      return session && typeof session.uid === "string" ? session.uid : "";
+    } catch (error) { return ""; }
+  };
+  const readConfirmed = () => {
+    try {
+      const raw = globalThis.localStorage ? globalThis.localStorage.getItem(resourceHudStorageKey) : "";
+      const cached = raw ? JSON.parse(raw) : null;
+      const wallet = normalizeWallet(cached);
+      const activeUid = readAuthUid();
+      return wallet && activeUid && cached.uid === activeUid ? {...wallet, uid: activeUid} : null;
+    } catch (error) { return null; }
+  };
+  const objects = (scene, name) => scene.getObjects(name);
+  const place = (object, x, y, width, height, zOrder) => {
+    if (!object) return;
+    object.setPosition(x, y);
+    if (typeof object.setWidth === "function") object.setWidth(width);
+    if (typeof object.setHeight === "function") object.setHeight(height);
+    if (typeof object.setZOrder === "function") object.setZOrder(zOrder);
+  };
+  const state = {
+    config: Object.freeze(resourceHudConfig),
+    confirmed: readConfirmed(),
+    acceptConfirmed(wallet, uid, scene) {
+      const safeWallet = normalizeWallet(wallet);
+      if (!safeWallet || typeof uid !== "string" || !uid) return false;
+      state.confirmed = {...safeWallet, uid};
+      try {
+        if (globalThis.localStorage) globalThis.localStorage.setItem(resourceHudStorageKey, JSON.stringify(state.confirmed));
+      } catch (error) {}
+      if (scene) state.render(scene);
+      return true;
+    },
+    render(scene) {
+      const c = state.config;
+      const firstY = c.anchorY;
+      const secondY = c.anchorY + c.rowHeight + c.rowGap;
+      place(objects(scene, "ResourceHudCookieFrame")[0], c.anchorX, firstY, c.width, c.rowHeight, c.frameZ);
+      place(objects(scene, "ResourceHudLockpickFrame")[0], c.anchorX, secondY, c.width, c.rowHeight, c.frameZ);
+      place(objects(scene, "ResourceHudCookieIcon")[0], c.anchorX + c.iconInsetX, firstY + c.iconInsetY, c.iconSize, c.iconSize, c.iconZ);
+      place(objects(scene, "ResourceHudLockpickIcon")[0], c.anchorX + c.iconInsetX, secondY + c.iconInsetY, c.iconSize, c.iconSize, c.iconZ);
+      const cookieText = objects(scene, "ResourceHudCookiesText")[0];
+      const lockpickText = objects(scene, "ResourceHudLockpicksText")[0];
+      place(cookieText, c.anchorX + c.textOffsetX, firstY + c.textInsetY, c.textWidth, c.textHeight, c.textZ);
+      place(lockpickText, c.anchorX + c.textOffsetX, secondY + c.textInsetY, c.textWidth, c.textHeight, c.textZ);
+      const value = state.confirmed;
+      if (cookieText) {
+        cookieText.setString(value ? String(value.cookies) : c.unavailableText);
+        if (typeof cookieText.setCharacterSize === "function") cookieText.setCharacterSize(c.fontSize);
+      }
+      if (lockpickText) {
+        lockpickText.setString(value ? String(value.lockpicks) : c.unavailableText);
+        if (typeof lockpickText.setCharacterSize === "function") lockpickText.setCharacterSize(c.fontSize);
+      }
+    }
+  };
+  resourceHudGame.__lockLootResourceHud = state;
+}
+const resourceHud = resourceHudGame.__lockLootResourceHud;
+if (!runtimeScene.getObjects("ResourceHudCookieFrame").length) {
+  gdjs.evtTools.runtimeScene.createObjectsFromExternalLayout(runtimeScene, "SharedResourceHUD_720x1280", 0, 0, 0);
+}
+resourceHud.render(runtimeScene);
+};
+gdjs.ShopSzeneCode.eventsList0 = function(runtimeScene) {
 
 {
 
-gdjs.copyArray(runtimeScene.getObjects("BackendHintBuyButton"), gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects1);
+
+gdjs.ShopSzeneCode.userFunc0x10ea768(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.ShopSzeneCode.userFunc0xfa7df0(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.ShopSzeneCode.userFunc0xa75d88(runtimeScene);
+
+}
+
+
+{
+
+gdjs.copyArray(runtimeScene.getObjects("ShopTabCookies"), gdjs.ShopSzeneCode.GDShopTabCookiesObjects1);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintBuyButtonObjects1Objects, runtimeScene, true, false);
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabCookiesObjects1Objects, runtimeScene, true, false);
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("hint-buy");
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("category-cookies");
 }
 }
 
@@ -444,17 +1040,17 @@ if (isConditionTrue_0) {
 
 {
 
-gdjs.copyArray(runtimeScene.getObjects("BackendCalendarClaimButton"), gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1);
+gdjs.copyArray(runtimeScene.getObjects("ShopTabLockpicks"), gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCalendarClaimButtonObjects1Objects, runtimeScene, true, false);
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopTabLockpicksObjects1Objects, runtimeScene, true, false);
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("calendar-claim");
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("category-lockpicks");
 }
 }
 
@@ -463,17 +1059,17 @@ if (isConditionTrue_0) {
 
 {
 
-gdjs.copyArray(runtimeScene.getObjects("BackendHintRepeatButton"), gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects1);
+gdjs.copyArray(runtimeScene.getObjects("ShopCardFrame"), gdjs.ShopSzeneCode.GDShopCardFrameObjects1);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintRepeatButtonObjects1Objects, runtimeScene, true, false);
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCardFrameObjects1Objects, runtimeScene, true, false);
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("hint-repeat");
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("product");
 }
 }
 
@@ -482,17 +1078,17 @@ if (isConditionTrue_0) {
 
 {
 
-gdjs.copyArray(runtimeScene.getObjects("BackendHintReloadButton"), gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1);
+gdjs.copyArray(runtimeScene.getObjects("ShopPremiumPanel"), gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendHintReloadButtonObjects1Objects, runtimeScene, true, false);
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopPremiumPanelObjects1Objects, runtimeScene, true, false);
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("hint-reload");
+{runtimeScene.getScene().getVariables().getFromIndex(0).setString("premium");
 }
 }
 
@@ -502,24 +1098,24 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.BackendTestScene_95L035Code.userFunc0xe474f8(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xf9d470(runtimeScene);
 
 }
 
 
 {
 
-gdjs.copyArray(runtimeScene.getObjects("BackendWrongButton"), gdjs.BackendTestScene_95L035Code.GDBackendWrongButtonObjects1);
+gdjs.copyArray(runtimeScene.getObjects("ShopCalendarButton"), gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendWrongButtonObjects1Objects, runtimeScene, true, false);
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopCalendarButtonObjects1Objects, runtimeScene, true, false);
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("wrong");
+{gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "TreasureCalendarScene", false);
 }
 }
 
@@ -528,169 +1124,17 @@ if (isConditionTrue_0) {
 
 {
 
-gdjs.copyArray(runtimeScene.getObjects("BackendCorrectButton"), gdjs.BackendTestScene_95L035Code.GDBackendCorrectButtonObjects1);
+gdjs.copyArray(runtimeScene.getObjects("ShopBackButton"), gdjs.ShopSzeneCode.GDShopBackButtonObjects1);
 
 let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCorrectButtonObjects1Objects, runtimeScene, true, false);
+isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.ShopSzeneCode.mapOfGDgdjs_9546ShopSzeneCode_9546GDShopBackButtonObjects1Objects, runtimeScene, true, false);
 if (isConditionTrue_0) {
 isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
 }
 if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("correct");
-}
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("BackendRepeatButton"), gdjs.BackendTestScene_95L035Code.GDBackendRepeatButtonObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendRepeatButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("repeat");
-}
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("BackendAuthButton"), gdjs.BackendTestScene_95L035Code.GDBackendAuthButtonObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendAuthButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("auth-error");
-}
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("BackendChestReloadButton"), gdjs.BackendTestScene_95L035Code.GDBackendChestReloadButtonObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendChestReloadButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("chest-reload");
-}
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("BackendStaleChestButton"), gdjs.BackendTestScene_95L035Code.GDBackendStaleChestButtonObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendStaleChestButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("chest-stale");
-}
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("BackendWalletReloadButton"), gdjs.BackendTestScene_95L035Code.GDBackendWalletReloadButtonObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendWalletReloadButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("wallet-reload");
-}
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("BackendCookieButton"), gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendCookieButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("wallet-cookie");
-}
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("BackendWalletRepeatButton"), gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendWalletRepeatButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("wallet-repeat");
-}
-}
-
-}
-
-
-{
-
-gdjs.copyArray(runtimeScene.getObjects("BackendBoosterButton"), gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects1);
-
-let isConditionTrue_0 = false;
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.cursorOnObject(gdjs.BackendTestScene_95L035Code.mapOfGDgdjs_9546BackendTestScene_959595L035Code_9546GDBackendBoosterButtonObjects1Objects, runtimeScene, true, false);
-if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonReleased(runtimeScene, "Left");
-}
-if (isConditionTrue_0) {
-{runtimeScene.getScene().getVariables().getFromIndex(1).setString("wallet-booster");
+{gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "MainMenu", false);
 }
 }
 
@@ -700,126 +1144,150 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.BackendTestScene_95L035Code.userFunc0xe94f98(runtimeScene);
+gdjs.ShopSzeneCode.userFunc0xfaa650(runtimeScene);
+
+}
+
+
+{
+
+
+gdjs.ShopSzeneCode.userFunc0xa4c4c8(runtimeScene);
 
 }
 
 
 };
 
-gdjs.BackendTestScene_95L035Code.func = function(runtimeScene) {
+gdjs.ShopSzeneCode.func = function(runtimeScene) {
 runtimeScene.getOnceTriggers().startNewFrame();
 
-gdjs.BackendTestScene_95L035Code.GDBackendTestTitleObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestTitleObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestInfoObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestInfoObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWrongButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWrongButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCorrectButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCorrectButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendRepeatButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendRepeatButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendAuthButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendAuthButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendSharedChestStatusObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendSharedChestStatusObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendChestReloadButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendChestReloadButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendStaleChestButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendStaleChestButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletStatusObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletStatusObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletReloadButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletReloadButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestStatusObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestStatusObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintStatusObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintStatusObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopBackgroundObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopBackgroundObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTabCookiesObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTabCookiesObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTabLockpicksObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardFrameObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardFrameObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardIconObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardIconObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumPanelObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTitleTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTitleTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTabCookiesTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTabCookiesTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTabLockpicksTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTabLockpicksTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardTitleTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardTitleTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardQuantityTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardQuantityTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardPriceTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardPriceTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardBonusTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardBonusTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumTitleTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumTitleTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumBodyTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumBodyTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumPriceTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumPriceTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopStatusTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopStatusTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDStagingBadgeObjects1.length = 0;
+gdjs.ShopSzeneCode.GDStagingBadgeObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2.length = 0;
 
-gdjs.BackendTestScene_95L035Code.eventsList0(runtimeScene);
-gdjs.BackendTestScene_95L035Code.GDBackendTestTitleObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestTitleObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestInfoObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestInfoObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWrongButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWrongButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCorrectButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCorrectButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendRepeatButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendRepeatButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendAuthButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendAuthButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendSharedChestStatusObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendSharedChestStatusObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendChestReloadButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendChestReloadButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendStaleChestButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendStaleChestButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletStatusObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletStatusObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletReloadButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletReloadButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCookieButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendWalletRepeatButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendBoosterButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestStatusObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendTestStatusObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintStatusObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintStatusObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintBuyButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintRepeatButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendHintReloadButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDBackendCalendarClaimButtonObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieFrameObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickFrameObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookieIconObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpickIconObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudCookiesTextObjects2.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects1.length = 0;
-gdjs.BackendTestScene_95L035Code.GDResourceHudLockpicksTextObjects2.length = 0;
+gdjs.ShopSzeneCode.eventsList0(runtimeScene);
+gdjs.ShopSzeneCode.GDShopBackgroundObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopBackgroundObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTabCookiesObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTabCookiesObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTabLockpicksObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTabLockpicksObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardFrameObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardFrameObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardIconObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardIconObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumPanelObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumPanelObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumBadgeObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTitleTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTitleTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTabCookiesTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTabCookiesTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopTabLockpicksTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopTabLockpicksTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardTitleTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardTitleTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardQuantityTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardQuantityTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardPriceTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardPriceTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCardBonusTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCardBonusTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumTitleTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumTitleTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumBodyTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumBodyTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumPriceTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumPriceTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopPremiumStatusTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopStatusTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopStatusTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopCalendarButtonTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDShopBackButtonTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDStagingBadgeObjects1.length = 0;
+gdjs.ShopSzeneCode.GDStagingBadgeObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookieFrameObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpickFrameObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookieIconObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookieIconObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpickIconObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpickIconObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookiesTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudCookiesTextObjects2.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects1.length = 0;
+gdjs.ShopSzeneCode.GDResourceHudLockpicksTextObjects2.length = 0;
 
 
 return;
 
 }
 
-gdjs['BackendTestScene_95L035Code'] = gdjs.BackendTestScene_95L035Code;
+gdjs['ShopSzeneCode'] = gdjs.ShopSzeneCode;
