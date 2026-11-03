@@ -285,7 +285,7 @@ gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects2= [];
 gdjs.TrainingSceneCode.GDResourceHudLockpicksTextObjects3= [];
 
 
-gdjs.TrainingSceneCode.userFunc0xa58ba0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa683a8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: Lokale Desktop- und Dateivorschau bleibt durchgehend proportional im 720x1280-Handyformat.
 const trainingPortraitGame = runtimeScene.getGame();
@@ -311,7 +311,7 @@ if (trainingPortraitEnabled) {
   if (typeof document !== 'undefined') { for (const element of [document.documentElement, document.body]) { element.style.setProperty('background', '#123f50', 'important'); element.style.setProperty('background-color', '#123f50', 'important'); } }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xf9b420 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf92a20 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-051/L&L-059: Zentrale, fail-closed Backendumgebung und letzte Lösung.
 const backendGame = runtimeScene.getGame();
@@ -706,7 +706,7 @@ for (const badge of runtimeScene.getObjects("StagingBadge")) {
 }
 // Unmarked environments retain their existing independent runtime.
 };
-gdjs.TrainingSceneCode.userFunc0xf9b558 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf92b58 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Eine zentrale, lokale und szenenübergreifende Musiksteuerung für alle aktiven Spielerszenen.
 const musicGame = runtimeScene.getGame();
@@ -933,7 +933,7 @@ if (!musicGame[musicControllerKey]) {
 }
 musicGame[musicControllerKey].updateForScene(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xa6f6f0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xe1b078 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: Zentrales lokales Lokalisierungssystem; keine Cloud- oder Firebase-Abhängigkeit.
 const localizationGame = runtimeScene.getGame();
@@ -972,11 +972,11 @@ if (!localizationGame.__lockLootI18n) {
 const sceneLocalization = localizationGame.__lockLootI18n;
 localizationGame.getVariables().get("localizationLanguage").setString(sceneLocalization.language);
 };
-gdjs.TrainingSceneCode.userFunc0xa6f890 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa68760 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-052: Initialisierung und Laufzeitaktualisierung erfolgen zentral über MusicController_Events.
 };
-gdjs.TrainingSceneCode.userFunc0xa574b8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xa4ea70 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-023: Rein visuelle Steuerung der modularen TrainingScene.
 // Rätsel-, Hinweis-, Ressourcen- und Schlosslogik werden nur gelesen und nicht ersetzt.
@@ -1634,7 +1634,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0x10e6e40 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0x1084f60 = function GDJSInlineCode(runtimeScene) {
 // D2-03B: Der sichtbare Code folgt der validierten Kistenlänge.
 const vars = runtimeScene.getVariables();
 const length = vars.get("activeCodeLength").getAsNumber();
@@ -1651,7 +1651,7 @@ if ([8, 10, 11, 12].includes(length)) {
   vars.get("enteredCode").setString(digits.join(""));
 }
 };
-gdjs.TrainingSceneCode.userFunc0x1090ac8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0x1082ff0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-058: Genau eine Trefferdimension wird exakt, die andere nur als serverbestätigtes Band dargestellt.
 const sceneVariables = runtimeScene.getVariables();
@@ -1686,7 +1686,7 @@ gdjs.TrainingSceneCode.eventsList12 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0x1090ac8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x1082ff0(runtimeScene);
 
 }
 
@@ -1695,7 +1695,7 @@ gdjs.TrainingSceneCode.userFunc0x1090ac8(runtimeScene);
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDHintNextButtonObjects1Objects = Hashtable.newFrom({"HintNextButton": gdjs.TrainingSceneCode.GDHintNextButtonObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDSpeechBubbleObjects1Objects = Hashtable.newFrom({"SpeechBubble": gdjs.TrainingSceneCode.GDSpeechBubbleObjects1});
-gdjs.TrainingSceneCode.userFunc0x107b290 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xfcc3b0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: Während der Animation bleibt die Navigation gesperrt; im Ergebnis nutzt sie den vorhandenen Zurück-Button.
 const chestEndNavigationLocked = runtimeScene.__lockLootTrainingBackend?.endLocked === true;
@@ -2241,7 +2241,7 @@ if (isConditionTrue_0) {
 }
 
 
-};gdjs.TrainingSceneCode.userFunc0xf92290 = function GDJSInlineCode(runtimeScene) {
+};gdjs.TrainingSceneCode.userFunc0xf8c6e0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const sceneVariables = runtimeScene.getVariables();
 const correctCodeVariable = sceneVariables.get('correctCode');
@@ -5080,14 +5080,14 @@ gdjs.TrainingSceneCode.eventsList20 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xf92290(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf8c6e0(runtimeScene);
 
 }
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
 gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDLock_95959595SpriteObjects1Objects = Hashtable.newFrom({"Lock_Sprite": gdjs.TrainingSceneCode.GDLock_9595SpriteObjects1});
-gdjs.TrainingSceneCode.userFunc0xf9b690 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf93278 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: Vertrag muss vor dem Backendadapter verfügbar sein.
 const chestEndRuntimeGame = runtimeScene.getGame();
@@ -5234,7 +5234,7 @@ const validateChestEndSnapshot = function validateChestEndSnapshot(value, contex
   chestEndRuntimeGame.__lockLootChestEndRuntime = { create: createChestEndFlow, identity: chestEndSnapshotIdentity, validate: validateChestEndSnapshot };
 }
 };
-gdjs.TrainingSceneCode.userFunc0xf971e8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf8dee0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // B4-1: PERSONAL is a separate public start projection; no legacy fallback.
 const personalRuntime = runtimeScene.getGame().__lockLootPersonalRuntime;
@@ -5713,7 +5713,7 @@ if (trainingVariables.get('backendInitState').getAsString() === 'offline' && !tr
 }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xb46668 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf933d0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-060: hochwertige Kistenendebühne; reine Präsentation, keine Rewardbuchung.
 const chestEndGame = runtimeScene.getGame();
@@ -6195,7 +6195,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 
 
 };gdjs.TrainingSceneCode.mapOfGDgdjs_9546TrainingSceneCode_9546GDparrotObjects1Objects = Hashtable.newFrom({"parrot": gdjs.TrainingSceneCode.GDparrotObjects1});
-gdjs.TrainingSceneCode.userFunc0xf9a7d8 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf91dd0 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047: TrainingScene-Spielertexte und Sprachwechsel ohne Zustandsmutation.
 const trainingI18n = runtimeScene.getGame().__lockLootI18n;
@@ -6216,11 +6216,11 @@ if (!runtimeScene.__lockLootL047Training || runtimeScene.__lockLootL047Training.
   }
 }
 };
-gdjs.TrainingSceneCode.userFunc0xf9a8b0 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf91ea8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-047-Kompatibilität: "training.inventory", "common.cookies", "common.lockpicks" und "common.not_available" bleiben im Katalog, werden seit L&L-048 aber nicht mehr als Wallet-Spielertext gerendert.
 };
-gdjs.TrainingSceneCode.userFunc0xa58c78 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf93528 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 // L&L-048: Zentrales, rein lesendes Ressourcen-HUD aus bestätigten Serverantworten.
 const resourceHudGame = runtimeScene.getGame();
@@ -6302,7 +6302,7 @@ if (!runtimeScene.getObjects("ResourceHudCookieFrame").length) {
 }
 resourceHud.render(runtimeScene);
 };
-gdjs.TrainingSceneCode.userFunc0xf9ab48 = function GDJSInlineCode(runtimeScene) {
+gdjs.TrainingSceneCode.userFunc0xf927b8 = function GDJSInlineCode(runtimeScene) {
 "use strict";
 const personal = runtimeScene.getGame().__lockLootPersonalRuntime;
 if (personal?.phase === 'ready') { personal.bridge.noWallet(runtimeScene); if (runtimeScene.getName() === 'TrainingScene') personal.bridge.tickTraining(runtimeScene); }
@@ -6312,7 +6312,7 @@ gdjs.TrainingSceneCode.eventsList22 = function(runtimeScene) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa58ba0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa683a8(runtimeScene);
 
 }
 
@@ -6320,7 +6320,7 @@ gdjs.TrainingSceneCode.userFunc0xa58ba0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xf9b420(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf92a20(runtimeScene);
 
 }
 
@@ -6328,7 +6328,7 @@ gdjs.TrainingSceneCode.userFunc0xf9b420(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xf9b558(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf92b58(runtimeScene);
 
 }
 
@@ -6336,7 +6336,7 @@ gdjs.TrainingSceneCode.userFunc0xf9b558(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa6f6f0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xe1b078(runtimeScene);
 
 }
 
@@ -6344,7 +6344,7 @@ gdjs.TrainingSceneCode.userFunc0xa6f6f0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa6f890(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa68760(runtimeScene);
 
 }
 
@@ -6352,7 +6352,7 @@ gdjs.TrainingSceneCode.userFunc0xa6f890(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa574b8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xa4ea70(runtimeScene);
 
 }
 
@@ -7026,7 +7026,7 @@ gdjs.copyArray(runtimeScene.getObjects("digit11"), gdjs.TrainingSceneCode.GDdigi
 {
 
 
-gdjs.TrainingSceneCode.userFunc0x10e6e40(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0x1084f60(runtimeScene);
 
 }
 
@@ -7363,7 +7363,7 @@ gdjs.copyArray(runtimeScene.getObjects("txtHint"), gdjs.TrainingSceneCode.GDtxtH
 {
 
 
-gdjs.TrainingSceneCode.userFunc0x107b290(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xfcc3b0(runtimeScene);
 
 }
 
@@ -7950,7 +7950,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xf9b690(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf93278(runtimeScene);
 
 }
 
@@ -7958,7 +7958,7 @@ gdjs.TrainingSceneCode.userFunc0xf9b690(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xf971e8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf8dee0(runtimeScene);
 
 }
 
@@ -7966,7 +7966,7 @@ gdjs.TrainingSceneCode.userFunc0xf971e8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xb46668(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf933d0(runtimeScene);
 
 }
 
@@ -8041,7 +8041,7 @@ if (isConditionTrue_0) {
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xf9a7d8(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf91dd0(runtimeScene);
 
 }
 
@@ -8049,7 +8049,7 @@ gdjs.TrainingSceneCode.userFunc0xf9a7d8(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xf9a8b0(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf91ea8(runtimeScene);
 
 }
 
@@ -8057,7 +8057,7 @@ gdjs.TrainingSceneCode.userFunc0xf9a8b0(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xa58c78(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf93528(runtimeScene);
 
 }
 
@@ -8065,7 +8065,7 @@ gdjs.TrainingSceneCode.userFunc0xa58c78(runtimeScene);
 {
 
 
-gdjs.TrainingSceneCode.userFunc0xf9ab48(runtimeScene);
+gdjs.TrainingSceneCode.userFunc0xf927b8(runtimeScene);
 
 }
 
